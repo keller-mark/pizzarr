@@ -1,0 +1,25 @@
+Package: subzarro
+Type: Package
+Title: A subset of Zarr implemented in R
+Version: 0.1.0
+Authors@R: c(
+    person("Mark", "Keller", email = "7525285+keller-mark@users.noreply.github.com", role = c("cre", "aut"))
+  )
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: MIT
+BugReports: https://github.com/keller-mark/subzarro/issues
+URL: https://github.com/keller-mark/subzarro
+Depends: R (>= 3.6.0)
+Imports:
+    rjson,
+    jsonlite,
+    R6,
+    qs
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat,
+    pkgdown
