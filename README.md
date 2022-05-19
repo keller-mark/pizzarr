@@ -1,7 +1,8 @@
-<img src="./img/hexsticker.png" width="230" align="right"/> 
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Grandma-pizza-01.jpg/640px-Grandma-pizza-01.jpg" width="400" align="right"/> 
 
-# subzarro
-A subset of Zarr implemented in R
+# pizzarr
+
+A Zarr implementation for R.
 
 ## Installation
 
@@ -9,13 +10,13 @@ Installation requires R 4.0.0 or greater.
 
 ```r
 install.packages("devtools")
-devtools::install_github("keller-mark/subzarro")
+devtools::install_github("keller-mark/pizzarr")
 ```
 
 ## Usage
 
 ```r
-library(subzarro)
+library(pizzarr)
 
 # TODO
 ```
@@ -25,7 +26,7 @@ library(subzarro)
 
 
 ```r
-setwd("path/to/subzarro")
+setwd("path/to/pizzarr")
 install.packages("devtools")
 devtools::install()
 devtools::load_all()
@@ -55,4 +56,5 @@ pkgdown::build_site()
 - [R6 roxygen2 syntax](https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/#r6-documentation)
 - [pkgdown](https://pkgdown.r-lib.org/)
 - [Zarr](https://github.com/zarr-developers)
-  - [LZ4 and ZSTD compression in R](https://github.com/traversc/qs)
+- [zarr_implementations](https://github.com/zarr-developers/zarr_implementations)
+- [LZ4 and ZSTD compression in R](https://github.com/traversc/qs)
