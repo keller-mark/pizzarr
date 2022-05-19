@@ -1,6 +1,6 @@
-Package: subzarro
+Package: pizzarr
 Type: Package
-Title: A subset of Zarr implemented in R
+Title: A Zarr implementation for R.
 Version: 0.1.0
 Authors@R: c(
     person("Mark", "Keller", email = "7525285+keller-mark@users.noreply.github.com", role = c("cre", "aut"))
@@ -8,8 +8,8 @@ Authors@R: c(
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT
-BugReports: https://github.com/keller-mark/subzarro/issues
-URL: https://github.com/keller-mark/subzarro
+BugReports: https://github.com/keller-mark/pizzarr/issues
+URL: https://github.com/keller-mark/pizzarr
 Depends: R (>= 3.6.0)
 Imports:
     rjson,
