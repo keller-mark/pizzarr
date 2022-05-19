@@ -1,0 +1,75 @@
+name: R
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    env:
+      cache-version: 4
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up libraries for Ubuntu
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsodium-dev libharfbuzz-dev libfribidi-dev libcurl4-openssl-dev texlive-latex-base texlive-fonts-extra pandoc libmagick++-dev libhdf5-dev
+      - name: Set up R 4.0
+        uses: r-lib/actions/setup-r@master
+        with:
+          r-version: 4.0
+      - name: Get R and OS version
+        id: get-version
+        run: |
+          cat("::set-output name=os-version::", sessionInfo()$running, "\n", sep = "")
+          cat("::set-output name=r-version::", R.Version()$version.string, "\n", sep = "")
+          cat("::endgroup::\n")
+        shell: Rscript {0}
+      - name: Cache dependencies
+        id: cache-deps
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}/*
+          key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{ env.cache-version }}-deps
+      - name: Install dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: |
+          install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr"))
+          BiocManager::install("BiocCheck")
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      - name: rcmdcheck
+        run: |
+          rcmdcheck::rcmdcheck(
+            error_on = "warning",
+            check_dir = "check"
+          )
+        shell: Rscript {0}
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: false
+      - name: BiocCheck
+        run: |
+          BiocCheck::BiocCheck(
+            dir('check', 'tar.gz$', full.names = TRUE),
+            `no-check-R-ver` = TRUE,
+            `no-check-pkg-size` = TRUE,
+            `no-check-vignettes` = TRUE
+          )
+        shell: Rscript {0}
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: false
+      - name: Run covr
+        run: |
+          covr::package_coverage()
+        shell: Rscript {0}
+      - name: Build docs
+        run: |
+          Rscript -e 'pkgdown::build_site(new_process = FALSE)'
+          touch docs/.nojekyll
+      - name: Deploy docs to gh-pages branch
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
+        with:
+          repo-token: ${{ secrets.GH_TOKEN }}
+          site-directory: docs

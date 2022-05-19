@@ -120,3 +120,21 @@ LZ4 <- R6::R6Class("LZ4",
      }
    )
 )
+
+#' Get a codec instance from the registry.
+#'
+#' @param config A codec config as a named list.
+#' @return The instance of the codec.
+get_codec <- function(config) {
+  result <- Codec$new()
+  if(!is.na(config)) {
+    codec_id <- config$id
+    config$id <- NULL
+    if(codec_id == "LZ4") {
+      result <- do.call(LZ4$new, config)
+    } else if(codec_id == "Zstd") {
+      result <- do.call(Zstd$new, config)
+    }
+  }
+  return(result)
+}
