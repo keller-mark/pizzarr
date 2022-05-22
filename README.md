@@ -4,6 +4,8 @@
 
 A Zarr implementation for R.
 
+🚧 work in progress 🚧
+
 ## Installation
 
 Installation requires R 4.0.0 or greater.
