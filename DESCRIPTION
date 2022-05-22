@@ -3,7 +3,13 @@ Type: Package
 Title: A Zarr implementation for R.
 Version: 0.1.0
 Authors@R: c(
-    person("Mark", "Keller", email = "7525285+keller-mark@users.noreply.github.com", role = c("cre", "aut"))
+    person(
+      given = "Mark",
+      family = "Keller",
+      email = "mark_keller@g.harvard.edu",
+      role = c("cre", "aut"),
+      comment = c(ORCID = "0000-0003-3003-874X")
+    )
   )
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
@@ -14,6 +20,7 @@ Depends: R (>= 3.6.0)
 Imports:
     rjson,
     jsonlite,
+    stats,
     R6,
     qs
 Encoding: UTF-8
@@ -22,4 +29,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Suggests: 
     testthat,
-    pkgdown
+    pkgdown,
+    covr
