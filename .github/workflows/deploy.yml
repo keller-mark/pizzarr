@@ -14,9 +14,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libsodium-dev libharfbuzz-dev libfribidi-dev libcurl4-openssl-dev texlive-latex-base texlive-fonts-extra pandoc libmagick++-dev libhdf5-dev
       - name: Set up R 4.0
-        uses: r-lib/actions/setup-r@master
+        uses: r-lib/actions/setup-r@v2
         with:
           r-version: 4.0
+      - name: Set CRAN mirror
+        run: |
+          cat("\noptions(repos=structure(c(CRAN=\"https://cran.rstudio.com\")))\n", file = "~/.Rprofile", append = TRUE)
+        shell: Rscript {0}
       - name: Get R and OS version
         id: get-version
         run: |
