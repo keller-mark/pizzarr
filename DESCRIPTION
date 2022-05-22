@@ -22,7 +22,8 @@ Imports:
     jsonlite,
     stats,
     R6,
-    qs
+    qs,
+    stringr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

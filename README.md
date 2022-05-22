@@ -50,11 +50,15 @@ pkgdown::build_site()
 
 ## Resources
 
-- [R packages](https://r-pkgs.org/)
-- [roxygen2 syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html)
-- [R6](https://r6.r-lib.org/index.html)
-- [R6 roxygen2 syntax](https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/#r6-documentation)
-- [pkgdown](https://pkgdown.r-lib.org/)
-- [Zarr](https://github.com/zarr-developers)
-- [zarr_implementations](https://github.com/zarr-developers/zarr_implementations)
-- [LZ4 and ZSTD compression in R](https://github.com/traversc/qs)
+- R package development
+  - [R packages](https://r-pkgs.org/)
+  - [roxygen2 syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html)
+  - [R6](https://r6.r-lib.org/index.html)
+  - [R6 roxygen2 syntax](https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/#r6-documentation)
+  - [pkgdown](https://pkgdown.r-lib.org/)
+- Zarr implementation
+  - [zarr_implementations](https://github.com/zarr-developers/zarr_implementations)
+  - [zarr-python](https://github.com/zarr-developers/zarr-python)
+  - [LZ4 and ZSTD compression in R](https://github.com/traversc/qs)
+  - [zarr.js](https://github.com/gzuidhof/zarr.js)
+  - [zarrita.js](https://github.com/manzt/zarrita.js)

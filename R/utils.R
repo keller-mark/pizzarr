@@ -56,7 +56,7 @@ matrix_to_zarr <- function(matrix, rows, cols, store, compressor = NA) {
 #'
 #' @param ... A variable number of list entries.
 #' @return An empty named list.
-#' 
+#'
 #' @keywords internal
 #' @export
 #' @examples
@@ -71,4 +71,46 @@ obj_list <- function(...) {
     retval[[key]] = param_list[[key]]
   }
   retval
+}
+
+normalize_storage_path <- function(path) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/29280463ff2f275c31c1fa0f002daa947b8f09b2/src/util.ts#L32
+
+  path_to_list <- function(s) {
+    return(stringr::str_split(s, pattern = "")[[1]])
+  }
+
+  if(!is.na(path)) {
+    # convert backslash to forward slash
+    path <- gsub("\\\\", "/", path)
+    path_list <- path_to_list(path)
+
+    # ensure no leading slash
+    while(length(path_list) > 0 && path_list[1] == '/') {
+      path <- stringr::str_sub(path, start = 2)
+      path_list <- path_to_list(path)
+    }
+
+    # ensure no trailing slash
+    while(length(path_list) > 0 && path_list[length(path_list)] == "/") {
+      path <- stringr::str_sub(path, start = 1, end = length(path_list) - 1)
+      path_list <- path_to_list(path)
+    }
+
+    # collapse any repeated slashes
+    path <- gsub("/+", "/", path)
+    path_list <- path_to_list(path)
+
+    # don't allow path segments with just '.' or '..'
+    path_segments <- stringr::str_split(path, "/")[[1]]
+    for(segment in path_segments) {
+      if(segment == "." || segment == "..") {
+        stop("path containing '.' or '..' segment not allowed")
+      }
+    }
+
+  } else {
+    path <- ""
+  }
+  return(path)
 }
