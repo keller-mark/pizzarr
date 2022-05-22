@@ -13,7 +13,7 @@ DirectoryStore for Zarr
 }
 \keyword{internal}
 \section{Super class}{
-\code{\link[subzarro:Store]{subzarro::Store}} -> \code{DirectoryStore}
+\code{\link[pizzarr:Store]{pizzarr::Store}} -> \code{DirectoryStore}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

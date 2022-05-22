@@ -33,9 +33,7 @@ jobs:
       - name: Install dependencies
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: |
-          install.packages(c("remotes", "rcmdcheck", "BiocManager", "covr"))
-          BiocManager::install("BiocCheck")
-          remotes::install_deps(dependencies = TRUE)
+          install.packages(c("rcmdcheck", "covr"))
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -44,17 +42,6 @@ jobs:
           rcmdcheck::rcmdcheck(
             error_on = "warning",
             check_dir = "check"
-          )
-        shell: Rscript {0}
-        env:
-          _R_CHECK_FORCE_SUGGESTS_: false
-      - name: BiocCheck
-        run: |
-          BiocCheck::BiocCheck(
-            dir('check', 'tar.gz$', full.names = TRUE),
-            `no-check-R-ver` = TRUE,
-            `no-check-pkg-size` = TRUE,
-            `no-check-vignettes` = TRUE
           )
         shell: Rscript {0}
         env:

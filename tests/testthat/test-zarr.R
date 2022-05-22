@@ -1,4 +1,4 @@
-library(subzarro)
+library(pizzarr)
 
 test_that("Zarr json_to_raw", {
   res <- json_to_raw(list(

@@ -1,4 +1,4 @@
 library(testthat)
-library(subzarro)
+library(pizzarr)
 
-test_check("subzarro")
+test_check("pizzarr")

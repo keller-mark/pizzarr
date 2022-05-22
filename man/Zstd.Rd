@@ -12,7 +12,7 @@ ZSTD compressor for Zarr
 }
 \keyword{internal}
 \section{Super class}{
-\code{\link[subzarro:Codec]{subzarro::Codec}} -> \code{Zstd}
+\code{\link[pizzarr:Codec]{pizzarr::Codec}} -> \code{Zstd}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

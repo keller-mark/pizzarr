@@ -12,7 +12,7 @@ LZ4 compressor for Zarr
 }
 \keyword{internal}
 \section{Super class}{
-\code{\link[subzarro:Codec]{subzarro::Codec}} -> \code{LZ4}
+\code{\link[pizzarr:Codec]{pizzarr::Codec}} -> \code{LZ4}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

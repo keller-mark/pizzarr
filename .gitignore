@@ -3,3 +3,10 @@
 .RData
 .Ruserdata
 .DS_Store
+*.Rcheck/
+*.tar.gz
+docs/
+data/
+check/
+vignettes/data/
+*.Rproj
