@@ -8,6 +8,67 @@ json_to_raw <- function(json_as_list) {
   return(json_raw)
 }
 
+str_to_vec <- function(s) {
+  return(stringr::str_split(s, pattern = "")[[1]])
+}
+
+create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor = NA, fill_value = NA, order = NA, filters = NA, dimension_separator = NA) {
+  # Reference: https://zarr.readthedocs.io/en/stable/spec/v2.html#metadata
+  if(is.na(dimension_separator)) {
+    dimension_separator <- "."
+  } else if(!(dimension_separator %in% c(".", "/"))) {
+    stop("dimension_separator must be '.' or '/'.")
+  }
+  if(is.na(compressor)) {
+    compressor <- jsonlite::unbox(compressor)
+  } else if(!is.na(compressor) && !("id" %in% names(compressor))) {
+    stop("compressor must contain an 'id' property when not null.")
+  }
+  if(!(order %in% c("C", "F"))) {
+    stop("order must be 'C' or 'F'.")
+  }
+  is_simple_dtype <- (length(dtype) == 1)
+  if(is_simple_dtype) {
+    dtype_vec <- str_to_vec(dtype)
+    dtype_byteorder <- dtype_vec[1]
+    dtype_basictype <- dtype_vec[2]
+    # TODO: validate dtype param's numbytes and time units
+    if(!(dtype_byteorder %in% c("<", ">", "|"))) {
+      stop("dtype byteorder must be <, >, or |.")
+    }
+    if(!(dtype_basictype %in% c("b", "i", "u", "f", "c", "m", "M", "S", "U", "V"))) {
+      stop("dtype basic type invalid.")
+    }
+    
+    if(dtype_basictype == "f") {
+      if(!(fill_value %in% c("NaN", "Infinity", "-Infinity"))) {
+        stop("fill_value must be NaN, Infinity, or -Infinity when dtype is float")
+      }
+    }
+    if(dtype_basictype == "S" && !is.na(fill_value)) {
+      # TODO: validate that fill_value is encoded as an ASCII string using the standard Base64 alphabet.
+    }
+  } else {
+    # TODO: validate structured dtypes
+  }
+  
+  # TODO: validate shape param
+  # TODO: validate chunks param
+  # TODO: validate filters param
+  zarray_meta <- list(
+    zarr_format = jsonlite::unbox(2),
+    shape = shape,
+    chunks = chunks,
+    dtype = jsonlite::unbox(dtype),
+    compressor = compressor,
+    fill_value = jsonlite::unbox(fill_value),
+    order = jsonlite::unbox(order),
+    filters = filters,
+    dimension_separator = jsonlite::unbox(dimension_separator)
+  )
+  return(zarray_meta)
+}
+
 
 #' Write an R matrix to a Zarr store (one chunk, no compression).
 #'
@@ -32,16 +93,14 @@ matrix_to_zarr <- function(matrix, rows, cols, store, compressor = NA) {
     rows = rows,
     cols = cols
   )
-  zarray <- list(
+  zarray <- create_zarray_meta(
     # TODO: set chunk size to something smaller if multiple chunks
     chunks = c(num_rows, num_cols),
     compressor = compressor_meta,
-    dtype = jsonlite::unbox("|u1"),
-    fill_value = jsonlite::unbox(0),
-    filters = jsonlite::unbox(NA),
-    order = jsonlite::unbox("C"),
-    shape = c(num_rows, num_cols),
-    zarr_format = jsonlite::unbox(2)
+    dtype = "|u1",
+    fill_value = 0,
+    order = "C",
+    shape = c(num_rows, num_cols)
   )
 
   store$set_item(".zattrs", json_to_raw(zattrs))
@@ -76,30 +135,25 @@ obj_list <- function(...) {
 normalize_storage_path <- function(path) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/29280463ff2f275c31c1fa0f002daa947b8f09b2/src/util.ts#L32
 
-  path_to_list <- function(s) {
-    return(stringr::str_split(s, pattern = "")[[1]])
-  }
-
   if(!is.na(path)) {
     # convert backslash to forward slash
     path <- gsub("\\\\", "/", path)
-    path_list <- path_to_list(path)
+    path_list <- str_to_vec(path)
 
     # ensure no leading slash
     while(length(path_list) > 0 && path_list[1] == '/') {
       path <- stringr::str_sub(path, start = 2)
-      path_list <- path_to_list(path)
+      path_list <- str_to_vec(path)
     }
 
     # ensure no trailing slash
     while(length(path_list) > 0 && path_list[length(path_list)] == "/") {
       path <- stringr::str_sub(path, start = 1, end = length(path_list) - 1)
-      path_list <- path_to_list(path)
+      path_list <- str_to_vec(path)
     }
 
     # collapse any repeated slashes
     path <- gsub("/+", "/", path)
-    path_list <- path_to_list(path)
 
     # don't allow path segments with just '.' or '..'
     path_segments <- stringr::str_split(path, "/")[[1]]

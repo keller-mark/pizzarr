@@ -1,0 +1,58 @@
+url: https://keller-mark.github.io/pizzarr/
+
+template:
+  bootstrap: 5
+  bslib:
+    base_font: {google: "Inter"}
+
+authors:
+  Mark Keller:
+    href: https://github.com/keller-mark
+
+navbar:
+  structure:
+    left:  [home, reference, articles]
+    right: [github]
+
+reference:
+- title: "Array creation"
+  desc: >
+    Functions for creating Zarr arrays.
+- contents:
+  - matrix_to_zarr
+- title: "The Array class"
+  desc: >
+    TODO
+- title: "Groups"
+  desc: >
+    Functions for creating and manipulating Zarr groups.
+- title: "Storage"
+  desc: >
+    Store classes.
+- contents:
+  - Store
+  - DirectoryStore
+  - MemoryStore
+- title: "Convenience functions"
+  desc: >
+    TODO
+- title: "Compressors and filters"
+  desc: >
+    TODO
+- title: "The Attributes class"
+  desc: >
+    TODO
+- title: "Synchronization"
+  desc: >
+    TODO
+
+articles:
+  - title: Articles
+    navbar: Tutorials
+    contents:
+      - array_creation
+  - title: Articles
+    navbar: Troubleshooting
+    contents:
+      - debugging
+      - session_info

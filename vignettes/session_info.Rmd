@@ -1,0 +1,16 @@
+---
+title: "R Session Info"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{R Session Info}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This page runs the `sessionInfo()` function and prints the results.
+The output can be used to check the dependency versions that were used to run tests.
+
+```{r include=TRUE, echo=TRUE}
+library(pizzarr)
+sessionInfo()
+```

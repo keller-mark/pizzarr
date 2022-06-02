@@ -18,9 +18,11 @@ BugReports: https://github.com/keller-mark/pizzarr/issues
 URL: https://github.com/keller-mark/pizzarr
 Depends: R (>= 3.6.0)
 Imports:
+    Matrix,
     rjson,
     jsonlite,
     stats,
+    methods,
     R6,
     qs,
     stringr
@@ -30,5 +32,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Suggests: 
     testthat,
+    knitr,
+    covr,
+    bslib,
     pkgdown,
-    covr
+    rmarkdown
