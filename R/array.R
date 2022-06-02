@@ -45,6 +45,12 @@ Array <- R6::R6Class("Array",
     #' @field filters
     #' @keywords internal
     filters = NULL,
+    #' @field vindex
+    #' @keywords internal
+    vindex = NULL,
+    #' @field oindex
+    #' @keywords internal
+    oindex = NULL,
     #' @description
     #' (Re)load metadata from store.
     load_metadata_nosync = function() {
@@ -124,7 +130,7 @@ Array <- R6::R6Class("Array",
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2063
       return(paste0(private$key_prefix, do.call(paste, c(as.list(chunk_coords), sep = private$dimension_separator))))
     },
-    get_cdata_shape = function() {
+    compute_cdata_shape = function() {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L428
       if(is.null(private$shape)) {
         return(1)
@@ -148,7 +154,7 @@ Array <- R6::R6Class("Array",
       args <- list(...)
       old_shape <- private$shape
       new_shape <- as.numeric(normalize_resize_args(old_shape, args))
-      old_cdata_shape <- private$get_cdata_shape()
+      old_cdata_shape <- private$compute_cdata_shape()
 
       # Update metadata
       private$shape <- new_shape
@@ -177,6 +183,60 @@ Array <- R6::R6Class("Array",
           message(paste("TODO: delete chunk", jsonlite::toJSON(cidx)))
         }
       }
+    },
+    get_basic_selection_zd = function(selection = NA, out = NA, fields = NA) {
+
+    },
+    get_basic_selection_nd = function(selection = NA, out = NA, fields = NA) {
+
+    },
+    get_selection = function(indexer, out = NA, fields = NA) {
+
+    },
+    set_basic_selection_zd = function(selection, value, fields = NA) {
+
+    },
+    set_basic_selection_nd = function(selection, value, fields = NA) {
+
+    },
+    set_selection = function(indexer, value, fields = NA) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1682
+    },
+    process_chunk = function(out, cdata, chunk_selection, drop_axes, out_is_ndarray, fields, out_selection, partial_read_decode = FALSE) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1755
+    },
+    chunk_getitem = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
+
+    },
+    chunk_getitems = function(lchunk_coords, lchunk_selection, out, lout_selection, drop_axes = NA, fields = NA) {
+      
+    },
+    chunk_setitem = function(chunk_coords, chunk_selection, value, fields = NA) {
+      
+    },
+    chunk_setitem_nosync = function(chunk_coords, chunk_selection, value, fields = NA) {
+      
+    },
+    chunk_setitems = function(lchunk_coords, lchunk_selection, values, fields = NA) {
+      
+    },
+    process_for_setitem = function(ckey, chunk_selection, value, fields = NA) {
+
+    },
+    chunk_delitem = function(ckey) {
+      
+    },
+    chunk_delitems = function(ckeys) {
+      
+    },
+    decode_chunk = function(cdata, start = NA, nitems = NA, expected_shape = NA) {
+
+    },
+    encode_chunk = function(chunk) {
+      
+    },
+    append_nosync = function(data, axis = 0) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141
     }
   ),
   public = list(
@@ -222,6 +282,9 @@ Array <- R6::R6Class("Array",
 
       akey <- paste0(private$key_prefix, ATTRS_KEY)
       private$attrs <- Attributes$new(store, key = akey)
+
+      private$vindex <- OIndex$new(self)
+      private$oindex <- VIndex$new(self)
     },
     get_store = function() {
       return(self$store)
@@ -251,8 +314,8 @@ Array <- R6::R6Class("Array",
     get_read_only = function() {
       return(self$read_only)
     },
-    set_read_only = function(value) {
-      self$read_only <- value
+    set_read_only = function(val) {
+      self$read_only <- val
     },
     get_chunk_store = function() {
       if(is.na(self$chunk_store)) {
@@ -273,6 +336,143 @@ Array <- R6::R6Class("Array",
     resize = function(...) {
       args <- list(...)
       do.call(private$resize_nosync, args)
+    },
+    get_chunks = function() {
+      return(private$chunks)
+    },
+    get_dtype = function() {
+      return(private$dtype)
+    },
+    get_compressor = function() {
+      return(private$compressor)
+    },
+    get_fill_value = function() {
+      return(private$fill_value)
+    },
+    set_fill_value = function(val) {
+      private$fill_value <- val
+      private$flush_metadata_nosync()
+    },
+    get_order = function() {
+      return(private$order)
+    },
+    get_filters = function() {
+      return(private$filters)
+    },
+    get_synchronizer = function() {
+      return(self$synchronizer)
+    },
+    get_attrs = function() {
+      return(private$attrs)
+    },
+    get_ndim = function() {
+      return(length(private$shape))
+    },
+    get_size = function() {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L383
+      # TODO
+    },
+    get_itemsize = function() {
+      # TODO
+    },
+    get_nbytes = function() {
+      private$refresh_metadata()
+      return(self$get_size() * self$get_itemsize())
+    },
+    get_nbytes_stored = function() {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L413
+      # TODO
+    },
+    get_cdata_shape = function() {
+      private$refresh_metadata()
+      return(private$compute_cdata_shape())
+    },
+    get_nchunks = function() {
+      # TODO
+    },
+    get_nchunks_initialized = function() {
+      # TODO
+    },
+    get_is_view = function() {
+      return(private$is_view)
+    },
+    get_oindex = function() {
+      return(private$oindex)
+    },
+    get_vindex = function() {
+      return(private$vindex)
+    },
+    get_write_empty_chunks = function() {
+      return(private$write_empty_chunks)
+    },
+    equals = function(other) {
+      return(all(c(
+        class(other)[[1]] == "Array",
+        # TODO: check store equality also
+        self$read_only == other$get_read_only(),
+        self$path == other$get_path(),
+        !private$is_view
+      )))
+    },
+    islice = function(start = NA, end = NA) {
+      # TODO
+    },
+    length = function() {
+      if(private$shape) {
+        return(private$shape[1])
+      } else {
+        # 0-dimensional array, same error message as numpy
+        stop("length of unized object")
+      }
+    },
+    get_item = function(selection) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
+      # TODO
+    },
+    get_basic_selection = function(selection = NA, out = NA, fields = NA) {
+
+    },
+    get_orthogonal_selection = function(selection = NA, out = NA, fields = NA) {
+
+    },
+    get_coordinate_selection = function(selection = NA, out = NA, fields = NA) {
+
+    },
+    get_mask_selection = function(selection = NA, out = NA, fields = NA) {
+
+    },
+    set_item = function(selection, value) {
+
+    },
+    set_basic_selection = function(selection, value, fields = NA) {
+
+    },
+    set_orthogonal_selection = function(selection, value, fields = NA) {
+
+    },
+    set_coordinate_selection = function(selection, value, fields = NA) {
+
+    },
+    set_mask_selection = function(selection, value, fields = NA) {
+
+    },
+    get_info = function() {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141
+    },
+    get_digest = function(hashname = "sha1") {
+
+    },
+    get_hexdigest = function(hashname = "sha1") {
+
+    },
+    append = function(data, axis = 0) {
+      private$append_nosync(data, axis)
+    },
+    view = function(shape = NA, chunks = NA, dtype = NA, fill_value = NA, filters = NA, read_only = NA, synchronizer = NA) {
+
+    },
+    astype = function(dtype) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2586
     }
   )
 )
