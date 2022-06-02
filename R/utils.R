@@ -103,7 +103,8 @@ decode_array_meta <- function(meta_bytes) {
 
 
 #' Write an R matrix to a Zarr store (one chunk, no compression).
-#'
+#' 
+#' @keywords internal
 #' @param matrix The matrix as an R matrix.
 #' @param rows A vector of row names.
 #' @param cols A vector of column names.
