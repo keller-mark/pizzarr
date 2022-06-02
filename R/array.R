@@ -46,10 +46,8 @@ Array <- R6::R6Class("Array",
     #' @keywords internal
     filters = NULL,
     #' @description
-    #' Get an item from the store.
-    #' @param key The item key.
-    #' @return The item data in a vector of type raw.
-    load_metadata = function() {
+    #' (Re)load metadata from store.
+    load_metadata_nosync = function() {
       mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
       meta_bytes <- self$store$get_item(mkey)
       meta <- decode_array_meta(meta_bytes)
@@ -79,9 +77,105 @@ Array <- R6::R6Class("Array",
         }
       }
     },
+    load_metadata = function() {
+      private$load_metadata_nosync()
+      # TODO: support for synchronization
+    },
+    refresh_metadata_nosync = function() {
+      if(!self$cache_metadata && !private$is_view) {
+        private$load_metadata_nosync()
+      }
+    },
     refresh_metadata = function() {
       if(!self$cache_metadata) {
         private$load_metadata()
+      }
+    },
+    flush_metadata_nosync = function() {
+      if(private$is_view) {
+        stop("Operation not permitted for views")
+      }
+      if(!is.na(private$compressor)) {
+        compressor_config <- private$compressor$get_config()
+      } else {
+        compressor_config <- NA
+      }
+      if(!is.na(private$filters)) {
+        filters_config <- list()
+        for(filter in private$filters) {
+          append(filters_config, filter$get_config)
+        }
+      } else {
+        filters_config <- NA
+      }
+      meta <- list(
+        shape = private$shape,
+        chunks = private$chunks,
+        dtype = private$dtype,
+        compressor = compressor_config,
+        fill_value = private$vill_value,
+        order = private$order,
+        filters = filters_config
+      )
+      mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
+      self$store$set_item(mkey, encode_array_meta(meta))
+    },
+    chunk_key = function(chunk_coords) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2063
+      return(paste0(private$key_prefix, do.call(paste, c(as.list(chunk_coords), sep = private$dimension_separator))))
+    },
+    get_cdata_shape = function() {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L428
+      if(is.null(private$shape)) {
+        return(1)
+      }
+      shape <- private$shape
+      chunks <- private$chunks
+      cdata_shape <- list()
+      for(i in seq_len(length(shape))) {
+        s <- shape[i]
+        c <- chunks[i]
+        cdata_shape <- append(cdata_shape, ceiling(s / c))
+      }
+      cdata_shape <- as.numeric(cdata_shape)
+      return(cdata_shape)
+    },
+    resize_nosync = function(...) {
+      # Note: When resizing an array, the data are not rearranged in any way.
+      # If one or more dimensions are shrunk, any chunks falling outside the
+      # new array shape will be deleted from the underlying store.
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2340
+      args <- list(...)
+      old_shape <- private$shape
+      new_shape <- as.numeric(normalize_resize_args(old_shape, args))
+      old_cdata_shape <- private$get_cdata_shape()
+
+      # Update metadata
+      private$shape <- new_shape
+      private$flush_metadata_nosync()
+
+      # Determine the new number and arrangement of chunks
+      chunks <- private$chunks
+      new_cdata_shape <- list()
+      for(i in seq_len(length(new_shape))) {
+        s <- new_shape[i]
+        c <- chunks[i]
+        new_cdata_shape <- append(new_cdata_shape, ceiling(s / c))
+      }
+      new_cdata_shape <- as.numeric(new_cdata_shape)
+
+      # Remove any chunks not within range
+      chunk_store <- self$get_chunk_store()
+      cidx_df <- do.call(expand.grid, lapply(old_cdata_shape, seq_len))
+      for(row_idx in seq_len(dim(cidx_df)[1])) {
+        cidx <- as.numeric(cidx_df[row_idx, ])
+        if(all(as.logical(lapply(zip_numeric(cidx, new_cdata_shape), function(v) v[1] < v[2])))) {
+          # pass; keep the chunk
+        } else {
+          key <- private$chunk_key(cidx)
+          # TODO: try to delete the key from chunk_store
+          message(paste("TODO: delete chunk", jsonlite::toJSON(cidx)))
+        }
       }
     }
   ),
@@ -109,10 +203,12 @@ Array <- R6::R6Class("Array",
     #' @return An `Array` instance.
     initialize = function(store, path = NA, read_only = FALSE, chunk_store = NA, synchronizer = NA, cache_metadata = TRUE, cache_attrs = TRUE, write_empty_chunks = TRUE) {
       self$store <- store
-      self$path <- normalize_storage_path(path)
+      self$chunk_store <- chunk_store
       if(!is.na(path)) {
+        self$path <- normalize_storage_path(path)
         private$key_prefix <- paste0(self$path, "/")
       } else {
+        self$path <- NA
         private$key_prefix <- ""
       }
       self$read_only <- read_only
@@ -127,11 +223,56 @@ Array <- R6::R6Class("Array",
       akey <- paste0(private$key_prefix, ATTRS_KEY)
       private$attrs <- Attributes$new(store, key = akey)
     },
-    #' @description
-    #' Get the array shape.
-    #' @return The shape metadata value.
+    get_store = function() {
+      return(self$store)
+    },
+    get_path = function() {
+      return(self$path)
+    },
+    get_name = function() {
+      if(!is.na(self$path)) {
+        name <- self$path
+        name_vec <- str_to_vec(name)
+        if(name_vec[1] != "/") {
+          name <- paste0("/", name)
+        }
+        return(name)
+      }
+      return(NA)
+    },
+    get_basename = function() {
+      name <- self$get_name()
+      if(!is.na(name)) {
+        name_segments <- stringr::str_split(name, "/")[[1]]
+        return(name_segments[length(name_segments)])
+      }
+      return(NA)
+    },
+    get_read_only = function() {
+      return(self$read_only)
+    },
+    set_read_only = function(value) {
+      self$read_only <- value
+    },
+    get_chunk_store = function() {
+      if(is.na(self$chunk_store)) {
+        return(self$store)
+      } else {
+        return(self$chunk_store)
+      }
+    },
     get_shape = function() {
+      private$refresh_metadata()
       return(private$shape)
+    },
+    set_shape = function(value) {
+      self$resize(value)
+    },
+    #' @description
+    #' Change the shape of the array by growing or shrinking one or more dimensions.
+    resize = function(...) {
+      args <- list(...)
+      do.call(private$resize_nosync, args)
     }
   )
 )

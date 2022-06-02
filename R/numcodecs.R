@@ -22,7 +22,7 @@ Codec <- R6::R6Class("Codec",
      decode = function(buf) {
        return(buf)
      },
-     get_meta = function() {
+     get_config = function() {
        return(jsonlite::unbox(NA))
      }
    )
@@ -58,7 +58,7 @@ Zstd <- R6::R6Class("Zstd",
     decode = function(buf) {
 
     },
-    get_meta = function() {
+    get_config = function() {
       meta <- list(
         id = jsonlite::unbox("zstd"),
         level = jsonlite::unbox(self$level)
@@ -111,7 +111,7 @@ LZ4 <- R6::R6Class("LZ4",
      decode = function(buf) {
 
      },
-     get_meta = function() {
+     get_config = function() {
        meta <- list(
          id = jsonlite::unbox("lz4"),
          acceleration = jsonlite::unbox(self$acceleration)

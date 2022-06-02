@@ -62,3 +62,30 @@ test_that("create_zarray_meta throws error when fill_value is invalid for float 
   expect_error(f())
 })
 
+
+test_that("zip_numeric", {
+  res <- zip_numeric(c(1, 2, 3), c(4, 5, 6))
+  expect_equal(res, list(
+    c(1, 4),
+    c(2, 5),
+    c(3, 6)
+  ))
+})
+
+test_that("normalize_resize_args throws error when different number of dimensions", {
+  f <- function() normalize_resize_args(list(1, 2, 3), list(4, 5))
+  expect_error(f())
+})
+
+test_that("normalize_resize_args", {
+  res <- normalize_resize_args(c(1, 2), c(2, 1))
+  expect_equal(res, list(2, 1))
+})
+test_that("normalize_resize_args with int argument", {
+  res <- normalize_resize_args(c(1), 2)
+  expect_equal(res, list(2))
+})
+test_that("normalize_resize_args with int argument", {
+  res <- normalize_resize_args(c(1), list(2))
+  expect_equal(res, list(2))
+})

@@ -51,10 +51,9 @@ jobs:
         shell: Rscript {0}
         env:
           _R_CHECK_FORCE_SUGGESTS_: false
-      - name: Run covr
+      - name: Run coverage report
         run: |
-          #covr::package_coverage()
-          cat("disable covr for now")
+          covr::package_coverage()
         shell: Rscript {0}
       - name: Build docs
         run: |

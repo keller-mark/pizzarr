@@ -101,6 +101,16 @@ decode_array_meta <- function(meta_bytes) {
   return(meta_list)
 }
 
+#' Encode zarray metadata.
+#' 
+#' @keywords internal
+#' @param meta The metadata as a named list.
+#' @return The metadata after conversion to an R list.
+encode_array_meta <- function(meta) {
+  meta_char <- jsonlite::toJSON(meta)
+  meta_bytes <- charToRaw(meta_char)
+  return(meta_bytes)
+}
 
 #' Write an R matrix to a Zarr store (one chunk, no compression).
 #' 
@@ -164,6 +174,27 @@ obj_list <- function(...) {
     retval[[key]] = param_list[[key]]
   }
   retval
+}
+
+zip_numeric <- function(a, b) {
+  result <- list()
+  for(i in seq_len(length(a))) {
+    result <- append(result, list(c(a[i], b[i])))
+  }
+  return(result)
+}
+
+normalize_resize_args <- function(old_shape, args) {
+  if(length(args) == 1) {
+    new_shape <- args[1]
+  } else {
+    new_shape <- args
+  }
+  new_shape <- as.list(new_shape)
+  if(length(new_shape) != length(old_shape)) {
+    stop('new shape must have same number of dimensions')
+  }
+  return(new_shape)
 }
 
 normalize_storage_path <- function(path) {
