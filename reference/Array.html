@@ -108,11 +108,20 @@ Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-Array-new"><code>Array$new()</code></a></p></li>
+<li><p><a href="#method-Array-get_store"><code>Array$get_store()</code></a></p></li>
+<li><p><a href="#method-Array-get_path"><code>Array$get_path()</code></a></p></li>
+<li><p><a href="#method-Array-get_name"><code>Array$get_name()</code></a></p></li>
+<li><p><a href="#method-Array-get_basename"><code>Array$get_basename()</code></a></p></li>
+<li><p><a href="#method-Array-get_read_only"><code>Array$get_read_only()</code></a></p></li>
+<li><p><a href="#method-Array-set_read_only"><code>Array$set_read_only()</code></a></p></li>
+<li><p><a href="#method-Array-get_chunk_store"><code>Array$get_chunk_store()</code></a></p></li>
 <li><p><a href="#method-Array-get_shape"><code>Array$get_shape()</code></a></p></li>
+<li><p><a href="#method-Array-set_shape"><code>Array$set_shape()</code></a></p></li>
+<li><p><a href="#method-Array-resize"><code>Array$resize()</code></a></p></li>
 <li><p><a href="#method-Array-clone"><code>Array$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-Array-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
-<p>Get an item from the store.</p>
+<p>(Re)load metadata from store.</p>
 
 <p>Create a new Array instance.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -134,33 +143,106 @@ Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.
 <dd><p>Array store, already initialized.</p></dd>
 
 
-<dt><code>key</code></dt>
-<dd><p>The item key.</p></dd>
-
-
 </dl><p></p></div>
 </div>
 <div class="section">
 <h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
-<p>The item data in a vector of type raw.</p>
+<p>An <code>Array</code> instance.</p>
 </div>
+
+</div><p></p><hr><a id="method-Array-get_store"></a><div class="section">
+<h3 id="method-get-store-">Method <code>get_store()</code><a class="anchor" aria-label="anchor" href="#method-get-store-"></a></h3>
+
+<div class="section">
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_store</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_path"></a><div class="section">
+<h3 id="method-get-path-">Method <code>get_path()</code><a class="anchor" aria-label="anchor" href="#method-get-path-"></a></h3>
+
+<div class="section">
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_path</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_name"></a><div class="section">
+<h3 id="method-get-name-">Method <code>get_name()</code><a class="anchor" aria-label="anchor" href="#method-get-name-"></a></h3>
+
+<div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_name</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_basename"></a><div class="section">
+<h3 id="method-get-basename-">Method <code>get_basename()</code><a class="anchor" aria-label="anchor" href="#method-get-basename-"></a></h3>
+
+<div class="section">
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_basename</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_read_only"></a><div class="section">
+<h3 id="method-get-read-only-">Method <code>get_read_only()</code><a class="anchor" aria-label="anchor" href="#method-get-read-only-"></a></h3>
+
+<div class="section">
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_read_only</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-set_read_only"></a><div class="section">
+<h3 id="method-set-read-only-">Method <code>set_read_only()</code><a class="anchor" aria-label="anchor" href="#method-set-read-only-"></a></h3>
+
+<div class="section">
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_read_only</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_chunk_store"></a><div class="section">
+<h3 id="method-get-chunk-store-">Method <code>get_chunk_store()</code><a class="anchor" aria-label="anchor" href="#method-get-chunk-store-"></a></h3>
+
+<div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_chunk_store</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
 
 </div><p></p><hr><a id="method-Array-get_shape"></a><div class="section">
 <h3 id="method-get-shape-">Method <code>get_shape()</code><a class="anchor" aria-label="anchor" href="#method-get-shape-"></a></h3>
-<p>Get the array shape.</p><div class="section">
-<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
+
+<div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_shape</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
+
+</div><p></p><hr><a id="method-Array-set_shape"></a><div class="section">
+<h3 id="method-set-shape-">Method <code>set_shape()</code><a class="anchor" aria-label="anchor" href="#method-set-shape-"></a></h3>
+
 <div class="section">
-<h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
-<p>The shape metadata value.</p>
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_shape</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
+
+
+</div><p></p><hr><a id="method-Array-resize"></a><div class="section">
+<h3 id="method-resize-">Method <code>resize()</code><a class="anchor" aria-label="anchor" href="#method-resize-"></a></h3>
+<p>Change the shape of the array by growing or shrinking one or more dimensions.</p><div class="section">
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">resize</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
 
 </div><p></p><hr><a id="method-Array-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
