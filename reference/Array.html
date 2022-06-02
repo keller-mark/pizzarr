@@ -118,6 +118,46 @@ Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.
 <li><p><a href="#method-Array-get_shape"><code>Array$get_shape()</code></a></p></li>
 <li><p><a href="#method-Array-set_shape"><code>Array$set_shape()</code></a></p></li>
 <li><p><a href="#method-Array-resize"><code>Array$resize()</code></a></p></li>
+<li><p><a href="#method-Array-get_chunks"><code>Array$get_chunks()</code></a></p></li>
+<li><p><a href="#method-Array-get_dtype"><code>Array$get_dtype()</code></a></p></li>
+<li><p><a href="#method-Array-get_compressor"><code>Array$get_compressor()</code></a></p></li>
+<li><p><a href="#method-Array-get_fill_value"><code>Array$get_fill_value()</code></a></p></li>
+<li><p><a href="#method-Array-set_fill_value"><code>Array$set_fill_value()</code></a></p></li>
+<li><p><a href="#method-Array-get_order"><code>Array$get_order()</code></a></p></li>
+<li><p><a href="#method-Array-get_filters"><code>Array$get_filters()</code></a></p></li>
+<li><p><a href="#method-Array-get_synchronizer"><code>Array$get_synchronizer()</code></a></p></li>
+<li><p><a href="#method-Array-get_attrs"><code>Array$get_attrs()</code></a></p></li>
+<li><p><a href="#method-Array-get_ndim"><code>Array$get_ndim()</code></a></p></li>
+<li><p><a href="#method-Array-get_size"><code>Array$get_size()</code></a></p></li>
+<li><p><a href="#method-Array-get_itemsize"><code>Array$get_itemsize()</code></a></p></li>
+<li><p><a href="#method-Array-get_nbytes"><code>Array$get_nbytes()</code></a></p></li>
+<li><p><a href="#method-Array-get_nbytes_stored"><code>Array$get_nbytes_stored()</code></a></p></li>
+<li><p><a href="#method-Array-get_cdata_shape"><code>Array$get_cdata_shape()</code></a></p></li>
+<li><p><a href="#method-Array-get_nchunks"><code>Array$get_nchunks()</code></a></p></li>
+<li><p><a href="#method-Array-get_nchunks_initialized"><code>Array$get_nchunks_initialized()</code></a></p></li>
+<li><p><a href="#method-Array-get_is_view"><code>Array$get_is_view()</code></a></p></li>
+<li><p><a href="#method-Array-get_oindex"><code>Array$get_oindex()</code></a></p></li>
+<li><p><a href="#method-Array-get_vindex"><code>Array$get_vindex()</code></a></p></li>
+<li><p><a href="#method-Array-get_write_empty_chunks"><code>Array$get_write_empty_chunks()</code></a></p></li>
+<li><p><a href="#method-Array-equals"><code>Array$equals()</code></a></p></li>
+<li><p><a href="#method-Array-islice"><code>Array$islice()</code></a></p></li>
+<li><p><a href="#method-Array-length"><code>Array$length()</code></a></p></li>
+<li><p><a href="#method-Array-get_item"><code>Array$get_item()</code></a></p></li>
+<li><p><a href="#method-Array-get_basic_selection"><code>Array$get_basic_selection()</code></a></p></li>
+<li><p><a href="#method-Array-get_orthogonal_selection"><code>Array$get_orthogonal_selection()</code></a></p></li>
+<li><p><a href="#method-Array-get_coordinate_selection"><code>Array$get_coordinate_selection()</code></a></p></li>
+<li><p><a href="#method-Array-get_mask_selection"><code>Array$get_mask_selection()</code></a></p></li>
+<li><p><a href="#method-Array-set_item"><code>Array$set_item()</code></a></p></li>
+<li><p><a href="#method-Array-set_basic_selection"><code>Array$set_basic_selection()</code></a></p></li>
+<li><p><a href="#method-Array-set_orthogonal_selection"><code>Array$set_orthogonal_selection()</code></a></p></li>
+<li><p><a href="#method-Array-set_coordinate_selection"><code>Array$set_coordinate_selection()</code></a></p></li>
+<li><p><a href="#method-Array-set_mask_selection"><code>Array$set_mask_selection()</code></a></p></li>
+<li><p><a href="#method-Array-get_info"><code>Array$get_info()</code></a></p></li>
+<li><p><a href="#method-Array-get_digest"><code>Array$get_digest()</code></a></p></li>
+<li><p><a href="#method-Array-get_hexdigest"><code>Array$get_hexdigest()</code></a></p></li>
+<li><p><a href="#method-Array-append"><code>Array$append()</code></a></p></li>
+<li><p><a href="#method-Array-view"><code>Array$view()</code></a></p></li>
+<li><p><a href="#method-Array-astype"><code>Array$astype()</code></a></p></li>
 <li><p><a href="#method-Array-clone"><code>Array$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-Array-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
@@ -200,7 +240,7 @@ Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.
 
 <div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_read_only</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_read_only</span><span class="op">(</span><span class="va">val</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 
@@ -239,10 +279,378 @@ Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.
 </div>
 
 
+</div><p></p><hr><a id="method-Array-get_chunks"></a><div class="section">
+<h3 id="method-get-chunks-">Method <code>get_chunks()</code><a class="anchor" aria-label="anchor" href="#method-get-chunks-"></a></h3>
+
+<div class="section">
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_chunks</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_dtype"></a><div class="section">
+<h3 id="method-get-dtype-">Method <code>get_dtype()</code><a class="anchor" aria-label="anchor" href="#method-get-dtype-"></a></h3>
+
+<div class="section">
+<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_dtype</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_compressor"></a><div class="section">
+<h3 id="method-get-compressor-">Method <code>get_compressor()</code><a class="anchor" aria-label="anchor" href="#method-get-compressor-"></a></h3>
+
+<div class="section">
+<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_compressor</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_fill_value"></a><div class="section">
+<h3 id="method-get-fill-value-">Method <code>get_fill_value()</code><a class="anchor" aria-label="anchor" href="#method-get-fill-value-"></a></h3>
+
+<div class="section">
+<h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_fill_value</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-set_fill_value"></a><div class="section">
+<h3 id="method-set-fill-value-">Method <code>set_fill_value()</code><a class="anchor" aria-label="anchor" href="#method-set-fill-value-"></a></h3>
+
+<div class="section">
+<h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_fill_value</span><span class="op">(</span><span class="va">val</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_order"></a><div class="section">
+<h3 id="method-get-order-">Method <code>get_order()</code><a class="anchor" aria-label="anchor" href="#method-get-order-"></a></h3>
+
+<div class="section">
+<h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_order</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_filters"></a><div class="section">
+<h3 id="method-get-filters-">Method <code>get_filters()</code><a class="anchor" aria-label="anchor" href="#method-get-filters-"></a></h3>
+
+<div class="section">
+<h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_filters</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_synchronizer"></a><div class="section">
+<h3 id="method-get-synchronizer-">Method <code>get_synchronizer()</code><a class="anchor" aria-label="anchor" href="#method-get-synchronizer-"></a></h3>
+
+<div class="section">
+<h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_synchronizer</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_attrs"></a><div class="section">
+<h3 id="method-get-attrs-">Method <code>get_attrs()</code><a class="anchor" aria-label="anchor" href="#method-get-attrs-"></a></h3>
+
+<div class="section">
+<h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_attrs</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_ndim"></a><div class="section">
+<h3 id="method-get-ndim-">Method <code>get_ndim()</code><a class="anchor" aria-label="anchor" href="#method-get-ndim-"></a></h3>
+
+<div class="section">
+<h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_ndim</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_size"></a><div class="section">
+<h3 id="method-get-size-">Method <code>get_size()</code><a class="anchor" aria-label="anchor" href="#method-get-size-"></a></h3>
+
+<div class="section">
+<h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_size</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_itemsize"></a><div class="section">
+<h3 id="method-get-itemsize-">Method <code>get_itemsize()</code><a class="anchor" aria-label="anchor" href="#method-get-itemsize-"></a></h3>
+
+<div class="section">
+<h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_itemsize</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_nbytes"></a><div class="section">
+<h3 id="method-get-nbytes-">Method <code>get_nbytes()</code><a class="anchor" aria-label="anchor" href="#method-get-nbytes-"></a></h3>
+
+<div class="section">
+<h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_nbytes</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_nbytes_stored"></a><div class="section">
+<h3 id="method-get-nbytes-stored-">Method <code>get_nbytes_stored()</code><a class="anchor" aria-label="anchor" href="#method-get-nbytes-stored-"></a></h3>
+
+<div class="section">
+<h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_nbytes_stored</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_cdata_shape"></a><div class="section">
+<h3 id="method-get-cdata-shape-">Method <code>get_cdata_shape()</code><a class="anchor" aria-label="anchor" href="#method-get-cdata-shape-"></a></h3>
+
+<div class="section">
+<h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_cdata_shape</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_nchunks"></a><div class="section">
+<h3 id="method-get-nchunks-">Method <code>get_nchunks()</code><a class="anchor" aria-label="anchor" href="#method-get-nchunks-"></a></h3>
+
+<div class="section">
+<h4 id="usage-26">Usage<a class="anchor" aria-label="anchor" href="#usage-26"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_nchunks</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_nchunks_initialized"></a><div class="section">
+<h3 id="method-get-nchunks-initialized-">Method <code>get_nchunks_initialized()</code><a class="anchor" aria-label="anchor" href="#method-get-nchunks-initialized-"></a></h3>
+
+<div class="section">
+<h4 id="usage-27">Usage<a class="anchor" aria-label="anchor" href="#usage-27"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_nchunks_initialized</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_is_view"></a><div class="section">
+<h3 id="method-get-is-view-">Method <code>get_is_view()</code><a class="anchor" aria-label="anchor" href="#method-get-is-view-"></a></h3>
+
+<div class="section">
+<h4 id="usage-28">Usage<a class="anchor" aria-label="anchor" href="#usage-28"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_is_view</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_oindex"></a><div class="section">
+<h3 id="method-get-oindex-">Method <code>get_oindex()</code><a class="anchor" aria-label="anchor" href="#method-get-oindex-"></a></h3>
+
+<div class="section">
+<h4 id="usage-29">Usage<a class="anchor" aria-label="anchor" href="#usage-29"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_oindex</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_vindex"></a><div class="section">
+<h3 id="method-get-vindex-">Method <code>get_vindex()</code><a class="anchor" aria-label="anchor" href="#method-get-vindex-"></a></h3>
+
+<div class="section">
+<h4 id="usage-30">Usage<a class="anchor" aria-label="anchor" href="#usage-30"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_vindex</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_write_empty_chunks"></a><div class="section">
+<h3 id="method-get-write-empty-chunks-">Method <code>get_write_empty_chunks()</code><a class="anchor" aria-label="anchor" href="#method-get-write-empty-chunks-"></a></h3>
+
+<div class="section">
+<h4 id="usage-31">Usage<a class="anchor" aria-label="anchor" href="#usage-31"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_write_empty_chunks</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-equals"></a><div class="section">
+<h3 id="method-equals-">Method <code>equals()</code><a class="anchor" aria-label="anchor" href="#method-equals-"></a></h3>
+
+<div class="section">
+<h4 id="usage-32">Usage<a class="anchor" aria-label="anchor" href="#usage-32"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">equals</span><span class="op">(</span><span class="va">other</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-islice"></a><div class="section">
+<h3 id="method-islice-">Method <code>islice()</code><a class="anchor" aria-label="anchor" href="#method-islice-"></a></h3>
+
+<div class="section">
+<h4 id="usage-33">Usage<a class="anchor" aria-label="anchor" href="#usage-33"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">islice</span><span class="op">(</span>start <span class="op">=</span> <span class="cn">NA</span>, end <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-length"></a><div class="section">
+<h3 id="method-length-">Method <code><a href="https://rdrr.io/r/base/length.html" class="external-link">length()</a></code><a class="anchor" aria-label="anchor" href="#method-length-"></a></h3>
+
+<div class="section">
+<h4 id="usage-34">Usage<a class="anchor" aria-label="anchor" href="#usage-34"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">length</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_item"></a><div class="section">
+<h3 id="method-get-item-">Method <code>get_item()</code><a class="anchor" aria-label="anchor" href="#method-get-item-"></a></h3>
+
+<div class="section">
+<h4 id="usage-35">Usage<a class="anchor" aria-label="anchor" href="#usage-35"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_item</span><span class="op">(</span><span class="va">selection</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_basic_selection"></a><div class="section">
+<h3 id="method-get-basic-selection-">Method <code>get_basic_selection()</code><a class="anchor" aria-label="anchor" href="#method-get-basic-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-36">Usage<a class="anchor" aria-label="anchor" href="#usage-36"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_basic_selection</span><span class="op">(</span>selection <span class="op">=</span> <span class="cn">NA</span>, out <span class="op">=</span> <span class="cn">NA</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_orthogonal_selection"></a><div class="section">
+<h3 id="method-get-orthogonal-selection-">Method <code>get_orthogonal_selection()</code><a class="anchor" aria-label="anchor" href="#method-get-orthogonal-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-37">Usage<a class="anchor" aria-label="anchor" href="#usage-37"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_orthogonal_selection</span><span class="op">(</span>selection <span class="op">=</span> <span class="cn">NA</span>, out <span class="op">=</span> <span class="cn">NA</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_coordinate_selection"></a><div class="section">
+<h3 id="method-get-coordinate-selection-">Method <code>get_coordinate_selection()</code><a class="anchor" aria-label="anchor" href="#method-get-coordinate-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-38">Usage<a class="anchor" aria-label="anchor" href="#usage-38"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_coordinate_selection</span><span class="op">(</span>selection <span class="op">=</span> <span class="cn">NA</span>, out <span class="op">=</span> <span class="cn">NA</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_mask_selection"></a><div class="section">
+<h3 id="method-get-mask-selection-">Method <code>get_mask_selection()</code><a class="anchor" aria-label="anchor" href="#method-get-mask-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-39">Usage<a class="anchor" aria-label="anchor" href="#usage-39"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_mask_selection</span><span class="op">(</span>selection <span class="op">=</span> <span class="cn">NA</span>, out <span class="op">=</span> <span class="cn">NA</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-set_item"></a><div class="section">
+<h3 id="method-set-item-">Method <code>set_item()</code><a class="anchor" aria-label="anchor" href="#method-set-item-"></a></h3>
+
+<div class="section">
+<h4 id="usage-40">Usage<a class="anchor" aria-label="anchor" href="#usage-40"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_item</span><span class="op">(</span><span class="va">selection</span>, <span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-set_basic_selection"></a><div class="section">
+<h3 id="method-set-basic-selection-">Method <code>set_basic_selection()</code><a class="anchor" aria-label="anchor" href="#method-set-basic-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-41">Usage<a class="anchor" aria-label="anchor" href="#usage-41"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_basic_selection</span><span class="op">(</span><span class="va">selection</span>, <span class="va">value</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-set_orthogonal_selection"></a><div class="section">
+<h3 id="method-set-orthogonal-selection-">Method <code>set_orthogonal_selection()</code><a class="anchor" aria-label="anchor" href="#method-set-orthogonal-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-42">Usage<a class="anchor" aria-label="anchor" href="#usage-42"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_orthogonal_selection</span><span class="op">(</span><span class="va">selection</span>, <span class="va">value</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-set_coordinate_selection"></a><div class="section">
+<h3 id="method-set-coordinate-selection-">Method <code>set_coordinate_selection()</code><a class="anchor" aria-label="anchor" href="#method-set-coordinate-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-43">Usage<a class="anchor" aria-label="anchor" href="#usage-43"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_coordinate_selection</span><span class="op">(</span><span class="va">selection</span>, <span class="va">value</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-set_mask_selection"></a><div class="section">
+<h3 id="method-set-mask-selection-">Method <code>set_mask_selection()</code><a class="anchor" aria-label="anchor" href="#method-set-mask-selection-"></a></h3>
+
+<div class="section">
+<h4 id="usage-44">Usage<a class="anchor" aria-label="anchor" href="#usage-44"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">set_mask_selection</span><span class="op">(</span><span class="va">selection</span>, <span class="va">value</span>, fields <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_info"></a><div class="section">
+<h3 id="method-get-info-">Method <code>get_info()</code><a class="anchor" aria-label="anchor" href="#method-get-info-"></a></h3>
+
+<div class="section">
+<h4 id="usage-45">Usage<a class="anchor" aria-label="anchor" href="#usage-45"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_info</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_digest"></a><div class="section">
+<h3 id="method-get-digest-">Method <code>get_digest()</code><a class="anchor" aria-label="anchor" href="#method-get-digest-"></a></h3>
+
+<div class="section">
+<h4 id="usage-46">Usage<a class="anchor" aria-label="anchor" href="#usage-46"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_digest</span><span class="op">(</span>hashname <span class="op">=</span> <span class="st">"sha1"</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-get_hexdigest"></a><div class="section">
+<h3 id="method-get-hexdigest-">Method <code>get_hexdigest()</code><a class="anchor" aria-label="anchor" href="#method-get-hexdigest-"></a></h3>
+
+<div class="section">
+<h4 id="usage-47">Usage<a class="anchor" aria-label="anchor" href="#usage-47"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">get_hexdigest</span><span class="op">(</span>hashname <span class="op">=</span> <span class="st">"sha1"</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-append"></a><div class="section">
+<h3 id="method-append-">Method <code><a href="https://rdrr.io/r/base/append.html" class="external-link">append()</a></code><a class="anchor" aria-label="anchor" href="#method-append-"></a></h3>
+
+<div class="section">
+<h4 id="usage-48">Usage<a class="anchor" aria-label="anchor" href="#usage-48"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">append</span><span class="op">(</span><span class="va">data</span>, axis <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-view"></a><div class="section">
+<h3 id="method-view-">Method <code>view()</code><a class="anchor" aria-label="anchor" href="#method-view-"></a></h3>
+
+<div class="section">
+<h4 id="usage-49">Usage<a class="anchor" aria-label="anchor" href="#usage-49"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">view</span><span class="op">(</span>
+  shape <span class="op">=</span> <span class="cn">NA</span>,
+  chunks <span class="op">=</span> <span class="cn">NA</span>,
+  dtype <span class="op">=</span> <span class="cn">NA</span>,
+  fill_value <span class="op">=</span> <span class="cn">NA</span>,
+  filters <span class="op">=</span> <span class="cn">NA</span>,
+  read_only <span class="op">=</span> <span class="cn">NA</span>,
+  synchronizer <span class="op">=</span> <span class="cn">NA</span>
+<span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Array-astype"></a><div class="section">
+<h3 id="method-astype-">Method <code>astype()</code><a class="anchor" aria-label="anchor" href="#method-astype-"></a></h3>
+
+<div class="section">
+<h4 id="usage-50">Usage<a class="anchor" aria-label="anchor" href="#usage-50"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">astype</span><span class="op">(</span><span class="va">dtype</span><span class="op">)</span></code></pre></div><p></p></div>
+</div>
+
+
 </div><p></p><hr><a id="method-Array-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<h4 id="usage-51">Usage<a class="anchor" aria-label="anchor" href="#usage-51"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Array</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
