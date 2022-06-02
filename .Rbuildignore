@@ -1,2 +1,11 @@
+^pizzarr\.Rproj$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.BBSoptions$
+^.github$
+^pkgdown$
+^vignettes$
+^docs$
+^index\.md$
+^LICENSE\.md$
+^LICENSE$

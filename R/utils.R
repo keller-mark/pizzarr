@@ -24,6 +24,9 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   } else if(!is.na(compressor) && !("id" %in% names(compressor))) {
     stop("compressor must contain an 'id' property when not null.")
   }
+  if(is.na(filters)) {
+    filters <- jsonlite::unbox(filters)
+  }
   if(!(order %in% c("C", "F"))) {
     stop("order must be 'C' or 'F'.")
   }
@@ -69,6 +72,12 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   return(zarray_meta)
 }
 
+decode_array_metadata <- function(meta_bytes) {
+  meta_char <- rawToChar(meta_bytes)
+  meta_list <- jsonlite::fromJSON(meta_char)
+  return(meta_list)
+}
+
 
 #' Write an R matrix to a Zarr store (one chunk, no compression).
 #'
@@ -103,8 +112,8 @@ matrix_to_zarr <- function(matrix, rows, cols, store, compressor = NA) {
     shape = c(num_rows, num_cols)
   )
 
-  store$set_item(".zattrs", json_to_raw(zattrs))
-  store$set_item(".zarray", json_to_raw(zarray))
+  store$set_item(ATTRS_KEY, json_to_raw(zattrs))
+  store$set_item(ARRAY_META_KEY, json_to_raw(zarray))
   # TODO: chunks
   store$set_item("0.0", raw_matrix)
 }

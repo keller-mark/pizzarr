@@ -22,7 +22,9 @@ reference:
   - matrix_to_zarr
 - title: "The Array class"
   desc: >
-    TODO
+    Instantiate an array from an initialized store.
+- contents:
+  - Array
 - title: "Groups"
   desc: >
     Functions for creating and manipulating Zarr groups.
@@ -39,9 +41,16 @@ reference:
 - title: "Compressors and filters"
   desc: >
     TODO
+- contents:
+  - Codec
+  - Zstd
+  - LZ4
+  - get_codec
 - title: "The Attributes class"
   desc: >
-    TODO
+    Class providing access to user attributes on an array or group.
+- contents:
+  - Attributes
 - title: "Synchronization"
   desc: >
     TODO

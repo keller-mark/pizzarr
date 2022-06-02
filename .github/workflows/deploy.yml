@@ -53,7 +53,7 @@ jobs:
       - name: Run covr
         run: |
           #covr::package_coverage()
-          echo "disable covr for now"
+          cat("disable covr for now")
         shell: Rscript {0}
       - name: Build docs
         run: |
