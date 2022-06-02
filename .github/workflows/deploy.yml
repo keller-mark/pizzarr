@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: |
-          install.packages(c("remotes", "rcmdcheck", "covr"))
+          install.packages(c("devtools", "remotes", "rcmdcheck", "covr"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
         env:
@@ -58,7 +58,7 @@ jobs:
         shell: Rscript {0}
       - name: Build docs
         run: |
-          Rscript -e 'pkgdown::build_site(new_process = FALSE)'
+          Rscript -e 'devtools::document(); pkgdown::build_site(new_process = FALSE)'
           touch docs/.nojekyll
       - name: Deploy docs to gh-pages branch
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}

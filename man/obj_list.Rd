@@ -4,12 +4,21 @@
 \alias{obj_list}
 \title{Create an empty named list}
 \usage{
-obj_list()
+obj_list(...)
+}
+\arguments{
+\item{...}{A variable number of list entries.}
 }
 \value{
 An empty named list.
 }
 \description{
 A helper function to construct an empty list which converts to a JSON object rather than a JSON array.
+}
+\examples{
+default_window <- obj_list(
+  min = 0,
+  max = 255
+)
 }
 \keyword{internal}
