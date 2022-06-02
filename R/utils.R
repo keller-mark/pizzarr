@@ -1,5 +1,6 @@
 #' Convert a JSON-like list to a raw type.
-#'
+#' 
+#' @keywords internal
 #' @param json_as_list An R list to be converted to JSON.
 #' @return The raw value.
 json_to_raw <- function(json_as_list) {
@@ -8,10 +9,27 @@ json_to_raw <- function(json_as_list) {
   return(json_raw)
 }
 
+#' Convert a string into a character vector.
+#' 
+#' @keywords internal
+#' @param s The string.
+#' @return A vector where each element is an individual character.
 str_to_vec <- function(s) {
   return(stringr::str_split(s, pattern = "")[[1]])
 }
 
+#' Create a list of zarray metadata.
+#' 
+#' @keywords internal
+#' @param shape
+#' @param chunks
+#' @param dtype
+#' @param compressor
+#' @param fill_value
+#' @param order
+#' @param filters
+#' @param dimension_separator
+#' @return A list.
 create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor = NA, fill_value = NA, order = NA, filters = NA, dimension_separator = NA) {
   # Reference: https://zarr.readthedocs.io/en/stable/spec/v2.html#metadata
   if(is.na(dimension_separator)) {
@@ -72,7 +90,12 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   return(zarray_meta)
 }
 
-decode_array_metadata <- function(meta_bytes) {
+#' Decode zarray metadata.
+#' 
+#' @keywords internal
+#' @param meta_bytes The metadata in raw bytes format.
+#' @return The metadata after conversion to an R list.
+decode_array_meta <- function(meta_bytes) {
   meta_char <- rawToChar(meta_bytes)
   meta_list <- jsonlite::fromJSON(meta_char)
   return(meta_list)
@@ -85,6 +108,7 @@ decode_array_metadata <- function(meta_bytes) {
 #' @param rows A vector of row names.
 #' @param cols A vector of column names.
 #' @param store The Zarr store.
+#' @param compressor The compressor config. Optional.
 matrix_to_zarr <- function(matrix, rows, cols, store, compressor = NA) {
 
   num_rows <- nrow(matrix)
@@ -123,7 +147,7 @@ matrix_to_zarr <- function(matrix, rows, cols, store, compressor = NA) {
 #' A helper function to construct an empty list which converts to a JSON object rather than a JSON array.
 #'
 #' @param ... A variable number of list entries.
-#' @return An empty named list.
+#' @return A named list.
 #'
 #' @keywords internal
 #' @export

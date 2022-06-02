@@ -52,7 +52,7 @@ Array <- R6::R6Class("Array",
     load_metadata = function() {
       mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
       meta_bytes <- self$store$get_item(mkey)
-      meta <- decode_array_metadata(meta_bytes)
+      meta <- decode_array_meta(meta_bytes)
       private$meta <- meta
       private$shape <- meta$shape
       private$chunks <- meta$chunks
