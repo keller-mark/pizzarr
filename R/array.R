@@ -3,7 +3,7 @@
 #' @docType class
 #' @description
 #' Instantiate an array from an initialized store.
-#' Reference: https://zarr.readthedocs.io/en/stable/_modules/zarr/core.html#Array
+#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L51
 #'
 #' @rdname Array
 #' @export
@@ -104,7 +104,7 @@ Array <- R6::R6Class("Array",
     write_empty_chunks = NULL,
 
     #' @description
-    #' Create a new LZ4 compressor.
+    #' Create a new Array instance.
     #' @param store Array store, already initialized.
     #' @return An `Array` instance.
     initialize = function(store, path = NA, read_only = FALSE, chunk_store = NA, synchronizer = NA, cache_metadata = TRUE, cache_attrs = TRUE, write_empty_chunks = TRUE) {

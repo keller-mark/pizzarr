@@ -15,19 +15,17 @@ navbar:
     right: [github]
 
 reference:
-- title: "Array creation"
+- title: "Arrays"
   desc: >
-    Functions for creating Zarr arrays.
-- contents:
-  - matrix_to_zarr
-- title: "The Array class"
-  desc: >
-    Instantiate an array from an initialized store.
+    Create and manipulate Zarr arrays.
 - contents:
   - Array
+  - matrix_to_zarr
 - title: "Groups"
   desc: >
-    Functions for creating and manipulating Zarr groups.
+    Create and manipulate Zarr groups.
+- contents:
+  - Group
 - title: "Storage"
   desc: >
     Store classes.
@@ -40,15 +38,15 @@ reference:
     TODO
 - title: "Compressors and filters"
   desc: >
-    TODO
+    Compressor and filter codec classes.
 - contents:
   - Codec
   - Zstd
   - LZ4
   - get_codec
-- title: "The Attributes class"
+- title: "Attributes"
   desc: >
-    Class providing access to user attributes on an array or group.
+    Access to user attributes on an array or group.
 - contents:
   - Attributes
 - title: "Synchronization"
