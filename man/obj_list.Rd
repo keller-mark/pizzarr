@@ -10,7 +10,7 @@ obj_list(...)
 \item{...}{A variable number of list entries.}
 }
 \value{
-An empty named list.
+A named list.
 }
 \description{
 A helper function to construct an empty list which converts to a JSON object rather than a JSON array.

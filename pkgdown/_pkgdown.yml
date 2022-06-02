@@ -20,7 +20,6 @@ reference:
     Create and manipulate Zarr arrays.
 - contents:
   - Array
-  - matrix_to_zarr
 - title: "Groups"
   desc: >
     Create and manipulate Zarr groups.
@@ -33,9 +32,6 @@ reference:
   - Store
   - DirectoryStore
   - MemoryStore
-- title: "Convenience functions"
-  desc: >
-    TODO
 - title: "Compressors and filters"
   desc: >
     Compressor and filter codec classes.
@@ -49,6 +45,9 @@ reference:
     Access to user attributes on an array or group.
 - contents:
   - Attributes
+- title: "Convenience functions"
+  desc: >
+    TODO
 - title: "Synchronization"
   desc: >
     TODO

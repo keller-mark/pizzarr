@@ -14,6 +14,8 @@ matrix_to_zarr(matrix, rows, cols, store, compressor = NA)
 \item{cols}{A vector of column names.}
 
 \item{store}{The Zarr store.}
+
+\item{compressor}{The compressor config. Optional.}
 }
 \description{
 Write an R matrix to a Zarr store (one chunk, no compression).

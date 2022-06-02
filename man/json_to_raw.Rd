@@ -15,3 +15,4 @@ The raw value.
 \description{
 Convert a JSON-like list to a raw type.
 }
+\keyword{internal}
