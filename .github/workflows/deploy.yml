@@ -37,7 +37,8 @@ jobs:
       - name: Install dependencies
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: |
-          install.packages(c("rcmdcheck", "covr"))
+          install.packages(c("remotes", "rcmdcheck", "covr"))
+          remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
