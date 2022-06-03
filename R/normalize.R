@@ -8,7 +8,7 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
       if(convert_integer_selection_to_slices) {
         selection[i] <- slice(dim_sel, dim_sel + 1, 1)
       } else {
-        selection[i] <- normalize_integer_selection(dim_sl, shape[i])
+        selection[i] <- normalize_integer_selection(dim_sel, shape[i])
       }
     } else if(is_integer_list(dim_sel)) { # TODO: should this be is_integer_vec?
       stop('TypeError(Integer array selections are not supported (yet))')
