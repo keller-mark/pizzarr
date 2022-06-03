@@ -89,3 +89,21 @@ test_that("normalize_resize_args with int argument", {
   res <- normalize_resize_args(c(1), list(2))
   expect_equal(res, list(2))
 })
+
+test_that("normalize_integer_selection with valid input", {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
+  res <- normalize_integer_selection(1, 100)
+  expect_equal(res, 1)
+  res <- normalize_integer_selection(-1, 100)
+  expect_equal(res, 99)
+})
+
+test_that("normalize_integer_selection with invalid input", {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
+  f1 <- function() normalize_integer_selection(100, 100)
+  expect_error(f1())
+  f2 <- function() normalize_integer_selection(1000, 100)
+  expect_error(f2())
+  f3 <- function() normalize_integer_selection(-1000, 100)
+  expect_error(f3())
+})

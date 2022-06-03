@@ -184,17 +184,6 @@ zip_numeric <- function(a, b) {
   return(result)
 }
 
-slice <- function(start, end, step) {
-  return(list(
-    start = start,
-    end = end,
-    step = step
-  ))
-}
-
-slice_indices <- function() {
-  
-}
 
 normalize_integer_selection <- function(dim_sel, dim_len) {
   # Normalize type to int
