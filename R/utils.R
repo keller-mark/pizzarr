@@ -184,6 +184,35 @@ zip_numeric <- function(a, b) {
   return(result)
 }
 
+slice <- function(start, end, step) {
+  return(list(
+    start = start,
+    end = end,
+    step = step
+  ))
+}
+
+slice_indices <- function() {
+  
+}
+
+normalize_integer_selection <- function(dim_sel, dim_len) {
+  # Normalize type to int
+  dim_sel <- as.numeric(dim_sel)
+
+  # handle wraparound
+  if(dim_sel < 0) {
+    dim_sel <- dim_len + dim_sel
+  }
+
+  # Handle out of bounds
+  if(dim_sel >= dim_len || dim_sel < 0) {
+    stop('BoundsCheckError(dim_len)')
+  }
+
+  return(dim_sel)
+}
+
 normalize_resize_args <- function(old_shape, args) {
   if(length(args) == 1) {
     new_shape <- args[1]

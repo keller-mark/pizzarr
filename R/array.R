@@ -185,10 +185,34 @@ Array <- R6::R6Class("Array",
       }
     },
     get_basic_selection_zd = function(selection = NA, out = NA, fields = NA) {
+      # Special case basic selection for zero-dimensional array
+      # Check selection is valid
+      #selection <- ensure_tuple(selection)  # TODO
+      if(!is.null(selection) || selection != "...") {
+        stop("err_too_many_indices(selection, ())")
+      }
+      # Obtain encoded data for chunk
+      ckey <- private$chunk_key(c(0))
+      cdata <- self$chunk_store$get_item(ckey)
+      # TODO: use try-catch
+      chunk <- private$decode_chunk(cdata)
 
+      # Handle fields
+      if(!is.na(fields)) {
+        chunk <- chunk[fields]
+      }
+
+      # Handle selection of the scalar value via empty tuple
+      if(is.na(out)) {
+        out <- chunk[selection]
+      } else {
+        out[selection] <- chunk[selection]
+      }
+      return(out)
     },
     get_basic_selection_nd = function(selection = NA, out = NA, fields = NA) {
-
+      indexer <- BasicIndexer$new(selection, self)
+      return(private$get_selection(indexer, out = out, fields = fields))
     },
     get_selection = function(indexer, out = NA, fields = NA) {
 
@@ -427,10 +451,21 @@ Array <- R6::R6Class("Array",
     },
     get_item = function(selection) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
-      # TODO
+      # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/index.ts#L266
+      return(self$get_basic_selection(selection))
     },
     get_basic_selection = function(selection = NA, out = NA, fields = NA) {
-
+      # Refresh metadata
+      if(!self$cache_metadata) {
+        private$load_metadata()
+      }
+      # Check args
+      #check_fields(fields, private$dtype) # TODO
+      # Handle zero-dimensional arrays
+      if(is.null(private$shape)) {
+        return(private$get_basic_selection_zd(selection, out = out, fields = fields))
+      }
+      return(private$get_basic_selection_nd(selection, out = out, fields = fields))
     },
     get_orthogonal_selection = function(selection = NA, out = NA, fields = NA) {
 
