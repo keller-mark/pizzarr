@@ -20,6 +20,8 @@ reference:
     Create and manipulate Zarr arrays.
 - contents:
   - Array
+  - NestedArray
+  - RawArray
 - title: "Groups"
   desc: >
     Create and manipulate Zarr groups.
