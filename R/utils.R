@@ -282,3 +282,10 @@ replace_ellipsis <- function(selection, shape) {
   return(selection)
 }
 
+compute_size <- function(shape) {
+  result <- 1
+  for(val in shape) {
+    result <- result * val
+  }
+  return(result)
+}

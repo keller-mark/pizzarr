@@ -215,52 +215,84 @@ Array <- R6::R6Class("Array",
       return(private$get_selection(indexer, out = out, fields = fields))
     },
     get_selection = function(indexer, out = NA, fields = NA) {
+      # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/index.ts#L304
+      # We iterate over all chunks which overlap the selection and thus contain data
+      # that needs to be extracted. Each chunk is processed in turn, extracting the
+      # necessary data and storing into the correct location in the output array.
+
+      out_dtype <- private$dtype
+      out_shape <- indexer$shape
+      out_size <- compute_size(indexer$shape)
+
+      if(!is.na(out)) {
+        # TODO: handle out provided as parameter
+      } else {
+        out <- NestedArray$new(null, out_shape, out_dtype)
+      }
+
+      if(out_size == 0) {
+        return(out)
+      }
+
+      # TODO: use queue to handle async iterator
+      for(proj in indexer$iter()) {
+        private$chunk_getitem(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
+      }
+
+      # Return scalar instead of zero-dimensional array.
+      if(length(out$shape) == 0) {
+        return(out$data[0])
+      }
+      return(out)
 
     },
     set_basic_selection_zd = function(selection, value, fields = NA) {
-
+      # TODO
     },
     set_basic_selection_nd = function(selection, value, fields = NA) {
-
+      # TODO
     },
     set_selection = function(indexer, value, fields = NA) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1682
+      # TODO
     },
     process_chunk = function(out, cdata, chunk_selection, drop_axes, out_is_ndarray, fields, out_selection, partial_read_decode = FALSE) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1755
+      # TODO
     },
     chunk_getitem = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
-
+      # TODO
     },
     chunk_getitems = function(lchunk_coords, lchunk_selection, out, lout_selection, drop_axes = NA, fields = NA) {
-      
+      # TODO
     },
     chunk_setitem = function(chunk_coords, chunk_selection, value, fields = NA) {
-      
+      # TODO
     },
     chunk_setitem_nosync = function(chunk_coords, chunk_selection, value, fields = NA) {
-      
+      # TODO
     },
     chunk_setitems = function(lchunk_coords, lchunk_selection, values, fields = NA) {
-      
+      # TODO
     },
     process_for_setitem = function(ckey, chunk_selection, value, fields = NA) {
-
+      # TODO
     },
     chunk_delitem = function(ckey) {
-      
+      # TODO
     },
     chunk_delitems = function(ckeys) {
-      
+      # TODO
     },
     decode_chunk = function(cdata, start = NA, nitems = NA, expected_shape = NA) {
-
+      # TODO
     },
     encode_chunk = function(chunk) {
-      
+      # TODO
     },
     append_nosync = function(data, axis = 0) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141
+      # TODO
     }
   ),
   public = list(
@@ -460,8 +492,6 @@ Array <- R6::R6Class("Array",
       if(!self$cache_metadata) {
         private$load_metadata()
       }
-      # Check args
-      #check_fields(fields, private$dtype) # TODO
       # Handle zero-dimensional arrays
       if(is.null(private$shape)) {
         return(private$get_basic_selection_zd(selection, out = out, fields = fields))
@@ -469,46 +499,48 @@ Array <- R6::R6Class("Array",
       return(private$get_basic_selection_nd(selection, out = out, fields = fields))
     },
     get_orthogonal_selection = function(selection = NA, out = NA, fields = NA) {
-
+      # TODO
     },
     get_coordinate_selection = function(selection = NA, out = NA, fields = NA) {
-
+      # TODO
     },
     get_mask_selection = function(selection = NA, out = NA, fields = NA) {
-
+      # TODO
     },
     set_item = function(selection, value) {
-
+      # TODO
     },
     set_basic_selection = function(selection, value, fields = NA) {
-
+      # TODO
     },
     set_orthogonal_selection = function(selection, value, fields = NA) {
-
+      # TODO
     },
     set_coordinate_selection = function(selection, value, fields = NA) {
-
+      # TODO
     },
     set_mask_selection = function(selection, value, fields = NA) {
-
+      # TODO
     },
     get_info = function() {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141
+      # TODO
     },
     get_digest = function(hashname = "sha1") {
-
+      # TODO
     },
     get_hexdigest = function(hashname = "sha1") {
-
+      # TODO
     },
     append = function(data, axis = 0) {
       private$append_nosync(data, axis)
     },
     view = function(shape = NA, chunks = NA, dtype = NA, fill_value = NA, filters = NA, read_only = NA, synchronizer = NA) {
-
+      # TODO
     },
     astype = function(dtype) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2586
+      # TODO
     }
   )
 )

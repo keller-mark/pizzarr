@@ -12,7 +12,7 @@ test_that("create_zarray_meta throws error when simple dtype byteorder is invali
 })
 
 test_that("create_zarray_meta throws error when simple dtype basic type is invalid", {
-  f <- function() create_zarray_meta(dtype = "<B1", order = "C", fill_value = 0, dimension_separator = ".")
+  f <- function() create_zarray_meta(dtype = "<Z1", order = "C", fill_value = 0, dimension_separator = ".")
   expect_error(f())
 })
 

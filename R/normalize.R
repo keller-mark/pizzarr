@@ -86,3 +86,9 @@ normalize_storage_path <- function(path) {
   }
   return(path)
 }
+
+# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
+normalize_shape <- function(shape) {
+  shape <- ensure_vec(shape)
+  return(floor(shape))
+}
