@@ -246,7 +246,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
     iter = function() {
       # TODO: use generator/yield features from async package
       result <- list()
-      dim_indexer_iterables <- lapply(self$dim_indexers, function(di) => di$iter())
+      dim_indexer_iterables <- lapply(self$dim_indexers, function(di) di$iter())
       dim_indexer_product <- do.call(expand.grid, dim_indexer_iterables)
 
       for(row_i in seq_len(dim(dim_indexer_product)[1])) {
