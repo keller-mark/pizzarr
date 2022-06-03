@@ -1,11 +1,28 @@
-normalize_array_selection <- function(selection, convert_integer_selection_to_slices = FALSE) {
+# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L45
+normalize_list_selection <- function(selection, shape, convert_integer_selection_to_slices = FALSE) {
   selection <- replace_ellipsis(selection, shape)
+
+  for(i in seq_along(selection)) {
+    dim_sel <- selection[i]
+    if(is_integer(dim_sel)) {
+      if(convert_integer_selection_to_slices) {
+        selection[i] <- slice(dim_sel, dim_sel + 1, 1)
+      } else {
+        selection[i] <- normalize_integer_selection(dim_sl, shape[i])
+      }
+    } else if(is_integer_list(dim_sel)) { # TODO: should this be is_integer_vec?
+      stop('TypeError(Integer array selections are not supported (yet))')
+    } else if(is.na(dim_sel) || dim_sel == ":") {
+      selection[i] <- slice(NA, NA, 1)
+    }
+  }
+  return(selection)
 }
 
 # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L110
 normalize_integer_selection <- function(dim_sel, dim_len) {
   # Normalize type to int
-  dim_sel <- as.numeric(dim_sel)
+  dim_sel <- as.scalar(dim_sel)
 
   # handle wraparound
   if(dim_sel < 0) {

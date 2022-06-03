@@ -167,3 +167,11 @@ test_that("replace_ellipsis [[null, null], [null, null, ellipsis], [100, 100]]",
   res <- replace_ellipsis(list(NA, NA, "..."), list(100, 100))
   expect_equal(res, list(NA, NA))
 })
+
+# Failure tests for replace_ellipsis
+test_that("replace_ellipsis errors with invalid input", {
+  f1 <- function() replace_ellipsis(list("...", "..."), list(100, 100))
+  expect_error(f1())
+  f2 <- function() replace_ellipsis(list(0, 1, 2), list(100, 100))
+  expect_error(f2())
+})

@@ -211,11 +211,11 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
     initialize = function(selection, array) {
       shape <- array$get_shape()
       chunks <- array$get_chunks()
-      #selection <- replace_ellipsis(selection, shape) # TODO
+      selection <- normalize_list_selection(selection, shape)
       
       # Setup per-dimension indexers
       dim_indexers <- list()
-      for(i in seq_len(length(selection))) {
+      for(i in seq_along(selection)) {
         dim_sel <- selection[i]
         dim_len <- shape[i]
         dim_chunk_len <- chunks[i]
@@ -224,7 +224,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
           dim_sel <- slice(NA)
         }
 
-        if(!is.list(dim_sel)) {
+        if(is_integer(dim_sel)) {
           dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
         } else if(is_slice(dim_sel)) {
           dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)

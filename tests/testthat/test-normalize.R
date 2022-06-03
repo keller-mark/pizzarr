@@ -51,9 +51,9 @@ test_that("normalize_resize_args with int argument", {
 test_that("normalize_integer_selection with valid input", {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
   res <- normalize_integer_selection(1, 100)
-  expect_equal(res, 1)
+  expect_equal(res, as.scalar(1))
   res <- normalize_integer_selection(-1, 100)
-  expect_equal(res, 99)
+  expect_equal(res, as.scalar(99))
 })
 
 test_that("normalize_integer_selection with invalid input", {
