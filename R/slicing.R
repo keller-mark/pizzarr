@@ -1,21 +1,45 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/slice.ts#L78
 
+# Shortcut for Slice$new
 slice <- function(start, stop = NA, step = NA) {
-  if(is.na(stop)) {
-    stop <- start
-    start <- NA
-  }
-  if(start == ":") {
-    start <- NA
-  }
-  if(stop == ":") {
-    stop <- NA
-  }
-  return(list(
+  return(Slice$new(
     start = start,
     stop = stop,
     step = step
   ))
+}
+
+is_slice <- function(s) {
+  if(class(s)[[1]] == "Slice") {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+is_contiguous_slice <- function(s) {
+  if(is_slice(s) && (s$step == NA || s$step == 1)) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+is_positive_slice <- function(s) {
+  if(is_slice(s) && (s$step == NA || s$step >= 1)) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+is_basic_selection <- function(selection) {
+  selection <- ensure_list(selection)
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L170
+  for(i in seq_along(selection)) {
+    s <- selection[i]
+    if(!(is.numeric(s) || is_positive_slice(s))) {
+      return(FALSE)
+    }
+  }
+  return(TRUE)
 }
 
 adjust_indices <- function(start, stop, step, length_param) {

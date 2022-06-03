@@ -1,35 +1,5 @@
 library(pizzarr)
 
-test_that("normalize_storage_path changes backslashes to forward slashes", {
-  res <- normalize_storage_path("test\\nested\\dirs")
-  expect_equal(res, "test/nested/dirs")
-})
-
-test_that("normalize_storage_path without leading nor trailing slashes", {
-  res <- normalize_storage_path("test")
-  expect_equal(res, "test")
-})
-
-test_that("normalize_storage_path with leading slash", {
-  res <- normalize_storage_path("/test")
-  expect_equal(res, "test")
-})
-
-test_that("normalize_storage_path with trailing slash", {
-  res <- normalize_storage_path("test/")
-  expect_equal(res, "test")
-})
-
-test_that("normalize_storage_path with both leading and trailing slashes", {
-  res <- normalize_storage_path("/test//")
-  expect_equal(res, "test")
-})
-
-test_that("normalize_storage_path collapses repeated slashes", {
-  res <- normalize_storage_path("/test//this")
-  expect_equal(res, "test/this")
-})
-
 test_that("create_zarray_meta does not throw error when simple dtype is valid", {
   res <- create_zarray_meta(dtype = "|u1", order = "C", fill_value = 0, dimension_separator = ".")
   expect_equal(class(res$dtype)[[1]], "scalar")
@@ -72,38 +42,128 @@ test_that("zip_numeric", {
   ))
 })
 
-test_that("normalize_resize_args throws error when different number of dimensions", {
-  f <- function() normalize_resize_args(list(1, 2, 3), list(4, 5))
-  expect_error(f())
+# Reference: https://github.com/gzuidhof/zarr.js/blob/master/test/core/indexing.test.ts#L25
+# [expected, selection, shape]
+
+# 1D, single item
+test_that("replace_ellipsis [[0], 0, [100]]", {
+  res <- replace_ellipsis(as.scalar(0), list(100))
+  expect_equal(res, list(0))
 })
 
-test_that("normalize_resize_args", {
-  res <- normalize_resize_args(c(1, 2), c(2, 1))
-  expect_equal(res, list(2, 1))
-})
-test_that("normalize_resize_args with int argument", {
-  res <- normalize_resize_args(c(1), 2)
-  expect_equal(res, list(2))
-})
-test_that("normalize_resize_args with int argument", {
-  res <- normalize_resize_args(c(1), list(2))
-  expect_equal(res, list(2))
+# 1D
+test_that("replace_ellipsis [[null], ellipsis, [100]]", {
+  res <- replace_ellipsis("...", list(100))
+  expect_equal(res, list(NA))
 })
 
-test_that("normalize_integer_selection with valid input", {
-  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
-  res <- normalize_integer_selection(1, 100)
-  expect_equal(res, 1)
-  res <- normalize_integer_selection(-1, 100)
-  expect_equal(res, 99)
+test_that("replace_ellipsis [[null], [null], [100]]", {
+  res <- replace_ellipsis(list(NA), list(100))
+  expect_equal(res, list(NA))
 })
 
-test_that("normalize_integer_selection with invalid input", {
-  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
-  f1 <- function() normalize_integer_selection(100, 100)
-  expect_error(f1())
-  f2 <- function() normalize_integer_selection(1000, 100)
-  expect_error(f2())
-  f3 <- function() normalize_integer_selection(-1000, 100)
-  expect_error(f3())
+test_that("replace_ellipsis [[null], [null, ellipsis], [100]]", {
+  res <- replace_ellipsis(list(NA, "..."), list(100))
+  expect_equal(res, list(NA))
+})
+
+test_that("replace_ellipsis [[null], [ellipsis, null], [100]]", {
+  res <- replace_ellipsis(list("...", NA), list(100))
+  expect_equal(res, list(NA))
+})
+
+test_that("replace_ellipsis [[slice(0, 5)], slice(0, 5), [100]]", {
+  res <- replace_ellipsis(slice(0, 5), list(100))
+  expect_equal(res, list(slice(0, 5)))
+})
+
+test_that("replace_ellipsis [[slice(null)], slice(:), [100]]", {
+  res <- replace_ellipsis(slice(":"), list(100))
+  expect_equal(res, list(slice(NA)))
+  expect_equal(res[[1]]$start, NA)
+  expect_equal(res[[1]]$stop, NA)
+  expect_equal(res[[1]]$step, NA)
+})
+
+test_that("replace_ellipsis [[slice(null)], slice(:, :), [100]]", {
+  res <- replace_ellipsis(slice(":", ":"), list(100))
+  expect_equal(res, list(slice(NA)))
+})
+
+# 2D, single item
+test_that("replace_ellipsis [[0, 0], [0, 0], [100, 100]]", {
+  res <- replace_ellipsis(list(0, 0), list(100, 100))
+  expect_equal(res, list(0, 0))
+})
+
+test_that("replace_ellipsis [[0, 0], [0, 0], [100, 100]] with as.scalar", {
+  res <- replace_ellipsis(list(as.scalar(0), as.scalar(0)), list(100, 100))
+  expect_equal(res, list(as.scalar(0), as.scalar(0)))
+})
+
+test_that("replace_ellipsis [[-1, 1], [-1, 1], [100, 100]]", {
+  res <- replace_ellipsis(list(-1, 1), list(100, 100))
+  expect_equal(res, list(-1, 1))
+})
+
+# 2D, single col/row
+test_that("replace_ellipsis [[0, null], [0, null], [100, 100]]", {
+  res <- replace_ellipsis(list(0, NA), list(100, 100))
+  expect_equal(res, list(0, NA))
+})
+
+test_that("replace_ellipsis [[0, slice(null)], [0, slice(null)], [100, 100]]", {
+  res <- replace_ellipsis(list(0, slice(NA)), list(100, 100))
+  expect_equal(res, list(0, slice(NA)))
+})
+
+test_that("replace_ellipsis [[null, 0], [null, 0], [100, 100]]", {
+  res <- replace_ellipsis(list(NA, 0), list(100, 100))
+  expect_equal(res, list(NA, 0))
+})
+
+# 2D
+test_that("replace_ellipsis [[null, null], ellipsis, [100, 100]]", {
+  res <- replace_ellipsis("...", list(100, 100))
+  expect_equal(res, list(NA, NA))
+})
+
+test_that("replace_ellipsis [[null, null], [null], [100, 100]]", {
+  res <- replace_ellipsis(list(NA), list(100, 100))
+  expect_equal(res, list(NA, NA))
+})
+
+test_that("replace_ellipsis [[null, null], [null, null], [100, 100]]", {
+  res <- replace_ellipsis(list(NA, NA), list(100, 100))
+  expect_equal(res, list(NA, NA))
+})
+
+test_that("replace_ellipsis [[null, null], [ellipsis, null], [100, 100]]", {
+  res <- replace_ellipsis(list("...", NA), list(100, 100))
+  expect_equal(res, list(NA, NA))
+})
+
+test_that("replace_ellipsis [[null, null], [null, ellipsis], [100, 100]]", {
+  res <- replace_ellipsis(list(NA, "..."), list(100, 100))
+  expect_equal(res, list(NA, NA))
+})
+
+test_that("replace_ellipsis [[null, slice(null)], [ellipsis, slice(null)], [100, 100]]", {
+  res <- replace_ellipsis(list("...", slice(NA)), list(100, 100))
+  expect_equal(res, list(NA, slice(NA)))
+})
+
+test_that("replace_ellipsis [[null, null], [ellipsis, null, null], [100, 100]]", {
+  res <- replace_ellipsis(list("...", NA, NA), list(100, 100))
+  expect_equal(res, list(NA, NA))
+})
+
+test_that("replace_ellipsis [[null, null], [null, ellipsis, null], [100, 100]]", {
+  res <- replace_ellipsis(list(NA, "...", NA), list(100, 100))
+  expect_equal(res, list(NA, NA))
+})
+
+test_that("replace_ellipsis [[null, null], [null, null, ellipsis], [100, 100]]", {
+  res <- replace_ellipsis(list(NA, NA, "..."), list(100, 100))
+  expect_equal(res, list(NA, NA))
 })

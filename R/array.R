@@ -187,7 +187,7 @@ Array <- R6::R6Class("Array",
     get_basic_selection_zd = function(selection = NA, out = NA, fields = NA) {
       # Special case basic selection for zero-dimensional array
       # Check selection is valid
-      #selection <- ensure_tuple(selection)  # TODO
+      selection <- ensure_list(selection)  # TODO
       if(!is.null(selection) || selection != "...") {
         stop("err_too_many_indices(selection, ())")
       }
@@ -449,6 +449,7 @@ Array <- R6::R6Class("Array",
         stop("length of unized object")
       }
     },
+    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
     get_item = function(selection) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
       # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/index.ts#L266
