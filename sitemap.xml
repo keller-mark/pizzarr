@@ -31,6 +31,9 @@
     <loc>https://keller-mark.github.io/pizzarr/reference/Attributes.html</loc>
   </url>
   <url>
+    <loc>https://keller-mark.github.io/pizzarr/reference/BasicIndexer.html</loc>
+  </url>
+  <url>
     <loc>https://keller-mark.github.io/pizzarr/reference/Codec.html</loc>
   </url>
   <url>
@@ -40,6 +43,9 @@
     <loc>https://keller-mark.github.io/pizzarr/reference/Group.html</loc>
   </url>
   <url>
+    <loc>https://keller-mark.github.io/pizzarr/reference/IntDimIndexer.html</loc>
+  </url>
+  <url>
     <loc>https://keller-mark.github.io/pizzarr/reference/LZ4.html</loc>
   </url>
   <url>
@@ -47,6 +53,9 @@
   </url>
   <url>
     <loc>https://keller-mark.github.io/pizzarr/reference/OIndex.html</loc>
+  </url>
+  <url>
+    <loc>https://keller-mark.github.io/pizzarr/reference/SliceDimIndexer.html</loc>
   </url>
   <url>
     <loc>https://keller-mark.github.io/pizzarr/reference/Store.html</loc>
