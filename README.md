@@ -4,7 +4,7 @@
 
 A Zarr implementation for R.
 
-🚧 work in progress 🚧
+🚧 [work in progress](https://github.com/keller-mark/pizzarr/search?q=TODO) 🚧
 
 ## Installation
 
