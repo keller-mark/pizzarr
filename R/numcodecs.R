@@ -127,7 +127,7 @@ LZ4 <- R6::R6Class("LZ4",
 #' @return The instance of the codec.
 get_codec <- function(config) {
   result <- Codec$new()
-  if(!is.na(config)) {
+  if(!is_na(config)) {
     codec_id <- config$id
     config$id <- NULL
     if(codec_id == "LZ4") {
@@ -137,4 +137,8 @@ get_codec <- function(config) {
     }
   }
   return(result)
+}
+
+get_default_compressor <- function() {
+  return(Zstd$new())
 }

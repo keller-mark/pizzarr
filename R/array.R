@@ -69,12 +69,12 @@ Array <- R6::R6Class("Array",
         # TODO: check whether store has a dimension separator before reverting to "."
         private$dimension_separator <- "."
       }
-      if(is.na(meta$compressor) || is.null(meta$compressor)) {
+      if(is_na(meta$compressor) || is.null(meta$compressor)) {
         private$compressor <- NA
       } else {
         private$compressor <- get_codec(meta$compressor)
       }
-      if(is.na(meta$filters) || is.null(meta$filters)) {
+      if(is_na(meta$filters) || is.null(meta$filters)) {
         private$filters <- NA
       } else {
         private$filters <- list()

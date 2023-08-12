@@ -37,12 +37,12 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   } else if(!(dimension_separator %in% c(".", "/"))) {
     stop("dimension_separator must be '.' or '/'.")
   }
-  if(is.na(compressor)) {
+  if(is_na(compressor)) {
     compressor <- jsonlite::unbox(compressor)
-  } else if(!is.na(compressor) && !("id" %in% names(compressor))) {
+  } else if(!is_na(compressor) && !("id" %in% names(compressor))) {
     stop("compressor must contain an 'id' property when not null.")
   }
-  if(is.na(filters)) {
+  if(is_na(filters)) {
     filters <- jsonlite::unbox(filters)
   }
   if(!(order %in% c("C", "F"))) {
@@ -62,7 +62,7 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
     }
     
     if(dtype_basictype == "f") {
-      if(!(fill_value %in% c("NaN", "Infinity", "-Infinity"))) {
+      if(!is.numeric(fill_value) && !(fill_value %in% c("NaN", "Infinity", "-Infinity"))) {
         stop("fill_value must be NaN, Infinity, or -Infinity when dtype is float")
       }
     }
@@ -288,4 +288,17 @@ compute_size <- function(shape) {
     result <- result * val
   }
   return(result)
+}
+
+#' Check if a value, potentially a vector, is NA
+#'
+#' @keywords internal
+#' @param val The value to check
+#' @return Whether the value is NA
+is_na <- function(val) {
+  if(length(val) > 1) {
+    return(FALSE)
+  } else {
+    return(is.na(val))
+  }
 }

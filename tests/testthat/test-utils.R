@@ -28,7 +28,7 @@ test_that("create_zarray_meta throws error when dimension separator is invalid",
 
 
 test_that("create_zarray_meta throws error when fill_value is invalid for float dtype", {
-  f <- function() create_zarray_meta(dtype = "<f2", order = "C", fill_value = 0)
+  f <- function() create_zarray_meta(dtype = "<f2", order = "C", fill_value = "foo")
   expect_error(f())
 })
 
