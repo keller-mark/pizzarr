@@ -302,3 +302,21 @@ is_na <- function(val) {
     return(is.na(val))
   }
 }
+
+is_total_slice <- function(chunk_selection, chunks) {
+  # TODO
+}
+
+chunk_fill <- function(chunk, value) {
+  # Chunk is an R array()
+  # Value is a scalar (after is.scalar() check)
+
+  # TODO
+  # Need to do equivalent of chunk.fill(value) in JS
+
+}
+
+is_key_error <- function(e) {
+  # TODO
+  return(TRUE)
+}

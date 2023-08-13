@@ -250,15 +250,61 @@ Array <- R6::R6Class("Array",
       # TODO
     },
     set_basic_selection_nd = function(selection, value, fields = NA) {
-      # TODO
+      indexer <- BasicIndexer$new(selection, self)
+      return(private$set_selection(indexer, value = value, fields = fields))
     },
     set_selection = function(indexer, value, fields = NA) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1682
-      # TODO
+      # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L566
+
+      # // We iterate over all chunks which overlap the selection and thus contain data
+      # // that needs to be replaced. Each chunk is processed in turn, extracting the
+      # // necessary data from the value array and storing into the chunk array.
+
+      # // N.B., it is an important optimisation that we only visit chunks which overlap
+      # // the selection. This minimises the number of iterations in the main for loop.
+
+      selection_shape <- indexer$shape
+
+      # Check value shape
+      if (length(selection_shape) == 0) {
+        # Setting a single value
+      } else if (is.scalar(value)) {
+        # Setting a scalar value
+      } else if ("NestedArray" %in% class(value)) {
+        # TODO: non stringify equality check
+        if (value$shape != selection_shape) {
+          stop("Shape mismatch in source NestedArray and set selection: ${value.shape} and ${selectionShape}")
+        }
+      } else {
+        # // TODO(zarr.js) support TypedArrays, buffers, etc
+        stop("Unknown data type for setting :(")
+      }
+
+      # TODO: use queue to handle async iterator
+      for (proj in indexer$iter()) {
+        chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
+        private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
+      }
     },
     process_chunk = function(out, cdata, chunk_selection, drop_axes, out_is_ndarray, fields, out_selection, partial_read_decode = FALSE) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1755
       # TODO
+    },
+    get_chunk_value = function(proj, indexer, value, selection_shape) {
+      # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L550
+      
+      if (length(selection_shape) == 0) {
+        chunk_value <- value
+      } else if (is.scalar(value)) {
+        chunk_value <- value
+      } else {
+        chunk_value <- value$get(proj$out_sel)
+        if (!is.null(indexer$drop_axes)) {
+          stop("Handling drop axes not supported yet")
+        }
+      }
+      return(chunk_value)
     },
     chunk_getitem = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
       # TODO
@@ -267,7 +313,73 @@ Array <- R6::R6Class("Array",
       # TODO
     },
     chunk_setitem = function(chunk_coords, chunk_selection, value, fields = NA) {
-      # TODO
+      # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L625
+
+      if (private$order == "F" && self$get_ndim() > 1) {
+        stop("Setting content for arrays in F-order is not supported.")
+      }
+
+      # Obtain key for chunk storage
+      chunk_key <- private$chunk_key(chunk_coords)
+
+      chunk <- NULL
+
+      dtype_constr = get_typed_array_ctr(private$dtype)
+      chunk_size <- private$chunk_size # TODO: what is chunk_size?
+
+      if (is_total_slice(chunk_selection, private$chunks)) {
+        # Totally replace chunk
+
+        # Optimization: we are completely replacing the chunk, so no need
+        # to access the existing chunk data
+
+        if (is.scalar(value)) {
+          # TODO get the right type here
+          chunk <- dtype_constr(chunk_size)
+          chunk_fill(chunk, value)
+        } else {
+          chunk <- value$flatten()
+        }
+      } else {
+        # partially replace the contents of this chunk
+
+        # Existing chunk data
+        #let chunkData: TypedArray;
+
+        chunk_data <- tryCatch({
+
+          # Chunk is initialized if this does not error
+          chunk_store_data <- private$chunk_store$get_item(chunk_key)
+          dbytes <- private$decode_chunk(chunk_store_data)
+          return(private$to_typed_array(dbytes))
+        }, error = function(cond) {
+          if (is_key_error(cond)) {
+            # Chunk is not initialized
+            chunk_data <- dtype_constr(chunk_size)
+            if (!is.null(private$fill_value)) { # TODO: should this be is.na
+              fill_chunk(chunk_data, private$fill_value)
+            }
+            return(chunk_data)
+          } else {
+            # // Different type of error - rethrow
+            stop("throw error;")
+          }
+        })
+
+        chunk_nested_array <- NestedArray$new(
+          chunk_data,
+          private$chunks,
+          private$dtype
+        )
+        chunk_nested_array$set(chunk_selection, value)
+        chunk <- chunk_nested_array$flatten()
+      }
+      chunk_data <- private$encode_chunk(chunk)
+      private$chunk_store$set_item(chunk_key, chunk_data)
+    },
+    to_typed_array = function(buffer) {
+      ctr <- get_typed_array_ctr(private$dtype)
+      return(ctr(buffer))
     },
     chunk_setitem_nosync = function(chunk_coords, chunk_selection, value, fields = NA) {
       # TODO
@@ -508,10 +620,14 @@ Array <- R6::R6Class("Array",
       # TODO
     },
     set_item = function(selection, value) {
-      # TODO
+      self$set_basic_selection(selection, value)
     },
     set_basic_selection = function(selection, value, fields = NA) {
-      # TODO
+      # Handle zero-dimensional arrays
+      if(is.null(private$shape)) {
+        return(private$set_basic_selection_zd(selection, value = value, fields = fields))
+      }
+      return(private$set_basic_selection_nd(selection, value = value, fields = fields))
     },
     set_orthogonal_selection = function(selection, value, fields = NA) {
       # TODO
