@@ -216,7 +216,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
       # Setup per-dimension indexers
       dim_indexers <- list()
       for(i in seq_along(selection)) {
-        dim_sel <- selection[i]
+        dim_sel <- selection[[i]]
         dim_len <- shape[i]
         dim_chunk_len <- chunks[i]
 
@@ -246,20 +246,29 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
     iter = function() {
       # TODO: use generator/yield features from async package
       result <- list()
-      dim_indexer_iterables <- lapply(self$dim_indexers, function(di) di$iter())
-      dim_indexer_product <- do.call(expand.grid, dim_indexer_iterables)
 
-      for(row_i in seq_len(dim(dim_indexer_product)[1])) {
-        dim_proj <- dim_indexer_product[row_i, ]
-        # TODO fix this, I think the product outputs too many combinations
+      # dim_indexers is a list of DimIndexer objects.
+      # dim_indexer_iterables is a list (one per dimension)
+      # of lists of IntDimIndexer or SliceDimIndexer objects.
+      dim_indexer_iterables <- lapply(self$dim_indexers, function(di) di$iter())
+      dim_indexer_product <- get_list_product(dim_indexer_iterables)
+
+
+      for(row_i in seq_len(length(dim_indexer_product))) {
+        dim_proj <- dim_indexer_product[[row_i]]
+
         chunk_coords <- list()
         chunk_sel <- list()
         out_sel <- list()
 
+        if(!is.list(dim_proj)) {
+          dim_proj <- list(dim_proj)
+        }
+
         for(p in dim_proj) {
           chunk_coords <- append(chunk_coords, p$dim_chunk_index)
           chunk_sel <- append(chunk_sel, p$dim_chunk_sel)
-          if(!is.na(p$dim_out_sel)) {
+          if(!is_na(p$dim_out_sel)) {
             out_sel <- append(out_sel, p$dim_out_sel)
           }
         }

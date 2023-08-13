@@ -91,8 +91,23 @@ get_typed_array_ctr <- function(dtype) {
 }
 
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
-create_nested_array <- function(buf, dtype, shape, offset = 0) {
+create_array_from_raw <- function(buf, dtype, shape, offset = 0) {
   # TODO
+}
+
+get_dtype_from_array <- function(a) {
+  TYPEOF_RTYPE_MAPPING <- list(
+    "logical" = logical(),
+    "integer" = integer(),
+    "double" = double()
+  )
+  RTYPE_DTYPE_MAPPING <- list(
+    "logical" = "|b",
+    "integer" = "<i4",
+    "double" = "<f8"
+  )
+  rtype_str <- typeof(a)
+  return(RTYPE_DTYPE_MAPPING[[rtype_str]])
 }
 
 #' The Zarr NestedArray class.
@@ -111,13 +126,23 @@ NestedArray <- R6::R6Class("NestedArray",
     #' @description
     #' Create a new NestedArray instance.
     #' @return A `NestedArray` instance.
-    initialize = function(data, shape, dtype) {
-      shape <- normalize_shape(shape)
+    initialize = function(data, shape = NA, dtype = NA) {
+      if(is_na(shape)) {
+        shape <- dim(data)
+      } else {
+        shape <- normalize_shape(shape)
+      }
+      if(is_na(dtype)) {
+        dtype <- get_dtype_from_array(data)
+      } else {
+        dtype <- normalize_dtype(dtype)
+      }
       self$shape <- shape
       self$dtype <- dtype
-      
-     if(length(self$shape) == 0) {
-        self$data <- typed_array_ctr(c(1))
+      if(is.null(data)) {
+        self$data <- array(data=get_dtype_rtype(dtype), dim=shape)
+      } else if(is.null(self$shape)) {
+        self$data <- data # TODO?
       } else if(is.array(data)) {
         num_shape_elements <- compute_size(shape)
         # TODO: check that data array has same shape as expected
@@ -130,18 +155,26 @@ NestedArray <- R6::R6Class("NestedArray",
         if (num_shape_elements != num_data_elements) {
           stop('Buffer has ${numDataElements} of dtype ${dtype}, shape is too large or small')
         }
-        self$data <- create_nested_array(buf, dtype, shape)
+        self$data <- create_array_from_raw(buf, dtype, shape)
       } else {
         buf_len <- compute_size(shape) * get_dtype_numbytes(dtype) 
         buf <- raw(length = buf_len)
-        # TODO
+        # TODO?
       }
     },
     get = function(selection) {
       # TODO
+      print("get")
+      print(selection)
+
+      return(self) # TODO: should return a new NestedArray for the selection
     },
     set = function(selection, value) {
       # TODO
+      # value should be a NestedArray.
+      print("set")
+      print(selection)
+      print(value)
     },
     flatten = function() {
       # TODO

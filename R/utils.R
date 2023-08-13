@@ -72,6 +72,11 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   } else {
     # TODO: validate structured dtypes
   }
+
+  if(is.null(shape)) {
+    shape <-jsonlite::unbox(NA)
+  }
+
   
   # TODO: validate shape param
   # TODO: validate chunks param
@@ -303,20 +308,76 @@ is_na <- function(val) {
   }
 }
 
-is_total_slice <- function(chunk_selection, chunks) {
-  # TODO
+is_total_slice <- function(item, shape) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/util.ts#L129
+
+  if (is.null(item) || is_na(item)) {
+    return(TRUE)
+  }
+  if (is.scalar(item)) {
+    item <- as.numeric(item)
+  }
+
+  for (i in seq_len(min(length(item), length(shape)))) {
+    it <- item[i]
+
+    if (is.null(it) || is_na(it)) {
+      # continue
+    } else {
+      if (is_slice(it)) {
+        s <- it
+        is_step_one <- s$step == 1 || is.null(s$step) || is_na(s$step)
+
+        if ((is.null(s$start) || is_na(s$start)) && (is.null(s$stop) || is_na(s$stop)) && is_step_one) {
+          # continue
+        } else {
+          if ((as.numeric(s$stop) - as.numeric(s$start)) == shape[i] && is_step_one) {
+            # continue
+          } else {
+            return(FALSE)
+          }
+        }
+      } else {
+        return(FALSE)
+      }
+    }
+  }
+  return(TRUE)
 }
 
 chunk_fill <- function(chunk, value) {
   # Chunk is an R array()
   # Value is a scalar (after is.scalar() check)
 
-  # TODO
   # Need to do equivalent of chunk.fill(value) in JS
-
+  chunk[] <- value
 }
 
 is_key_error <- function(e) {
   # TODO
   return(TRUE)
+}
+
+get_list_product_aux <- function(dim_indexer_iterables, i, partial_results) {
+  dim_results <- dim_indexer_iterables[[i]]
+  result <- list()
+  for(d in dim_results) {
+    if(length(partial_results) == 0) {
+      result <- append(result, list(d))
+    } else {
+      for(p in partial_results) {
+        result <- append(result, list(append(p, list(d))))
+      }
+    }
+  }
+  return(result)
+}
+
+get_list_product <- function(dim_indexer_iterables) {
+  # Reference: https://docs.python.org/3/library/itertools.html#itertools.product
+  partial_results <- list()
+  for(i in seq_len(length(dim_indexer_iterables))) {
+    partial_results <- get_list_product_aux(dim_indexer_iterables, i, partial_results)
+  }
+  return(partial_results)
 }

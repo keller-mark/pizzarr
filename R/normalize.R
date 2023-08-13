@@ -6,14 +6,14 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
     dim_sel <- selection[i]
     if(is_integer(dim_sel)) {
       if(convert_integer_selection_to_slices) {
-        selection[i] <- slice(dim_sel, dim_sel + 1, 1)
+        selection[[i]] <- slice(dim_sel, dim_sel + 1, 1)
       } else {
-        selection[i] <- normalize_integer_selection(dim_sel, shape[i])
+        selection[[i]] <- normalize_integer_selection(dim_sel, shape[i])
       }
     } else if(is_integer_list(dim_sel)) { # TODO: should this be is_integer_vec?
       stop('TypeError(Integer array selections are not supported (yet))')
     } else if(is.na(dim_sel) || dim_sel == ":") {
-      selection[i] <- slice(NA, NA, 1)
+      selection[[i]] <- slice(NA, NA, 1)
     }
   }
   return(selection)
@@ -89,20 +89,23 @@ normalize_storage_path <- function(path) {
 
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
 normalize_shape <- function(shape) {
-  shape <- ensure_vec(shape)
-  return(floor(shape))
+  if(!is.null(shape)) {
+    shape <- ensure_vec(shape)
+    return(floor(shape))
+  }
+  return(shape)
 }
 
-normalize_dtype <- function(dtype, object_codec) {
+normalize_dtype <- function(dtype) {
   # TODO
   # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L152
 
   if(is_na(dtype)) {
     # np.dtype(None) returns 'float64'
-    dtype <- "<f8"
+    return("<f8")
   }
 
-  return(list(dtype = dtype, object_codec = object_codec))
+  return(dtype)
 }
 
 guess_chunks <- function(shape, typesize) {

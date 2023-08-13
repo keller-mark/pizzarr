@@ -187,13 +187,13 @@ Array <- R6::R6Class("Array",
     get_basic_selection_zd = function(selection = NA, out = NA, fields = NA) {
       # Special case basic selection for zero-dimensional array
       # Check selection is valid
-      selection <- ensure_list(selection)  # TODO
-      if(!is.null(selection) || selection != "...") {
+      if(!is.null(selection) && selection != "...") {
         stop("err_too_many_indices(selection, ())")
       }
+      selection <- ensure_list(selection)  # TODO
       # Obtain encoded data for chunk
       ckey <- private$chunk_key(c(0))
-      cdata <- self$chunk_store$get_item(ckey)
+      cdata <- self$get_chunk_store()$get_item(ckey)
       # TODO: use try-catch
       chunk <- private$decode_chunk(cdata)
 
@@ -227,7 +227,7 @@ Array <- R6::R6Class("Array",
       if(!is.na(out)) {
         # TODO: handle out provided as parameter
       } else {
-        out <- NestedArray$new(null, out_shape, out_dtype)
+        out <- NestedArray$new(NULL, out_shape, out_dtype)
       }
 
       if(out_size == 0) {
@@ -248,6 +248,7 @@ Array <- R6::R6Class("Array",
     },
     set_basic_selection_zd = function(selection, value, fields = NA) {
       # TODO
+      print(paste("set_basic_selection_zd", selection, value))
     },
     set_basic_selection_nd = function(selection, value, fields = NA) {
       indexer <- BasicIndexer$new(selection, self)
@@ -271,8 +272,12 @@ Array <- R6::R6Class("Array",
         # Setting a single value
       } else if (is.scalar(value)) {
         # Setting a scalar value
+      } else if(class(value) == "array") {
+        if (dim(value) != selection_shape) {
+          stop("Shape mismatch in source array and set selection: ${dim(value)} and ${selectionShape}")
+        }
+        value <- NestedArray$new(value)
       } else if ("NestedArray" %in% class(value)) {
-        # TODO: non stringify equality check
         if (value$shape != selection_shape) {
           stop("Shape mismatch in source NestedArray and set selection: ${value.shape} and ${selectionShape}")
         }
@@ -294,13 +299,19 @@ Array <- R6::R6Class("Array",
     get_chunk_value = function(proj, indexer, value, selection_shape) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L550
       
+      # value is the full NestedArray representing the value to be set.
+      # we call value.get() to get the value for the current chunk selection,
+      # since the full value might span multiple chunks.
+
+      print(value)
+
       if (length(selection_shape) == 0) {
         chunk_value <- value
       } else if (is.scalar(value)) {
         chunk_value <- value
       } else {
         chunk_value <- value$get(proj$out_sel)
-        if (!is.null(indexer$drop_axes)) {
+        if (isTRUE(indexer$drop_axes)) {
           stop("Handling drop axes not supported yet")
         }
       }
@@ -325,7 +336,7 @@ Array <- R6::R6Class("Array",
       chunk <- NULL
 
       dtype_constr = get_typed_array_ctr(private$dtype)
-      chunk_size <- private$chunk_size # TODO: what is chunk_size?
+      chunk_size <- compute_size(private$chunks)
 
       if (is_total_slice(chunk_selection, private$chunks)) {
         # Totally replace chunk
@@ -338,6 +349,7 @@ Array <- R6::R6Class("Array",
           chunk <- dtype_constr(chunk_size)
           chunk_fill(chunk, value)
         } else {
+          # value is a NestedArray
           chunk <- value$flatten()
         }
       } else {
@@ -349,7 +361,7 @@ Array <- R6::R6Class("Array",
         chunk_data <- tryCatch({
 
           # Chunk is initialized if this does not error
-          chunk_store_data <- private$chunk_store$get_item(chunk_key)
+          chunk_store_data <- self$get_chunk_store()$get_item(chunk_key)
           dbytes <- private$decode_chunk(chunk_store_data)
           return(private$to_typed_array(dbytes))
         }, error = function(cond) {
@@ -357,7 +369,7 @@ Array <- R6::R6Class("Array",
             # Chunk is not initialized
             chunk_data <- dtype_constr(chunk_size)
             if (!is.null(private$fill_value)) { # TODO: should this be is.na
-              fill_chunk(chunk_data, private$fill_value)
+              chunk_fill(chunk_data, private$fill_value)
             }
             return(chunk_data)
           } else {
@@ -375,7 +387,7 @@ Array <- R6::R6Class("Array",
         chunk <- chunk_nested_array$flatten()
       }
       chunk_data <- private$encode_chunk(chunk)
-      private$chunk_store$set_item(chunk_key, chunk_data)
+      self$get_chunk_store()$set_item(chunk_key, chunk_data)
     },
     to_typed_array = function(buffer) {
       ctr <- get_typed_array_ctr(private$dtype)

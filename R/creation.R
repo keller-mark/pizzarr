@@ -78,14 +78,15 @@ init_array_metadata <- function(
         stop("ContainsGroupError(path)")
     }
 
-    # TODO: normalize metadata
-    dtype_and_object_codec <- normalize_dtype(dtype, object_codec)
-    dtype <- dtype_and_object_codec$dtype
+    # normalize metadata
+    dtype <- normalize_dtype(dtype)
 
-    # object_codec <- dtype_and_object_codec$object_codec
+    # object_codec <- normalize_object_codec(dtype, object_codec) # TODO
 
     # shape = normalize_shape(shape) + dtype.shape
     # dtype = dtype.base
+
+    shape <- normalize_shape(shape)
 
     dtype_itemsize <- get_dtype_numbytes(dtype)
     chunks <- normalize_chunks(chunks, shape, dtype_itemsize)
@@ -160,7 +161,7 @@ init_array_metadata <- function(
     )
     key <- paste0(path_to_prefix(path), ARRAY_META_KEY)
 
-    store$set_item(key, json_to_raw(zarray_meta))
+    store$set_item(key, encode_array_meta(zarray_meta))
 }
 
 #' @internal
