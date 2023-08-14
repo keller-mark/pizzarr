@@ -20,7 +20,19 @@ devtools::install_github("keller-mark/pizzarr")
 ```r
 library(pizzarr)
 
-# TODO
+a <- array(data=1:20, dim=c(2, 10))
+#      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+# [1,]    1    3    5    7    9   11   13   15   17    19
+# [2,]    2    4    6    8   10   12   14   16   18    20
+z <- create(shape=dim(a), dtype="<f4", fill_value=NA)
+
+z$set_item("...", a)
+
+sel <- z$get_item(list(slice(1, 2), slice(0, 4)))
+
+# expected_out <- array(data=NA, dim=c(1, 5))
+# expected_out[1,] <- c(2, 4, 6, 8, 10)
+# expect_equal(expected_out, sel$data)
 ```
 
 
@@ -71,6 +83,8 @@ pkgdown::build_site()
 ### Selections
 
 Must be of type `list` with values `"..."`, `Slice`, or `scalar`.
+
+Slice `start` and `stop` are intended to work like Python/NumPy `arr[start:stop]`: zero-based indexing, inclusive start, exclusive stop.
 
 See the `slice()` and `as.scalar` functions.
 
