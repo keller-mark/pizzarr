@@ -37,12 +37,12 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   } else if(!(dimension_separator %in% c(".", "/"))) {
     stop("dimension_separator must be '.' or '/'.")
   }
-  if(is.na(compressor)) {
+  if(is_na(compressor)) {
     compressor <- jsonlite::unbox(compressor)
-  } else if(!is.na(compressor) && !("id" %in% names(compressor))) {
+  } else if(!is_na(compressor) && !("id" %in% names(compressor))) {
     stop("compressor must contain an 'id' property when not null.")
   }
-  if(is.na(filters)) {
+  if(is_na(filters)) {
     filters <- jsonlite::unbox(filters)
   }
   if(!(order %in% c("C", "F"))) {
@@ -62,7 +62,7 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
     }
     
     if(dtype_basictype == "f") {
-      if(!(fill_value %in% c("NaN", "Infinity", "-Infinity"))) {
+      if(!is.numeric(fill_value) && !(fill_value %in% c("NaN", "Infinity", "-Infinity"))) {
         stop("fill_value must be NaN, Infinity, or -Infinity when dtype is float")
       }
     }
@@ -72,6 +72,11 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   } else {
     # TODO: validate structured dtypes
   }
+
+  if(is.null(shape)) {
+    shape <-jsonlite::unbox(NA)
+  }
+
   
   # TODO: validate shape param
   # TODO: validate chunks param
@@ -224,8 +229,14 @@ filter_list <- function(l, pred) {
   return(result)
 }
 
-# Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L67
+#' Convert user selections, potentially containing "...", to a list of slices
+#' that can be used internally.
+#' @param selection The user-provided selection list.
+#' @param shape The shape of the array, to be used to fill in ellipsis values.
+#' @returns A list of selections with ellipsis values converted to NA.
 replace_ellipsis <- function(selection, shape) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L67
+
   selection <- ensure_list(selection)
   
   ellipsis_index <- 0
@@ -282,10 +293,71 @@ replace_ellipsis <- function(selection, shape) {
   return(selection)
 }
 
+#' @internal
+#' @param shape A shape vector
+#' @returns The product of shape elements.
 compute_size <- function(shape) {
   result <- 1
   for(val in shape) {
     result <- result * val
   }
   return(result)
+}
+
+#' Check if a value, potentially a vector, is NA
+#'
+#' @keywords internal
+#' @param val The value to check
+#' @return Whether the value is NA
+is_na <- function(val) {
+  if(length(val) > 1) {
+    return(FALSE)
+  } else {
+    return(is.na(val))
+  }
+}
+
+#' Fill in an R array with a single scalar value.
+#' @internal
+#' @param chunk The R array to fill.
+#' @param value The scalar value (after is.scalar() check).
+chunk_fill <- function(chunk, value) {
+  # Chunk is an R array()
+  # Value is a scalar (after is.scalar() check)
+
+  # Need to do equivalent of chunk.fill(value) in JS
+  chunk[] <- value
+}
+
+#' @internal
+is_key_error <- function(e) {
+  return(grepl("KeyError", e$message))
+}
+
+#' @internal
+get_list_product_aux <- function(dim_indexer_iterables, i, partial_results) {
+  dim_results <- dim_indexer_iterables[[i]]
+  result <- list()
+  for(d in dim_results) {
+    if(length(partial_results) == 0) {
+      result <- append(result, list(d))
+    } else {
+      for(p in partial_results) {
+        result <- append(result, list(append(p, list(d))))
+      }
+    }
+  }
+  return(result)
+}
+
+#' Generate a product of lists.
+#' @param dim_indexer_iterables A list of lists.
+#' @return A list of lists.
+get_list_product <- function(dim_indexer_iterables) {
+  # Reference: https://docs.python.org/3/library/itertools.html#itertools.product
+  partial_results <- list()
+  for(i in seq_len(length(dim_indexer_iterables))) {
+    partial_results <- get_list_product_aux(dim_indexer_iterables, i, partial_results)
+  }
+  return(partial_results)
 }

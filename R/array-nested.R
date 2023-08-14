@@ -91,8 +91,53 @@ get_typed_array_ctr <- function(dtype) {
 }
 
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
-create_nested_array <- function(buf, dtype, shape, offset = 0) {
+create_array_from_raw <- function(buf, dtype, shape, offset = 0) {
   # TODO
+}
+
+get_dtype_from_array <- function(a) {
+  TYPEOF_RTYPE_MAPPING <- list(
+    "logical" = logical(),
+    "integer" = integer(),
+    "double" = double()
+  )
+  RTYPE_DTYPE_MAPPING <- list(
+    "logical" = "|b",
+    "integer" = "<i4",
+    "double" = "<f8"
+  )
+  rtype_str <- typeof(a)
+  return(RTYPE_DTYPE_MAPPING[[rtype_str]])
+}
+
+get_dtype_asrtype <- function(dtype) {
+    # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
+  DTYPE_RTYPE_MAPPING <- list(
+    "|b" = as.logical,
+    "|u1" = as.integer,
+    "|i1" = as.integer,
+    "<b" = as.logical,
+    "<u1" = as.integer,
+    "<i1" = as.integer,
+    "<u2" = as.integer,
+    "<i2" = as.integer,
+    "<u4" = as.integer,
+    "<i4" = as.integer,
+    "<f4" = as.double,
+    "<f8" = as.double,
+    ">b" = as.logical,
+    ">u1" = as.integer,
+    ">i1" = as.integer,
+    ">u2" = as.integer,
+    ">i2" = as.integer,
+    ">u4" = as.integer,
+    ">i4" = as.integer,
+    ">f4" = as.double,
+    ">f8" = as.double
+  )
+  return(DTYPE_RTYPE_MAPPING[[dtype]])
+  # TODO: handle errors
+  #stop('Dtype not recognized or not supported in pizzarr')
 }
 
 #' The Zarr NestedArray class.
@@ -110,18 +155,39 @@ NestedArray <- R6::R6Class("NestedArray",
     data = NULL,
     #' @description
     #' Create a new NestedArray instance.
+    #' @param data The data to initialize the array with.
+    #' Either NULL, base R array, base R vector (numeric/logical),
+    #' scalar, or raw vector.
+    #' @param shape The shape of the array.
+    #' @param dtype The Zarr dtype of the array, as a string like ">f8".
     #' @return A `NestedArray` instance.
-    initialize = function(data, shape, dtype) {
-      shape <- normalize_shape(shape)
+    initialize = function(data, shape = NA, dtype = NA) {
+      if(is.null(shape) || is_na(shape)) {
+        shape <- dim(data)
+      } else {
+        shape <- normalize_shape(shape)
+      }
+      if(is_na(dtype)) {
+        dtype <- get_dtype_from_array(data)
+      } else {
+        dtype <- normalize_dtype(dtype)
+      }
       self$shape <- shape
       self$dtype <- dtype
-      
-     if(length(self$shape) == 0) {
-        self$data <- typed_array_ctr(c(1))
-      } else if(is.array(data)) {
+      if(is.null(data)) {
+        self$data <- array(data=get_dtype_rtype(dtype), dim=shape)
+      } else if(is.null(self$shape)) {
+        self$data <- data # TODO?
+      } else if(is.array(data) || is.numeric(data) || is.logical(data)) {
         num_shape_elements <- compute_size(shape)
         # TODO: check that data array has same shape as expected
-        self$data <- data
+        if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
+          self$data <- data
+        } else {
+          astype_func <- get_dtype_asrtype(dtype)
+          self$data <- array(data=as.array(astype_func(data)), dim=shape)
+        }
+        
       } else if(is.raw(data)) {
         buf <- data
         # Create from ArrayBuffer or Buffer
@@ -130,21 +196,90 @@ NestedArray <- R6::R6Class("NestedArray",
         if (num_shape_elements != num_data_elements) {
           stop('Buffer has ${numDataElements} of dtype ${dtype}, shape is too large or small')
         }
-        self$data <- create_nested_array(buf, dtype, shape)
+        self$data <- create_array_from_raw(buf, dtype, shape)
       } else {
         buf_len <- compute_size(shape) * get_dtype_numbytes(dtype) 
         buf <- raw(length = buf_len)
-        # TODO
+        # TODO?
+        stop("Unexpected type for data in NestedArray$initialize()")
       }
     },
+    #' @description
+    #' Subset the array.
+    #' @param selection A list of slices.
+    #' @return A new NestedArray (potentially a subset) representing the selection.
     get = function(selection) {
-      # TODO
+      print("get")
+      print(selection)
+      selection_list <- list()
+      for(sel in selection) {
+        selection_list <- append(selection_list, list(c(sel$start:sel$stop))) # TODO: step?
+      }
+
+      subset_arr <- abind::asub(self$data, selection_list)
+
+      print(subset_arr)
+
+      subset_nested_array <- NestedArray$new(subset_arr, shape = dim(subset_arr), dtype = self$dtype)
+
+      
+      return(subset_nested_array)
     },
+    #' @description
+    #' Set a subset of the array.
+    #' @param selection A list of slices.
+    #' @param value A NestedArray or a base R array.
     set = function(selection, value) {
-      # TODO
+      # value should be a NestedArray.
+      print("set")
+      print(selection)
+      print(value)
+
+      selection_list <- list()
+      for(sel in selection) {
+        selection_list <- append(selection_list, list(c(sel$start:sel$stop))) # TODO: step?
+      }
+
+      value_data <- value$data
+
+      if("NestedArray" %in% class(value)) {
+        value_data <- value$data
+      } else if(is.scalar(value)) {
+        value_data <- value
+      } else {
+        print(value)
+        stop("Got unexpected type for value in NestedArray$set()")
+      }
+
+      print(value_data)
+      print(selection_list)
+
+      # Cannot figure out how to dynamically set values in an array
+      # of arbitrary dimensions.
+      # Tried: abind::afill <- but it doesn't seem to work with arbitrary dims or do.call
+      if(length(selection_list) == 1) {
+        self$data[selection_list[[1]]] <- value_data
+      } else if(length(selection_list) == 2) {
+        print(self$data[selection_list[[1]], selection_list[[2]]])
+        self$data[selection_list[[1]], selection_list[[2]]] <- value_data
+      } else if(length(selection_list) == 3) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]]] <- value_data
+      } else if(length(selection_list) == 4) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]]] <- value_data
+      } else if(length(selection_list) == 5) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]]] <- value_data
+      } else if(length(selection_list) == 6) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]], selection_list[[6]]] <- value_data
+      } else {
+        stop("NestedArray$set() can only handle up to 6D arrays at the moment. Please make a feature request if you need to handle more dims.")
+      }
     },
+    #' @description
+    #' Flatten the array contents.
+    #' @returns The data as a flat vector.
     flatten = function() {
       # TODO
+      return(as.vector(self$data))
     },
     arange = function(size, dtype) {
       # TODO

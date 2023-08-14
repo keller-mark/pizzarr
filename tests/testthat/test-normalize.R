@@ -65,3 +65,55 @@ test_that("normalize_integer_selection with invalid input", {
   f3 <- function() normalize_integer_selection(-1000, 100)
   expect_error(f3())
 })
+
+test_that("normalize_chunks", {
+  res <- normalize_chunks(c(10), c(100), 1)
+  expect_equal(res, c(10))
+
+  res <- normalize_chunks(as.scalar(10), c(100), 1)
+  expect_equal(res, c(10))
+
+  res <- normalize_chunks(c(10, 10), c(100, 10), 1)
+  expect_equal(res, c(10, 10))
+
+  res <- normalize_chunks(as.scalar(10), c(100, 10), 1)
+  expect_equal(res, c(10, 10))
+
+  res <- normalize_chunks(c(10, NA), c(100, 10), 1)
+  expect_equal(res, c(10, 10))
+
+  res <- normalize_chunks(as.scalar(30), c(100, 20, 10), 1)
+  expect_equal(res, c(30, 30, 30))
+
+  res <- normalize_chunks(c(30), c(100, 20, 10), 1)
+  expect_equal(res, c(30, 20, 10))
+
+  res <- normalize_chunks(c(30, NA), c(100, 20, 10), 1)
+  expect_equal(res, c(30, 20, 10))
+
+  res <- normalize_chunks(c(30, NA, NA), c(100, 20, 10), 1)
+  expect_equal(res, c(30, 20, 10))
+
+  res <- normalize_chunks(c(30, 20, NA), c(100, 20, 10), 1)
+  expect_equal(res, c(30, 20, 10))
+
+  res <- normalize_chunks(c(30, 20, 10), c(100, 20, 10), 1)
+  expect_equal(res, c(30, 20, 10))
+
+  f1 <- function() normalize_chunks("foo", c(100), 1)
+  expect_error(f1())
+
+  f2 <- function() normalize_chunks(c(100, 10), c(100), 1)
+  expect_error(f2())
+
+  # test auto-chunking
+  res <- normalize_chunks(NA, c(100), 1)
+  expect_equal(res, c(100))
+
+  res <- normalize_chunks(as.scalar(-1), c(100), 1)
+  expect_equal(res, c(100))
+
+  res <- normalize_chunks(c(30, -1, NA), c(100, 20, 10), 1)
+  expect_equal(res, c(30, 20, 10))
+})
+

@@ -28,7 +28,7 @@ test_that("create_zarray_meta throws error when dimension separator is invalid",
 
 
 test_that("create_zarray_meta throws error when fill_value is invalid for float dtype", {
-  f <- function() create_zarray_meta(dtype = "<f2", order = "C", fill_value = 0)
+  f <- function() create_zarray_meta(dtype = "<f2", order = "C", fill_value = "foo")
   expect_error(f())
 })
 
@@ -174,4 +174,23 @@ test_that("replace_ellipsis errors with invalid input", {
   expect_error(f1())
   f2 <- function() replace_ellipsis(list(0, 1, 2), list(100, 100))
   expect_error(f2())
+})
+
+
+test_that("get_list_product", {
+  in_list <- list(
+    list('A', 'B', 'C', 'D'),
+    list('x', 'y')
+  )
+  out_list <- get_list_product(in_list)
+  expect_equal(out_list, list(
+    list('A', 'x'),
+    list('B', 'x'),
+    list('C', 'x'),
+    list('D', 'x'),
+    list('A', 'y'),
+    list('B', 'y'),
+    list('C', 'y'),
+    list('D', 'y')
+  ))
 })

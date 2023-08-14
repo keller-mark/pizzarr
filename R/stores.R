@@ -7,7 +7,76 @@
 #' @rdname Store
 #' @export
 Store <- R6::R6Class("Store",
+   private = list(
+      #' @field readable
+      #' @keywords internal
+      readable = NULL,
+      #' @field writable
+      #' @keywords internal
+      writeable = NULL,
+      #' @field erasable
+      #' @keywords internal
+      erasable = NULL,
+      #' @field listable
+      #' @keywords internal
+      listable = NULL,
+      #' @field store_version
+      #' @keywords internal
+      store_version = NULL,
+
+      listdir_from_keys = function(path) {
+        # TODO
+      },
+      rename_from_keys = function() {
+        # TODO
+      },
+      rmdir_from_keys = function() {
+        # TODO
+      }
+   ),
    public = list(
+    initialize = function() {
+      self$readable <- TRUE
+      self$writeable <- TRUE
+      self$erasable <- TRUE
+      self$listable <- TRUE
+      self$store_version <- 2
+    },
+    is_readable = function() {
+      return(private$readable)
+    },
+    is_writeable = function() {
+      return(private$writeable)
+    },
+    is_erasable = function() {
+      return(private$erasable)
+    },
+    is_listable = function() {
+      return(private$listable)
+    },
+    close = function() {
+      # Do nothing by default
+    },
+    listdir = function(path=NA) {
+      if(is.na(path)) {
+        path <- ""
+      }
+      path <- normalize_storage_path(path)
+      return(private$listdir_from_keys(path))
+    },
+    rename = function(src_path, dst_path) {
+      if(!self$is_erasable()) {
+        stop("Store is not erasable, cannot call 'rename'")
+      }
+      private$rename_from_keys(src_path, dst_path)
+    },
+    rmdir = function(path) {
+      if(!self$is_erasable()) {
+        stop("Store is not erasable, cannot call 'rmdir'")
+      }
+      path <- normalize_storage_path(path)
+      private$rmdir_from_keys(path)
+    },
      #' @description
      #' Get an item from the store.
      #' @param key The item key.

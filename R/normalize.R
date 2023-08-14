@@ -1,26 +1,27 @@
-# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L45
 normalize_list_selection <- function(selection, shape, convert_integer_selection_to_slices = FALSE) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L45
   selection <- replace_ellipsis(selection, shape)
 
   for(i in seq_along(selection)) {
     dim_sel <- selection[i]
     if(is_integer(dim_sel)) {
       if(convert_integer_selection_to_slices) {
-        selection[i] <- slice(dim_sel, dim_sel + 1, 1)
+        selection[[i]] <- slice(dim_sel, dim_sel + 1, 1)
       } else {
-        selection[i] <- normalize_integer_selection(dim_sel, shape[i])
+        selection[[i]] <- normalize_integer_selection(dim_sel, shape[i])
       }
     } else if(is_integer_list(dim_sel)) { # TODO: should this be is_integer_vec?
       stop('TypeError(Integer array selections are not supported (yet))')
     } else if(is.na(dim_sel) || dim_sel == ":") {
-      selection[i] <- slice(NA, NA, 1)
+      selection[[i]] <- slice(NA, NA, 1)
     }
   }
   return(selection)
 }
 
-# Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L110
 normalize_integer_selection <- function(dim_sel, dim_len) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L110
+
   # Normalize type to int
   dim_sel <- as.scalar(dim_sel)
 
@@ -87,8 +88,194 @@ normalize_storage_path <- function(path) {
   return(path)
 }
 
-# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
 normalize_shape <- function(shape) {
-  shape <- ensure_vec(shape)
-  return(floor(shape))
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
+  if(!is.null(shape)) {
+    shape <- ensure_vec(shape)
+    return(floor(shape))
+  }
+  return(shape)
+}
+
+normalize_dtype <- function(dtype) {
+  # TODO
+  # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L152
+
+  if(is_na(dtype)) {
+    # np.dtype(None) returns 'float64'
+    return("<f8")
+  }
+
+  return(dtype)
+}
+
+guess_chunks <- function(shape, typesize) {
+  # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L69
+
+  # Guess an appropriate chunk layout for an array, given its shape and
+  # the size of each element in bytes.  Will allocate chunks only as large
+  # as MAX_SIZE.  Chunks are generally close to some power-of-2 fraction of
+  # each axis, slightly favoring bigger values for the last index.
+  # Undocumented and subject to change without warning.
+
+  CHUNK_BASE <- 256*1024  # Multiplier by which chunks are adjusted
+  CHUNK_MIN <- 128*1024  # Soft lower limit (128k)
+  CHUNK_MAX <- 64*1024*1024  # Hard upper limit
+
+  ndims <- length(shape)
+  # require chunks to have non-zero length for all dimensions
+  chunks <- rep(1, ndims)
+  for(i in seq_along(shape)) {
+    if(shape[i] >= 1) {
+      chunks[i] <- shape[i]
+    }
+  }
+
+  # Determine the optimal chunk size in bytes using a PyTables expression.
+  # This is kept as a float.
+  dset_size <- prod(chunks) * typesize
+  target_size <- CHUNK_BASE * (2 ** log10(dset_size / (1024. * 1024)))
+
+  if (target_size > CHUNK_MAX) {
+      target_size <- CHUNK_MAX
+  } else if (target_size < CHUNK_MIN) {
+      target_size <- CHUNK_MIN
+  }
+
+  idx <- 0
+  while (TRUE) {
+      # Repeatedly loop over the axes, dividing them by 2.  Stop when:
+      # 1a. We're smaller than the target chunk size, OR
+      # 1b. We're within 50% of the target chunk size, AND
+      # 2. The chunk is smaller than the maximum chunk size
+
+      chunk_bytes <- prod(chunks)*typesize
+
+      if ((chunk_bytes < target_size || abs(chunk_bytes-target_size)/target_size < 0.5) && chunk_bytes < CHUNK_MAX) {
+        break
+      }
+
+      if (prod(chunks) == 1) {
+        break  # Element size larger than CHUNK_MAX
+      }
+
+      chunks[idx %% ndims] <- ceiling(chunks[idx %% ndims] / 2.0)
+      idx <- idx + 1
+  }
+
+  return(as.integer(chunks))
+}
+
+normalize_chunks <- function(chunks, shape, typesize) {
+  # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L115
+
+  # N.B., expect shape already normalized
+
+  # handle auto-chunking
+  if(is_na(chunks) || isTRUE(chunks)) {
+    return(guess_chunks(shape, typesize))
+  }
+
+  # handle no chunking
+  if (isFALSE(chunks)) {
+    return(shape)
+  }
+
+  # handle 1D convenience form
+  if(is.scalar(chunks)) {
+    chunks <- rep(as.integer(chunks), length(shape))
+  }
+
+  # handle bad dimensionality
+  if(length(chunks) > length(shape)) {
+    stop("too many dimensions in chunks")
+  }
+
+  # handle underspecified chunks
+  if(length(chunks) < length(shape)) {
+    # assume chunks across remaining dimensions
+    chunks <- c(chunks, shape[(length(chunks)+1):length(shape)])
+  }
+
+  # handle None or -1 in chunks
+  if (-1 %in% chunks || NA %in% chunks) {
+    for(i in seq_along(chunks)) {
+      if(chunks[i] == -1 || is.na(chunks[i])) {
+        chunks[i] <- shape[i]
+      }
+    }
+  }
+
+  if(!is.numeric(chunks)) {
+    stop("chunks must be numeric")
+  }
+
+  return(chunks)
+}
+
+normalize_store_arg <- function(store, storage_options=NA, mode=NA) {
+  if(is.na(mode)) {
+    mode <- "r"
+  }
+
+  if(is.na(store)) {
+    return(MemoryStore$new())
+  }
+
+  if(is.character(store)) {
+    if(grepl("://", store, fixed=TRUE) || grepl("::", store, fixed=TRUE)) {
+      # TODO: return FSStore
+    }
+    if(endsWith(store, ".zip")) {
+      # TODO: return ZipStore
+      # return(ZipStore$new(store, mode=mode))
+    }
+    return(DirectoryStore$new(store))
+  } else {
+    if(!("Store" %in% class(store))) {
+      stop("store must be NA, a string, or a Store instance")
+    }
+  }
+  return(store)
+}
+
+normalize_order <- function(order) {
+  order <- toupper(order)
+  if (!(order %in% c('C', 'F'))) {
+    stop("order must be either 'C' or 'F'")
+  }
+  return(order)
+}
+
+normalize_fill_value <- function(fill_value, dtype) {
+  if (is_na(fill_value)) { # or dtype.hasobject:
+        # no fill value
+        # pass
+  } else {
+    rtype <- get_dtype_rtype(dtype)
+    if (fill_value == 0) {
+      if(is.logical(rtype)) {
+        fill_value <- FALSE
+      } else if(is.integer(rtype)) {
+        fill_value <- 0L
+      } else if(is.double(rtype)) {
+        fill_value <- 0.0
+      }
+    } else if(is.character(rtype)) {
+      if(!is.character(fill_value)) {
+        stop("fill_value {!r} is not valid for dtype {}; must be a 'unicode string'")
+      }
+    } else {
+      if(is.logical(rtype)) {
+        fill_value <- TRUE
+      } else if(is.integer(rtype)) {
+        fill_value <- as.integer(fill_value)
+      } else if(is.double(rtype)) {
+        fill_value <- as.double(fill_value)
+      } else {
+        stop("fill_value {!r} is not valid for dtype {}")
+      }
+    }
+  }
+  return(fill_value)
 }
