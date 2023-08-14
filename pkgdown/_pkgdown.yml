@@ -49,10 +49,21 @@ reference:
   - Attributes
 - title: "Convenience functions"
   desc: >
-    TODO
-- title: "Synchronization"
+    Convenience functions for storing and loading data.
+  contents:
+    - create
+    - empty
+    - zeros
+- title: "Utilities"
   desc: >
-    TODO
+    Utility functions for working with Zarr arrays and groups.
+  contents:
+    - slice
+    - is_slice
+    - as.scalar
+    - is.scalar
+    - is_key_error
+
 
 articles:
   - title: Articles

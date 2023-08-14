@@ -24,22 +24,16 @@ ZSTD compressor for Zarr
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Zstd$new()}}
-\item \href{#method-encode}{\code{Zstd$encode()}}
-\item \href{#method-decode}{\code{Zstd$decode()}}
-\item \href{#method-get_meta}{\code{Zstd$get_meta()}}
-\item \href{#method-clone}{\code{Zstd$clone()}}
+\item \href{#method-Zstd-new}{\code{Zstd$new()}}
+\item \href{#method-Zstd-encode}{\code{Zstd$encode()}}
+\item \href{#method-Zstd-decode}{\code{Zstd$decode()}}
+\item \href{#method-Zstd-get_config}{\code{Zstd$get_config()}}
+\item \href{#method-Zstd-clone}{\code{Zstd$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Zstd-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Zstd-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new ZSTD compressor.
 \subsection{Usage}{
@@ -58,8 +52,8 @@ A new \code{Zstd} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-encode"></a>}}
-\if{latex}{\out{\hypertarget{method-encode}{}}}
+\if{html}{\out{<a id="method-Zstd-encode"></a>}}
+\if{latex}{\out{\hypertarget{method-Zstd-encode}{}}}
 \subsection{Method \code{encode()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Zstd$encode(buf)}\if{html}{\out{</div>}}
@@ -67,8 +61,8 @@ A new \code{Zstd} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-decode"></a>}}
-\if{latex}{\out{\hypertarget{method-decode}{}}}
+\if{html}{\out{<a id="method-Zstd-decode"></a>}}
+\if{latex}{\out{\hypertarget{method-Zstd-decode}{}}}
 \subsection{Method \code{decode()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Zstd$decode(buf)}\if{html}{\out{</div>}}
@@ -76,17 +70,17 @@ A new \code{Zstd} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_meta"></a>}}
-\if{latex}{\out{\hypertarget{method-get_meta}{}}}
-\subsection{Method \code{get_meta()}}{
+\if{html}{\out{<a id="method-Zstd-get_config"></a>}}
+\if{latex}{\out{\hypertarget{method-Zstd-get_config}{}}}
+\subsection{Method \code{get_config()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Zstd$get_meta()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Zstd$get_config()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Zstd-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Zstd-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

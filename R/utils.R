@@ -219,6 +219,7 @@ selection_to_slice_indices <- function(selection, shape) {
   ))
 }
 
+#' @keywords internal
 filter_list <- function(l, pred) {
   result <- list()
   for(item in l) {
@@ -231,6 +232,7 @@ filter_list <- function(l, pred) {
 
 #' Convert user selections, potentially containing "...", to a list of slices
 #' that can be used internally.
+#' @keywords internal
 #' @param selection The user-provided selection list.
 #' @param shape The shape of the array, to be used to fill in ellipsis values.
 #' @returns A list of selections with ellipsis values converted to NA.
@@ -293,7 +295,7 @@ replace_ellipsis <- function(selection, shape) {
   return(selection)
 }
 
-#' @internal
+#' @keywords internal
 #' @param shape A shape vector
 #' @returns The product of shape elements.
 compute_size <- function(shape) {
@@ -318,7 +320,7 @@ is_na <- function(val) {
 }
 
 #' Fill in an R array with a single scalar value.
-#' @internal
+#' @keywords internal
 #' @param chunk The R array to fill.
 #' @param value The scalar value (after is.scalar() check).
 chunk_fill <- function(chunk, value) {
@@ -329,12 +331,15 @@ chunk_fill <- function(chunk, value) {
   chunk[] <- value
 }
 
-#' @internal
+#' @description
+#' Check if an error is a KeyError.
+#' @param e The error to check.
+#' @return TRUE if the error is a KeyError, FALSE otherwise.
 is_key_error <- function(e) {
   return(grepl("KeyError", e$message))
 }
 
-#' @internal
+#' @keywords internal
 get_list_product_aux <- function(dim_indexer_iterables, i, partial_results) {
   dim_results <- dim_indexer_iterables[[i]]
   result <- list()

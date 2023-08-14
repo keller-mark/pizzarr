@@ -1,5 +1,6 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/types.ts
 
+#' @keywords internal
 Slice <- R6::R6Class("Slice",
   public = list(
     start = NULL,
@@ -24,6 +25,7 @@ Slice <- R6::R6Class("Slice",
 )
 
 # Mapping from chunk to output array for a single dimension.
+#' @keywords internal
 ChunkDimProjection <- R6::R6Class("ChunkDimProjection",
   public = list(
     # Index of chunk
@@ -43,6 +45,7 @@ ChunkDimProjection <- R6::R6Class("ChunkDimProjection",
 # A mapping of items from chunk to output array. Can be used to extract items from the
 # chunk array for loading into an output array. Can also be used to extract items from a
 # value array for setting/updating in a chunk array.
+#' @keywords internal
 ChunkProjection <- R6::R6Class("ChunkProjection",
   public = list(
     # Indices of chunk.
@@ -59,6 +62,7 @@ ChunkProjection <- R6::R6Class("ChunkProjection",
   )
 )
 
+#' @keywords internal
 Indexer <- R6::R6Class("Indexer",
   public = list(
     shape = NULL,
@@ -69,6 +73,7 @@ Indexer <- R6::R6Class("Indexer",
   )
 )
 
+#' @keywords internal
 DimIndexer <- R6::R6Class("DimIndexer",
   public = list(
     num_items = NULL,

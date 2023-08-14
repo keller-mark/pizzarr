@@ -26,23 +26,31 @@ MemoryStore for Zarr
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{MemoryStore$new()}}
-\item \href{#method-get_parent}{\code{MemoryStore$get_parent()}}
-\item \href{#method-get_item}{\code{MemoryStore$get_item()}}
-\item \href{#method-set_item}{\code{MemoryStore$set_item()}}
-\item \href{#method-contains_item}{\code{MemoryStore$contains_item()}}
-\item \href{#method-clone}{\code{MemoryStore$clone()}}
+\item \href{#method-MemoryStore-new}{\code{MemoryStore$new()}}
+\item \href{#method-MemoryStore-get_parent}{\code{MemoryStore$get_parent()}}
+\item \href{#method-MemoryStore-get_item}{\code{MemoryStore$get_item()}}
+\item \href{#method-MemoryStore-set_item}{\code{MemoryStore$set_item()}}
+\item \href{#method-MemoryStore-contains_item}{\code{MemoryStore$contains_item()}}
+\item \href{#method-MemoryStore-clone}{\code{MemoryStore$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="close"><a href='../../pizzarr/html/Store.html#method-Store-close'><code>pizzarr::Store$close()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_erasable"><a href='../../pizzarr/html/Store.html#method-Store-is_erasable'><code>pizzarr::Store$is_erasable()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_listable"><a href='../../pizzarr/html/Store.html#method-Store-is_listable'><code>pizzarr::Store$is_listable()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_readable"><a href='../../pizzarr/html/Store.html#method-Store-is_readable'><code>pizzarr::Store$is_readable()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_writeable"><a href='../../pizzarr/html/Store.html#method-Store-is_writeable'><code>pizzarr::Store$is_writeable()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="listdir"><a href='../../pizzarr/html/Store.html#method-Store-listdir'><code>pizzarr::Store$listdir()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rename"><a href='../../pizzarr/html/Store.html#method-Store-rename'><code>pizzarr::Store$rename()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rmdir"><a href='../../pizzarr/html/Store.html#method-Store-rmdir'><code>pizzarr::Store$rmdir()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-MemoryStore-new"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new memory store.
 \subsection{Usage}{
@@ -54,8 +62,8 @@ A new \code{MemoryStore} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_parent"></a>}}
-\if{latex}{\out{\hypertarget{method-get_parent}{}}}
+\if{html}{\out{<a id="method-MemoryStore-get_parent"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-get_parent}{}}}
 \subsection{Method \code{get_parent()}}{
 Get the parent of an item.
 \subsection{Usage}{
@@ -74,8 +82,8 @@ A list with the keys \code{parent} and \code{key}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_item"></a>}}
-\if{latex}{\out{\hypertarget{method-get_item}{}}}
+\if{html}{\out{<a id="method-MemoryStore-get_item"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-get_item}{}}}
 \subsection{Method \code{get_item()}}{
 Get an item from the store.
 \subsection{Usage}{
@@ -94,8 +102,8 @@ The item data in a vector of type raw.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_item"></a>}}
-\if{latex}{\out{\hypertarget{method-set_item}{}}}
+\if{html}{\out{<a id="method-MemoryStore-set_item"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-set_item}{}}}
 \subsection{Method \code{set_item()}}{
 Set an item in the store.
 \subsection{Usage}{
@@ -113,8 +121,8 @@ Set an item in the store.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-contains_item"></a>}}
-\if{latex}{\out{\hypertarget{method-contains_item}{}}}
+\if{html}{\out{<a id="method-MemoryStore-contains_item"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-contains_item}{}}}
 \subsection{Method \code{contains_item()}}{
 Determine whether the store contains an item.
 \subsection{Usage}{
@@ -133,8 +141,8 @@ A boolean value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-MemoryStore-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

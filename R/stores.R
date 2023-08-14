@@ -23,13 +23,15 @@ Store <- R6::R6Class("Store",
       #' @field store_version
       #' @keywords internal
       store_version = NULL,
-
+      #' @keywords internal
       listdir_from_keys = function(path) {
         # TODO
       },
+      #' @keywords internal
       rename_from_keys = function() {
         # TODO
       },
+      #' @keywords internal
       rmdir_from_keys = function() {
         # TODO
       }

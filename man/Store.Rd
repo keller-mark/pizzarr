@@ -10,18 +10,109 @@ Class representing an abstract store
 \details{
 Abstract store for Zarr
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-get_item}{\code{Store$get_item()}}
-\item \href{#method-set_item}{\code{Store$set_item()}}
-\item \href{#method-contains_item}{\code{Store$contains_item()}}
-\item \href{#method-clone}{\code{Store$clone()}}
+\item \href{#method-Store-new}{\code{Store$new()}}
+\item \href{#method-Store-is_readable}{\code{Store$is_readable()}}
+\item \href{#method-Store-is_writeable}{\code{Store$is_writeable()}}
+\item \href{#method-Store-is_erasable}{\code{Store$is_erasable()}}
+\item \href{#method-Store-is_listable}{\code{Store$is_listable()}}
+\item \href{#method-Store-close}{\code{Store$close()}}
+\item \href{#method-Store-listdir}{\code{Store$listdir()}}
+\item \href{#method-Store-rename}{\code{Store$rename()}}
+\item \href{#method-Store-rmdir}{\code{Store$rmdir()}}
+\item \href{#method-Store-get_item}{\code{Store$get_item()}}
+\item \href{#method-Store-set_item}{\code{Store$set_item()}}
+\item \href{#method-Store-contains_item}{\code{Store$contains_item()}}
+\item \href{#method-Store-clone}{\code{Store$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_item"></a>}}
-\if{latex}{\out{\hypertarget{method-get_item}{}}}
+\if{html}{\out{<a id="method-Store-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-new}{}}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$new()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-is_readable"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-is_readable}{}}}
+\subsection{Method \code{is_readable()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$is_readable()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-is_writeable"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-is_writeable}{}}}
+\subsection{Method \code{is_writeable()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$is_writeable()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-is_erasable"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-is_erasable}{}}}
+\subsection{Method \code{is_erasable()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$is_erasable()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-is_listable"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-is_listable}{}}}
+\subsection{Method \code{is_listable()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$is_listable()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-close"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-close}{}}}
+\subsection{Method \code{close()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$close()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-listdir"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-listdir}{}}}
+\subsection{Method \code{listdir()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$listdir(path = NA)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-rename"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-rename}{}}}
+\subsection{Method \code{rename()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$rename(src_path, dst_path)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-rmdir"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-rmdir}{}}}
+\subsection{Method \code{rmdir()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$rmdir(path)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-get_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-get_item}{}}}
 \subsection{Method \code{get_item()}}{
 Get an item from the store.
 \subsection{Usage}{
@@ -40,8 +131,8 @@ The item data in a vector of type raw.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_item"></a>}}
-\if{latex}{\out{\hypertarget{method-set_item}{}}}
+\if{html}{\out{<a id="method-Store-set_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-set_item}{}}}
 \subsection{Method \code{set_item()}}{
 Set an item in the store.
 \subsection{Usage}{
@@ -59,8 +150,8 @@ Set an item in the store.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-contains_item"></a>}}
-\if{latex}{\out{\hypertarget{method-contains_item}{}}}
+\if{html}{\out{<a id="method-Store-contains_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-contains_item}{}}}
 \subsection{Method \code{contains_item()}}{
 Determine whether the store contains an item.
 \subsection{Usage}{
@@ -79,8 +170,8 @@ A boolean value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Store-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

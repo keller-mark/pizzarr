@@ -136,6 +136,12 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
       dim_chunk_index_from <- floor(self$start / self$dim_chunk_len)
       dim_chunk_index_to <- ceiling(self$stop / self$dim_chunk_len)
 
+      # START R-SPECIFIC
+      if(dim_chunk_index_from == dim_chunk_index_to) {
+        dim_chunk_index_to <- dim_chunk_index_to + 1
+      }
+      # END R-SPECIFIC
+
       # Iterate over chunks in range
       result <- list()
       for(dim_chunk_index in seq(from = dim_chunk_index_from, to = (dim_chunk_index_to - 1), by = 1)) {
@@ -212,18 +218,13 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
       shape <- array$get_shape()
       chunks <- array$get_chunks()
 
-      print("BasicIndexer pre-normalize_list_selection")
-      print(selection)
       selection <- normalize_list_selection(selection, shape)
-
-      print("BasicIndexer post-normalize_list_selection")
-      print(selection)
       
       # Setup per-dimension indexers
       dim_indexers <- list()
       for(i in seq_along(selection)) {
         dim_sel <- selection[[i]]
-        dim_len <- shape[i]
+        dim_len <- shape[i] - 1 # R-SPECIFIC: subtracting one here
         dim_chunk_len <- chunks[i]
 
         if(is.null(dim_sel)) {
@@ -242,7 +243,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
       self$shape <- list()
       for(d in dim_indexers) {
         if(class(d)[[1]] == "SliceDimIndexer") {
-          self$shape <- append(self$shape, d$num_items)
+          self$shape <- append(self$shape, d$num_items + 1) # R-SPECIFIC: adding one here
         }
       }
       self$drop_axes <- NA
