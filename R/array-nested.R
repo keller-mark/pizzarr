@@ -127,7 +127,7 @@ NestedArray <- R6::R6Class("NestedArray",
     #' Create a new NestedArray instance.
     #' @return A `NestedArray` instance.
     initialize = function(data, shape = NA, dtype = NA) {
-      if(is_na(shape)) {
+      if(is.null(shape) || is_na(shape)) {
         shape <- dim(data)
       } else {
         shape <- normalize_shape(shape)
@@ -167,7 +167,22 @@ NestedArray <- R6::R6Class("NestedArray",
       print("get")
       print(selection)
 
-      return(self) # TODO: should return a new NestedArray for the selection
+      arr <- self$data
+
+      selection_vec <- c()
+      for(sel in selection) {
+        selection_vec <- c(selection_vec, list(sel$start:sel$stop)) # TODO: step?
+      }
+
+      print(selection_vec)
+
+      subset_arr <- do.call('[', c(list(arr), selection_vec))
+
+      print(dim(subset_arr))
+
+      subset_nested_array <- NestedArray$new(subset_arr, shape = dim(subset_arr), dtype = self$dtype)
+
+      return(subset_nested_array)
     },
     set = function(selection, value) {
       # TODO
@@ -175,6 +190,8 @@ NestedArray <- R6::R6Class("NestedArray",
       print("set")
       print(selection)
       print(value)
+
+      
     },
     flatten = function() {
       # TODO
