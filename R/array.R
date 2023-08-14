@@ -727,7 +727,9 @@ Array <- R6::R6Class("Array",
         stop("length of unized object")
       }
     },
+    #' Subset the array.
     #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+    #' @returns A subset of the array, as a NestedArray instance.
     get_item = function(selection) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
       # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/index.ts#L266
@@ -753,6 +755,9 @@ Array <- R6::R6Class("Array",
     get_mask_selection = function(selection = NA, out = NA, fields = NA) {
       # TODO
     },
+    #' Set a subset of the array.
+    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+    #' @param value The value to set, as an R array() or a Zarr NestedArray instance.
     set_item = function(selection, value) {
       self$set_basic_selection(selection, value)
     },

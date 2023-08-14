@@ -4,6 +4,10 @@
 \name{Array}
 \alias{Array}
 \title{Array Class}
+\value{
+A subset of the array, as a NestedArray instance.
+Set a subset of the array.
+}
 \description{
 Instantiate an array from an initialized store.
 Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L51
@@ -208,6 +212,7 @@ An \code{Array} instance.
 \if{latex}{\out{\hypertarget{method-Array-resize}{}}}
 \subsection{Method \code{resize()}}{
 Change the shape of the array by growing or shrinking one or more dimensions.
+Subset the array.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Array$resize(...)}\if{html}{\out{</div>}}
 }
@@ -489,6 +494,15 @@ Change the shape of the array by growing or shrinking one or more dimensions.
 \if{html}{\out{<div class="r">}}\preformatted{Array$set_item(selection, value)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+
+\item{\code{value}}{The value to set, as an R array() or a Zarr NestedArray instance.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Array-set_basic_selection"></a>}}
