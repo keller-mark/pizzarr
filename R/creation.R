@@ -10,6 +10,7 @@ path_to_prefix <- function(path) {
     return(prefix)
 }
 
+#' @internal
 contains_array <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L91
     # Return True if the store contains an array at the given logical path.
@@ -19,6 +20,7 @@ contains_array <- function(store, path=NA) {
     return(store$contains_item(key))
 }
 
+#' @internal
 contains_group <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L99
     # Return True if the store contains a group at the given logical path.
@@ -28,6 +30,7 @@ contains_group <- function(store, path=NA) {
     return(store$contains_item(key))
 }
 
+#' @internal
 rmdir <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L130
 
@@ -221,39 +224,37 @@ require_parent_group <- function(
 
 
 
-# Initialize an array store with the given configuration. Note that this is a low-level
-# function and there should be no need to call this directly from user code.
-
-# Parameters
-# ----------
-# store : Store
-#     A mapping that supports string keys and bytes-like values.
-# shape : int or tuple of ints
-#     Array shape.
-# chunks : bool, int or tuple of ints, optional
-#     Chunk shape. If True, will be guessed from `shape` and `dtype`. If
-#     False, will be set to `shape`, i.e., single chunk for the whole array.
-# dtype : string or dtype, optional
-#     NumPy dtype.
-# compressor : Codec, optional
-#     Primary compressor.
-# fill_value : object
-#     Default value to use for uninitialized portions of the array.
-# order : {'C', 'F'}, optional
-#     Memory layout to be used within each chunk.
-# overwrite : bool, optional
-#     If True, erase all data in `store` prior to initialisation.
-# path : string, bytes, optional
-#     Path under which array is stored.
-# chunk_store : Store, optional
-#     Separate storage for chunks. If not provided, `store` will be used
-#     for storage of both chunks and metadata.
-# filters : sequence, optional
-#     Sequence of filters to use to encode chunk data prior to compression.
-# object_codec : Codec, optional
-#     A codec to encode object arrays, only needed if dtype=object.
-# dimension_separator : {'.', '/'}, optional
-#     Separator placed between the dimensions of a chunk.
+#' @description
+#' Initialize an array store with the given configuration. Note that this is a low-level
+#' function and there should be no need to call this directly from user code.
+#' @param store : Store
+#'     A mapping that supports string keys and bytes-like values.
+#' @param shape : int or tuple of ints
+#'     Array shape.
+#' @param chunks : bool, int or tuple of ints, optional
+#'     Chunk shape. If True, will be guessed from `shape` and `dtype`. If
+#'     False, will be set to `shape`, i.e., single chunk for the whole array.
+#' @param dtype : string or dtype, optional
+#'     NumPy dtype.
+#' @param compressor : Codec, optional
+#'     Primary compressor.
+#' @param fill_value : object
+#'     Default value to use for uninitialized portions of the array.
+#' @param order : {'C', 'F'}, optional
+#'     Memory layout to be used within each chunk.
+#' @param overwrite : bool, optional
+#'     If True, erase all data in `store` prior to initialisation.
+#' @param path : string, bytes, optional
+#'     Path under which array is stored.
+#' @param chunk_store : Store, optional
+#'     Separate storage for chunks. If not provided, `store` will be used
+#'     for storage of both chunks and metadata.
+#' @param filters : sequence, optional
+#'     Sequence of filters to use to encode chunk data prior to compression.
+#' @param object_codec : Codec, optional
+#'     A codec to encode object arrays, only needed if dtype=object.
+#' @param dimension_separator : {'.', '/'}, optional
+#'     Separator placed between the dimensions of a chunk.
 #' @internal
 init_array <- function(
     store,
@@ -302,67 +303,61 @@ init_array <- function(
 }
 
 
-# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/creation.py#L18
+#' @description
 #' Create an array
-#' shape : int or tuple of ints
-#     Array shape.
-# chunks : int or tuple of ints, optional
-#     Chunk shape. If True, will be guessed from `shape` and `dtype`. If
-#     False, will be set to `shape`, i.e., single chunk for the whole array.
-#     If an int, the chunk size in each dimension will be given by the value
-#     of `chunks`. Default is True.
-# dtype : string or dtype, optional
-#     NumPy dtype.
-# compressor : Codec, optional
-#     Primary compressor.
-# fill_value : object
-#     Default value to use for uninitialized portions of the array.
-# order : {'C', 'F'}, optional
-#     Memory layout to be used within each chunk.
-# store : MutableMapping or string
-#     Store or path to directory in file system or name of zip file.
-# synchronizer : object, optional
-#     Array synchronizer.
-# overwrite : bool, optional
-#     If True, delete all pre-existing data in `store` at `path` before
-#     creating the array.
-# path : string, optional
-#     Path under which array is stored.
-# chunk_store : MutableMapping, optional
-#     Separate storage for chunks. If not provided, `store` will be used
-#     for storage of both chunks and metadata.
-# filters : sequence of Codecs, optional
+#' @param shape : int or tuple of ints
+#'     Array shape.
+#' @param chunks : int or tuple of ints, optional
+#'     Chunk shape. If True, will be guessed from `shape` and `dtype`. If
+#'     False, will be set to `shape`, i.e., single chunk for the whole array.
+#'     If an int, the chunk size in each dimension will be given by the value
+#'     of `chunks`. Default is True.
+#' @param dtype : string or dtype, optional
+#'     NumPy dtype.
+#' @param compressor : Codec, optional
+#'     Primary compressor.
+#' @param fill_value : object
+#'     Default value to use for uninitialized portions of the array.
+#' @param order : {'C', 'F'}, optional
+#'     Memory layout to be used within each chunk.
+#' @param store : MutableMapping or string
+#'     Store or path to directory in file system or name of zip file.
+#' @param synchronizer : object, optional
+#'     Array synchronizer.
+#' @param overwrite : bool, optional
+#'     If True, delete all pre-existing data in `store` at `path` before
+#'     creating the array.
+#' @param path : string, optional
+#'     Path under which array is stored.
+#' @param chunk_store : MutableMapping, optional
+#'     Separate storage for chunks. If not provided, `store` will be used
+#'     for storage of both chunks and metadata.
+#' @param filters : sequence of Codecs, optional
 #     Sequence of filters to use to encode chunk data prior to compression.
-# cache_metadata : bool, optional
-#     If True, array configuration metadata will be cached for the
-#     lifetime of the object. If False, array metadata will be reloaded
-#     prior to all data access and modification operations (may incur
-#     overhead depending on storage and data access pattern).
-# cache_attrs : bool, optional
-#     If True (default), user attributes will be cached for attribute read
-#     operations. If False, user attributes are reloaded from the store prior
-#     to all attribute read operations.
-# read_only : bool, optional
-#     True if array should be protected against modification.
-# object_codec : Codec, optional
-#     A codec to encode object arrays, only needed if dtype=object.
-# dimension_separator : {'.', '/'}, optional
-#     Separator placed between the dimensions of a chunk.
-
-#     .. versionadded:: 2.8
-
-# write_empty_chunks : bool, optional
-#     If True (default), all chunks will be stored regardless of their
-#     contents. If False, each chunk is compared to the array's fill value
-#     prior to storing. If a chunk is uniformly equal to the fill value, then
-#     that chunk is not be stored, and the store entry for that chunk's key
-#     is deleted. This setting enables sparser storage, as only chunks with
-#     non-fill-value data are stored, at the expense of overhead associated
-#     with checking the data of each chunk.
-#     .. versionadded:: 2.11
-# Returns
-#     -------
-#     z : zarr.core.Array
+#' @param cache_metadata : bool, optional
+#'     If True, array configuration metadata will be cached for the
+#'     lifetime of the object. If False, array metadata will be reloaded
+#'     prior to all data access and modification operations (may incur
+#'     overhead depending on storage and data access pattern).
+#' @param cache_attrs : bool, optional
+#'     If True (default), user attributes will be cached for attribute read
+#'     operations. If False, user attributes are reloaded from the store prior
+#'     to all attribute read operations.
+#' @param read_only : bool, optional
+#'     True if array should be protected against modification.
+#' @param object_codec : Codec, optional
+#'     A codec to encode object arrays, only needed if dtype=object.
+#' @param dimension_separator : {'.', '/'}, optional
+#'     Separator placed between the dimensions of a chunk.
+#' @param write_empty_chunks : bool, optional
+#'     If True (default), all chunks will be stored regardless of their
+#'     contents. If False, each chunk is compared to the array's fill value
+#'     prior to storing. If a chunk is uniformly equal to the fill value, then
+#'     that chunk is not be stored, and the store entry for that chunk's key
+#'     is deleted. This setting enables sparser storage, as only chunks with
+#'     non-fill-value data are stored, at the expense of overhead associated
+#'     with checking the data of each chunk.
+#' @returns z : zarr.core.Array
 create <- function(
     shape,
     chunks=TRUE,
@@ -383,6 +378,7 @@ create <- function(
     dimension_separator=NA,
     write_empty_chunks=TRUE
 ) {
+    # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/creation.py#L18
     if(is_na(compressor)) {
         compressor <- "default"
     }
@@ -417,10 +413,20 @@ create <- function(
     return(z)
 }
 
+#' @description
+#' Create an array filled with NAs.
+#' @param shape : int or tuple of ints
+#' @param ... The params of create()
+#' @returns Array
 empty <- function(shape, ...) {
     return(create(shape=shape, fill_value=NA, ...))
 }
 
+#' @description
+#' Create an array filled with zeros.
+#' @param shape : int or tuple of ints
+#' @param ... The params of create()
+#' @returns Array
 zeros <- function(shape, ...) {
     return(create(shape=shape, fill_value=0, ...))
 }

@@ -229,8 +229,14 @@ filter_list <- function(l, pred) {
   return(result)
 }
 
-# Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L67
+#' Convert user selections, potentially containing "...", to a list of slices
+#' that can be used internally.
+#' @param selection The user-provided selection list.
+#' @param shape The shape of the array, to be used to fill in ellipsis values.
+#' @returns A list of selections with ellipsis values converted to NA.
 replace_ellipsis <- function(selection, shape) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L67
+
   selection <- ensure_list(selection)
   
   ellipsis_index <- 0
@@ -287,6 +293,9 @@ replace_ellipsis <- function(selection, shape) {
   return(selection)
 }
 
+#' @internal
+#' @param shape A shape vector
+#' @returns The product of shape elements.
 compute_size <- function(shape) {
   result <- 1
   for(val in shape) {
@@ -308,6 +317,10 @@ is_na <- function(val) {
   }
 }
 
+#' Fill in an R array with a single scalar value.
+#' @internal
+#' @param chunk The R array to fill.
+#' @param value The scalar value (after is.scalar() check).
 chunk_fill <- function(chunk, value) {
   # Chunk is an R array()
   # Value is a scalar (after is.scalar() check)
@@ -316,10 +329,12 @@ chunk_fill <- function(chunk, value) {
   chunk[] <- value
 }
 
+#' @internal
 is_key_error <- function(e) {
   return(grepl("KeyError", e$message))
 }
 
+#' @internal
 get_list_product_aux <- function(dim_indexer_iterables, i, partial_results) {
   dim_results <- dim_indexer_iterables[[i]]
   result <- list()
@@ -335,6 +350,9 @@ get_list_product_aux <- function(dim_indexer_iterables, i, partial_results) {
   return(result)
 }
 
+#' Generate a product of lists.
+#' @param dim_indexer_iterables A list of lists.
+#' @return A list of lists.
 get_list_product <- function(dim_indexer_iterables) {
   # Reference: https://docs.python.org/3/library/itertools.html#itertools.product
   partial_results <- list()

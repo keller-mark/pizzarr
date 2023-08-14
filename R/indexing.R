@@ -211,7 +211,13 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
     initialize = function(selection, array) {
       shape <- array$get_shape()
       chunks <- array$get_chunks()
+
+      print("BasicIndexer pre-normalize_list_selection")
+      print(selection)
       selection <- normalize_list_selection(selection, shape)
+
+      print("BasicIndexer post-normalize_list_selection")
+      print(selection)
       
       # Setup per-dimension indexers
       dim_indexers <- list()

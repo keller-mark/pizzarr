@@ -155,6 +155,11 @@ NestedArray <- R6::R6Class("NestedArray",
     data = NULL,
     #' @description
     #' Create a new NestedArray instance.
+    #' @param data The data to initialize the array with.
+    #' Either NULL, base R array, base R vector (numeric/logical),
+    #' scalar, or raw vector.
+    #' @param shape The shape of the array.
+    #' @param dtype The Zarr dtype of the array, as a string like ">f8".
     #' @return A `NestedArray` instance.
     initialize = function(data, shape = NA, dtype = NA) {
       if(is.null(shape) || is_na(shape)) {
@@ -199,7 +204,13 @@ NestedArray <- R6::R6Class("NestedArray",
         stop("Unexpected type for data in NestedArray$initialize()")
       }
     },
+    #' @description
+    #' Subset the array.
+    #' @param selection A list of slices.
+    #' @return A new NestedArray (potentially a subset) representing the selection.
     get = function(selection) {
+      print("get")
+      print(selection)
       selection_list <- list()
       for(sel in selection) {
         selection_list <- append(selection_list, list(c(sel$start:sel$stop))) # TODO: step?
@@ -207,9 +218,17 @@ NestedArray <- R6::R6Class("NestedArray",
 
       subset_arr <- abind::asub(self$data, selection_list)
 
+      print(subset_arr)
+
       subset_nested_array <- NestedArray$new(subset_arr, shape = dim(subset_arr), dtype = self$dtype)
+
+      
       return(subset_nested_array)
     },
+    #' @description
+    #' Set a subset of the array.
+    #' @param selection A list of slices.
+    #' @param value A NestedArray or a base R array.
     set = function(selection, value) {
       # value should be a NestedArray.
       print("set")
@@ -233,6 +252,7 @@ NestedArray <- R6::R6Class("NestedArray",
       }
 
       print(value_data)
+      print(selection_list)
 
       # Cannot figure out how to dynamically set values in an array
       # of arbitrary dimensions.
@@ -240,6 +260,7 @@ NestedArray <- R6::R6Class("NestedArray",
       if(length(selection_list) == 1) {
         self$data[selection_list[[1]]] <- value_data
       } else if(length(selection_list) == 2) {
+        print(self$data[selection_list[[1]], selection_list[[2]]])
         self$data[selection_list[[1]], selection_list[[2]]] <- value_data
       } else if(length(selection_list) == 3) {
         self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]]] <- value_data
@@ -253,6 +274,9 @@ NestedArray <- R6::R6Class("NestedArray",
         stop("NestedArray$set() can only handle up to 6D arrays at the moment. Please make a feature request if you need to handle more dims.")
       }
     },
+    #' @description
+    #' Flatten the array contents.
+    #' @returns The data as a flat vector.
     flatten = function() {
       # TODO
       return(as.vector(self$data))

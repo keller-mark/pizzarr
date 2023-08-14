@@ -1,5 +1,5 @@
-# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L45
 normalize_list_selection <- function(selection, shape, convert_integer_selection_to_slices = FALSE) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L45
   selection <- replace_ellipsis(selection, shape)
 
   for(i in seq_along(selection)) {
@@ -19,8 +19,9 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
   return(selection)
 }
 
-# Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L110
 normalize_integer_selection <- function(dim_sel, dim_len) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L110
+
   # Normalize type to int
   dim_sel <- as.scalar(dim_sel)
 
@@ -87,8 +88,8 @@ normalize_storage_path <- function(path) {
   return(path)
 }
 
-# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
 normalize_shape <- function(shape) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
   if(!is.null(shape)) {
     shape <- ensure_vec(shape)
     return(floor(shape))

@@ -410,6 +410,10 @@ Array <- R6::R6Class("Array",
             return(TRUE)
           }
 
+          print("chunk_getitem")
+          print(chunk_coords)
+          print(chunk_selection)
+
           # Decode chunk
           chunk <- private$to_nested_array(decoded_chunk)
           tmp <- chunk$get(chunk_selection)
