@@ -24,22 +24,16 @@ LZ4 compressor for Zarr
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{LZ4$new()}}
-\item \href{#method-encode}{\code{LZ4$encode()}}
-\item \href{#method-decode}{\code{LZ4$decode()}}
-\item \href{#method-get_meta}{\code{LZ4$get_meta()}}
-\item \href{#method-clone}{\code{LZ4$clone()}}
+\item \href{#method-LZ4-new}{\code{LZ4$new()}}
+\item \href{#method-LZ4-encode}{\code{LZ4$encode()}}
+\item \href{#method-LZ4-decode}{\code{LZ4$decode()}}
+\item \href{#method-LZ4-get_config}{\code{LZ4$get_config()}}
+\item \href{#method-LZ4-clone}{\code{LZ4$clone()}}
 }
-}
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-LZ4-new"></a>}}
+\if{latex}{\out{\hypertarget{method-LZ4-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new LZ4 compressor.
 \subsection{Usage}{
@@ -58,8 +52,8 @@ A new \code{LZ4} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-encode"></a>}}
-\if{latex}{\out{\hypertarget{method-encode}{}}}
+\if{html}{\out{<a id="method-LZ4-encode"></a>}}
+\if{latex}{\out{\hypertarget{method-LZ4-encode}{}}}
 \subsection{Method \code{encode()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LZ4$encode(buf)}\if{html}{\out{</div>}}
@@ -67,8 +61,8 @@ A new \code{LZ4} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-decode"></a>}}
-\if{latex}{\out{\hypertarget{method-decode}{}}}
+\if{html}{\out{<a id="method-LZ4-decode"></a>}}
+\if{latex}{\out{\hypertarget{method-LZ4-decode}{}}}
 \subsection{Method \code{decode()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LZ4$decode(buf)}\if{html}{\out{</div>}}
@@ -76,17 +70,17 @@ A new \code{LZ4} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_meta"></a>}}
-\if{latex}{\out{\hypertarget{method-get_meta}{}}}
-\subsection{Method \code{get_meta()}}{
+\if{html}{\out{<a id="method-LZ4-get_config"></a>}}
+\if{latex}{\out{\hypertarget{method-LZ4-get_config}{}}}
+\subsection{Method \code{get_config()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LZ4$get_meta()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{LZ4$get_config()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-LZ4-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-LZ4-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

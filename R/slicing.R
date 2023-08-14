@@ -1,6 +1,11 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/slice.ts#L78
 
-# Shortcut for Slice$new
+#' @description
+#' Shortcut for Slice$new() constructor.
+#' @param start The start index.
+#' @param stop The stop index.
+#' @param step The step size.
+#' @return A Slice instance with the specified parameters.
 slice <- function(start, stop = NA, step = NA) {
   return(Slice$new(
     start = start,
@@ -9,6 +14,10 @@ slice <- function(start, stop = NA, step = NA) {
   ))
 }
 
+#' @description
+#' Check if a value is a Slice instance.
+#' @param s The value to check.
+#' @return TRUE if the value is a Slice instance, FALSE otherwise.
 is_slice <- function(s) {
   if(class(s)[[1]] == "Slice") {
     return(TRUE)
@@ -16,20 +25,15 @@ is_slice <- function(s) {
   return(FALSE)
 }
 
-is_contiguous_slice <- function(s) {
-  if(is_slice(s) && (s$step == NA || s$step == 1)) {
-    return(TRUE)
-  }
-  return(FALSE)
-}
-
+#' @keywords internal
 is_positive_slice <- function(s) {
-  if(is_slice(s) && (s$step == NA || s$step >= 1)) {
+  if(is_slice(s) && (is_na(s$step) || s$step >= 1)) {
     return(TRUE)
   }
   return(FALSE)
 }
 
+#' @keywords internal
 is_basic_selection <- function(selection) {
   selection <- ensure_list(selection)
   # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L170
@@ -42,6 +46,7 @@ is_basic_selection <- function(selection) {
   return(TRUE)
 }
 
+#' @keywords internal
 adjust_indices <- function(start, stop, step, length_param) {
   if(start < 0) {
     start <- start + length_param
@@ -89,6 +94,7 @@ adjust_indices <- function(start, stop, step, length_param) {
   return(c(start, stop, step, 0))
 }
 
+#' @keywords internal
 slice_indices <- function(slice_param, length_param) {
   start <- 0
   stop <- 0
@@ -140,6 +146,7 @@ slice_indices <- function(slice_param, length_param) {
   return(c(start, stop, step, length_param))
 }
 
+#' @keywords internal
 is_total_slice <- function(item, shape) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/util.ts#L129
 
@@ -177,6 +184,7 @@ is_total_slice <- function(item, shape) {
   return(TRUE)
 }
 
+#' @keywords internal
 is_contiguous_slice <- function(s) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/indexing.ts#L149
   if(is_slice(s) && (is_na(s$step) || s$step == 1)) {
@@ -185,6 +193,7 @@ is_contiguous_slice <- function(s) {
   return(FALSE)
 }
 
+#' @keywords internal
 is_contiguous_selection <- function(selection) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/indexing.ts#L157
   selection <- ensure_list(selection)

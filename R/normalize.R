@@ -1,3 +1,4 @@
+#' @keywords internal
 normalize_list_selection <- function(selection, shape, convert_integer_selection_to_slices = FALSE) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L45
   selection <- replace_ellipsis(selection, shape)
@@ -19,6 +20,7 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
   return(selection)
 }
 
+#' @keywords internal
 normalize_integer_selection <- function(dim_sel, dim_len) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L110
 
@@ -38,6 +40,7 @@ normalize_integer_selection <- function(dim_sel, dim_len) {
   return(dim_sel)
 }
 
+#' @keywords internal
 normalize_resize_args <- function(old_shape, args) {
   if(length(args) == 1) {
     new_shape <- args[1]
@@ -51,6 +54,7 @@ normalize_resize_args <- function(old_shape, args) {
   return(new_shape)
 }
 
+#' @keywords internal
 normalize_storage_path <- function(path) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/29280463ff2f275c31c1fa0f002daa947b8f09b2/src/util.ts#L32
 
@@ -88,6 +92,7 @@ normalize_storage_path <- function(path) {
   return(path)
 }
 
+#' @keywords internal
 normalize_shape <- function(shape) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
   if(!is.null(shape)) {
@@ -97,6 +102,7 @@ normalize_shape <- function(shape) {
   return(shape)
 }
 
+#' @keywords internal
 normalize_dtype <- function(dtype) {
   # TODO
   # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L152
@@ -109,6 +115,7 @@ normalize_dtype <- function(dtype) {
   return(dtype)
 }
 
+#' @keywords internal
 guess_chunks <- function(shape, typesize) {
   # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L69
 
@@ -166,6 +173,7 @@ guess_chunks <- function(shape, typesize) {
   return(as.integer(chunks))
 }
 
+#' @keywords internal
 normalize_chunks <- function(chunks, shape, typesize) {
   # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L115
 
@@ -213,6 +221,7 @@ normalize_chunks <- function(chunks, shape, typesize) {
   return(chunks)
 }
 
+#' @keywords internal
 normalize_store_arg <- function(store, storage_options=NA, mode=NA) {
   if(is.na(mode)) {
     mode <- "r"
@@ -239,6 +248,7 @@ normalize_store_arg <- function(store, storage_options=NA, mode=NA) {
   return(store)
 }
 
+#' @keywords internal
 normalize_order <- function(order) {
   order <- toupper(order)
   if (!(order %in% c('C', 'F'))) {
@@ -247,6 +257,7 @@ normalize_order <- function(order) {
   return(order)
 }
 
+#' @keywords internal
 normalize_fill_value <- function(fill_value, dtype) {
   if (is_na(fill_value)) { # or dtype.hasobject:
         # no fill value

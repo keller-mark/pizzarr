@@ -13,15 +13,15 @@ Abstract compressor for Zarr
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-encode}{\code{Codec$encode()}}
-\item \href{#method-decode}{\code{Codec$decode()}}
-\item \href{#method-get_meta}{\code{Codec$get_meta()}}
-\item \href{#method-clone}{\code{Codec$clone()}}
+\item \href{#method-Codec-encode}{\code{Codec$encode()}}
+\item \href{#method-Codec-decode}{\code{Codec$decode()}}
+\item \href{#method-Codec-get_config}{\code{Codec$get_config()}}
+\item \href{#method-Codec-clone}{\code{Codec$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-encode"></a>}}
-\if{latex}{\out{\hypertarget{method-encode}{}}}
+\if{html}{\out{<a id="method-Codec-encode"></a>}}
+\if{latex}{\out{\hypertarget{method-Codec-encode}{}}}
 \subsection{Method \code{encode()}}{
 Compress data.
 \subsection{Usage}{
@@ -40,8 +40,8 @@ Compressed data.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-decode"></a>}}
-\if{latex}{\out{\hypertarget{method-decode}{}}}
+\if{html}{\out{<a id="method-Codec-decode"></a>}}
+\if{latex}{\out{\hypertarget{method-Codec-decode}{}}}
 \subsection{Method \code{decode()}}{
 Decompress data.
 \subsection{Usage}{
@@ -60,17 +60,17 @@ Un-compressed data.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_meta"></a>}}
-\if{latex}{\out{\hypertarget{method-get_meta}{}}}
-\subsection{Method \code{get_meta()}}{
+\if{html}{\out{<a id="method-Codec-get_config"></a>}}
+\if{latex}{\out{\hypertarget{method-Codec-get_config}{}}}
+\subsection{Method \code{get_config()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Codec$get_meta()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Codec$get_config()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Codec-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Codec-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

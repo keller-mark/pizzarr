@@ -205,7 +205,7 @@ Array <- R6::R6Class("Array",
           chunk_inner <- as_dtype_func(private$fill_value)
           return(chunk_inner)
         } else {
-          print(cond$message)
+          message(cond$message)
           stop("rethrow")
         }
       })      
@@ -290,7 +290,7 @@ Array <- R6::R6Class("Array",
       #     chunk_inner <- as_dtype_func(private$fill_value)
       #     return(chunk_inner)
       #   } else {
-      #     print(cond$message)
+      #     message(cond$message)
       #     stop("rethrow")
       #   }
       # })
@@ -334,6 +334,7 @@ Array <- R6::R6Class("Array",
 
       selection_shape <- indexer$shape
       selection_shape_vec <- ensure_vec(indexer$shape)
+      
 
       # Check value shape
       if (length(selection_shape) == 0) {
@@ -347,7 +348,6 @@ Array <- R6::R6Class("Array",
         value <- NestedArray$new(value, shape = selection_shape_vec, dtype=private$dtype)
       } else if ("NestedArray" %in% class(value)) {
         if (!all(ensure_vec(value$shape) == selection_shape_vec)) {
-          #print(value$shape, selection_shape)
           stop("Shape mismatch in source NestedArray and set selection: ${value.shape} and ${selectionShape}")
         }
       } else {
@@ -410,10 +410,6 @@ Array <- R6::R6Class("Array",
             return(TRUE)
           }
 
-          print("chunk_getitem")
-          print(chunk_coords)
-          print(chunk_selection)
-
           # Decode chunk
           chunk <- private$to_nested_array(decoded_chunk)
           tmp <- chunk$get(chunk_selection)
@@ -435,7 +431,7 @@ Array <- R6::R6Class("Array",
             out$set(out_selection, as.scalar(private$fill_value))
           }
         } else {
-          print(cond$message)
+          message(cond$message)
           stop("Different type of error - rethrow")
         }
       })
@@ -493,7 +489,7 @@ Array <- R6::R6Class("Array",
             }
             return(chunk_data)
           } else {
-            print(cond$message)
+            message(cond$message)
             # // Different type of error - rethrow
             stop("throw error;")
           }

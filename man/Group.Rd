@@ -14,13 +14,13 @@ The Zarr Group class.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Group$new()}}
-\item \href{#method-clone}{\code{Group$clone()}}
+\item \href{#method-Group-new}{\code{Group$new()}}
+\item \href{#method-Group-clone}{\code{Group$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Group-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new Group instance.
 \subsection{Usage}{
@@ -46,8 +46,8 @@ A \code{Group} instance.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Group-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -1,143 +1,42 @@
-get_dtype_rtype <- function(dtype) {
-    # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
-  DTYPE_RTYPE_MAPPING <- list(
-    "|b" = logical(),
-    "|u1" = integer(),
-    "|i1" = integer(),
-    "<b" = logical(),
-    "<u1" = integer(),
-    "<i1" = integer(),
-    "<u2" = integer(),
-    "<i2" = integer(),
-    "<u4" = integer(),
-    "<i4" = integer(),
-    "<f4" = double(),
-    "<f8" = double(),
-    ">b" = logical(),
-    ">u1" = integer(),
-    ">i1" = integer(),
-    ">u2" = integer(),
-    ">i2" = integer(),
-    ">u4" = integer(),
-    ">i4" = integer(),
-    ">f4" = double(),
-    ">f8" = double()
-  )
-  return(DTYPE_RTYPE_MAPPING[[dtype]])
-  # TODO: handle errors
-  #stop('Dtype not recognized or not supported in pizzarr')
-}
 
 
-get_dtype_endianness <- function(dtype) {
-  # TODO: use regexes to figure this stuff out
-  DTYPE_ENDIANNESS_MAPPING <- list(
-    "|b" = "nr",
-    "|u1" = "nr",
-    "|i1" = "nr",
-    "<b" = "little",
-    "<u1" = "little",
-    "<i1" = "little",
-    "<u2" = "little",
-    "<i2" = "little",
-    "<u4" = "little",
-    "<i4" = "little",
-    "<f4" = "little",
-    "<f8" = "little",
-    ">b" = "big",
-    ">u1" = "big",
-    ">i1" = "big",
-    ">u2" = "big",
-    ">i2" = "big",
-    ">u4" = "big",
-    ">i4" = "big",
-    ">f4" = "big",
-    ">f8" = "big"
-  )
-  return(DTYPE_ENDIANNESS_MAPPING[[dtype]])
-}
-
-get_dtype_numbytes <- function(dtype) {
-  # TODO: use regexes to figure this stuff out
-  DTYPE_NUMBYTES_MAPPING <- list(
-    "|b" = 1,
-    "|u1" = 1,
-    "|i1" = 1,
-    "<b" = 1,
-    "<u1" = 1,
-    "<i1" = 1,
-    "<u2" = 2,
-    "<i2" = 2,
-    "<u4" = 4,
-    "<i4" = 4,
-    "<f4" = 4,
-    "<f8" = 8,
-    ">b" = 1,
-    ">u1" = 1,
-    ">i1" = 1,
-    ">u2" = 2,
-    ">i2" = 2,
-    ">u4" = 4,
-    ">i4" = 4,
-    ">f4" = 4,
-    ">f8" = 8
-  )
-  return(DTYPE_NUMBYTES_MAPPING[[dtype]])
-}
-
-get_typed_array_ctr <- function(dtype) {
-  rtype <- get_dtype_rtype(dtype)
-  return(function(dim) array(data = rtype, dim = dim))
-}
-
-# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
+#' @keywords internal
 create_array_from_raw <- function(buf, dtype, shape, offset = 0) {
   # TODO
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
+
 }
 
-get_dtype_from_array <- function(a) {
-  TYPEOF_RTYPE_MAPPING <- list(
-    "logical" = logical(),
-    "integer" = integer(),
-    "double" = double()
-  )
-  RTYPE_DTYPE_MAPPING <- list(
-    "logical" = "|b",
-    "integer" = "<i4",
-    "double" = "<f8"
-  )
-  rtype_str <- typeof(a)
-  return(RTYPE_DTYPE_MAPPING[[rtype_str]])
-}
-
-get_dtype_asrtype <- function(dtype) {
-    # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
-  DTYPE_RTYPE_MAPPING <- list(
-    "|b" = as.logical,
-    "|u1" = as.integer,
-    "|i1" = as.integer,
-    "<b" = as.logical,
-    "<u1" = as.integer,
-    "<i1" = as.integer,
-    "<u2" = as.integer,
-    "<i2" = as.integer,
-    "<u4" = as.integer,
-    "<i4" = as.integer,
-    "<f4" = as.double,
-    "<f8" = as.double,
-    ">b" = as.logical,
-    ">u1" = as.integer,
-    ">i1" = as.integer,
-    ">u2" = as.integer,
-    ">i2" = as.integer,
-    ">u4" = as.integer,
-    ">i4" = as.integer,
-    ">f4" = as.double,
-    ">f8" = as.double
-  )
-  return(DTYPE_RTYPE_MAPPING[[dtype]])
-  # TODO: handle errors
-  #stop('Dtype not recognized or not supported in pizzarr')
+#' @keywords internal
+zero_based_to_one_based <- function(selection, shape) {
+  selection_list <- list()
+  for(i in seq_len(length(selection))) {
+    sel <- selection[[i]]
+    # We assume the selection uses zero-based indexing,
+    # and internally convert to R-based / 1-based indexing
+    # before accessing data on the internal self$data.
+    sel_start <- sel$start + 1
+    sel_stop <- sel$stop + 1 # Do not add one, since R indexing is inclusive.
+    # TODO: convert these warnings to errors once we know internals do indexing correctly
+    if(sel_start < 1) {
+      sel_start <- 1
+      message("IndexError: NestedArray$get() received slice with start index out of bounds - too low")
+    }
+    if(sel_start > shape[i]) {
+      sel_start <- shape[i]
+      message("IndexError: NestedArray$get() received slice with start index out of bounds - too high")
+    }
+    if(sel_stop < 1) {
+      sel_stop <- 1
+      message("IndexError: NestedArray$get() received slice with stop index out of bounds - too low")
+    }
+    if(sel_stop > shape[i]) {
+      sel_stop <- shape[i]
+      message("IndexError: NestedArray$get() received slice with stop index out of bounds - too high")
+    }
+    selection_list <- append(selection_list, list(c(sel_start:sel_stop))) # TODO: support non-1 step
+  }
+  return(selection_list)
 }
 
 #' The Zarr NestedArray class.
@@ -209,20 +108,10 @@ NestedArray <- R6::R6Class("NestedArray",
     #' @param selection A list of slices.
     #' @return A new NestedArray (potentially a subset) representing the selection.
     get = function(selection) {
-      print("get")
-      print(selection)
-      selection_list <- list()
-      for(sel in selection) {
-        selection_list <- append(selection_list, list(c(sel$start:sel$stop))) # TODO: step?
-      }
+      selection_list <- zero_based_to_one_based(selection, self$shape)
 
       subset_arr <- abind::asub(self$data, selection_list)
-
-      print(subset_arr)
-
       subset_nested_array <- NestedArray$new(subset_arr, shape = dim(subset_arr), dtype = self$dtype)
-
-      
       return(subset_nested_array)
     },
     #' @description
@@ -231,14 +120,7 @@ NestedArray <- R6::R6Class("NestedArray",
     #' @param value A NestedArray or a base R array.
     set = function(selection, value) {
       # value should be a NestedArray.
-      print("set")
-      print(selection)
-      print(value)
-
-      selection_list <- list()
-      for(sel in selection) {
-        selection_list <- append(selection_list, list(c(sel$start:sel$stop))) # TODO: step?
-      }
+      selection_list <- zero_based_to_one_based(selection, self$shape)
 
       value_data <- value$data
 
@@ -247,12 +129,9 @@ NestedArray <- R6::R6Class("NestedArray",
       } else if(is.scalar(value)) {
         value_data <- value
       } else {
-        print(value)
+        message(value)
         stop("Got unexpected type for value in NestedArray$set()")
       }
-
-      print(value_data)
-      print(selection_list)
 
       # Cannot figure out how to dynamically set values in an array
       # of arbitrary dimensions.
@@ -260,7 +139,6 @@ NestedArray <- R6::R6Class("NestedArray",
       if(length(selection_list) == 1) {
         self$data[selection_list[[1]]] <- value_data
       } else if(length(selection_list) == 2) {
-        print(self$data[selection_list[[1]], selection_list[[2]]])
         self$data[selection_list[[1]], selection_list[[2]]] <- value_data
       } else if(length(selection_list) == 3) {
         self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]]] <- value_data
@@ -278,11 +156,7 @@ NestedArray <- R6::R6Class("NestedArray",
     #' Flatten the array contents.
     #' @returns The data as a flat vector.
     flatten = function() {
-      # TODO
       return(as.vector(self$data))
-    },
-    arange = function(size, dtype) {
-      # TODO
     }
   )
 )

@@ -20,3 +20,4 @@ matrix_to_zarr(matrix, rows, cols, store, compressor = NA)
 \description{
 Write an R matrix to a Zarr store (one chunk, no compression).
 }
+\keyword{internal}

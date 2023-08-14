@@ -1,4 +1,4 @@
-#' @internal
+#' @keywords internal
 path_to_prefix <- function(path) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/_storage/store.py#L134
     # assume path already normalized
@@ -10,7 +10,7 @@ path_to_prefix <- function(path) {
     return(prefix)
 }
 
-#' @internal
+#' @keywords internal
 contains_array <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L91
     # Return True if the store contains an array at the given logical path.
@@ -20,7 +20,7 @@ contains_array <- function(store, path=NA) {
     return(store$contains_item(key))
 }
 
-#' @internal
+#' @keywords internal
 contains_group <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L99
     # Return True if the store contains a group at the given logical path.
@@ -30,7 +30,7 @@ contains_group <- function(store, path=NA) {
     return(store$contains_item(key))
 }
 
-#' @internal
+#' @keywords internal
 rmdir <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L130
 
@@ -44,7 +44,7 @@ rmdir <- function(store, path=NA) {
     }
 }
 
-#' @internal
+#' @keywords internal
 init_array_metadata <- function(
     store,
     shape,
@@ -167,7 +167,7 @@ init_array_metadata <- function(
     store$set_item(key, encode_array_meta(zarray_meta))
 }
 
-#' @internal
+#' @keywords internal
 init_group_metadata <- function(
     store,
     overwrite = FALSE,
@@ -198,7 +198,7 @@ init_group_metadata <- function(
     store$set_item(key, json_to_raw(zgroup_meta))
 }
 
-#' @internal
+#' @keywords internal
 require_parent_group <- function(
     path,
     store,
@@ -255,7 +255,7 @@ require_parent_group <- function(
 #'     A codec to encode object arrays, only needed if dtype=object.
 #' @param dimension_separator : {'.', '/'}, optional
 #'     Separator placed between the dimensions of a chunk.
-#' @internal
+#' @keywords internal
 init_array <- function(
     store,
     shape,

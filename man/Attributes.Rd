@@ -11,16 +11,45 @@ Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/attrs
 \details{
 The Zarr Attributes class.
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{cached_aslist}}{The attributes cached as a list.}
+
+\item{\code{store}}{Attributes store, already initialized.}
+
+\item{\code{key}}{The key under which the attributes will be stored.}
+
+\item{\code{read_only}}{If True, attributes cannot be modified.}
+
+\item{\code{cache}}{If True (default), attributes will be cached locally.}
+
+\item{\code{synchronizer}}{Only necessary if attributes may be modified from multiple threads or processes.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{cached_aslist}}{The attributes cached as a list.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Attributes$new()}}
-\item \href{#method-clone}{\code{Attributes$clone()}}
+\item \href{#method-Attributes-new}{\code{Attributes$new()}}
+\item \href{#method-Attributes-asdict}{\code{Attributes$asdict()}}
+\item \href{#method-Attributes-refresh}{\code{Attributes$refresh()}}
+\item \href{#method-Attributes-contains}{\code{Attributes$contains()}}
+\item \href{#method-Attributes-get_item}{\code{Attributes$get_item()}}
+\item \href{#method-Attributes-set_item}{\code{Attributes$set_item()}}
+\item \href{#method-Attributes-clone}{\code{Attributes$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Attributes-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new Attributes instance.
 \subsection{Usage}{
@@ -45,8 +74,53 @@ An \code{Attributes} instance.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Attributes-asdict"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-asdict}{}}}
+\subsection{Method \code{asdict()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Attributes$asdict()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Attributes-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-refresh}{}}}
+\subsection{Method \code{refresh()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Attributes$refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Attributes-contains"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-contains}{}}}
+\subsection{Method \code{contains()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Attributes$contains(x)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Attributes-get_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-get_item}{}}}
+\subsection{Method \code{get_item()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Attributes$get_item(item)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Attributes-set_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-set_item}{}}}
+\subsection{Method \code{set_item()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Attributes$set_item(item, value)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Attributes-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
