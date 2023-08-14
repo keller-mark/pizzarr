@@ -140,7 +140,6 @@ get_dtype_asrtype <- function(dtype) {
   #stop('Dtype not recognized or not supported in pizzarr')
 }
 
-
 #' The Zarr NestedArray class.
 #' @title NestedArray Class
 #' @docType class
@@ -174,10 +173,16 @@ NestedArray <- R6::R6Class("NestedArray",
         self$data <- array(data=get_dtype_rtype(dtype), dim=shape)
       } else if(is.null(self$shape)) {
         self$data <- data # TODO?
-      } else if(is.array(data)) {
+      } else if(is.array(data) || is.numeric(data) || is.logical(data)) {
         num_shape_elements <- compute_size(shape)
         # TODO: check that data array has same shape as expected
-        self$data <- data
+        if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
+          self$data <- data
+        } else {
+          astype_func <- get_dtype_asrtype(dtype)
+          self$data <- array(data=as.array(astype_func(data)), dim=shape)
+        }
+        
       } else if(is.raw(data)) {
         buf <- data
         # Create from ArrayBuffer or Buffer
@@ -191,23 +196,18 @@ NestedArray <- R6::R6Class("NestedArray",
         buf_len <- compute_size(shape) * get_dtype_numbytes(dtype) 
         buf <- raw(length = buf_len)
         # TODO?
+        stop("Unexpected type for data in NestedArray$initialize()")
       }
     },
     get = function(selection) {
-      print("get")
-      print(selection)
-
       selection_list <- list()
       for(sel in selection) {
-        selection_list <- append(selection_list, c(sel$start:sel$stop)) # TODO: step?
+        selection_list <- append(selection_list, list(c(sel$start:sel$stop))) # TODO: step?
       }
 
-      selection_cbind <- do.call('cbind', selection_list)
-
-      subset_arr <- self$data[selection_cbind]
+      subset_arr <- abind::asub(self$data, selection_list)
 
       subset_nested_array <- NestedArray$new(subset_arr, shape = dim(subset_arr), dtype = self$dtype)
-
       return(subset_nested_array)
     },
     set = function(selection, value) {
@@ -218,18 +218,39 @@ NestedArray <- R6::R6Class("NestedArray",
 
       selection_list <- list()
       for(sel in selection) {
-        selection_list <- append(selection_list, c(sel$start:sel$stop)) # TODO: step?
+        selection_list <- append(selection_list, list(c(sel$start:sel$stop))) # TODO: step?
       }
 
-      selection_cbind <- do.call('cbind', selection_list)
+      value_data <- value$data
 
       if("NestedArray" %in% class(value)) {
-        self$data[selection_cbind] <- value$data
+        value_data <- value$data
       } else if(is.scalar(value)) {
-        self$data[selection_cbind] <- value
+        value_data <- value
       } else {
         print(value)
         stop("Got unexpected type for value in NestedArray$set()")
+      }
+
+      print(value_data)
+
+      # Cannot figure out how to dynamically set values in an array
+      # of arbitrary dimensions.
+      # Tried: abind::afill <- but it doesn't seem to work with arbitrary dims or do.call
+      if(length(selection_list) == 1) {
+        self$data[selection_list[[1]]] <- value_data
+      } else if(length(selection_list) == 2) {
+        self$data[selection_list[[1]], selection_list[[2]]] <- value_data
+      } else if(length(selection_list) == 3) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]]] <- value_data
+      } else if(length(selection_list) == 4) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]]] <- value_data
+      } else if(length(selection_list) == 5) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]]] <- value_data
+      } else if(length(selection_list) == 6) {
+        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]], selection_list[[6]]] <- value_data
+      } else {
+        stop("NestedArray$set() can only handle up to 6D arrays at the moment. Please make a feature request if you need to handle more dims.")
       }
     },
     flatten = function() {

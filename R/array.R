@@ -241,7 +241,7 @@ Array <- R6::R6Class("Array",
       if(!is.na(out)) {
         # TODO: handle out provided as parameter
       } else {
-        out <- NestedArray$new(NULL, out_shape, out_dtype)
+        out <- NestedArray$new(NULL, shape = out_shape, dtype = out_dtype)
       }
 
       if(out_size == 0) {
@@ -335,10 +335,6 @@ Array <- R6::R6Class("Array",
       selection_shape <- indexer$shape
       selection_shape_vec <- ensure_vec(indexer$shape)
 
-      print(ensure_vec(dim(value)))
-      print(selection_shape_vec)
-      print(all(ensure_vec(dim(value)) == selection_shape_vec))
-
       # Check value shape
       if (length(selection_shape) == 0) {
         # Setting a single value
@@ -348,7 +344,7 @@ Array <- R6::R6Class("Array",
         if (!all(ensure_vec(dim(value)) == selection_shape_vec)) {
           stop("Shape mismatch in source array and set selection: ${dim(value)} and ${selectionShape}")
         }
-        value <- NestedArray$new(value)
+        value <- NestedArray$new(value, shape = selection_shape_vec, dtype=private$dtype)
       } else if ("NestedArray" %in% class(value)) {
         if (!all(ensure_vec(value$shape) == selection_shape_vec)) {
           #print(value$shape, selection_shape)
@@ -375,9 +371,6 @@ Array <- R6::R6Class("Array",
       # value is the full NestedArray representing the value to be set.
       # we call value.get() to get the value for the current chunk selection,
       # since the full value might span multiple chunks.
-
-      print(value)
-
       if (length(selection_shape) == 0) {
         chunk_value <- value
       } else if (is.scalar(value)) {
@@ -391,9 +384,8 @@ Array <- R6::R6Class("Array",
       return(chunk_value)
     },
     to_nested_array = function(decoded_chunk) {
-      # TODO
 
-      nested_array <- NestedArray$new(data = decoded_chunk)
+      nested_array <- NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype)
       return(nested_array)
     },
     chunk_buffer_to_raw_array = function(decoded_chunk) {
@@ -505,13 +497,16 @@ Array <- R6::R6Class("Array",
 
         chunk_nested_array <- NestedArray$new(
           chunk_data,
-          private$chunks,
-          private$dtype
+          shape = private$chunks,
+          dtype = private$dtype
         )
         chunk_nested_array$set(chunk_selection, value)
         chunk <- chunk_nested_array$flatten()
       }
       chunk_data <- private$encode_chunk(chunk)
+
+      
+
       self$get_chunk_store()$set_item(chunk_key, chunk_data)
     },
     to_typed_array = function(buffer) {
