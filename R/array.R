@@ -192,21 +192,35 @@ Array <- R6::R6Class("Array",
       }
       selection <- ensure_list(selection)  # TODO
       # Obtain encoded data for chunk
-      ckey <- private$chunk_key(c(0))
-      cdata <- self$get_chunk_store()$get_item(ckey)
-      # TODO: use try-catch
-      chunk <- private$decode_chunk(cdata)
+      c_key <- private$chunk_key(c(0))
 
-      # Handle fields
-      if(!is.na(fields)) {
-        chunk <- chunk[fields]
-      }
+      chunk <- tryCatch({
+        c_data <- self$get_chunk_store()$get_item(c_key)
+        chunk_inner <- private$decode_chunk(c_data)
+        return(chunk_inner)
+      }, error = function(cond) {
+        if(is_key_error(cond)) {
+          # chunk not initialized
+          as_dtype_func <- get_dtype_asrtype(private$dtype)
+          chunk_inner <- as_dtype_func(private$fill_value)
+          return(chunk_inner)
+        } else {
+          print(cond$message)
+          stop("rethrow")
+        }
+      })      
+
+      # TODO: Handle fields
+      # if(!is.na(fields)) {
+      #   chunk <- chunk[fields]
+      # }
 
       # Handle selection of the scalar value via empty tuple
-      if(is.na(out)) {
-        out <- chunk[selection]
+      if(is_na(out)) {
+        out <- as.scalar(chunk)
       } else {
-        out[selection] <- chunk[selection]
+        # TODO
+        out[selection] <- as.scalar(chunk)
       }
       return(out)
     },
@@ -249,10 +263,59 @@ Array <- R6::R6Class("Array",
     set_basic_selection_zd = function(selection, value, fields = NA) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L1625
 
-    
+      # check selection is valid
+      selection <- ensure_list(selection)
+      if(!(length(selection) == 0 || selection == "...")) {
+        stop("err_too_many_indices(selection, self._shape)")
+      }
 
+      # TODO: check fields
+      #check_fields(fields, self._dtype)
+      #fields = check_no_multi_fields(fields)
 
-      print(paste("set_basic_selection_zd", selection, value))
+      # obtain key for chunk
+      c_key <- private$chunk_key(c(0))
+
+      # setup chunk
+      # chunk <- tryCatch({
+      #   # obtain compressed data for chunk
+      #   c_data <- self$get_chunk_store()$get_item(c_key)
+      #   # decode chunk
+      #   chunk_inner <- private$decode_chunk(c_data)
+      #   return(chunk_inner)
+      # }, error = function(cond) {
+      #   if(is_key_error(cond)) {
+      #     # chunk not initialized
+      #     as_dtype_func = get_dtype_asrtype(private$dtype)
+      #     chunk_inner <- as_dtype_func(private$fill_value)
+      #     return(chunk_inner)
+      #   } else {
+      #     print(cond$message)
+      #     stop("rethrow")
+      #   }
+      # })
+      
+      # TODO
+      # set value
+      # if fields:
+      #     chunk[fields][selection] = value
+      # else:
+      #     chunk[selection] = value
+
+      # TODO
+      # remove chunk if write_empty_chunks is false and it only contains the fill value
+      # if (not self.write_empty_chunks) and all_equal(self.fill_value, chunk):
+      #     try:
+      #         del self.chunk_store[ckey]
+      #         return
+      #     except Exception:  # pragma: no cover
+      #         # deleting failed, fallback to overwriting
+      #         pass
+      # else:
+
+      # encode and store
+      c_data <- private$encode_chunk(as.scalar(value))
+      self$get_chunk_store()$set_item(c_key, c_data)
     },
     set_basic_selection_nd = function(selection, value, fields = NA) {
       indexer <- BasicIndexer$new(selection, self)
@@ -270,19 +333,25 @@ Array <- R6::R6Class("Array",
       # // the selection. This minimises the number of iterations in the main for loop.
 
       selection_shape <- indexer$shape
+      selection_shape_vec <- ensure_vec(indexer$shape)
+
+      print(ensure_vec(dim(value)))
+      print(selection_shape_vec)
+      print(all(ensure_vec(dim(value)) == selection_shape_vec))
 
       # Check value shape
       if (length(selection_shape) == 0) {
         # Setting a single value
       } else if (is.scalar(value)) {
         # Setting a scalar value
-      } else if(class(value) == "array") {
-        if (dim(value) != selection_shape) {
+      } else if("array" %in% class(value)) {
+        if (!all(ensure_vec(dim(value)) == selection_shape_vec)) {
           stop("Shape mismatch in source array and set selection: ${dim(value)} and ${selectionShape}")
         }
         value <- NestedArray$new(value)
       } else if ("NestedArray" %in% class(value)) {
-        if (value$shape != selection_shape) {
+        if (!all(ensure_vec(value$shape) == selection_shape_vec)) {
+          #print(value$shape, selection_shape)
           stop("Shape mismatch in source NestedArray and set selection: ${value.shape} and ${selectionShape}")
         }
       } else {

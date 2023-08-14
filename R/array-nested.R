@@ -110,6 +110,37 @@ get_dtype_from_array <- function(a) {
   return(RTYPE_DTYPE_MAPPING[[rtype_str]])
 }
 
+get_dtype_asrtype <- function(dtype) {
+    # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
+  DTYPE_RTYPE_MAPPING <- list(
+    "|b" = as.logical,
+    "|u1" = as.integer,
+    "|i1" = as.integer,
+    "<b" = as.logical,
+    "<u1" = as.integer,
+    "<i1" = as.integer,
+    "<u2" = as.integer,
+    "<i2" = as.integer,
+    "<u4" = as.integer,
+    "<i4" = as.integer,
+    "<f4" = as.double,
+    "<f8" = as.double,
+    ">b" = as.logical,
+    ">u1" = as.integer,
+    ">i1" = as.integer,
+    ">u2" = as.integer,
+    ">i2" = as.integer,
+    ">u4" = as.integer,
+    ">i4" = as.integer,
+    ">f4" = as.double,
+    ">f8" = as.double
+  )
+  return(DTYPE_RTYPE_MAPPING[[dtype]])
+  # TODO: handle errors
+  #stop('Dtype not recognized or not supported in pizzarr')
+}
+
+
 #' The Zarr NestedArray class.
 #' @title NestedArray Class
 #' @docType class
