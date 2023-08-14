@@ -192,7 +192,14 @@ NestedArray <- R6::R6Class("NestedArray",
 
       selection_cbind <- do.call('cbind', selection_list)
 
-      self$data[selection_cbind] <- value$data
+      if("NestedArray" %in% class(value)) {
+        self$data[selection_cbind] <- value$data
+      } else if(is.scalar(value)) {
+        self$data[selection_cbind] <- value
+      } else {
+        print(value)
+        stop("Got unexpected type for value in NestedArray$set()")
+      }
     },
     flatten = function() {
       # TODO

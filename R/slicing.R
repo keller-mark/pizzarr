@@ -139,3 +139,60 @@ slice_indices <- function(slice_param, length_param) {
   }
   return(c(start, stop, step, length_param))
 }
+
+is_total_slice <- function(item, shape) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/util.ts#L129
+
+  if (is.null(item) || is_na(item)) {
+    return(TRUE)
+  }
+  if (is.scalar(item)) {
+    item <- as.numeric(item)
+  }
+
+  for (i in seq_len(min(length(item), length(shape)))) {
+    it <- item[i]
+
+    if (is.null(it) || is_na(it)) {
+      # continue
+    } else {
+      if (is_slice(it)) {
+        s <- it
+        is_step_one <- s$step == 1 || is.null(s$step) || is_na(s$step)
+
+        if ((is.null(s$start) || is_na(s$start)) && (is.null(s$stop) || is_na(s$stop)) && is_step_one) {
+          # continue
+        } else {
+          if ((as.numeric(s$stop) - as.numeric(s$start)) == shape[i] && is_step_one) {
+            # continue
+          } else {
+            return(FALSE)
+          }
+        }
+      } else {
+        return(FALSE)
+      }
+    }
+  }
+  return(TRUE)
+}
+
+is_contiguous_slice <- function(s) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/indexing.ts#L149
+  if(is_slice(s) && (is_na(s$step) || s$step == 1)) {
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+is_contiguous_selection <- function(selection) {
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/indexing.ts#L157
+  selection <- ensure_list(selection)
+  for(i in seq_len(length(selection))) {
+    s <- selection[[i]]
+    if(!(is_integer_vec(s) || is_contiguous_slice(s) || s == "...")) {
+      return(FALSE)
+    }
+  }
+  return(TRUE)
+}

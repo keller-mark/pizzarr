@@ -13,7 +13,9 @@ library(pizzarr)
 
 #     sel <- z$get_item("...")
 
-#     expect_equal(a, sel)
+#     print(sel)
+
+#     expect_equal(a, sel$data)
 # })
 
 test_that("get_basic_selection_1d", {

@@ -247,7 +247,11 @@ Array <- R6::R6Class("Array",
 
     },
     set_basic_selection_zd = function(selection, value, fields = NA) {
-      # TODO
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L1625
+
+    
+
+
       print(paste("set_basic_selection_zd", selection, value))
     },
     set_basic_selection_nd = function(selection, value, fields = NA) {
@@ -317,10 +321,59 @@ Array <- R6::R6Class("Array",
       }
       return(chunk_value)
     },
+    to_nested_array = function(decoded_chunk) {
+      # TODO
+
+      nested_array <- NestedArray$new(data = decoded_chunk)
+      return(nested_array)
+    },
+    chunk_buffer_to_raw_array = function(decoded_chunk) {
+      # TODO
+    },
     chunk_getitem = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
       # TODO
       # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L380
 
+      if(length(chunk_coords) != length(private$chunks)) {
+        stop("Inconsistent shapes: chunkCoordsLength: ${chunkCoords.length}, cDataShapeLength: ${this.chunkDataShape.length}")
+      }
+      c_key <- private$chunk_key(chunk_coords)
+
+      tryCatch({
+        c_data <- self$get_chunk_store()$get_item(c_key)
+        decoded_chunk <- private$decode_chunk(c_data)
+
+        if("NestedArray" %in% class(out)) {
+          if(is_contiguous_selection(out_selection) && is_total_slice(chunk_selection, private$chunks) && is.null(private$filters)) {
+            out$set(out_selection, private$to_nested_array(decoded_chunk))
+            return(TRUE)
+          }
+
+          # Decode chunk
+          chunk <- private$to_nested_array(decoded_chunk)
+          tmp <- chunk$get(chunk_selection)
+
+          if(!is_na(drop_axes)) {
+            stop("Drop axes is not supported yet")
+          }
+          out$set(out_selection, tmp)
+        } else {
+          # RawArray
+          # Copies chunk by index directly into output. Doesn't matter if selection is contiguous
+          # since store/output are different shapes/strides.
+          out$set(out_selection, private$chunk_buffer_to_raw_array(decoded_chunk), chunk_selection)
+        }
+      }, error = function(cond) {
+        if(is_key_error(cond)) {
+          # fill with scalar if cKey doesn't exist in store
+          if(!is_na(private$fill_value)) {
+            out$set(out_selection, as.scalar(private$fill_value))
+          }
+        } else {
+          print(cond$message)
+          stop("Different type of error - rethrow")
+        }
+      })
     },
     chunk_getitems = function(lchunk_coords, lchunk_selection, out, lout_selection, drop_axes = NA, fields = NA) {
       # TODO
@@ -375,6 +428,7 @@ Array <- R6::R6Class("Array",
             }
             return(chunk_data)
           } else {
+            print(cond$message)
             # // Different type of error - rethrow
             stop("throw error;")
           }
@@ -412,9 +466,11 @@ Array <- R6::R6Class("Array",
     },
     decode_chunk = function(cdata, start = NA, nitems = NA, expected_shape = NA) {
       # TODO
+      return(cdata)
     },
     encode_chunk = function(chunk) {
       # TODO
+      return(chunk)
     },
     append_nosync = function(data, axis = 0) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141
