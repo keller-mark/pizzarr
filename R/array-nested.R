@@ -163,38 +163,40 @@ NestedArray <- R6::R6Class("NestedArray",
       }
     },
     get = function(selection) {
-      # TODO
       print("get")
       print(selection)
 
-      arr <- self$data
-
-      selection_vec <- c()
+      selection_list <- list()
       for(sel in selection) {
-        selection_vec <- c(selection_vec, list(sel$start:sel$stop)) # TODO: step?
+        selection_list <- append(selection_list, c(sel$start:sel$stop)) # TODO: step?
       }
 
-      print(selection_vec)
+      selection_cbind <- do.call('cbind', selection_list)
 
-      subset_arr <- do.call('[', c(list(arr), selection_vec))
-
-      print(dim(subset_arr))
+      subset_arr <- self$data[selection_cbind]
 
       subset_nested_array <- NestedArray$new(subset_arr, shape = dim(subset_arr), dtype = self$dtype)
 
       return(subset_nested_array)
     },
     set = function(selection, value) {
-      # TODO
       # value should be a NestedArray.
       print("set")
       print(selection)
       print(value)
 
-      
+      selection_list <- list()
+      for(sel in selection) {
+        selection_list <- append(selection_list, c(sel$start:sel$stop)) # TODO: step?
+      }
+
+      selection_cbind <- do.call('cbind', selection_list)
+
+      self$data[selection_cbind] <- value$data
     },
     flatten = function() {
       # TODO
+      return(as.vector(self$data))
     },
     arange = function(size, dtype) {
       # TODO

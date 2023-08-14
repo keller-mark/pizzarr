@@ -28,5 +28,7 @@ test_that("get_basic_selection_1d", {
 
     sel <- z$get_item("...")
 
+    print(sel)
+
     expect_equal(a, sel$data)
 })
