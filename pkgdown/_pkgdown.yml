@@ -51,18 +51,18 @@ reference:
   desc: >
     Convenience functions for storing and loading data.
 - contents:
-    - create
-    - empty
-    - zeros
+  - create
+  - empty
+  - zeros
 - title: "Utilities"
   desc: >
     Utility functions for working with Zarr arrays and groups.
 - contents:
-    - slice
-    - is_slice
-    - as.scalar
-    - is.scalar
-    - is_key_error
+  - slice
+  - is_slice
+  - as.scalar
+  - is.scalar
+  - is_key_error
 
 
 articles:
