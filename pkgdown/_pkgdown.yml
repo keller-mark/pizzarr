@@ -50,14 +50,14 @@ reference:
 - title: "Convenience functions"
   desc: >
     Convenience functions for storing and loading data.
-  contents:
+- contents:
     - create
     - empty
     - zeros
 - title: "Utilities"
   desc: >
     Utility functions for working with Zarr arrays and groups.
-  contents:
+- contents:
     - slice
     - is_slice
     - as.scalar
