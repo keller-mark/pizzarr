@@ -140,6 +140,7 @@ get_codec <- function(config) {
 }
 
 #' Get the default compressor.
+#' @keywords internal
 #' @returns A Zstd compressor instance.
 get_default_compressor <- function() {
   return(Zstd$new())

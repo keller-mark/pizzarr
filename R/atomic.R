@@ -1,6 +1,5 @@
 # Reference: https://github.com/jeroen/jsonlite/blob/6a30ac/R/unbox.R
 
-#' @description
 #' Convert a value to a scalar to opt-out of R default vector casting behavior.
 #' @param obj The value to convert.
 #' @return The value wrapped as a scalar.
@@ -8,7 +7,6 @@ as.scalar <- function(obj) {
   return(jsonlite::unbox(obj))
 }
 
-#' @description
 #' Check if a value is a scalar.
 #' @param s The value to check.
 #' @return TRUE if the value is a scalar, FALSE otherwise.

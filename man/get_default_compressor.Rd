@@ -12,3 +12,4 @@ A Zstd compressor instance.
 \description{
 Get the default compressor.
 }
+\keyword{internal}

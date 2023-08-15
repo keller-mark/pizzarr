@@ -224,7 +224,6 @@ require_parent_group <- function(
 
 
 
-#' @description
 #' Initialize an array store with the given configuration. Note that this is a low-level
 #' function and there should be no need to call this directly from user code.
 #' @param store : Store
@@ -303,7 +302,6 @@ init_array <- function(
 }
 
 
-#' @description
 #' Create an array
 #' @param shape : int or tuple of ints
 #'     Array shape.
@@ -413,7 +411,6 @@ create <- function(
     return(z)
 }
 
-#' @description
 #' Create an array filled with NAs.
 #' @param shape : int or tuple of ints
 #' @param ... The params of create()
@@ -422,7 +419,6 @@ empty <- function(shape, ...) {
     return(create(shape=shape, fill_value=NA, ...))
 }
 
-#' @description
 #' Create an array filled with zeros.
 #' @param shape : int or tuple of ints
 #' @param ... The params of create()

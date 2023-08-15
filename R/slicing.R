@@ -1,6 +1,5 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/slice.ts#L78
 
-#' @description
 #' Shortcut for Slice$new() constructor.
 #' @param start The start index.
 #' @param stop The stop index.
@@ -14,7 +13,6 @@ slice <- function(start, stop = NA, step = NA) {
   ))
 }
 
-#' @description
 #' Check if a value is a Slice instance.
 #' @param s The value to check.
 #' @return TRUE if the value is a Slice instance, FALSE otherwise.

@@ -331,7 +331,6 @@ chunk_fill <- function(chunk, value) {
   chunk[] <- value
 }
 
-#' @description
 #' Check if an error is a KeyError.
 #' @param e The error to check.
 #' @return TRUE if the error is a KeyError, FALSE otherwise.
@@ -357,6 +356,7 @@ get_list_product_aux <- function(dim_indexer_iterables, i, partial_results) {
 
 #' Generate a product of lists.
 #' @param dim_indexer_iterables A list of lists.
+#' @keywords internal
 #' @return A list of lists.
 get_list_product <- function(dim_indexer_iterables) {
   # Reference: https://docs.python.org/3/library/itertools.html#itertools.product
