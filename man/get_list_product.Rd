@@ -15,3 +15,4 @@ A list of lists.
 \description{
 Generate a product of lists.
 }
+\keyword{internal}
