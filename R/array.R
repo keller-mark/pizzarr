@@ -1,14 +1,17 @@
 #' The Zarr Array class.
-#' @title Array Class
+#' @title ZarrArray Class
 #' @docType class
 #' @description
 #' Instantiate an array from an initialized store.
 #' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L51
 #'
-#' @rdname Array
+#' @rdname ZarrArray
 #' @export
-Array <- R6::R6Class("Array",
+ZarrArray <- R6::R6Class("ZarrArray",
   private = list(
+    #' @field store Array store, already initialized.
+    store = NULL,
+    # TODO: move more things here from public
     #' @field key_prefix
     #' @keywords internal
     key_prefix = NULL,
@@ -55,8 +58,8 @@ Array <- R6::R6Class("Array",
     #' (Re)load metadata from store.
     load_metadata_nosync = function() {
       mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
-      meta_bytes <- self$store$get_item(mkey)
-      meta <- decode_array_meta(meta_bytes)
+      meta_bytes <- private$store$get_item(mkey)
+      meta <- private$store$metadata_class$decode_array_metadata(meta_bytes)
       private$meta <- meta
       private$shape <- meta$shape
       private$chunks <- meta$chunks
@@ -124,7 +127,7 @@ Array <- R6::R6Class("Array",
         filters = filters_config
       )
       mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
-      self$store$set_item(mkey, encode_array_meta(meta))
+      private$store$set_item(mkey, encode_array_meta(meta))
     },
     chunk_key = function(chunk_coords) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2063
@@ -217,10 +220,10 @@ Array <- R6::R6Class("Array",
 
       # Handle selection of the scalar value via empty tuple
       if(is_na(out)) {
-        out <- as.scalar(chunk)
+        out <- as_scalar(chunk)
       } else {
         # TODO
-        out[selection] <- as.scalar(chunk)
+        out[selection] <- as_scalar(chunk)
       }
       return(out)
     },
@@ -314,7 +317,7 @@ Array <- R6::R6Class("Array",
       # else:
 
       # encode and store
-      c_data <- private$encode_chunk(as.scalar(value))
+      c_data <- private$encode_chunk(as_scalar(value))
       self$get_chunk_store()$set_item(c_key, c_data)
     },
     set_basic_selection_nd = function(selection, value, fields = NA) {
@@ -339,7 +342,7 @@ Array <- R6::R6Class("Array",
       # Check value shape
       if (length(selection_shape) == 0) {
         # Setting a single value
-      } else if (is.scalar(value)) {
+      } else if (is_scalar(value)) {
         # Setting a scalar value
       } else if("array" %in% class(value)) {
         if (!all(ensure_vec(dim(value)) == selection_shape_vec)) {
@@ -373,7 +376,7 @@ Array <- R6::R6Class("Array",
       # since the full value might span multiple chunks.
       if (length(selection_shape) == 0) {
         chunk_value <- value
-      } else if (is.scalar(value)) {
+      } else if (is_scalar(value)) {
         chunk_value <- value
       } else {
         chunk_value <- value$get(proj$out_sel)
@@ -428,7 +431,7 @@ Array <- R6::R6Class("Array",
         if(is_key_error(cond)) {
           # fill with scalar if cKey doesn't exist in store
           if(!is_na(private$fill_value)) {
-            out$set(out_selection, as.scalar(private$fill_value))
+            out$set(out_selection, as_scalar(private$fill_value))
           }
         } else {
           message(cond$message)
@@ -460,7 +463,7 @@ Array <- R6::R6Class("Array",
         # Optimization: we are completely replacing the chunk, so no need
         # to access the existing chunk data
 
-        if (is.scalar(value)) {
+        if (is_scalar(value)) {
           # TODO get the right type here
           chunk <- dtype_constr(chunk_size)
           chunk_fill(chunk, value)
@@ -542,8 +545,6 @@ Array <- R6::R6Class("Array",
     }
   ),
   public = list(
-    #' @field store Array store, already initialized.
-    store = NULL,
     #' @field chunk_store Separate storage for chunks. If not provided, `store` will be used for storage of both chunks and metadata.
     chunk_store = NULL,
     #' @field path Storage path. String, optional.
@@ -564,7 +565,7 @@ Array <- R6::R6Class("Array",
     #' @param store Array store, already initialized.
     #' @return An `Array` instance.
     initialize = function(store, path = NA, read_only = FALSE, chunk_store = NA, synchronizer = NA, cache_metadata = TRUE, cache_attrs = TRUE, write_empty_chunks = TRUE) {
-      self$store <- store
+      private$store <- store
       self$chunk_store <- chunk_store
       if(!is.na(path)) {
         self$path <- normalize_storage_path(path)
@@ -589,7 +590,7 @@ Array <- R6::R6Class("Array",
       private$oindex <- VIndex$new(self)
     },
     get_store = function() {
-      return(self$store)
+      return(private$store)
     },
     get_path = function() {
       return(self$path)
@@ -620,8 +621,8 @@ Array <- R6::R6Class("Array",
       self$read_only <- val
     },
     get_chunk_store = function() {
-      if(is.na(self$chunk_store)) {
-        return(self$store)
+      if(is_na(self$chunk_store)) {
+        return(private$store)
       } else {
         return(self$chunk_store)
       }

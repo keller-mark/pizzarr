@@ -3,7 +3,7 @@ library(pizzarr)
 test_that("Zarr Array can load .zarray metadata", {
   store <- MemoryStore$new()
 
-  zarray_meta_char <- jsonlite::toJSON(create_zarray_meta(
+  zarray_meta <- store$metadata_class$encode_array_metadata(create_zarray_meta(
     dtype = "|u1",
     order = "C",
     fill_value = 0,
@@ -12,9 +12,9 @@ test_that("Zarr Array can load .zarray metadata", {
     dimension_separator = "."
   ))
 
-  store$set_item(".zarray", charToRaw(zarray_meta_char))
+  store$set_item(".zarray", zarray_meta)
   
-  array <- Array$new(store = store)
+  array <- ZarrArray$new(store = store)
   shape <- array$get_shape()
   
   expect_equal(shape, c(1, 2))
@@ -23,7 +23,7 @@ test_that("Zarr Array can load .zarray metadata", {
 test_that("Zarr Array can be resized", {
   store <- MemoryStore$new()
   
-  zarray_meta_char <- jsonlite::toJSON(create_zarray_meta(
+  zarray_meta <- store$metadata_class$encode_array_metadata(create_zarray_meta(
     dtype = "|u1",
     order = "C",
     fill_value = 0,
@@ -32,9 +32,9 @@ test_that("Zarr Array can be resized", {
     dimension_separator = "."
   ))
   
-  store$set_item(".zarray", charToRaw(zarray_meta_char))
+  store$set_item(".zarray", zarray_meta)
   
-  array <- Array$new(store = store)
+  array <- ZarrArray$new(store = store)
   old_shape <- array$get_shape()
   expect_equal(old_shape, c(4, 5))
   array$resize(1, 2)

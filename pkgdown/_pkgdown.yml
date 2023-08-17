@@ -19,7 +19,7 @@ reference:
   desc: >
     Create and manipulate Zarr arrays.
 - contents:
-  - Array
+  - ZarrArray
   - NestedArray
   - RawArray
 - title: "Groups"
@@ -51,17 +51,19 @@ reference:
   desc: >
     Convenience functions for storing and loading data.
 - contents:
-  - create
-  - empty
-  - zeros
+  - zarr_create
+  - zarr_create_empty
+  - zarr_create_zeros
+  - zarr_create_array
+  - zarr_create_group
 - title: "Utilities"
   desc: >
     Utility functions for working with Zarr arrays and groups.
 - contents:
   - slice
   - is_slice
-  - as.scalar
-  - is.scalar
+  - as_scalar
+  - is_scalar
   - is_key_error
 
 

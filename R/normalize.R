@@ -7,7 +7,7 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
     dim_sel <- selection[i]
     if(is_integer(dim_sel)) {
       if(convert_integer_selection_to_slices) {
-        selection[[i]] <- zb_slice(dim_sel, dim_sel + 1, 1)
+        selection[[i]] <- slice(dim_sel, dim_sel + 1, 1, zero_based = TRUE)
       } else {
         selection[[i]] <- normalize_integer_selection(dim_sel, shape[i])
       }
@@ -25,7 +25,7 @@ normalize_integer_selection <- function(dim_sel, dim_len) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L110
 
   # Normalize type to int
-  dim_sel <- as.scalar(dim_sel)
+  dim_sel <- as_scalar(dim_sel)
 
   # handle wraparound
   if(dim_sel < 0) {
@@ -190,7 +190,7 @@ normalize_chunks <- function(chunks, shape, typesize) {
   }
 
   # handle 1D convenience form
-  if(is.scalar(chunks)) {
+  if(is_scalar(chunks)) {
     chunks <- rep(as.integer(chunks), length(shape))
   }
 
@@ -227,7 +227,7 @@ normalize_store_arg <- function(store, storage_options=NA, mode=NA) {
     mode <- "r"
   }
 
-  if(is.na(store)) {
+  if(is_na(store)) {
     return(MemoryStore$new())
   }
 
