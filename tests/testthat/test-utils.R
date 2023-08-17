@@ -72,22 +72,22 @@ test_that("replace_ellipsis [[null], [ellipsis, null], [100]]", {
   expect_equal(res, list(NA))
 })
 
-test_that("replace_ellipsis [[slice(0, 5)], slice(0, 5), [100]]", {
-  res <- replace_ellipsis(slice(0, 5), list(100))
-  expect_equal(res, list(slice(0, 5)))
+test_that("replace_ellipsis [[zb_slice(0, 5)], zb_slice(0, 5), [100]]", {
+  res <- replace_ellipsis(zb_slice(0, 5), list(100))
+  expect_equal(res, list(zb_slice(0, 5)))
 })
 
-test_that("replace_ellipsis [[slice(null)], slice(:), [100]]", {
-  res <- replace_ellipsis(slice(":"), list(100))
-  expect_equal(res, list(slice(NA)))
+test_that("replace_ellipsis [[zb_slice(null)], zb_slice(:), [100]]", {
+  res <- replace_ellipsis(zb_slice(":"), list(100))
+  expect_equal(res, list(zb_slice(NA)))
   expect_equal(res[[1]]$start, NA)
   expect_equal(res[[1]]$stop, NA)
   expect_equal(res[[1]]$step, NA)
 })
 
-test_that("replace_ellipsis [[slice(null)], slice(:, :), [100]]", {
-  res <- replace_ellipsis(slice(":", ":"), list(100))
-  expect_equal(res, list(slice(NA)))
+test_that("replace_ellipsis [[zb_slice(null)], zb_slice(:, :), [100]]", {
+  res <- replace_ellipsis(zb_slice(":", ":"), list(100))
+  expect_equal(res, list(zb_slice(NA)))
 })
 
 # 2D, single item
@@ -112,9 +112,9 @@ test_that("replace_ellipsis [[0, null], [0, null], [100, 100]]", {
   expect_equal(res, list(0, NA))
 })
 
-test_that("replace_ellipsis [[0, slice(null)], [0, slice(null)], [100, 100]]", {
-  res <- replace_ellipsis(list(0, slice(NA)), list(100, 100))
-  expect_equal(res, list(0, slice(NA)))
+test_that("replace_ellipsis [[0, zb_slice(null)], [0, zb_slice(null)], [100, 100]]", {
+  res <- replace_ellipsis(list(0, zb_slice(NA)), list(100, 100))
+  expect_equal(res, list(0, zb_slice(NA)))
 })
 
 test_that("replace_ellipsis [[null, 0], [null, 0], [100, 100]]", {
@@ -148,9 +148,9 @@ test_that("replace_ellipsis [[null, null], [null, ellipsis], [100, 100]]", {
   expect_equal(res, list(NA, NA))
 })
 
-test_that("replace_ellipsis [[null, slice(null)], [ellipsis, slice(null)], [100, 100]]", {
-  res <- replace_ellipsis(list("...", slice(NA)), list(100, 100))
-  expect_equal(res, list(NA, slice(NA)))
+test_that("replace_ellipsis [[null, zb_slice(null)], [ellipsis, zb_slice(null)], [100, 100]]", {
+  res <- replace_ellipsis(list("...", zb_slice(NA)), list(100, 100))
+  expect_equal(res, list(NA, zb_slice(NA)))
 })
 
 test_that("replace_ellipsis [[null, null], [ellipsis, null, null], [100, 100]]", {

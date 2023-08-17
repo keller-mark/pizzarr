@@ -4,13 +4,32 @@
 #' @param start The start index.
 #' @param stop The stop index.
 #' @param step The step size.
+#' @param zero_based The index of the dimension. By default, FALSE for R-like behavior.
+#' @param stop_exclusive Whether the stop index is exclusive. By default, FALSE for R-like behavior.
 #' @return A Slice instance with the specified parameters.
-slice <- function(start, stop = NA, step = NA) {
+slice <- function(start, stop = NA, step = NA, zero_based = FALSE, stop_exclusive = FALSE) {
+  start_offset <- ifelse(zero_based, 0, -1)
+  stop_offset <- ifelse(stop_exclusive, 0, -1)
+  if(!is_na(start) && is.numeric(start)) {
+    start <- start + start_offset
+  }
+  if(!is_na(stop) && is.numeric(stop)) {
+    stop <- stop + stop_offset
+  }
   return(Slice$new(
     start = start,
     stop = stop,
     step = step
   ))
+}
+
+#' Shortcut for Slice$new() constructor with zero-based indexing and exclusive stop index.
+#' @param start The start index.
+#' @param stop The stop index.
+#' @param step The step size.
+#' @keywords internal
+zb_slice <- function(start, stop = NA, step = NA, stop_exclusive = FALSE) {
+  return(slice(start, stop, step, zero_based = TRUE, stop_exclusive = TRUE))
 }
 
 #' Check if a value is a Slice instance.
