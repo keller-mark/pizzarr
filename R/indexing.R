@@ -181,9 +181,9 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
           dim_chunk_sel_stop <- self$stop - dim_offset
         }
 
-        dim_chunk_sel <- slice(dim_chunk_sel_start, dim_chunk_sel_stop, self$step)
+        dim_chunk_sel <- zb_slice(dim_chunk_sel_start, dim_chunk_sel_stop, self$step)
         dim_chunk_num_items <- ceiling((dim_chunk_sel_stop - dim_chunk_sel_start) / self$step)
-        dim_out_sel <- slice(dim_out_offset, dim_out_offset + dim_chunk_num_items)
+        dim_out_sel <- zb_slice(dim_out_offset, dim_out_offset + dim_chunk_num_items)
 
         result <- append(result, ChunkDimProjection$new(
           dim_chunk_index,
@@ -228,7 +228,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
         dim_chunk_len <- chunks[i]
 
         if(is.null(dim_sel)) {
-          dim_sel <- slice(NA)
+          dim_sel <- zb_slice(NA)
         }
 
         if(is_integer(dim_sel)) {

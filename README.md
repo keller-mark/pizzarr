@@ -84,7 +84,9 @@ pkgdown::build_site()
 
 Must be of type `list` with values `"..."`, `Slice`, or `scalar`.
 
-Slice `start` and `stop` are intended to work like Python/NumPy `arr[start:stop]`: zero-based indexing, inclusive start, exclusive stop.
+For `slice()`, `start` and `stop` are intended to work like R `arr[start:stop]`: one-based indexing, inclusive start, inclusive stop.
+For `zb_slice()`, `start` and `stop` are intended to work like Python `arr[start:stop]`: zero-based indexing, inclusive start, exclusive stop.
+
 
 See the `slice()` and `as.scalar` functions.
 
