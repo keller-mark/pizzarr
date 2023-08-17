@@ -4,7 +4,7 @@
 create_array_from_raw <- function(buf, dtype, shape, offset = 0) {
   # TODO
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
-
+  stop("TODO: implement create_array_from_raw()")
 }
 
 #' @keywords internal
@@ -51,8 +51,11 @@ zero_based_to_one_based <- function(selection, shape) {
 #' @export
 NestedArray <- R6::R6Class("NestedArray",
   public = list(
+    #' @field shape The shape of the array.
     shape = NULL,
+    #' @field dtype The Zarr dtype of the array, as a string like ">f8".
     dtype = NULL,
+    #' @field data The array contents as a base R array.
     data = NULL,
     #' @description
     #' Create a new NestedArray instance.

@@ -10,7 +10,6 @@ Set a subset of the array.
 }
 \description{
 Instantiate an array from an initialized store.
-Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L51
 }
 \details{
 The Zarr Array class.
@@ -41,6 +40,20 @@ The Zarr Array class.
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{store}}{Array store, already initialized.}
+
+\item{\code{chunk_store}}{Separate storage for chunks. If not provided, \code{store} will be used for storage of both chunks and metadata.}
+
+\item{\code{path}}{Storage path. String, optional.}
+
+\item{\code{read_only}}{True if array should be protected against modification.}
+
+\item{\code{synchronizer}}{Array synchronizer. Object, optional.}
+
+\item{\code{cache_metadata}}{If True (default), array configuration metadata will be cached. If False, metadata will be reloaded prior to all data access and modification.}
+
+\item{\code{cache_attrs}}{If True (default), user attributes will be cached. If False, attributes will be reloaded prior to all data access and modification.}
+
+\item{\code{write_empty_chunks}}{If True, all chunks will be stored regardless of their contents. If False (default), each chunk is compared to the array's fill value prior to storing. If a chunk is uniformly equal to the fill value, then that chunk is not be stored, and the store entry for that chunk's key is deleted.}
 }
 \if{html}{\out{</div>}}
 }

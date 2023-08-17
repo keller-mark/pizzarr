@@ -8,11 +8,22 @@
 The data as a flat vector.
 }
 \description{
-TODO
-Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L9
+Represents a multi-dimensional array that can be
+accessed and subsetted via list of Slice instances.
 }
 \details{
 The Zarr NestedArray class.
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{shape}}{The shape of the array.}
+
+\item{\code{dtype}}{The Zarr dtype of the array, as a string like ">f8".}
+
+\item{\code{data}}{The array contents as a base R array.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{

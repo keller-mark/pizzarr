@@ -11,8 +11,29 @@
 ZarrArray <- R6::R6Class("ZarrArray",
   private = list(
     #' @field store Array store, already initialized.
+    #' @keywords internal
     store = NULL,
-    # TODO: move more things here from public
+    #' @field chunk_store Separate storage for chunks. If not provided, `store` will be used for storage of both chunks and metadata.
+    #' @keywords internal
+    chunk_store = NULL,
+    #' @field path Storage path. String, optional.
+    #' @keywords internal
+    path = NULL,
+    #' @field read_only True if array should be protected against modification.
+    #' @keywords internal
+    read_only = NULL,
+    #' @field synchronizer Array synchronizer. Object, optional.
+    #' @keywords internal
+    synchronizer = NULL,
+    #' @field cache_metadata If True (default), array configuration metadata will be cached. If False, metadata will be reloaded prior to all data access and modification.
+    #' @keywords internal
+    cache_metadata = NULL,
+    #' @field cache_attrs If True (default), user attributes will be cached. If False, attributes will be reloaded prior to all data access and modification.
+    #' @keywords internal
+    cache_attrs = NULL,
+    #' @field write_empty_chunks If True, all chunks will be stored regardless of their contents. If False (default), each chunk is compared to the array's fill value prior to storing. If a chunk is uniformly equal to the fill value, then that chunk is not be stored, and the store entry for that chunk's key is deleted.
+    #' @keywords internal
+    write_empty_chunks = NULL,
     #' @field key_prefix
     #' @keywords internal
     key_prefix = NULL,
@@ -92,12 +113,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # TODO: support for synchronization
     },
     refresh_metadata_nosync = function() {
-      if(!self$cache_metadata && !private$is_view) {
+      if(!private$cache_metadata && !private$is_view) {
         private$load_metadata_nosync()
       }
     },
     refresh_metadata = function() {
-      if(!self$cache_metadata) {
+      if(!private$cache_metadata) {
         private$load_metadata()
       }
     },
@@ -546,41 +567,26 @@ ZarrArray <- R6::R6Class("ZarrArray",
     }
   ),
   public = list(
-    #' @field chunk_store Separate storage for chunks. If not provided, `store` will be used for storage of both chunks and metadata.
-    chunk_store = NULL,
-    #' @field path Storage path. String, optional.
-    path = NULL,
-    #' @field read_only True if array should be protected against modification.
-    read_only = NULL,
-    #' @field synchronizer Array synchronizer. Object, optional.
-    synchronizer = NULL,
-    #' @field cache_metadata If True (default), array configuration metadata will be cached. If False, metadata will be reloaded prior to all data access and modification.
-    cache_metadata = NULL,
-    #' @field cache_attrs If True (default), user attributes will be cached. If False, attributes will be reloaded prior to all data access and modification.
-    cache_attrs = NULL,
-    #' @field write_empty_chunks If True, all chunks will be stored regardless of their contents. If False (default), each chunk is compared to the array's fill value prior to storing. If a chunk is uniformly equal to the fill value, then that chunk is not be stored, and the store entry for that chunk's key is deleted.
-    write_empty_chunks = NULL,
-
     #' @description
     #' Create a new Array instance.
     #' @param store Array store, already initialized.
     #' @return An `Array` instance.
     initialize = function(store, path = NA, read_only = FALSE, chunk_store = NA, synchronizer = NA, cache_metadata = TRUE, cache_attrs = TRUE, write_empty_chunks = TRUE) {
       private$store <- store
-      self$chunk_store <- chunk_store
+      private$chunk_store <- chunk_store
       if(!is.na(path)) {
-        self$path <- normalize_storage_path(path)
-        private$key_prefix <- paste0(self$path, "/")
+        private$path <- normalize_storage_path(path)
+        private$key_prefix <- paste0(private$path, "/")
       } else {
-        self$path <- NA
+        private$path <- NA
         private$key_prefix <- ""
       }
-      self$read_only <- read_only
-      self$synchronizer <- synchronizer
-      self$cache_metadata <- cache_metadata
-      self$cache_attrs <- cache_attrs
+      private$read_only <- read_only
+      private$synchronizer <- synchronizer
+      private$cache_metadata <- cache_metadata
+      private$cache_attrs <- cache_attrs
       private$is_view <- FALSE
-      self$write_empty_chunks <- write_empty_chunks
+      private$write_empty_chunks <- write_empty_chunks
 
       private$load_metadata()
 
@@ -594,11 +600,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(private$store)
     },
     get_path = function() {
-      return(self$path)
+      return(private$path)
     },
     get_name = function() {
-      if(!is.na(self$path)) {
-        name <- self$path
+      if(!is.na(private$path)) {
+        name <- private$path
         name_vec <- str_to_vec(name)
         if(name_vec[1] != "/") {
           name <- paste0("/", name)
@@ -616,16 +622,16 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(NA)
     },
     get_read_only = function() {
-      return(self$read_only)
+      return(private$read_only)
     },
     set_read_only = function(val) {
-      self$read_only <- val
+      private$read_only <- val
     },
     get_chunk_store = function() {
-      if(is_na(self$chunk_store)) {
+      if(is_na(private$chunk_store)) {
         return(private$store)
       } else {
-        return(self$chunk_store)
+        return(private$chunk_store)
       }
     },
     get_shape = function() {
@@ -664,7 +670,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(private$filters)
     },
     get_synchronizer = function() {
-      return(self$synchronizer)
+      return(private$synchronizer)
     },
     get_attrs = function() {
       return(private$attrs)
@@ -713,8 +719,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(all(c(
         class(other)[[1]] == "Array",
         # TODO: check store equality also
-        self$read_only == other$get_read_only(),
-        self$path == other$get_path(),
+        private$read_only == other$get_read_only(),
+        private$path == other$get_path(),
         !private$is_view
       )))
     },
@@ -739,7 +745,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     get_basic_selection = function(selection = NA, out = NA, fields = NA) {
       # Refresh metadata
-      if(!self$cache_metadata) {
+      if(!private$cache_metadata) {
         private$load_metadata()
       }
       # Handle zero-dimensional arrays
