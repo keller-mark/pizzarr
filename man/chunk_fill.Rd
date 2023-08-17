@@ -9,7 +9,7 @@ chunk_fill(chunk, value)
 \arguments{
 \item{chunk}{The R array to fill.}
 
-\item{value}{The scalar value (after is.scalar() check).}
+\item{value}{The scalar value (after is_scalar() check).}
 }
 \description{
 Fill in an R array with a single scalar value.

@@ -11,10 +11,22 @@ Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/hiera
 \details{
 The Zarr Group class.
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Group-new}{\code{Group$new()}}
+\item \href{#method-Group-get_store}{\code{Group$get_store()}}
+\item \href{#method-Group-get_path}{\code{Group$get_path()}}
+\item \href{#method-Group-get_name}{\code{Group$get_name()}}
+\item \href{#method-Group-get_read_only}{\code{Group$get_read_only()}}
+\item \href{#method-Group-get_chunk_store}{\code{Group$get_chunk_store()}}
+\item \href{#method-Group-get_synchronizer}{\code{Group$get_synchronizer()}}
+\item \href{#method-Group-get_attrs}{\code{Group$get_attrs()}}
+\item \href{#method-Group-contains_item}{\code{Group$contains_item()}}
+\item \href{#method-Group-get_item}{\code{Group$get_item()}}
+\item \href{#method-Group-create_group}{\code{Group$create_group()}}
+\item \href{#method-Group-create_dataset}{\code{Group$create_dataset()}}
 \item \href{#method-Group-clone}{\code{Group$clone()}}
 }
 }
@@ -43,6 +55,114 @@ Create a new Group instance.
 }
 \subsection{Returns}{
 A \code{Group} instance.
+Test for group membership.
+Obtain a group member.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_store"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_store}{}}}
+\subsection{Method \code{get_store()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_store()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_path"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_path}{}}}
+\subsection{Method \code{get_path()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_path()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_name"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_name}{}}}
+\subsection{Method \code{get_name()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_name()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_read_only"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_read_only}{}}}
+\subsection{Method \code{get_read_only()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_read_only()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_chunk_store"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_chunk_store}{}}}
+\subsection{Method \code{get_chunk_store()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_chunk_store()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_synchronizer"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_synchronizer}{}}}
+\subsection{Method \code{get_synchronizer()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_synchronizer()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_attrs"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_attrs}{}}}
+\subsection{Method \code{get_attrs()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_attrs()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-contains_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-contains_item}{}}}
+\subsection{Method \code{contains_item()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$contains_item(item)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-get_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-get_item}{}}}
+\subsection{Method \code{get_item()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$get_item(item)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-create_group"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-create_group}{}}}
+\subsection{Method \code{create_group()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$create_group(name, overwrite = FALSE)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Group-create_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-Group-create_dataset}{}}}
+\subsection{Method \code{create_dataset()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Group$create_dataset(name, data = NA, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Extra arguments to pass to zarr_create() or array().}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
