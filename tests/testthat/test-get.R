@@ -177,3 +177,52 @@ test_that("get_basic_selection_2d(one-based) - can get_item for subset with one 
     expected_out <- array(data=1:10, dim=c(2, 5))
     expect_equal(expected_out, sel$data)
 })
+
+test_that("get_basic_selection_3d(one-based) - can get_item for three-dimensional array", {
+    a <- array(data=1:24, dim=c(2, 3, 4))
+    # , , 1
+    #
+    #      [,1] [,2] [,3]
+    # [1,]    1    3    5
+    # [2,]    2    4    6
+    #
+    # , , 2
+    #
+    #      [,1] [,2] [,3]
+    # [1,]    7    9   11
+    # [2,]    8   10   12
+    #
+    # , , 3
+    #
+    #      [,1] [,2] [,3]
+    # [1,]   13   15   17
+    # [2,]   14   16   18
+    #
+    # , , 4
+    #
+    #      [,1] [,2] [,3]
+    # [1,]   19   21   23
+    # [2,]   20   22   24
+    z <- zarr_create(shape=dim(a), dtype="<f4", fill_value=NA)
+
+    expect_equal(z$get_shape(), c(2, 3, 4))
+    expect_equal(z$get_chunks(), c(2, 3, 4))
+
+    z$set_item("...", a)
+
+    sel <- z$get_item(list(slice(1, 2), slice(1, 2), slice(1, 2)))
+
+    expected_out <- array(data=c(1, 2, 3, 4, 7, 8, 9, 10), dim=c(2, 2, 2))
+    # , , 1
+    #
+    #      [,1] [,2]
+    # [1,]    1    3
+    # [2,]    2    4
+    #
+    # , , 2
+    #
+    #      [,1] [,2]
+    # [1,]    7    9
+    # [2,]    8   10
+    expect_equal(expected_out, sel$data)
+})
