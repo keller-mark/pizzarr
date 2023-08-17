@@ -2,8 +2,14 @@ name: R
 
 on: [push, pull_request]
 
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  build:
+  pre_deploy:
     runs-on: ubuntu-latest
     env:
       cache-version: 4
@@ -63,9 +69,19 @@ jobs:
         run: |
           Rscript -e 'devtools::document(); pkgdown::build_site(new_process = FALSE)'
           touch docs/.nojekyll
-      - name: Deploy docs to gh-pages branch
+      - uses: actions/upload-pages-artifact@v1
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
         with:
-          repo-token: ${{ secrets.GH_TOKEN }}
-          site-directory: docs
+          path: ./docs
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: pre_deploy
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: actions/deploy-pages@v1
