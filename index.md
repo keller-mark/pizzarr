@@ -30,9 +30,10 @@ z <- create(shape=dim(a), dtype="<f4", fill_value=NA)
 
 z$set_item("...", a)
 
-sel <- z$get_item(list(slice(1, 2), slice(0, 4)))
+sel <- z$get_item(list(slice(1, 2), slice(1, 5)))
 
-# expected_out <- array(data=NA, dim=c(1, 5))
-# expected_out[1,] <- c(2, 4, 6, 8, 10)
-# expect_equal(expected_out, sel$data)
+print(sel$data)
+#      [,1] [,2] [,3] [,4] [,5]
+# [1,]    1    3    5    7    9
+# [2,]    2    4    6    8   10
 ```
