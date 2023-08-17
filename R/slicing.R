@@ -9,13 +9,15 @@
 #' @return A Slice instance with the specified parameters.
 slice <- function(start, stop = NA, step = NA, zero_based = FALSE, stop_exclusive = FALSE) {
   start_offset <- ifelse(zero_based, 0, -1)
-  stop_offset <- ifelse(stop_exclusive, 0, -1)
+  stop_offset <- ifelse(stop_exclusive, -1, 0)
   if(!is_na(start) && is.numeric(start)) {
     start <- start + start_offset
   }
   if(!is_na(stop) && is.numeric(stop)) {
-    stop <- stop + stop_offset
+    stop <- stop + start_offset + stop_offset
   }
+  # Assumed to be zero-based
+  # and stop-inclusive
   return(Slice$new(
     start = start,
     stop = stop,
@@ -170,7 +172,7 @@ is_total_slice <- function(item, shape) {
   if (is.null(item) || is_na(item)) {
     return(TRUE)
   }
-  if (is.scalar(item)) {
+  if (is_scalar(item)) {
     item <- as.numeric(item)
   }
 

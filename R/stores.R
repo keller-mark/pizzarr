@@ -37,12 +37,16 @@ Store <- R6::R6Class("Store",
       }
    ),
    public = list(
+    #' @field metadata_class
+    #' @keywords internal
+    metadata_class = NULL,
     initialize = function() {
-      self$readable <- TRUE
-      self$writeable <- TRUE
-      self$erasable <- TRUE
-      self$listable <- TRUE
-      self$store_version <- 2
+      private$readable <- TRUE
+      private$writeable <- TRUE
+      private$erasable <- TRUE
+      private$listable <- TRUE
+      private$store_version <- 2
+      self$metadata_class <- Metadata2$new()
     },
     is_readable = function() {
       return(private$readable)
@@ -124,6 +128,7 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
     #' @param root The path to the root of the store.
     #' @return A new `DirectoryStore` object.
     initialize = function(root) {
+      super$initialize()
       self$root <- root
       if(!dir.exists(root)) {
         dir.create(root, recursive = TRUE, showWarnings = FALSE)
@@ -184,6 +189,7 @@ MemoryStore <- R6::R6Class("MemoryStore",
      #' Create a new memory store.
      #' @return A new `MemoryStore` object.
      initialize = function() {
+      super$initialize()
        self$root <- obj_list()
      },
      #' @description

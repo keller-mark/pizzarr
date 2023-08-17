@@ -322,10 +322,10 @@ is_na <- function(val) {
 #' Fill in an R array with a single scalar value.
 #' @keywords internal
 #' @param chunk The R array to fill.
-#' @param value The scalar value (after is.scalar() check).
+#' @param value The scalar value (after is_scalar() check).
 chunk_fill <- function(chunk, value) {
   # Chunk is an R array()
-  # Value is a scalar (after is.scalar() check)
+  # Value is a scalar (after is_scalar() check)
 
   # Need to do equivalent of chunk.fill(value) in JS
   chunk[] <- value

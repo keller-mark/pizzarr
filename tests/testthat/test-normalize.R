@@ -51,9 +51,9 @@ test_that("normalize_resize_args with int argument", {
 test_that("normalize_integer_selection with valid input", {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
   res <- normalize_integer_selection(1, 100)
-  expect_equal(res, as.scalar(1))
+  expect_equal(res, as_scalar(1))
   res <- normalize_integer_selection(-1, 100)
-  expect_equal(res, as.scalar(99))
+  expect_equal(res, as_scalar(99))
 })
 
 test_that("normalize_integer_selection with invalid input", {
@@ -70,19 +70,19 @@ test_that("normalize_chunks", {
   res <- normalize_chunks(c(10), c(100), 1)
   expect_equal(res, c(10))
 
-  res <- normalize_chunks(as.scalar(10), c(100), 1)
+  res <- normalize_chunks(as_scalar(10), c(100), 1)
   expect_equal(res, c(10))
 
   res <- normalize_chunks(c(10, 10), c(100, 10), 1)
   expect_equal(res, c(10, 10))
 
-  res <- normalize_chunks(as.scalar(10), c(100, 10), 1)
+  res <- normalize_chunks(as_scalar(10), c(100, 10), 1)
   expect_equal(res, c(10, 10))
 
   res <- normalize_chunks(c(10, NA), c(100, 10), 1)
   expect_equal(res, c(10, 10))
 
-  res <- normalize_chunks(as.scalar(30), c(100, 20, 10), 1)
+  res <- normalize_chunks(as_scalar(30), c(100, 20, 10), 1)
   expect_equal(res, c(30, 30, 30))
 
   res <- normalize_chunks(c(30), c(100, 20, 10), 1)
@@ -110,7 +110,7 @@ test_that("normalize_chunks", {
   res <- normalize_chunks(NA, c(100), 1)
   expect_equal(res, c(100))
 
-  res <- normalize_chunks(as.scalar(-1), c(100), 1)
+  res <- normalize_chunks(as_scalar(-1), c(100), 1)
   expect_equal(res, c(100))
 
   res <- normalize_chunks(c(30, -1, NA), c(100, 20, 10), 1)

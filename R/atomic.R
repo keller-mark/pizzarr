@@ -3,14 +3,14 @@
 #' Convert a value to a scalar to opt-out of R default vector casting behavior.
 #' @param obj The value to convert.
 #' @return The value wrapped as a scalar.
-as.scalar <- function(obj) {
+as_scalar <- function(obj) {
   return(jsonlite::unbox(obj))
 }
 
 #' Check if a value is a scalar.
 #' @param s The value to check.
 #' @return TRUE if the value is a scalar, FALSE otherwise.
-is.scalar <- function(s) {
+is_scalar <- function(s) {
   if(class(s)[[1]] == "scalar") {
     return(TRUE)
   }
@@ -19,7 +19,7 @@ is.scalar <- function(s) {
 
 #' @keywords internal
 is_integer <- function(s) {
-  if(is.scalar(s) && is.numeric(s)) {
+  if(is_scalar(s) && is.numeric(s)) {
     return(TRUE)
   }
   return(FALSE)
@@ -27,7 +27,7 @@ is_integer <- function(s) {
 
 #' @keywords internal
 is_integer_vec <- function(s) {
-  if(!is.scalar(s) && is.numeric(s)) {
+  if(!is_scalar(s) && is.numeric(s)) {
     return(TRUE)
   }
   return(FALSE)

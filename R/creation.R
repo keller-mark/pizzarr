@@ -164,7 +164,8 @@ init_array_metadata <- function(
     )
     key <- paste0(path_to_prefix(path), ARRAY_META_KEY)
 
-    store$set_item(key, encode_array_meta(zarray_meta))
+    encoded_meta <- store$metadata_class$encode_array_metadata(zarray_meta)
+    store$set_item(key, encoded_meta)
 }
 
 #' @keywords internal
@@ -195,7 +196,8 @@ init_group_metadata <- function(
     zgroup_meta <- obj_list()
     key <- paste0(path_to_prefix(path), GROUP_META_KEY)
 
-    store$set_item(key, json_to_raw(zgroup_meta))
+    encoded_meta <- store$metadata_class$encode_group_metadata(zgroup_meta)
+    store$set_item(key, encoded_meta)
 }
 
 #' @keywords internal
@@ -210,7 +212,7 @@ require_parent_group <- function(
     if(!is.na(path)) {
         segments <- stringr::str_split(path, "/")[[1]]
         for(i in seq_len(length(segments) - 1)) {
-            p <- paste(segments[0:i], sep="/")
+            p <- paste(segments[0:i], collapse="/")
             if(contains_array(store, p)) {
                 # Parent contained an array, so overwrite as group.
                 init_group_metadata(store, path=p, chunk_store=chunk_store, overwrite=overwrite)
@@ -301,6 +303,38 @@ init_array <- function(
 
 }
 
+#' Initialize a group store. Note that this is a low-level function and there should be no
+#' need to call this directly from user code.
+#' @param store : Store
+#'     A mapping that supports string keys and byte sequence values.
+#' @param overwrite : bool, optional
+#'     If True, erase all data in `store` prior to initialisation.
+#' @param path : string, optional
+#'     Path under which array is stored.
+#' @param chunk_store : Store, optional
+#'     Separate storage for chunks. If not provided, `store` will be used
+#'     for storage of both chunks and metadata.
+#' @keywords internal
+init_group <- function(
+    store,
+    overwrite = FALSE,
+    path = NA,
+    chunk_store = NA
+) {
+    # normalize path
+    path <- normalize_storage_path(path)
+
+    # ensure parent group initialized
+    require_parent_group(path, store=store, chunk_store=chunk_store, overwrite=overwrite)
+
+    init_group_metadata(
+        store,
+        overwrite=overwrite,
+        path=path,
+        chunk_store=chunk_store
+    )
+}
+
 
 #' Create an array
 #' @param shape : int or tuple of ints
@@ -356,7 +390,7 @@ init_array <- function(
 #'     non-fill-value data are stored, at the expense of overhead associated
 #'     with checking the data of each chunk.
 #' @returns z : zarr.core.Array
-create <- function(
+zarr_create <- function(
     shape,
     chunks=TRUE,
     dtype=NA,
@@ -398,7 +432,7 @@ create <- function(
 
     
     # instantiate array
-    z <- Array$new(
+    z <- ZarrArray$new(
         store,
         path=path,
         chunk_store=chunk_store,
@@ -413,16 +447,54 @@ create <- function(
 
 #' Create an array filled with NAs.
 #' @param shape : int or tuple of ints
-#' @param ... The params of create()
+#' @param ... The params of zarr_create()
 #' @returns Array
-empty <- function(shape, ...) {
-    return(create(shape=shape, fill_value=NA, ...))
+zarr_create_empty <- function(shape, ...) {
+    return(zarr_create(shape=shape, fill_value=NA, ...))
+}
+
+zarr_create_array <- function(data, ...) {
+    z <- zarr_create(...)
+    z$set_item("...", data)
+    # TODO: set as read_only = TRUE for array
+    return(z)
 }
 
 #' Create an array filled with zeros.
 #' @param shape : int or tuple of ints
-#' @param ... The params of create()
+#' @param ... The params of zarr_create()
 #' @returns Array
-zeros <- function(shape, ...) {
-    return(create(shape=shape, fill_value=0, ...))
+zarr_create_zeros <- function(shape, ...) {
+    return(zarr_create(shape=shape, fill_value=0, ...))
+}
+
+zarr_create_group <- function(
+    store = NA,
+    overwrite = FALSE,
+    chunk_store = NA,
+    cache_attrs = TRUE,
+    synchronizer = NA,
+    path = NA
+) {
+    # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/hierarchy.py#L1061
+    # handle polymorphic store arg
+    store <- normalize_store_arg(store)
+    path <- normalize_storage_path(path)
+
+    if(overwrite || !contains_group(store)) {
+        init_group(
+            store,
+            overwrite = overwrite,
+            chunk_store = chunk_store,
+            path = path
+        )
+    }
+    return(Group$new(
+        store,
+        read_only = FALSE,
+        chunk_store = chunk_store,
+        cache_attrs = cache_attrs,
+        synchronizer = synchronizer,
+        path = path
+    ))
 }

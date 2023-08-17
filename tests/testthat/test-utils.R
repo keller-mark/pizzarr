@@ -47,7 +47,7 @@ test_that("zip_numeric", {
 
 # 1D, single item
 test_that("replace_ellipsis [[0], 0, [100]]", {
-  res <- replace_ellipsis(as.scalar(0), list(100))
+  res <- replace_ellipsis(as_scalar(0), list(100))
   expect_equal(res, list(0))
 })
 
@@ -96,9 +96,9 @@ test_that("replace_ellipsis [[0, 0], [0, 0], [100, 100]]", {
   expect_equal(res, list(0, 0))
 })
 
-test_that("replace_ellipsis [[0, 0], [0, 0], [100, 100]] with as.scalar", {
-  res <- replace_ellipsis(list(as.scalar(0), as.scalar(0)), list(100, 100))
-  expect_equal(res, list(as.scalar(0), as.scalar(0)))
+test_that("replace_ellipsis [[0, 0], [0, 0], [100, 100]] with as_scalar", {
+  res <- replace_ellipsis(list(as_scalar(0), as_scalar(0)), list(100, 100))
+  expect_equal(res, list(as_scalar(0), as_scalar(0)))
 })
 
 test_that("replace_ellipsis [[-1, 1], [-1, 1], [100, 100]]", {

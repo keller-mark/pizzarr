@@ -126,7 +126,7 @@ NestedArray <- R6::R6Class("NestedArray",
 
       if("NestedArray" %in% class(value)) {
         value_data <- value$data
-      } else if(is.scalar(value)) {
+      } else if(is_scalar(value)) {
         value_data <- value
       } else {
         message(value)
@@ -156,6 +156,8 @@ NestedArray <- R6::R6Class("NestedArray",
     #' Flatten the array contents.
     #' @returns The data as a flat vector.
     flatten = function() {
+      # TODO: pass ordering C/F as argument.
+      # TODO: transpose first (if needed, based on the ordering).
       return(as.vector(self$data))
     }
   )
