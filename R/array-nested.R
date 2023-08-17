@@ -39,12 +39,14 @@ zero_based_to_one_based <- function(selection, shape) {
   return(selection_list)
 }
 
+# Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L9
+
 #' The Zarr NestedArray class.
 #' @title NestedArray Class
 #' @docType class
 #' @description
-#' TODO
-#' Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L9
+#' Represents a multi-dimensional array that can be
+#' accessed and subsetted via list of Slice instances.
 #' @rdname NestedArray
 #' @export
 NestedArray <- R6::R6Class("NestedArray",

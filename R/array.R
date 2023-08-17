@@ -1,9 +1,10 @@
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L51
+
 #' The Zarr Array class.
 #' @title ZarrArray Class
 #' @docType class
 #' @description
 #' Instantiate an array from an initialized store.
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L51
 #'
 #' @rdname ZarrArray
 #' @export
