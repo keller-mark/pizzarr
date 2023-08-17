@@ -109,8 +109,10 @@ NestedArray <- R6::R6Class("NestedArray",
     #' @return A new NestedArray (potentially a subset) representing the selection.
     get = function(selection) {
       selection_list <- zero_based_to_one_based(selection, self$shape)
-
-      subset_arr <- abind::asub(self$data, selection_list)
+      
+      # Using do.call here seems to work the same as `abind::asub(self$data, selection_list)`
+      # so we can use do.call to avoid the extra dependency.
+      subset_arr <- do.call("[", append(list(self$data), selection_list))
       subset_nested_array <- NestedArray$new(subset_arr, shape = dim(subset_arr), dtype = self$dtype)
       return(subset_nested_array)
     },

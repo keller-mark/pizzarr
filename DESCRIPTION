@@ -25,8 +25,7 @@ Imports:
     methods,
     R6,
     qs,
-    stringr,
-    abind
+    stringr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
