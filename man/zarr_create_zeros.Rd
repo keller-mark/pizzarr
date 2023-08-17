@@ -12,7 +12,7 @@ zarr_create_zeros(shape, ...)
 \item{...}{The params of zarr_create()}
 }
 \value{
-Array
+ZarrArray
 }
 \description{
 Create an array filled with zeros.

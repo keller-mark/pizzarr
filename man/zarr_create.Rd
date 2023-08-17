@@ -96,7 +96,7 @@ non-fill-value data are stored, at the expense of overhead associated
 with checking the data of each chunk.}
 }
 \value{
-z : zarr.core.Array
+ZarrArray
 }
 \description{
 Create an array

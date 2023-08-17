@@ -389,7 +389,7 @@ init_group <- function(
 #'     is deleted. This setting enables sparser storage, as only chunks with
 #'     non-fill-value data are stored, at the expense of overhead associated
 #'     with checking the data of each chunk.
-#' @returns z : zarr.core.Array
+#' @returns ZarrArray
 zarr_create <- function(
     shape,
     chunks=TRUE,
@@ -448,11 +448,15 @@ zarr_create <- function(
 #' Create an array filled with NAs.
 #' @param shape : int or tuple of ints
 #' @param ... The params of zarr_create()
-#' @returns Array
+#' @returns ZarrArray
 zarr_create_empty <- function(shape, ...) {
     return(zarr_create(shape=shape, fill_value=NA, ...))
 }
 
+#' Create an array initialized with data.
+#' @param data A base R array() or pizzarr NestedArray instance.
+#' @param ... The params of zarr_create()
+#' @returns ZarrArray
 zarr_create_array <- function(data, ...) {
     z <- zarr_create(...)
     z$set_item("...", data)
@@ -463,11 +467,29 @@ zarr_create_array <- function(data, ...) {
 #' Create an array filled with zeros.
 #' @param shape : int or tuple of ints
 #' @param ... The params of zarr_create()
-#' @returns Array
+#' @returns ZarrArray
 zarr_create_zeros <- function(shape, ...) {
     return(zarr_create(shape=shape, fill_value=0, ...))
 }
 
+#' Create a group.
+#' @param store : MutableMapping or string, optional
+#'     Store or path to directory in file system.
+#' @param overwrite : bool, optional
+#'     If True, delete any pre-existing data in `store` at `path` before
+#'     creating the group.
+#' @param chunk_store : MutableMapping, optional
+#'     Separate storage for chunks. If not provided, `store` will be used
+#'     for storage of both chunks and metadata.
+#' @param cache_attrs : bool, optional
+#'     If True (default), user attributes will be cached for attribute read
+#'     operations. If False, user attributes are reloaded from the store prior
+#'     to all attribute read operations.
+#' @param synchronizer : object, optional
+#'     Array synchronizer.
+#' @param path : string, optional
+#'     Group path within store.
+#' @returns ZarrGroup
 zarr_create_group <- function(
     store = NA,
     overwrite = FALSE,
@@ -489,7 +511,7 @@ zarr_create_group <- function(
             path = path
         )
     }
-    return(Group$new(
+    return(ZarrGroup$new(
         store,
         read_only = FALSE,
         chunk_store = chunk_store,

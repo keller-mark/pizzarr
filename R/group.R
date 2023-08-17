@@ -1,13 +1,14 @@
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/hierarchy.py#L39
+
 #' The Zarr Group class.
-#' @title Group Class
+#' @title ZarrGroup Class
 #' @docType class
 #' @description
 #' Instantiate a group from an initialized store.
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/hierarchy.py#L39
 #'
-#' @rdname Group
+#' @rdname ZarrGroup
 #' @export
-Group <- R6::R6Class("Group",
+ZarrGroup <- R6::R6Class("ZarrGroup",
   private = list(
     #' @field store
     #' @keywords internal
@@ -58,7 +59,7 @@ Group <- R6::R6Class("Group",
       )
 
       # create group instance
-      return(Group$new(
+      return(ZarrGroup$new(
         private$store,
         path = path,
         read_only = private$read_only,
@@ -108,9 +109,9 @@ Group <- R6::R6Class("Group",
   ),
   public = list(
     #' @description
-    #' Create a new Group instance.
+    #' Create a new ZarrGroup instance.
     #' @param store Group store, already initialized.
-    #' @return A `Group` instance.
+    #' @return A `ZarrGroup` instance.
     initialize = function(store, path = NA, read_only = FALSE, chunk_store = NA, cache_attrs = TRUE, synchronizer = NA) {
       private$store <- store
       private$path <- normalize_storage_path(path)
@@ -193,7 +194,7 @@ Group <- R6::R6Class("Group",
           cache_attrs = private$attrs$cache
         ))
       } else if(contains_group(private$store, path)) {
-        return(Group$new(
+        return(ZarrGroup$new(
           private$store,
           path = path,
           read_only = private$read_only,
