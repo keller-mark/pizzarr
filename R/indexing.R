@@ -175,7 +175,7 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
 
         if(self$stop > dim_limit) {
           # Selection ends after current chunk
-          dim_chunk_sel_stop <- self$dim_chunk_len - 1 # R-SPECIFIC: subtracting one here
+          dim_chunk_sel_stop <- self$dim_chunk_len
         } else {
           # Selection ends within current chunk
           dim_chunk_sel_stop <- self$stop - dim_offset
@@ -224,7 +224,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
       dim_indexers <- list()
       for(i in seq_along(selection)) {
         dim_sel <- selection[[i]]
-        dim_len <- shape[i] - 1 # R-SPECIFIC: subtracting one here
+        dim_len <- shape[i]
         dim_chunk_len <- chunks[i]
 
         if(is.null(dim_sel)) {
@@ -243,7 +243,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
       self$shape <- list()
       for(d in dim_indexers) {
         if(class(d)[[1]] == "SliceDimIndexer") {
-          self$shape <- append(self$shape, d$num_items + 1) # R-SPECIFIC: adding one here
+          self$shape <- append(self$shape, d$num_items)
         }
       }
       self$drop_axes <- NA
