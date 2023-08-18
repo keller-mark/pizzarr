@@ -65,3 +65,26 @@ test_that("can convert a NestedArray to a raw vector with zstd compression", {
 
     expect_equal(uncompressed_raw, expected_out)
 })
+
+test_that("zarr_create with non-default compressor", {
+
+    compressor <- LZ4$new(acceleration = 1)
+
+    a <- array(data=1:20, dim=c(2, 10))
+    #      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+    # [1,]    1    3    5    7    9   11   13   15   17    19
+    # [2,]    2    4    6    8   10   12   14   16   18    20
+    z <- zarr_create(shape=dim(a), dtype="<f4", fill_value=NA, compressor = compressor)
+
+    expect_equal(z$get_shape(), c(2, 10))
+    expect_equal(z$get_chunks(), c(2, 10))
+
+    expect_equal(as.character(z$get_compressor()$get_config()$id), "lz4")
+
+    z$set_item("...", a)
+
+    sel <- z$get_item(list(slice(1, 2), slice(1, 5)))
+
+    expected_out <- array(data=1:10, dim=c(2, 5))
+    expect_equal(expected_out, sel$data)
+})

@@ -555,12 +555,73 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # TODO
     },
     decode_chunk = function(cdata, start = NA, nitems = NA, expected_shape = NA) {
-      # TODO
-      return(as.raw(cdata))
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2066
+      # decompress
+      if(!is_na(private$compressor)) {
+        # TODO: only decode requested items
+        # if (
+        #     all(x is not None for x in [start, nitems])
+        #     and self._compressor.codec_id == "blosc"
+        # ) and hasattr(self._compressor, "decode_partial"):
+        #     chunk = self._compressor.decode_partial(cdata, start, nitems)
+        # else:
+        chunk <- private$compressor$decode(cdata)
+      } else {
+        chunk <- cdata
+      }
+
+      # apply filters
+      if(!is_na(private$filters)) {
+        for (f in rev(private$filters)) {
+          chunk <- f$decode(chunk)
+        }
+      }
+
+      # TODO: view as numpy array with correct dtype
+      # chunk <- ensure_ndarray(chunk)
+      # special case object dtype, because incorrect handling can lead to
+      # segfaults and other bad things happening
+      # if self._dtype != object:
+      #    chunk = chunk.view(self._dtype)
+      # elif chunk.dtype != object:
+          # If we end up here, someone must have hacked around with the filters.
+          # We cannot deal with object arrays unless there is an object
+          # codec in the filter chain, i.e., a filter that converts from object
+          # array to something else during encoding, and converts back to object
+          # array during decoding.
+          # raise RuntimeError('cannot read object array without object codec')
+
+      # ensure correct chunk shape
+      return(as.raw(chunk))
     },
-    encode_chunk = function(chunk) {
-      # TODO
-      return(chunk)
+    encode_chunk = function(chunk_as_raw) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2105
+
+      chunk <- chunk_as_raw
+
+      # apply filters
+      if(!is_na(private$filters)) {
+        for(f in private$filters) {
+          chunk <- f$encode(chunk)
+        }
+      }
+
+      # TODO: check object encoding
+      #if ensure_ndarray(chunk).dtype == object:
+      #    raise RuntimeError('cannot write object array without object codec')
+
+      # compress
+      if(!is_na(private$compressor)) {
+        cdata <- private$compressor$encode(chunk)
+      } else {
+        cdata <- chunk
+      }
+
+      # TODO: ensure in-memory data is immutable and easy to compare
+      #if isinstance(self.chunk_store, MutableMapping):
+      #    cdata = ensure_bytes(cdata)
+
+      return(cdata)
     },
     append_nosync = function(data, axis = 0) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141
