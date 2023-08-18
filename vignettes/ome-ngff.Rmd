@@ -1,0 +1,30 @@
+---
+title: "OME-NGFF Demo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{OME-NGFF Demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```r
+root <- system.file("extdata", "dog.ome.zarr", package="pizzarr")
+store <- DirectoryStore$new(root)
+g <- zarr_open_group(store)
+attrs <- g$get_attrs()$to_list()
+
+resolution_paths <- attrs$multiscales$datasets[[1]]$path
+
+first_resolution <- resolution_paths[[1]]
+
+arr <- g$get_item(first_resolution)
+
+print(arr$get_shape())
+# [1]   2 236 275 271
+
+a <- arr$get_item("...")
+print(a$data)
+
+arr_as_raster <- raster::as.raster(aperm(a$data, c(2, 3, 1)) / 255.0)
+raster::plot(arr_as_raster)
+```

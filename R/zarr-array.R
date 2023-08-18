@@ -466,7 +466,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     chunk_setitem = function(chunk_coords, chunk_selection, value, fields = NA) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L625
-
+      
       if (private$order == "F" && self$get_ndim() > 1) {
         stop("Setting content for arrays in F-order is not supported.")
       }

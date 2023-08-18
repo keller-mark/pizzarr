@@ -175,7 +175,7 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
 
         if(self$stop > dim_limit) {
           # Selection ends after current chunk
-          dim_chunk_sel_stop <- dim_chunk_length
+          dim_chunk_sel_stop <- self$dim_chunk_len - 1 # R-SPECIFIC: subtracting one here
         } else {
           # Selection ends within current chunk
           dim_chunk_sel_stop <- self$stop - dim_offset

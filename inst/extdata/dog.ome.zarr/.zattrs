@@ -1,0 +1,66 @@
+{
+    "multiscales": [
+        {
+            "axes": [
+                "c",
+                "y",
+                "x"
+            ],
+            "datasets": [
+                {
+                    "path": "0"
+                },
+                {
+                    "path": "1"
+                },
+                {
+                    "path": "2"
+                },
+                {
+                    "path": "3"
+                },
+                {
+                    "path": "4"
+                }
+            ],
+            "version": "0.3"
+        }
+    ],
+    "omero": {
+        "channels": [
+            {
+                "color": "FF0000",
+                "label": "R",
+                "window": {
+                    "end": 255,
+                    "max": 255,
+                    "min": 0,
+                    "start": 0
+                }
+            },
+            {
+                "color": "00FF00",
+                "label": "G",
+                "window": {
+                    "end": 255,
+                    "max": 255,
+                    "min": 0,
+                    "start": 0
+                }
+            },
+            {
+                "color": "0000FF",
+                "label": "B",
+                "window": {
+                    "end": 255,
+                    "max": 255,
+                    "min": 0,
+                    "start": 0
+                }
+            }
+        ],
+        "name": "Dog",
+        "rdefs": {},
+        "version": "0.3"
+    }
+}
