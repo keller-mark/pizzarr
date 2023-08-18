@@ -1,11 +1,16 @@
 <br/>
-Pizzarr is an R implmentation for Zarr.
+Pizzarr is an R implementation for Zarr.
 
 ## Getting Started
 
 The ``pizzarr`` package includes:
 
-* TODO
+* Support for reading and writing Zarr Arrays and Groups
+* Support for numeric Zarr data types (with strings on roadmap)
+* Support for both R-like one-based slicing and Python-like zero-based slicing
+* Familiar API based on [zarr-python](https://github.com/zarr-developers/zarr-python) and [zarr.js](https://github.com/gzuidhof/zarr.js)
+* R-based and [R6](https://github.com/r-lib/R6/)-based implementation for ease of maintenance
+
 
 ## Installation
 
