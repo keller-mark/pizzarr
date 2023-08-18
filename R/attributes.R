@@ -31,7 +31,10 @@ Attributes <- R6::R6Class("Attributes",
     #' Create a new Attributes instance.
     #' @param store Attributes store, already initialized.
     #' @return An `Attributes` instance.
-    initialize = function(store, key = ".zattrs", read_only = FALSE, cache = TRUE, synchronizer = NA) {
+    initialize = function(store, key = NA, read_only = FALSE, cache = TRUE, synchronizer = NA) {
+      if(is_na(key)) {
+        key <- ATTRS_KEY
+      }
       self$store <- store
       self$key <- key
       self$read_only <- read_only
@@ -39,8 +42,8 @@ Attributes <- R6::R6Class("Attributes",
       private$cached_aslist <- NA
       self$synchronizer <- synchronizer
     },
-    asdict = function() {
-      # TODO
+    to_list = function() {
+      return(self$store$metadata_class$decode_metadata(self$store$get_item(self$key)))
     },
     refresh = function() {
       # TODO

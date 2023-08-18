@@ -133,6 +133,8 @@ get_codec <- function(config) {
       result <- do.call(LZ4$new, config)
     } else if(codec_id == "zstd") {
       result <- do.call(Zstd$new, config)
+    } else {
+      stop(paste("Unknown codec", codec_id))
     }
   }
   return(result)
