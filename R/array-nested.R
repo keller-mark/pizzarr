@@ -1,12 +1,3 @@
-
-
-#' @keywords internal
-create_array_from_raw <- function(buf, dtype, shape, offset = 0) {
-  # TODO
-  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
-  stop("TODO: implement create_array_from_raw()")
-}
-
 #' @keywords internal
 zero_based_to_one_based <- function(selection, shape) {
   selection_list <- list()
@@ -67,6 +58,9 @@ NestedArray <- R6::R6Class("NestedArray",
     #' @return A `NestedArray` instance.
     initialize = function(data, shape = NA, dtype = NA) {
       if(is.null(shape) || is_na(shape)) {
+        if(is.raw(data)) {
+          stop("Cannot infer shape from raw data, please provide shape explicitly")
+        }
         shape <- dim(data)
       } else {
         shape <- normalize_shape(shape)
@@ -79,10 +73,16 @@ NestedArray <- R6::R6Class("NestedArray",
       self$shape <- shape
       self$dtype <- dtype
       if(is.null(data)) {
+        # Create empty array.
+
         self$data <- array(data=get_dtype_rtype(dtype), dim=shape)
       } else if(is.null(self$shape)) {
+        # Create zero-dimensional array.
+
         self$data <- data # TODO?
       } else if(is.array(data) || is.numeric(data) || is.logical(data)) {
+        # Create array from R atomic vector or array().
+
         num_shape_elements <- compute_size(shape)
         # TODO: check that data array has same shape as expected
         if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
@@ -93,17 +93,44 @@ NestedArray <- R6::R6Class("NestedArray",
         }
         
       } else if(is.raw(data)) {
+        # Create array from a raw vector.
+
+        # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
         buf <- data
         # Create from ArrayBuffer or Buffer
         num_shape_elements <- compute_size(shape)
-        num_data_elements <- length(buf) / get_dtype_numbytes(dtype)
+        dtype_size <- get_dtype_numbytes(dtype)
+        num_data_elements <- length(buf) / dtype_size
         if (num_shape_elements != num_data_elements) {
           stop('Buffer has ${numDataElements} of dtype ${dtype}, shape is too large or small')
         }
-        self$data <- create_array_from_raw(buf, dtype, shape)
+
+        dtype_rtype <- get_dtype_rtype(dtype)
+        dtype_signed <- get_dtype_signed(dtype)
+        if(!dtype_signed && !(dtype_size == 1 || dtype_size == 2)) {
+          # readBin will warn "signed = FALSE is only valid for integers of sizes 1 and 2"
+          dtype_signed <- TRUE
+        }
+
+        endian <- get_dtype_endianness(self$dtype)
+        if(endian == "nr") {
+          endian <- "little"
+        }
+
+        vec_from_raw <- readBin(
+          con = buf,
+          what = dtype_rtype,
+          size = dtype_size,
+          n = num_shape_elements,
+          signed = dtype_signed,
+          endian = endian
+        )
+        array_from_vec <- array(data = vec_from_raw, dim = shape)
+
+        self$data <- array_from_vec
       } else {
-        buf_len <- compute_size(shape) * get_dtype_numbytes(dtype) 
-        buf <- raw(length = buf_len)
+        #buf_len <- compute_size(shape) * get_dtype_numbytes(dtype) 
+        #buf <- raw(length = buf_len)
         # TODO?
         stop("Unexpected type for data in NestedArray$initialize()")
       }
@@ -166,6 +193,28 @@ NestedArray <- R6::R6Class("NestedArray",
       # TODO: pass ordering C/F as argument.
       # TODO: transpose first (if needed, based on the ordering).
       return(as.vector(self$data))
+    },
+    #' @description
+    #' Flatten the array contents and convert to a raw vector.
+    #' @returns The data as a flat raw vector.
+    flatten_to_raw = function() {
+      data_as_vec <- self$flatten()
+
+      bytes_per_val <- get_dtype_numbytes(self$dtype)
+      endian <- get_dtype_endianness(self$dtype)
+      if(endian == "nr") {
+        endian <- "little"
+      }
+
+      # "If writeBin is called with con a raw vector, it is just an indication that a raw vector should be returned."
+      # Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/readBin.html
+      buf <- writeBin(
+        data_as_vec,
+        con = raw(),
+        size = bytes_per_val,
+        endian = endian
+      )
+      return(buf)
     }
   )
 )

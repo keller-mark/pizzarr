@@ -108,7 +108,7 @@ init_array_metadata <- function(
     # elif compressor == 'none':
     #     # compatibility
     #     compressor = None
-    if (compressor == "default") {
+    if (is.character(compressor) && compressor == "default") {
         compressor <- get_default_compressor()
     }
 
