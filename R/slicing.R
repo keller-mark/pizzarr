@@ -1,5 +1,29 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/slice.ts#L78
 
+#' @keywords internal
+Slice <- R6::R6Class("Slice",
+  public = list(
+    start = NULL,
+    stop = NULL,
+    step = NULL,
+    initialize = function(start, stop = NA, step = NA) {
+      if(is.na(stop)) {
+        stop <- start
+        start <- NA
+      }
+      if(!is.na(start) && start == ":") {
+        start <- NA
+      }
+      if(!is.na(stop) && stop == ":") {
+        stop <- NA
+      }
+      self$start <- start
+      self$stop <- stop
+      self$step <- step
+    }
+  )
+)
+
 #' Shortcut for Slice$new() constructor.
 #' @param start The start index.
 #' @param stop The stop index.

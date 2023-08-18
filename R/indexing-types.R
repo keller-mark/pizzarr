@@ -1,29 +1,5 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/types.ts
 
-#' @keywords internal
-Slice <- R6::R6Class("Slice",
-  public = list(
-    start = NULL,
-    stop = NULL,
-    step = NULL,
-    initialize = function(start, stop = NA, step = NA) {
-      if(is.na(stop)) {
-        stop <- start
-        start <- NA
-      }
-      if(!is.na(start) && start == ":") {
-        start <- NA
-      }
-      if(!is.na(stop) && stop == ":") {
-        stop <- NA
-      }
-      self$start <- start
-      self$stop <- stop
-      self$step <- step
-    }
-  )
-)
-
 # Mapping from chunk to output array for a single dimension.
 #' @keywords internal
 ChunkDimProjection <- R6::R6Class("ChunkDimProjection",
