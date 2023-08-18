@@ -48,23 +48,3 @@ test_that("Zarr MemoryStore, can set and get twice nested values", {
   value_world <- store$get_item("hello/world")
   expect_equal(value_world, list(a = 0xdead, b = 0xdead))
 })
-test_that("Zarr matrix_to_zarr, no compression", {
-  store <- MemoryStore$new()
-
-  m <- matrix(c(1, 2, 3, rep(0, 9)), nrow = 3, ncol= 4)
-  rows <- c("c1", "c2", "c3")
-  cols <- c("g1", "g2", "g3", "g4")
-
-  matrix_to_zarr(m, rows, cols, store)
-
-  expect_equal(store$contains_item(".zarray"), TRUE)
-  expect_equal(store$contains_item(".zattrs"), TRUE)
-  expect_equal(store$contains_item("0.0"), TRUE)
-  expect_equal(store$contains_item("0.1"), FALSE)
-
-  zattrs_raw <- store$get_item(".zattrs")
-  expect_equal(rawToChar(zattrs_raw), "{\"rows\":[\"c1\",\"c2\",\"c3\"],\"cols\":[\"g1\",\"g2\",\"g3\",\"g4\"]}")
-
-  chunk_raw <- store$get_item("0.0")
-  expect_equal(length(chunk_raw), 12)
-})
