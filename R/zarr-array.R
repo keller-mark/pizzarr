@@ -221,18 +221,18 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # Obtain encoded data for chunk
       c_key <- private$chunk_key(c(0))
 
-      chunk <- tryCatch({
+      chunk_nested_array <- tryCatch({
         c_data <- self$get_chunk_store()$get_item(c_key)
         chunk_inner <- private$decode_chunk(c_data)
-        return(chunk_inner)
+        return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype))
       }, error = function(cond) {
         if(is_key_error(cond)) {
           # chunk not initialized
           as_dtype_func <- get_dtype_asrtype(private$dtype)
           chunk_inner <- as_dtype_func(private$fill_value)
-          return(chunk_inner)
+          return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype))
         } else {
-          message(cond$message)
+          print(cond$message)
           stop("rethrow")
         }
       })      
@@ -241,6 +241,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # if(!is.na(fields)) {
       #   chunk <- chunk[fields]
       # }
+
+      chunk <- chunk_nested_array$data
 
       # Handle selection of the scalar value via empty tuple
       if(is_na(out)) {
@@ -317,7 +319,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       #     chunk_inner <- as_dtype_func(private$fill_value)
       #     return(chunk_inner)
       #   } else {
-      #     message(cond$message)
+      #     print(cond$message)
       #     stop("rethrow")
       #   }
       # })
@@ -341,7 +343,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # else:
 
       # encode and store
-      c_data <- private$encode_chunk(as_scalar(value))
+
+      chunk_nested_array <- NestedArray$new(as_scalar(value), shape = NULL, dtype = private$dtype)
+      chunk_raw <- chunk_nested_array$flatten_to_raw()
+
+      c_data <- private$encode_chunk(chunk_raw)
       self$get_chunk_store()$set_item(c_key, c_data)
     },
     set_basic_selection_nd = function(selection, value, fields = NA) {
@@ -410,11 +416,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }
       return(chunk_value)
     },
-    to_nested_array = function(decoded_chunk) {
-
-      nested_array <- NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype)
-      return(nested_array)
-    },
     chunk_buffer_to_raw_array = function(decoded_chunk) {
       # TODO
     },
@@ -433,12 +434,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
         if("NestedArray" %in% class(out)) {
           if(is_contiguous_selection(out_selection) && is_total_slice(chunk_selection, private$chunks) && is.null(private$filters)) {
-            out$set(out_selection, private$to_nested_array(decoded_chunk))
+            out$set(out_selection, NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype))
             return(TRUE)
           }
 
           # Decode chunk
-          chunk <- private$to_nested_array(decoded_chunk)
+          chunk <- NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype)
           tmp <- chunk$get(chunk_selection)
 
           if(!is_na(drop_axes)) {
@@ -458,7 +459,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
             out$set(out_selection, as_scalar(private$fill_value))
           }
         } else {
-          message(cond$message)
+          print(cond$message)
           stop("Different type of error - rethrow")
         }
       })
@@ -488,25 +489,30 @@ ZarrArray <- R6::R6Class("ZarrArray",
         # to access the existing chunk data
 
         if (is_scalar(value)) {
-          # TODO get the right type here
-          chunk <- dtype_constr(chunk_size)
-          chunk_fill(chunk, value)
-        } else {
-          # value is a NestedArray
-          chunk <- value$flatten()
+          chunk <- NestedArray$new(
+            value,
+            shape = private$chunks,
+            dtype = private$dtype
+          )
         }
+        # value was already a NestedArray
+        chunk_raw <- value$flatten_to_raw()
       } else {
         # partially replace the contents of this chunk
 
         # Existing chunk data
         #let chunkData: TypedArray;
 
-        chunk_data <- tryCatch({
+        chunk_nested_array <- tryCatch({
 
           # Chunk is initialized if this does not error
           chunk_store_data <- self$get_chunk_store()$get_item(chunk_key)
           dbytes <- private$decode_chunk(chunk_store_data)
-          return(private$to_typed_array(dbytes))
+          return(NestedArray$new(
+            dbytes,
+            shape = private$chunks,
+            dtype = private$dtype
+          ))
         }, error = function(cond) {
           if (is_key_error(cond)) {
             # Chunk is not initialized
@@ -514,31 +520,24 @@ ZarrArray <- R6::R6Class("ZarrArray",
             if (!is.null(private$fill_value)) { # TODO: should this be is.na
               chunk_fill(chunk_data, private$fill_value)
             }
-            return(chunk_data)
+            return(NestedArray$new(
+              chunk_data,
+              shape = private$chunks,
+              dtype = private$dtype
+            ))
           } else {
-            message(cond$message)
+            print(cond$message)
             # // Different type of error - rethrow
             stop("throw error;")
           }
         })
 
-        chunk_nested_array <- NestedArray$new(
-          chunk_data,
-          shape = private$chunks,
-          dtype = private$dtype
-        )
         chunk_nested_array$set(chunk_selection, value)
-        chunk <- chunk_nested_array$flatten()
+        chunk_raw <- chunk_nested_array$flatten_to_raw()
       }
-      chunk_data <- private$encode_chunk(chunk)
-
-      
+      chunk_data <- private$encode_chunk(chunk_raw)
 
       self$get_chunk_store()$set_item(chunk_key, chunk_data)
-    },
-    to_typed_array = function(buffer) {
-      ctr <- get_typed_array_ctr(private$dtype)
-      return(ctr(buffer))
     },
     chunk_setitem_nosync = function(chunk_coords, chunk_selection, value, fields = NA) {
       # TODO
@@ -557,7 +556,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     decode_chunk = function(cdata, start = NA, nitems = NA, expected_shape = NA) {
       # TODO
-      return(cdata)
+      return(as.raw(cdata))
     },
     encode_chunk = function(chunk) {
       # TODO
