@@ -139,7 +139,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       } else {
         filters_config <- NA
       }
-      meta <- list(
+      zarray_meta <- list(
         shape = private$shape,
         chunks = private$chunks,
         dtype = private$dtype,
@@ -149,7 +149,9 @@ ZarrArray <- R6::R6Class("ZarrArray",
         filters = filters_config
       )
       mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
-      private$store$set_item(mkey, encode_array_meta(meta))
+
+      encoded_meta <- private$store$metadata_class$encode_array_metadata(zarray_meta)
+      private$store$set_item(mkey, encoded_meta)
     },
     chunk_key = function(chunk_coords) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2063

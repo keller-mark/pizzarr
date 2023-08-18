@@ -1,14 +1,3 @@
-#' Convert a JSON-like list to a raw type.
-#' 
-#' @keywords internal
-#' @param json_as_list An R list to be converted to JSON.
-#' @return The raw value.
-json_to_raw <- function(json_as_list) {
-  json_str <- jsonlite::toJSON(json_as_list)
-  json_raw <- charToRaw(json_str)
-  return(json_raw)
-}
-
 #' Convert a string into a character vector.
 #' 
 #' @keywords internal
@@ -95,29 +84,8 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   return(zarray_meta)
 }
 
-#' Decode zarray metadata.
-#' 
-#' @keywords internal
-#' @param meta_bytes The metadata in raw bytes format.
-#' @return The metadata after conversion to an R list.
-decode_array_meta <- function(meta_bytes) {
-  meta_char <- rawToChar(meta_bytes)
-  meta_list <- jsonlite::fromJSON(meta_char)
-  return(meta_list)
-}
-
-#' Encode zarray metadata.
-#' 
-#' @keywords internal
-#' @param meta The metadata as a named list.
-#' @return The metadata after conversion to an R list.
-encode_array_meta <- function(meta) {
-  meta_char <- jsonlite::toJSON(meta)
-  meta_bytes <- charToRaw(meta_char)
-  return(meta_bytes)
-}
-
 #' Write an R matrix to a Zarr store (one chunk, no compression).
+#' TODO: remove this function
 #' 
 #' @keywords internal
 #' @param matrix The matrix as an R matrix.
@@ -126,6 +94,18 @@ encode_array_meta <- function(meta) {
 #' @param store The Zarr store.
 #' @param compressor The compressor config. Optional.
 matrix_to_zarr <- function(matrix, rows, cols, store, compressor = NA) {
+
+  #' Convert a JSON-like list to a raw type.
+  #' TODO: remove this function
+  #' 
+  #' @keywords internal
+  #' @param json_as_list An R list to be converted to JSON.
+  #' @return The raw value.
+  json_to_raw <- function(json_as_list) {
+    json_str <- jsonlite::toJSON(json_as_list)
+    json_raw <- charToRaw(json_str)
+    return(json_raw)
+  }
 
   num_rows <- nrow(matrix)
   num_cols <- ncol(matrix)
