@@ -72,9 +72,8 @@ articles:
   - title: Articles
     navbar: Tutorials
     contents:
-      - array_creation
+      - basics
   - title: Articles
     navbar: Troubleshooting
     contents:
-      - debugging
       - session_info

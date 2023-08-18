@@ -1,5 +1,5 @@
 <br/>
-Pizzarr is an R implementation for Zarr.
+Pizzarr is an R implementation for [Zarr](https://zarr.readthedocs.io/).
 
 ## Getting Started
 
