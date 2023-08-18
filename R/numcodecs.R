@@ -56,7 +56,8 @@ Zstd <- R6::R6Class("Zstd",
       return(result)
     },
     decode = function(buf) {
-
+      result <- qs::zstd_decompress_raw(buf)
+      return(result)
     },
     get_config = function() {
       meta <- list(
@@ -109,7 +110,8 @@ LZ4 <- R6::R6Class("LZ4",
        return(result)
      },
      decode = function(buf) {
-
+      result <- qs::lz4_decompress_raw(buf)
+      return(result)
      },
      get_config = function() {
        meta <- list(
@@ -130,10 +132,12 @@ get_codec <- function(config) {
   if(!is_na(config)) {
     codec_id <- config$id
     config$id <- NULL
-    if(codec_id == "LZ4") {
+    if(codec_id == "lz4") {
       result <- do.call(LZ4$new, config)
-    } else if(codec_id == "Zstd") {
+    } else if(codec_id == "zstd") {
       result <- do.call(Zstd$new, config)
+    } else {
+      stop(paste("Unknown compressor found", codec_id))
     }
   }
   return(result)

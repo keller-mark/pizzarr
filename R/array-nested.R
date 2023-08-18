@@ -4,7 +4,17 @@
 create_array_from_raw <- function(buf, dtype, shape, offset = 0) {
   # TODO
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
-  stop("TODO: implement create_array_from_raw()")
+  #stop("TODO: implement create_array_from_raw()")
+
+  dtype_rtype <- get_dtype_rtype(dtype)
+  dtype_size <- get_dtype_numbytes(dtype)
+  size <- compute_size(shape)
+  signed <- get_dtype_signed(dtype)
+
+  vec_from_raw <- readBin(con = buf, dtype_rtype, size = dtype_size, n = size, signed = signed)
+  print(vec_from_raw)
+  array_from_vec <- array(data = vec_from_raw, dim = shape)
+  return(array_from_vec)
 }
 
 #' @keywords internal
@@ -98,6 +108,10 @@ NestedArray <- R6::R6Class("NestedArray",
         num_shape_elements <- compute_size(shape)
         num_data_elements <- length(buf) / get_dtype_numbytes(dtype)
         if (num_shape_elements != num_data_elements) {
+          print(num_shape_elements)
+          print(num_data_elements)
+          print(length(buf))
+          print(dtype)
           stop('Buffer has ${numDataElements} of dtype ${dtype}, shape is too large or small')
         }
         self$data <- create_array_from_raw(buf, dtype, shape)
@@ -166,6 +180,24 @@ NestedArray <- R6::R6Class("NestedArray",
       # TODO: pass ordering C/F as argument.
       # TODO: transpose first (if needed, based on the ordering).
       return(as.vector(self$data))
+    },
+    flatten_as_raw = function() {
+      bytes_per_val <- get_dtype_numbytes(self$dtype)
+
+      num_shape_elements <- compute_size(self$shape)
+      num_data_elements <- num_shape_elements * bytes_per_val
+      buf <- raw(length = num_data_elements)
+
+
+      data_as_vec <- self$flatten()
+
+      for(i in seq_len(length(data_as_vec))) {
+        val <- data_as_vec[i]
+
+        offset_i <- i * bytes_per_val
+        buf[offset_i:(offset_i + bytes_per_val - 1)] <- as.raw(c(0, 0, 0, 0, 0, 0, 0, val))
+      }
+      return(buf)
     }
   )
 )

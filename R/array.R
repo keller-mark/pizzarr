@@ -222,15 +222,17 @@ ZarrArray <- R6::R6Class("ZarrArray",
       chunk <- tryCatch({
         c_data <- self$get_chunk_store()$get_item(c_key)
         chunk_inner <- private$decode_chunk(c_data)
-        return(chunk_inner)
+
+        return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype))
       }, error = function(cond) {
         if(is_key_error(cond)) {
           # chunk not initialized
           as_dtype_func <- get_dtype_asrtype(private$dtype)
           chunk_inner <- as_dtype_func(private$fill_value)
-          return(chunk_inner)
+
+          return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype))
         } else {
-          message(cond$message)
+          print(cond$message)
           stop("rethrow")
         }
       })      
@@ -431,12 +433,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
         if("NestedArray" %in% class(out)) {
           if(is_contiguous_selection(out_selection) && is_total_slice(chunk_selection, private$chunks) && is.null(private$filters)) {
-            out$set(out_selection, private$to_nested_array(decoded_chunk))
+            out$set(out_selection, NestedArray$new(decoded_chunk, shape = private$chunks, dtype = private$dtype))
             return(TRUE)
           }
 
           # Decode chunk
-          chunk <- private$to_nested_array(decoded_chunk)
+          chunk <- NestedArray$new(decoded_chunk, shape = private$chunks, dtype = private$dtype)
           tmp <- chunk$get(chunk_selection)
 
           if(!is_na(drop_axes)) {
@@ -456,7 +458,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
             out$set(out_selection, as_scalar(private$fill_value))
           }
         } else {
-          message(cond$message)
+          print(cond$message)
           stop("Different type of error - rethrow")
         }
       })
@@ -491,7 +493,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
           chunk_fill(chunk, value)
         } else {
           # value is a NestedArray
-          chunk <- value$flatten()
+          chunk <- value$flatten_as_raw()
         }
       } else {
         # partially replace the contents of this chunk
@@ -499,12 +501,16 @@ ZarrArray <- R6::R6Class("ZarrArray",
         # Existing chunk data
         #let chunkData: TypedArray;
 
-        chunk_data <- tryCatch({
+        chunk_nested_array <- tryCatch({
 
           # Chunk is initialized if this does not error
           chunk_store_data <- self$get_chunk_store()$get_item(chunk_key)
           dbytes <- private$decode_chunk(chunk_store_data)
-          return(private$to_typed_array(dbytes))
+          return(NestedArray$new(
+            dbytes,
+            shape = private$chunks,
+            dtype = private$dtype
+          ))
         }, error = function(cond) {
           if (is_key_error(cond)) {
             # Chunk is not initialized
@@ -512,7 +518,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
             if (!is.null(private$fill_value)) { # TODO: should this be is.na
               chunk_fill(chunk_data, private$fill_value)
             }
-            return(chunk_data)
+            return(NestedArray$new(
+              chunk_data,
+              shape = private$chunks,
+              dtype = private$dtype
+            ))
           } else {
             message(cond$message)
             # // Different type of error - rethrow
@@ -520,17 +530,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
           }
         })
 
-        chunk_nested_array <- NestedArray$new(
-          chunk_data,
-          shape = private$chunks,
-          dtype = private$dtype
-        )
         chunk_nested_array$set(chunk_selection, value)
-        chunk <- chunk_nested_array$flatten()
+        chunk <- chunk_nested_array$flatten_as_raw()
+        print(length(chunk))
+        print(class(chunk))
       }
       chunk_data <- private$encode_chunk(chunk)
-
-      
 
       self$get_chunk_store()$set_item(chunk_key, chunk_data)
     },
@@ -554,12 +559,82 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # TODO
     },
     decode_chunk = function(cdata, start = NA, nitems = NA, expected_shape = NA) {
-      # TODO
-      return(cdata)
-    },
-    encode_chunk = function(chunk) {
-      # TODO
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2066
+      # decompress
+      if(!is_na(private$compressor)) {
+        # TODO: only decode requested items
+        # if (
+        #     all(x is not None for x in [start, nitems])
+        #     and self._compressor.codec_id == "blosc"
+        # ) and hasattr(self._compressor, "decode_partial"):
+        #     chunk = self._compressor.decode_partial(cdata, start, nitems)
+        # else:
+        chunk <- private$compressor$decode(cdata)
+      } else {
+        chunk <- cdata
+      }
+
+      # apply filters
+      if(!is_na(private$filters)) {
+        for (f in rev(private$filters)) {
+          chunk <- f$decode(chunk)
+        }
+      }
+
+      # TODO: view as numpy array with correct dtype
+      # chunk <- ensure_ndarray(chunk)
+      # special case object dtype, because incorrect handling can lead to
+      # segfaults and other bad things happening
+      # if self._dtype != object:
+      #    chunk = chunk.view(self._dtype)
+      # elif chunk.dtype != object:
+          # If we end up here, someone must have hacked around with the filters.
+          # We cannot deal with object arrays unless there is an object
+          # codec in the filter chain, i.e., a filter that converts from object
+          # array to something else during encoding, and converts back to object
+          # array during decoding.
+          # raise RuntimeError('cannot read object array without object codec')
+
+      # ensure correct chunk shape
+      # chunk <- chunk.reshape(-1, order='A')
+      if(is_na(expected_shape)) {
+        expected_shape <- private$chunks
+      }
+      if(length(expected_shape) == 0) {
+        # Zero-dimensional case
+        return(chunk)
+      }
+      # chunk <- chunk_reshape(chunk, expected_shape, order=private$order)
       return(chunk)
+    },
+    encode_chunk = function(chunk_as_raw) {
+      # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2105
+
+      chunk <- chunk_as_raw
+
+      # apply filters
+      if(!is_na(private$filters)) {
+        for(f in private$filters) {
+          chunk <- f$encode(chunk)
+        }
+      }
+
+      # TODO: check object encoding
+      #if ensure_ndarray(chunk).dtype == object:
+      #    raise RuntimeError('cannot write object array without object codec')
+
+      # compress
+      if(!is_na(private$compressor)) {
+        cdata <- private$compressor$encode(chunk)
+      } else {
+        cdata <- chunk
+      }
+
+      # TODO: ensure in-memory data is immutable and easy to compare
+      #if isinstance(self.chunk_store, MutableMapping):
+      #    cdata = ensure_bytes(cdata)
+
+      return(cdata)
     },
     append_nosync = function(data, axis = 0) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141

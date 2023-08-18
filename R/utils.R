@@ -331,6 +331,12 @@ chunk_fill <- function(chunk, value) {
   chunk[] <- value
 }
 
+#' @keywords internal
+chunk_reshape <- function(chunk, expected_shape, order = NA) {
+  # TODO: support order
+  return(array(data = chunk, dim = expected_shape))
+}
+
 #' Check if an error is a KeyError.
 #' @param e The error to check.
 #' @return TRUE if the error is a KeyError, FALSE otherwise.
