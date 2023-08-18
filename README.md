@@ -65,6 +65,7 @@ pkgdown::build_site()
 
 ## Resources
 
+- Discussion of Zarr in R: https://github.com/zarr-developers/community/issues/18
 - R package development
   - [R packages](https://r-pkgs.org/)
   - [roxygen2 syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html)
@@ -78,40 +79,3 @@ pkgdown::build_site()
   - [zarr.js](https://github.com/gzuidhof/zarr.js)
   - [zarrita.js](https://github.com/manzt/zarrita.js)
   - [v2 spec](https://zarr.readthedocs.io/en/stable/spec/v2.html)
-  
-## Notes
-
-### Selections
-
-Must be of type `list` with values `"..."`, `Slice`, or `scalar`.
-
-For `slice()`, `start` and `stop` are intended to work like R `arr[start:stop]`: one-based indexing, inclusive start, inclusive stop.
-For `zb_slice()`, `start` and `stop` are intended to work like Python `arr[start:stop]`: zero-based indexing, inclusive start, exclusive stop.
-
-
-See the `slice()` and `as_scalar` functions.
-
-### "array buffers"
-
-In JavaScript, there is such thing as an ArrayBuffer, which is used as the internal representation for TypedArrays.
-I don't think there is an analogous concept in R, but we can try to use raw vectors as array buffers:
-
-```R
-readBin(con = as.raw(c(
-  0x7b, 0x22, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x22,
-  0x3a, 0x5b, 0x22, 0x77, 0x6f, 0x72, 0x6c, 0x64,
-  0x22, 0x2c, 0x22, 0x21, 0x22, 0x5d, 0x7d, 0x12
-)), integer(), size = 1, n = 24, signed = FALSE)
-readBin(con = as.raw(c(
-  0x7b, 0x22, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x22,
-  0x3a, 0x5b, 0x22, 0x77, 0x6f, 0x72, 0x6c, 0x64,
-  0x22, 0x2c, 0x22, 0x21, 0x22, 0x5d, 0x7d, 0x12
-)), integer(), size = 2, n = 12, signed = FALSE)
-readBin(con = as.raw(c(
-  0x7b, 0x22, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x22,
-  0x3a, 0x5b, 0x22, 0x77, 0x6f, 0x72, 0x6c, 0x64,
-  0x22, 0x2c, 0x22, 0x21, 0x22, 0x5d, 0x7d, 0x12
-)), double(), size = 8, n = 3, signed = TRUE)
-```
-
-
