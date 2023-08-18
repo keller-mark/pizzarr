@@ -520,3 +520,90 @@ zarr_create_group <- function(
         path = path
     ))
 }
+
+#' Open a group using file-mode-like semantics.
+#' @param store : MutableMapping or string, optional
+#'     Store or path to directory in file system or name of zip file.
+#' @param mode : {'r', 'r+', 'a', 'w', 'w-'}, optional
+#'     Persistence mode: 'r' means read only (must exist); 'r+' means
+#'     read/write (must exist); 'a' means read/write (create if doesn't
+#'     exist); 'w' means create (overwrite if exists); 'w-' means create
+#'     (fail if exists).
+#' @param cache_attrs : bool, optional
+#'     If True (default), user attributes will be cached for attribute read
+#'     operations. If False, user attributes are reloaded from the store prior
+#'     to all attribute read operations.
+#' @param synchronizer : object, optional
+#'     Array synchronizer.
+#' @param path : string, optional
+#'     Group path within store.
+#' @param chunk_store : MutableMapping or string, optional
+#'     Store or path to directory in file system or name of zip file.
+#' @param storage_options : dict
+#'     If using an fsspec URL to create the store, these will be passed to
+#'     the backend implementation. Ignored otherwise.
+#' @returns ZarrGroup
+zarr_open_group <- function(
+    store = NA,
+    mode = NA,
+    cache_attrs = TRUE,
+    synchronizer = NA,
+    path = NA,
+    chunk_store = NA,
+    storage_options = NA
+) {
+    # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/hierarchy.py#L1119
+
+    if(is_na(mode)) {
+        mode <- "a"
+    }
+
+    # handle polymorphic store arg
+    store <- normalize_store_arg(store, storage_options=storage_options, mode=mode)
+    if(!is_na(chunk_store)) {
+        chunk_store <- normalize_store_arg(chunk_store, storage_options=storage_options, mode=mode)
+    }
+    path <- normalize_storage_path(path)
+
+    # ensure store is initialized
+
+    if(mode == "r" || mode == "r+") {
+        if (!contains_group(store, path)) {
+            if(contains_array(store, path)) {
+                stop("ContainsArrayError(path)")
+            }
+            stop("GroupNotFoundError(path)")
+        }
+
+    } else if (mode == 'w') {
+        init_group(store, overwrite=True, path=path, chunk_store=chunk_store)
+
+    } else if(mode == "a") {
+        if (!contains_group(store, path)) {
+            if(contains_array(store, path)) {
+                stop("ContainsArrayError(path)")
+            }
+            init_group(store, path=path, chunk_store=chunk_store)
+        }
+    } else if(mode == "w-" || mode == "x") {
+        if (contains_array(store, path)) {
+            stop("ContainsArrayError(path)")
+        } else if (contains_group(store, path)) {
+            stop("ContainsGroupError(path)")
+        } else {
+            init_group(store, path=path, chunk_store=chunk_store)
+        }
+    }
+
+    # determine read only status
+    read_only <- (mode == "r")
+
+    return(ZarrGroup$new(
+        store,
+        read_only=read_only,
+        cache_attrs=cache_attrs,
+        synchronizer=synchronizer,
+        path=path,
+        chunk_store=chunk_store
+    ))
+}
