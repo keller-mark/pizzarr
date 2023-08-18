@@ -12,7 +12,7 @@ test_that("get_basic_selection_zd", {
 
     sel <- z$get_item("...")
 
-    expect_equal(as.numeric(a), as.numeric(sel))
+    expect_equal(as.numeric(a), as.numeric(sel$data))
 })
 
 test_that("get_basic_selection_1d", {

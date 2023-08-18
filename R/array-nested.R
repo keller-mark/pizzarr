@@ -41,6 +41,9 @@ zero_based_to_one_based <- function(selection, shape) {
 #' @rdname NestedArray
 #' @export
 NestedArray <- R6::R6Class("NestedArray",
+  private = list(
+    is_zero_dim = NULL
+  ),
   public = list(
     #' @field shape The shape of the array.
     shape = NULL,
@@ -57,7 +60,7 @@ NestedArray <- R6::R6Class("NestedArray",
     #' @param dtype The Zarr dtype of the array, as a string like ">f8".
     #' @return A `NestedArray` instance.
     initialize = function(data, shape = NA, dtype = NA) {
-      if(is.null(shape) || is_na(shape)) {
+      if(is.null(shape) || (!is.list(shape) && is_na(shape))) {
         if(is.raw(data)) {
           stop("Cannot infer shape from raw data, please provide shape explicitly")
         }
@@ -65,22 +68,25 @@ NestedArray <- R6::R6Class("NestedArray",
       } else {
         shape <- normalize_shape(shape)
       }
-      if(is_na(dtype)) {
+      if(is_na(dtype) && (is.numeric(data) || is.logical(data))) {
         dtype <- get_dtype_from_array(data)
       } else {
         dtype <- normalize_dtype(dtype)
       }
       self$shape <- shape
       self$dtype <- dtype
+
+      private$is_zero_dim <- (is.null(shape) || length(shape) == 0)
+
       if(is.null(data)) {
         # Create empty array.
 
         self$data <- array(data=get_dtype_rtype(dtype), dim=shape)
-      } else if(is.null(self$shape)) {
+      } else if(!is.raw(data) && is.null(self$shape)) {
         # Create zero-dimensional array.
 
         self$data <- data # TODO?
-      } else if(is.array(data) || is.numeric(data) || is.logical(data)) {
+      } else if(!is.raw(data) && (is.array(data) || is.numeric(data) || is.logical(data))) {
         # Create array from R atomic vector or array().
 
         num_shape_elements <- compute_size(shape)
@@ -95,10 +101,12 @@ NestedArray <- R6::R6Class("NestedArray",
       } else if(is.raw(data)) {
         # Create array from a raw vector.
 
+        num_shape_elements <- compute_size(shape)
+
         # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/index.ts#L134
         buf <- data
         # Create from ArrayBuffer or Buffer
-        num_shape_elements <- compute_size(shape)
+        
         dtype_size <- get_dtype_numbytes(dtype)
         num_data_elements <- length(buf) / dtype_size
         if (num_shape_elements != num_data_elements) {
@@ -125,9 +133,23 @@ NestedArray <- R6::R6Class("NestedArray",
           signed = dtype_signed,
           endian = endian
         )
-        array_from_vec <- array(data = vec_from_raw, dim = shape)
+        if(private$is_zero_dim) {
+          array_from_vec <- array(data = vec_from_raw, dim = c(1))
+        } else {
+          array_from_vec <- array(data = vec_from_raw, dim = shape)
+        }
+        
 
         self$data <- array_from_vec
+      } else if(is_scalar(data)) {
+        # Create array from a scalar value.
+        astype_func <- get_dtype_asrtype(dtype)
+        if(private$is_zero_dim) {
+          self$data <- array(data=get_dtype_rtype(dtype), dim=c(1))
+        } else {
+          self$data <- array(data=get_dtype_rtype(dtype), dim=shape)
+        }
+        self$data[] <- astype_func(data)
       } else {
         #buf_len <- compute_size(shape) * get_dtype_numbytes(dtype) 
         #buf <- raw(length = buf_len)
