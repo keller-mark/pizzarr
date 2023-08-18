@@ -56,7 +56,8 @@ Zstd <- R6::R6Class("Zstd",
       return(result)
     },
     decode = function(buf) {
-
+      result <- qs::zstd_decompress_raw(buf)
+      return(result)
     },
     get_config = function() {
       meta <- list(
@@ -97,19 +98,17 @@ LZ4 <- R6::R6Class("LZ4",
        # of the decompressed data as a little-endian 32-bit integer.
        # Reference: https://numcodecs.readthedocs.io/en/stable/lz4.html#numcodecs.lz4.compress
        orig_size <- length(buf)
-       header <- as.raw(c(
-         bitwAnd(orig_size, 0xff),
-         bitwAnd(bitwShiftR(orig_size, 8), 0xff),
-         bitwAnd(bitwShiftR(orig_size, 16), 0xff),
-         bitwAnd(bitwShiftR(orig_size, 24), 0xff)
-       ))
+       header <- writeBin(orig_size, con = raw(), size = 4, endian = "little")
 
        result <- c(header, body)
 
        return(result)
      },
      decode = function(buf) {
+      body <- buf[5:length(buf)]
 
+      result <- qs::lz4_decompress_raw(body)
+      return(result)
      },
      get_config = function() {
        meta <- list(
