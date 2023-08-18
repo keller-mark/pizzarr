@@ -93,6 +93,7 @@ test_that("basic indexer for array that spans multiple chunks where shape is not
 
     bi <- BasicIndexer$new(list(zb_slice(5, 10), zb_slice(5, 10)), z)
 
+    expect_equal(as.numeric(bi$shape), c(5, 5))
     
     expect_equal(length(bi$dim_indexers), 2)
 
@@ -116,7 +117,4 @@ test_that("basic indexer for array that spans multiple chunks where shape is not
     expect_equal(sdi2$dim_chunk_len, 3)
     expect_equal(sdi2$num_items, 5)
     expect_equal(sdi2$num_chunks, 4)
-
-    expect_equal(as.numeric(bi$shape), c(5, 5))
-
 })
