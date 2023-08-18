@@ -91,6 +91,35 @@ get_dtype_numbytes <- function(dtype) {
 }
 
 #' @keywords internal
+get_dtype_signed <- function(dtype) {
+  # TODO: use regexes to figure this stuff out
+  DTYPE_SIGNED_MAPPING <- list(
+    "|b" = FALSE,
+    "|u1" = FALSE,
+    "|i1" = TRUE,
+    "<b" = FALSE,
+    "<u1" = FALSE,
+    "<i1" = TRUE,
+    "<u2" = FALSE,
+    "<i2" = TRUE,
+    "<u4" = FALSE,
+    "<i4" = TRUE,
+    "<f4" = TRUE,
+    "<f8" = TRUE,
+    ">b" = FALSE,
+    ">u1" = FALSE,
+    ">i1" = TRUE,
+    ">u2" = FALSE,
+    ">i2" = TRUE,
+    ">u4" = FALSE,
+    ">i4" = TRUE,
+    ">f4" = TRUE,
+    ">f8" = TRUE
+  )
+  return(DTYPE_SIGNED_MAPPING[[dtype]])
+}
+
+#' @keywords internal
 get_dtype_from_array <- function(a) {
   TYPEOF_RTYPE_MAPPING <- list(
     "logical" = logical(),

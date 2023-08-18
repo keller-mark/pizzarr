@@ -130,9 +130,9 @@ get_codec <- function(config) {
   if(!is_na(config)) {
     codec_id <- config$id
     config$id <- NULL
-    if(codec_id == "LZ4") {
+    if(codec_id == "lz4") {
       result <- do.call(LZ4$new, config)
-    } else if(codec_id == "Zstd") {
+    } else if(codec_id == "zstd") {
       result <- do.call(Zstd$new, config)
     }
   }
