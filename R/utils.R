@@ -84,60 +84,6 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   return(zarray_meta)
 }
 
-#' Write an R matrix to a Zarr store (one chunk, no compression).
-#' TODO: remove this function
-#' 
-#' @keywords internal
-#' @param matrix The matrix as an R matrix.
-#' @param rows A vector of row names.
-#' @param cols A vector of column names.
-#' @param store The Zarr store.
-#' @param compressor The compressor config. Optional.
-matrix_to_zarr <- function(matrix, rows, cols, store, compressor = NA) {
-
-  #' Convert a JSON-like list to a raw type.
-  #' TODO: remove this function
-  #' 
-  #' @keywords internal
-  #' @param json_as_list An R list to be converted to JSON.
-  #' @return The raw value.
-  json_to_raw <- function(json_as_list) {
-    json_str <- jsonlite::toJSON(json_as_list)
-    json_raw <- charToRaw(json_str)
-    return(json_raw)
-  }
-
-  num_rows <- nrow(matrix)
-  num_cols <- ncol(matrix)
-
-  raw_matrix <- as.raw(matrix)
-
-  compressor_meta <- jsonlite::unbox(NA)
-  if(R6::is.R6(compressor)) {
-    raw_matrix <- compressor$encode(raw_matrix)
-    compressor_meta <- compressor$get_meta()
-  }
-
-  zattrs <- list(
-    rows = rows,
-    cols = cols
-  )
-  zarray <- create_zarray_meta(
-    # TODO: set chunk size to something smaller if multiple chunks
-    chunks = c(num_rows, num_cols),
-    compressor = compressor_meta,
-    dtype = "|u1",
-    fill_value = 0,
-    order = "C",
-    shape = c(num_rows, num_cols)
-  )
-
-  store$set_item(ATTRS_KEY, json_to_raw(zattrs))
-  store$set_item(ARRAY_META_KEY, json_to_raw(zarray))
-  # TODO: chunks
-  store$set_item("0.0", raw_matrix)
-}
-
 #' Create an empty named list
 #'
 #' A helper function to construct an empty list which converts to a JSON object rather than a JSON array.
