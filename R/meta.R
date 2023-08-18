@@ -6,20 +6,23 @@ Metadata2 <- R6::R6Class("Metadata2",
         ZARR_FORMAT = 2
     ),
     public = list(
-        parse_metadata = function(s) {
+        decode_metadata = function(s) {
             if(is.list(s)) {
                 return(s)
             } else {
-                return(jsonlite::fromJSON(s))
+                return(jsonlite::fromJSON(rawToChar(s)))
             }
         },
+        encode_metadata = function(meta) {
+            return(charToRaw(jsonlite::toJSON(meta)))
+        },
         decode_array_metadata = function(s) {
-            meta <- self$parse_metadata(s)
+            meta <- self$decode_metadata(s)
             # TODO: check zarr format is v2
             return(meta)
         },
         decode_group_metadata = function(s) {
-            meta <- self$parse_metadata(s)
+            meta <- self$decode_metadata(s)
             # TODO: check zarr format is v2
             return(meta)
         },
@@ -27,12 +30,12 @@ Metadata2 <- R6::R6Class("Metadata2",
             clean_meta <- meta
             clean_meta[['zarr_format']] <- private$ZARR_FORMAT
             # TODO: clean up meta even further
-            return(jsonlite::toJSON(clean_meta))
+            return(self$encode_metadata(clean_meta))
         },
         encode_group_metadata = function(meta = NA) {
             meta <- obj_list()
             meta[['zarr_format']] <- private$ZARR_FORMAT
-            return(jsonlite::toJSON(meta))
+            return(self$encode_metadata(meta))
         }
     )
 )
