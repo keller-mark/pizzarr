@@ -7,7 +7,6 @@
 \description{
 Store class that uses a hierarchy of list objects,
 thus all data will be held in main memory.
-Reference: https://github.com/zarr-developers/zarr-python/blob/a5dfc3b4/zarr/storage.py#L512
 }
 \details{
 MemoryStore for Zarr

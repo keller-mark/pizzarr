@@ -1,10 +1,8 @@
 library(pizzarr)
 
 test_that("Slice$indices() behavior matches Python slice().indices()", {
-
     # Python slice.indices() only returns (start, stop, step).
-    # (Zarr.js returns (start, stop, step, adjusted_length) but I'm
-    # currently not sure the correct behavior for adjusted_length)
+    # (Zarr.js returns (start, stop, step, adjusted_length).)
     expect_equal(Slice$new(0, 10, 1)$indices(10)[1:3], c(0, 10, 1))
     expect_equal(Slice$new(0, 10, 1)$indices(11)[1:3], c(0, 10, 1))
     expect_equal(Slice$new(0, 10, 1)$indices(12)[1:3], c(0, 10, 1))

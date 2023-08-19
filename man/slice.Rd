@@ -4,7 +4,7 @@
 \alias{slice}
 \title{Shortcut for Slice$new() constructor.}
 \usage{
-slice(start, stop = NA, step = NA, zero_based = FALSE, stop_exclusive = FALSE)
+slice(start, stop = NA, step = NA, zero_based = FALSE)
 }
 \arguments{
 \item{start}{The start index.}
@@ -14,8 +14,6 @@ slice(start, stop = NA, step = NA, zero_based = FALSE, stop_exclusive = FALSE)
 \item{step}{The step size.}
 
 \item{zero_based}{The index of the dimension. By default, FALSE for R-like behavior.}
-
-\item{stop_exclusive}{Whether the stop index is exclusive. By default, FALSE for R-like behavior.}
 }
 \value{
 A Slice instance with the specified parameters.

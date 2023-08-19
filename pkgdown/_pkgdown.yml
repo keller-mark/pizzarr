@@ -73,6 +73,7 @@ articles:
     navbar: Tutorials
     contents:
       - basics
+      - ome-ngff
   - title: Articles
     navbar: Troubleshooting
     contents:
