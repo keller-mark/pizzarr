@@ -36,4 +36,5 @@ Suggests:
     covr,
     bslib,
     pkgdown,
-    rmarkdown
+    rmarkdown,
+    crul

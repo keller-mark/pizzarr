@@ -151,6 +151,9 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
     get_path = function() {
       return(private$path)
     },
+    get_meta = function() {
+      return(private$meta)
+    },
     get_name = function() {
       if(!is_na(private$path)) {
         name <- private$path

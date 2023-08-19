@@ -107,13 +107,13 @@ Store <- R6::R6Class("Store",
    )
 )
 
+# Reference: https://github.com/zarr-developers/zarr_implementations/blob/c0bd932/generate_data/js/src/fsstore.js#L7
 
 #' DirectoryStore for Zarr
 #' @title DirectoryStore Class
 #' @docType class
 #' @description
 #' Store class using directories and files on a standard file system.
-#' Adapted from https://github.com/zarr-developers/zarr_implementations/blob/c0bd932/generate_data/js/src/fsstore.js#L7
 #'
 #' @rdname DirectoryStore
 #' @export
@@ -169,13 +169,14 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
 )
 
 
+# Reference: https://github.com/zarr-developers/zarr-python/blob/a5dfc3b4/zarr/storage.py#L512
+
 #' MemoryStore for Zarr
 #' @title MemoryStore Class
 #' @docType class
 #' @description
 #' Store class that uses a hierarchy of list objects,
 #' thus all data will be held in main memory.
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/a5dfc3b4/zarr/storage.py#L512
 #'
 #' @rdname MemoryStore
 #' @export
@@ -271,4 +272,71 @@ MemoryStore <- R6::R6Class("MemoryStore",
    )
 )
 
+# Reference: https://github.com/manzt/zarrita.js/blob/main/packages/storage/src/fetch.ts
 
+#' HttpStore for Zarr
+#' @title HttpStore Class
+#' @docType class
+#' @description
+#' Store class that uses HTTP requests.
+#' Read-only.
+#'
+#' @rdname HttpStore
+#' @export
+HttpStore <- R6::R6Class("HttpStore",
+  inherit = Store,
+  private = list(
+    url = NULL,
+    base_path = NULL,
+    domain = NULL,
+    options = NULL,
+    headers = NULL,
+    client = NULL,
+    make_request = function(item) {
+      # Remove leading slash if necessary.
+      if(substr(item, 1, 1) == "/") {
+        key <- substr(item, 2, length(item))
+      } else {
+        key <- item
+      }
+      
+      res <- private$client$get(paste(private$base_path, key, sep="/"))
+      return(res)
+    }
+  ),
+  public = list(
+    initialize = function(url, options = NA, headers = NA) {
+      super$initialize()
+      # Remove trailing slash if necessary.
+      if(substr(url, length(url), length(url)) == "/") {
+        private$url <- substr(url, 1, length(url)-1)
+      } else {
+        private$url <- url
+      }
+      private$options <- options
+      private$headers <- headers
+
+      segments <- stringr::str_split(private$url, "/")[[1]]
+      private$domain <- paste(segments[1:3], collapse="/")
+      private$base_path <- paste(segments[4:length(segments)], collapse="/")
+
+      private$client <- crul::HttpClient$new(
+        url = private$domain,
+        opts = private$options,
+        headers = private$headers
+      )
+    },
+    #' @description
+    #' Get an item from the store.
+    #' @param item The item key.
+    #' @return The item data in a vector of type raw.
+    get_item = function(item) {
+      res <- private$make_request(item)
+      return(res$content)
+    },
+    contains_item = function(item) {
+      res <- private$make_request(item)
+      return(res$status_code == 200)
+    }
+  )
+)
