@@ -34,7 +34,7 @@ first_resolution <- resolution_paths[[1]]
 zarr_arr <- g$get_item(first_resolution)
 
 print(zarr_arr$get_shape())
-# [1]   2 236 275 271
+# [1]   3 500 750
 
 # Load the 3-dimensional array of RGB pixels (as a NestedArray instance).
 nested_arr <- zarr_arr$get_item("...")
