@@ -20,6 +20,62 @@ Slice <- R6::R6Class("Slice",
       self$start <- start
       self$stop <- stop
       self$step <- step
+    },
+    #' @description
+    #' This method takes a single integer argument `length` and computes information about the
+    #' slice that the slice object would describe if applied to a sequence of `length` items.
+    #' It returns a tuple of three integers; respectively these are the start and stop indices
+    # and the step or stride length of the slice. Missing or out-of-bounds indices are handled
+    # in a manner consistent with regular slices.
+    indices = function(length_param) {
+      start <- 0
+      stop <- 0
+      step <- 0
+
+      MAX_SAFE_INTEGER <- .Machine$integer.max
+
+      if(is.na(self$step)) {
+        step <- 1
+      } else {
+        step <- self$step
+      }
+
+      if(is.na(self$start)) {
+        if(step < 0) {
+          start <- MAX_SAFE_INTEGER
+        } else {
+          0
+        }
+      } else {
+        start <- self$start
+        if(start < 0) {
+          start <- start + length_param
+        }
+      }
+
+      if(is.na(self$stop)) {
+        if(step < 0) {
+          stop <- -MAX_SAFE_INTEGER
+        } else {
+          stop <- MAX_SAFE_INTEGER
+        }
+      } else {
+        stop <- self$stop
+        if(stop < 0) {
+          stop <- stop + length_param
+        }
+      }
+
+      s <- adjust_indices(start, stop, step, length_param)
+      start <- s[1]
+      stop <- s[2]
+      step <- s[3]
+      length_param <- s[4]
+
+      if(step == 0) {
+        stop("step size 0 is invalid")
+      }
+      return(c(start, stop, step, length_param))
     }
   )
 )
@@ -29,16 +85,15 @@ Slice <- R6::R6Class("Slice",
 #' @param stop The stop index.
 #' @param step The step size.
 #' @param zero_based The index of the dimension. By default, FALSE for R-like behavior.
-#' @param stop_exclusive Whether the stop index is exclusive. By default, FALSE for R-like behavior.
 #' @return A Slice instance with the specified parameters.
-slice <- function(start, stop = NA, step = NA, zero_based = FALSE, stop_exclusive = FALSE) {
+slice <- function(start, stop = NA, step = NA, zero_based = FALSE) {
   start_offset <- ifelse(zero_based, 0, -1)
-  stop_offset <- ifelse(stop_exclusive, -1, 0)
+  stop_offset <- ifelse(zero_based, 0, 0)
   if(!is_na(start) && is.numeric(start)) {
     start <- start + start_offset
   }
   if(!is_na(stop) && is.numeric(stop)) {
-    stop <- stop + start_offset + stop_offset
+    stop <- stop + stop_offset
   }
   # Assumed to be zero-based
   # and stop-inclusive
@@ -54,8 +109,8 @@ slice <- function(start, stop = NA, step = NA, zero_based = FALSE, stop_exclusiv
 #' @param stop The stop index.
 #' @param step The step size.
 #' @keywords internal
-zb_slice <- function(start, stop = NA, step = NA, stop_exclusive = FALSE) {
-  return(slice(start, stop, step, zero_based = TRUE, stop_exclusive = TRUE))
+zb_slice <- function(start, stop = NA, step = NA) {
+  return(slice(start, stop, step, zero_based = TRUE))
 }
 
 #' Check if a value is a Slice instance.
@@ -135,58 +190,6 @@ adjust_indices <- function(start, stop, step, length_param) {
     }
   }
   return(c(start, stop, step, 0))
-}
-
-#' @keywords internal
-slice_indices <- function(slice_param, length_param) {
-  start <- 0
-  stop <- 0
-  step <- 0
-
-  MAX_SAFE_INTEGER <- .Machine$integer.max
-
-  if(is.na(slice_param$step)) {
-    step <- 1
-  } else {
-    step <- slice_param$step
-  }
-
-  if(is.na(slice_param$start)) {
-    if(step < 0) {
-      start <- MAX_SAFE_INTEGER
-    } else {
-      0
-    }
-  } else {
-    start <- slice_param$start
-    if(start < 0) {
-      start <- start + length_param
-    }
-  }
-
-  if(is.na(slice_param$stop)) {
-    if(step < 0) {
-      stop <- -MAX_SAFE_INTEGER
-    } else {
-      stop <- MAX_SAFE_INTEGER
-    }
-  } else {
-    stop <- slice_param$stop
-    if(stop < 0) {
-      stop <- stop + length_param
-    }
-  }
-
-  s <- adjust_indices(start, stop, step, length_param)
-  start <- s[1]
-  stop <- s[2]
-  step <- s[3]
-  length_param <- s[4]
-
-  if(step == 0) {
-    stop("step size 0 is invalid")
-  }
-  return(c(start, stop, step, length_param))
 }
 
 #' @keywords internal

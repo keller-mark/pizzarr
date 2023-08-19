@@ -119,7 +119,7 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
     #' @return A `SliceDimIndexer` instance.
     initialize = function(dim_sel, dim_len, dim_chunk_len) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L311
-      si <- slice_indices(dim_sel, dim_len)
+      si <- dim_sel$indices(dim_len)
       self$start <- si[1]
       self$stop <- si[2]
       self$step <- si[3]
@@ -181,9 +181,9 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
           dim_chunk_sel_stop <- self$stop - dim_offset
         }
 
-        dim_chunk_sel <- slice(dim_chunk_sel_start, dim_chunk_sel_stop, self$step, zero_based = TRUE)
+        dim_chunk_sel <- zb_slice(dim_chunk_sel_start, dim_chunk_sel_stop, self$step)
         dim_chunk_num_items <- ceiling((dim_chunk_sel_stop - dim_chunk_sel_start) / self$step)
-        dim_out_sel <- slice(dim_out_offset, dim_out_offset + dim_chunk_num_items, zero_based = TRUE)
+        dim_out_sel <- zb_slice(dim_out_offset, dim_out_offset + dim_chunk_num_items)
 
         result <- append(result, ChunkDimProjection$new(
           dim_chunk_index,

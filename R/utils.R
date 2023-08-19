@@ -133,7 +133,7 @@ selection_to_slice_indices <- function(selection, shape) {
     if(is.numeric(s)) {
       slice_indices_result <- append(slice_indices_result, s)
     } else {
-      x <- slice_indices(s, shape[i])
+      x <- s$indices(shape[i])
       dim_length <- x[4]
       out_shape <- c(out_shape, dim_length)
       slice_indices_result <- append(slice_indices_result, x)

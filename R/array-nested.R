@@ -6,8 +6,8 @@ zero_based_to_one_based <- function(selection, shape) {
     # We assume the selection uses zero-based indexing,
     # and internally convert to R-based / 1-based indexing
     # before accessing data on the internal self$data.
-    sel_start <- sel$start + 1
-    sel_stop <- sel$stop + 1 # Do not add one, since R indexing is inclusive.
+    sel_start <- sel$start + 1 # Add one, since R indexing is zero-based.
+    sel_stop <- sel$stop # Do not subtract one, since R indexing is inclusive.
     # TODO: convert these warnings to errors once we know internals do indexing correctly
     if(sel_start < 1) {
       sel_start <- 1
