@@ -6,7 +6,6 @@
 \title{Attributes Class}
 \description{
 Class providing access to user attributes on an array or group.
-Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/attrs.py#L7
 }
 \details{
 The Zarr Attributes class.
@@ -39,7 +38,7 @@ The Zarr Attributes class.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Attributes-new}{\code{Attributes$new()}}
-\item \href{#method-Attributes-asdict}{\code{Attributes$asdict()}}
+\item \href{#method-Attributes-to_list}{\code{Attributes$to_list()}}
 \item \href{#method-Attributes-refresh}{\code{Attributes$refresh()}}
 \item \href{#method-Attributes-contains}{\code{Attributes$contains()}}
 \item \href{#method-Attributes-get_item}{\code{Attributes$get_item()}}
@@ -55,7 +54,7 @@ Create a new Attributes instance.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$new(
   store,
-  key = ".zattrs",
+  key = NA,
   read_only = FALSE,
   cache = TRUE,
   synchronizer = NA
@@ -74,11 +73,11 @@ An \code{Attributes} instance.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Attributes-asdict"></a>}}
-\if{latex}{\out{\hypertarget{method-Attributes-asdict}{}}}
-\subsection{Method \code{asdict()}}{
+\if{html}{\out{<a id="method-Attributes-to_list"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-to_list}{}}}
+\subsection{Method \code{to_list()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Attributes$asdict()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Attributes$to_list()}\if{html}{\out{</div>}}
 }
 
 }

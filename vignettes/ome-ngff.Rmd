@@ -1,0 +1,50 @@
+---
+title: "OME-NGFF Demo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{OME-NGFF Demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+### Setup
+
+`pizzarr` does not depend on the `raster` package, but we use it for this demo to render an RGB array to an image using R.
+
+```r
+install.packages("raster")
+```
+
+### Demo
+
+```r
+# The path to the root of the OME-NGFF Zarr store.
+root <- system.file("extdata", "dog.ome.zarr", package="pizzarr")
+
+# Open the OME-NGFF as a DirectoryStore.
+store <- DirectoryStore$new(root)
+g <- zarr_open_group(store)
+
+# Using the OME metadata, get the path to the first resolution of the image pyramid.
+attrs <- g$get_attrs()$to_list()
+resolution_paths <- attrs$multiscales$datasets[[1]]$path
+first_resolution <- resolution_paths[[1]]
+
+# Load the 3-dimensional array of RGB pixels (as a ZarrArray instance).
+zarr_arr <- g$get_item(first_resolution)
+
+print(zarr_arr$get_shape())
+# [1]   3 500 750
+
+# Load the 3-dimensional array of RGB pixels (as a NestedArray instance).
+nested_arr <- zarr_arr$get_item("...")
+
+# Extract the NestedArray contents as a base R array.
+arr <- nested_arr$data
+
+# Convert the base R array to a raster object.
+arr_as_raster <- raster::as.raster(aperm(arr, c(2, 3, 1)) / 255.0)
+
+# Plot the raster object.
+raster::plot(arr_as_raster)
+```

@@ -4,9 +4,9 @@
 #' @title RawArray Class
 #' @docType class
 #' @description
-#' TODO
+#' TODO: Add export annotation / remove keywords internal annotation once implemented.
 #' @rdname RawArray
-#' @export
+#' @keywords internal
 RawArray <- R6::R6Class("RawArray",
   public = list(
     #' @description

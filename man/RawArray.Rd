@@ -5,11 +5,12 @@
 \alias{RawArray}
 \title{RawArray Class}
 \description{
-TODO
+TODO: Add export annotation / remove keywords internal annotation once implemented.
 }
 \details{
 The Zarr RawArray class.
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

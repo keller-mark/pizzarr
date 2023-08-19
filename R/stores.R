@@ -279,7 +279,7 @@ MemoryStore <- R6::R6Class("MemoryStore",
 #' @docType class
 #' @description
 #' Store class that uses HTTP requests.
-#' Read-only.
+#' Read-only. Depends on the `crul` package.
 #'
 #' @rdname HttpStore
 #' @export

@@ -7,7 +7,7 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
     dim_sel <- selection[i]
     if(is_integer(dim_sel)) {
       if(convert_integer_selection_to_slices) {
-        selection[[i]] <- slice(dim_sel, dim_sel + 1, 1, zero_based = TRUE)
+        selection[[i]] <- zb_slice(dim_sel, dim_sel + 1, 1)
       } else {
         selection[[i]] <- normalize_integer_selection(dim_sel, shape[i])
       }

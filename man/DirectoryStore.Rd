@@ -6,7 +6,6 @@
 \title{DirectoryStore Class}
 \description{
 Store class using directories and files on a standard file system.
-Adapted from https://github.com/zarr-developers/zarr_implementations/blob/c0bd932/generate_data/js/src/fsstore.js#L7
 }
 \details{
 DirectoryStore for Zarr

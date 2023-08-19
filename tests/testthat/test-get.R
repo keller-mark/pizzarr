@@ -134,7 +134,7 @@ test_that("get_basic_selection_2d(zero-based) - can get_item for subset with one
 
     z$set_item("...", a)
 
-    sel <- z$get_item(list(zb_slice(2, 3), zb_slice(1, 5)))
+    sel <- z$get_item(list(zb_slice(1, 2), zb_slice(1, 5)))
 
     expected_out <- array(data=NA, dim=c(1, 4))
     expected_out[1,] <- c(4, 6, 8, 10)
