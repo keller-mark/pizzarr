@@ -6,7 +6,6 @@
 \title{Attributes Class}
 \description{
 Class providing access to user attributes on an array or group.
-Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/attrs.py#L7
 }
 \details{
 The Zarr Attributes class.

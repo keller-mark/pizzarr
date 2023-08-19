@@ -21,7 +21,6 @@ reference:
 - contents:
   - ZarrArray
   - NestedArray
-  - RawArray
 - title: "Groups"
   desc: >
     Create and manipulate Zarr groups.
@@ -34,6 +33,7 @@ reference:
   - Store
   - DirectoryStore
   - MemoryStore
+  - HttpStore
 - title: "Compressors and filters"
   desc: >
     Compressor and filter codec classes.
@@ -62,6 +62,7 @@ reference:
     Utility functions for working with Zarr arrays and groups.
 - contents:
   - slice
+  - zb_slice
   - is_slice
   - as_scalar
   - is_scalar

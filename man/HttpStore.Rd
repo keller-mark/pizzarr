@@ -6,7 +6,7 @@
 \title{HttpStore Class}
 \description{
 Store class that uses HTTP requests.
-Read-only.
+Read-only. Depends on the \code{crul} package.
 }
 \details{
 HttpStore for Zarr
