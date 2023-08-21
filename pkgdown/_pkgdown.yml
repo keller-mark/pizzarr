@@ -45,6 +45,7 @@ reference:
   - GzipCodec
   - Bz2Codec
   - LzmaCodec
+  - BloscCodec
   - get_codec
 - title: "Attributes"
   desc: >
