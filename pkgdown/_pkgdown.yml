@@ -39,8 +39,12 @@ reference:
     Compressor and filter codec classes.
 - contents:
   - Codec
-  - Zstd
-  - LZ4
+  - ZstdCodec
+  - Lz4Codec
+  - ZlibCodec
+  - GzipCodec
+  - Bz2Codec
+  - LzmaCodec
   - get_codec
 - title: "Attributes"
   desc: >
