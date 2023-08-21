@@ -36,6 +36,53 @@ print(selection$data)
 # [2,]    2    4    6    8   10
 ```
 
+## Current status
+
+(This section has been adapted from the [Rarr](https://github.com/grimbough/Rarr) project README).
+
+### Stores
+
+| Store             | Status<br/>(reading / writing) |
+|-------------------|:------------------------------:|
+| `MemoryStore`     |             ✔ / ✔              |
+| `DirectoryStore`  |             ✔ / ✔              |
+| `HttpStore`       |             ✔ / ❌             |
+
+### Data types
+
+| Zarr Data Type        | Status<br/>(reading / writing) | Notes                                                                                                                                                                           |
+|-----------------------|:------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `boolean`             |             ✔ / ✔             |                                                                                                                                                                                 |
+| `int8`                |             ✔ / ✔             |                                                                                                                                                                                 |
+| `uint8`               |             ✔ / ✔             |                                                                                                                                                                                 |
+| `int16`               |             ✔ / ✔             |                                                                                                                                                                                 |
+| `uint16`              |             ✔ / ✔             |                                                                                                                                                                                 |
+| `int32`               |             ✔ / ✔             |                                                                                                                                                                                 |
+| `uint32`              |             ✔ / ✔             |  |
+| `int64`               |             ✔ / ✔             |  |
+| `uint64`              |             ✔ / ✔             | |
+| `half` / `float16`    |             ✔ / ✔             | Converted to `double` in R. No effort is made to assess loss of precision due to conversion.                                                                                    |
+| `single` / `float32`  |             ✔ / ✔             | Converted to `double` in R. No effort is made to assess loss of precision due to conversion.                                                                                    |
+| `double` / `float64`  |             ✔ / ✔             |                                                                                                                                                                                 |
+| `complex`             |            ❌ / ❌             |                                                                                                                                                                                 |
+| `timedelta`           |            ❌ / ❌             |                                                                                                                                                                                 |
+| `datetime`            |            ❌ / ❌             |                                                                                                                                                                                 |
+| `string`              |            ❌ / ❌             | [On roadmap](https://github.com/keller-mark/pizzarr/issues/22)                |
+| `Unicode`             |            ❌ / ❌             | [On roadmap](https://github.com/keller-mark/pizzarr/issues/22)                |
+| `void *`              |            ❌ / ❌             |                                                                                                                                                                                 |
+| Structured data types |            ❌ / ❌             |                                                                                                                                                                                 |
+
+### Compression tools
+
+| Data Type     | Status<br/>(reading / writing) | Notes                                                                                               |
+|---------------|:------------------------------:|-----------------------------------------------------------------------------------------------------|
+| `zlib / gzip` |             ✔ / ✔              | Only system default compression level 6 is enabled for writing.                                     |
+| `bzip2`       |             ✔ / ✔              | Only system default compression level 6 is enabled for writing.                                     |
+| `blosc`       |             ✔ / ✔              | Only system default compression level 5 is enabled for writing.                                     |
+| `LZMA`        |             ✔ / ✔              | Only system default compression level 9 is enabled for writing.                                     |
+| `LZ4`         |             ✔ / ✔              |   |
+| `Zstd`        |             ✔ / ✔              |   |
+
 
 ## Development
 
