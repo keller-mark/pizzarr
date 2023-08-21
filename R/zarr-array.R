@@ -224,13 +224,15 @@ ZarrArray <- R6::R6Class("ZarrArray",
       chunk_nested_array <- tryCatch({
         c_data <- self$get_chunk_store()$get_item(c_key)
         chunk_inner <- private$decode_chunk(c_data)
-        NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype)
+        # From raw.
+        NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype, order = private$order)
       }, error = function(cond) {
         if(is_key_error(cond)) {
           # chunk not initialized
           as_dtype_func <- get_dtype_asrtype(private$dtype)
           chunk_inner <- as_dtype_func(private$fill_value)
-          return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype))
+          # From array().
+          return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype, order = private$order))
         } else {
           print(cond$message)
           stop("rethrow")
@@ -268,7 +270,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       if(!is.na(out)) {
         # TODO: handle out provided as parameter
       } else {
-        out <- NestedArray$new(NULL, shape = out_shape, dtype = out_dtype)
+        out <- NestedArray$new(NULL, shape = out_shape, dtype = out_dtype, order = private$order)
       }
 
       if(out_size == 0) {
@@ -342,8 +344,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
       # encode and store
 
-      chunk_nested_array <- NestedArray$new(as_scalar(value), shape = NULL, dtype = private$dtype)
-      chunk_raw <- chunk_nested_array$flatten_to_raw()
+      chunk_nested_array <- NestedArray$new(as_scalar(value), shape = NULL, dtype = private$dtype, order = private$order)
+      chunk_raw <- chunk_nested_array$flatten_to_raw(order = private$order)
 
       c_data <- private$encode_chunk(chunk_raw)
       self$get_chunk_store()$set_item(c_key, c_data)
@@ -375,7 +377,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         if (!all(ensure_vec(dim(value)) == selection_shape_vec)) {
           stop("Shape mismatch in source array and set selection: ${dim(value)} and ${selectionShape}")
         }
-        value <- NestedArray$new(value, shape = selection_shape_vec, dtype=private$dtype)
+        value <- NestedArray$new(value, shape = selection_shape_vec, dtype=private$dtype, order = private$order)
       } else if ("NestedArray" %in% class(value)) {
         if (!all(ensure_vec(value$shape) == selection_shape_vec)) {
           stop("Shape mismatch in source NestedArray and set selection: ${value.shape} and ${selectionShape}")
@@ -431,12 +433,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
         if("NestedArray" %in% class(out)) {
           if(is_contiguous_selection(out_selection) && is_total_slice(chunk_selection, private$chunks) && is.null(private$filters)) {
-            out$set(out_selection, NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype))
+            out$set(out_selection, NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype, order = private$order))
             return(TRUE)
           }
 
           # Decode chunk
-          chunk <- NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype)
+          chunk <- NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype, order = private$order)
           tmp <- chunk$get(chunk_selection)
 
           if(!is_na(drop_axes)) {
@@ -447,7 +449,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
           # RawArray
           # Copies chunk by index directly into output. Doesn't matter if selection is contiguous
           # since store/output are different shapes/strides.
-          out$set(out_selection, private$chunk_buffer_to_raw_array(decoded_chunk), chunk_selection)
+          #out$set(out_selection, private$chunk_buffer_to_raw_array(decoded_chunk), chunk_selection)
+          stop("TODO: support out for chunk_getitem")
         }
       }, error = function(cond) {
         if(is_key_error(cond)) {
@@ -467,8 +470,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
     chunk_setitem = function(chunk_coords, chunk_selection, value, fields = NA) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L625
       
-      if (private$order == "F" && self$get_ndim() > 1) {
-        stop("Setting content for arrays in F-order is not supported.")
+      if (private$order == "C" && self$get_ndim() > 1) {
+        stop("Setting content for arrays in C-order is not yet supported.")
       }
 
       # Obtain key for chunk storage
@@ -487,11 +490,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
           chunk <- NestedArray$new(
             value,
             shape = private$chunks,
-            dtype = private$dtype
+            dtype = private$dtype,
+            order = private$order
           )
         }
         # value was already a NestedArray
-        chunk_raw <- value$flatten_to_raw()
+        chunk_raw <- value$flatten_to_raw(order = private$order)
       } else {
         # partially replace the contents of this chunk
 
@@ -501,10 +505,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
           # Chunk is initialized if this does not error
           chunk_store_data <- self$get_chunk_store()$get_item(chunk_key)
           dbytes <- private$decode_chunk(chunk_store_data)
+          # From raw.
           NestedArray$new(
             dbytes,
             shape = private$chunks,
-            dtype = private$dtype
+            dtype = private$dtype,
+            order = private$order
           )
         }, error = function(cond) {
           if (is_key_error(cond)) {
@@ -513,10 +519,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
             if (!is.null(private$fill_value)) { # TODO: should this be is.na
               chunk_fill(chunk_data, private$fill_value)
             }
+            # From base R array.
             return(NestedArray$new(
               chunk_data,
               shape = private$chunks,
-              dtype = private$dtype
+              dtype = private$dtype,
+              order = private$order
             ))
           } else {
             print(cond$message)
@@ -529,7 +537,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         # we set the new value by using the chunk_selection
         # to specify which subset to replace.
         chunk_nested_array$set(chunk_selection, value)
-        chunk_raw <- chunk_nested_array$flatten_to_raw()
+        chunk_raw <- chunk_nested_array$flatten_to_raw(order = private$order)
       }
       # We encode the new chunk and set it in the chunk store.
       chunk_data <- private$encode_chunk(chunk_raw)
@@ -862,6 +870,9 @@ ZarrArray <- R6::R6Class("ZarrArray",
     astype = function(dtype) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2586
       # TODO
+    },
+    get_dimension_separator = function() {
+      return(private$dimension_separator)
     }
   )
 )
