@@ -44,6 +44,7 @@ jobs:
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: |
           install.packages(c("devtools", "remotes", "rcmdcheck", "BiocManager", "covr"))
+          BiocManager::install("Rarr")
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
         env:

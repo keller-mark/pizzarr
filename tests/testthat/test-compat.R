@@ -113,3 +113,177 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with no compre
     expect_equal(dim(selection$data), c(4))
     expect_equal(selection$data, array(data=c(1, 2, 3, 4), dim=c(4)))
 })
+
+test_that("Can open Zarr group and read a 1D 4-byte integer array", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.contiguous.i4")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(4))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c(1, 2, 3, 4), dim=c(4)))
+})
+
+test_that("Can open Zarr group and read a 1D 1-byte unsigned integer array", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.contiguous.u1")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(4))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c(255, 0, 255, 0), dim=c(4)))
+})
+
+test_that("Can open Zarr group and read a 1D 4-byte float array, little endian", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.contiguous.f4.le")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(4))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c(-1000.5, 0, 1000.5, 0), dim=c(4)))
+})
+
+test_that("Can open Zarr group and read a 1D 4-byte float array, big endian", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.contiguous.f4.be")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(4))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c(-1000.5, 0, 1000.5, 0), dim=c(4)))
+})
+
+test_that("Can open Zarr group and read a 1D 8-byte float array", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.contiguous.f8")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(4))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c(1.5, 2.5, 3.5, 4.5), dim=c(4)))
+})
+
+test_that("Can open Zarr group and read a 1D 2-byte float array, 2 chunks", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.chunked.i2")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(2))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c(1, 2, 3, 4), dim=c(4)))
+})
+
+test_that("Can open Zarr group and read a 1D 2-byte float array, 2 chunks, ragged", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.chunked.ragged.i2")
+
+    expect_equal(a$get_shape(), c(5))
+    expect_equal(a$get_chunks(), c(2))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(5))
+    expect_equal(selection$data, array(data=c(1, 2, 3, 4, 5), dim=c(5)))
+})
+
+test_that("Can open Zarr group and read a 2D 2-byte integer array", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("2d.contiguous.i2")
+
+    expect_equal(a$get_shape(), c(2, 2))
+    expect_equal(a$get_chunks(), c(2, 2))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(2, 2))
+    expect_equal(selection$data[1,], c(1, 2))
+    expect_equal(selection$data[2,], c(3, 4))
+})
+
+test_that("Can open Zarr group and read a 2D 2-byte integer array, 2 chunks", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("2d.chunked.i2")
+
+    expect_equal(a$get_shape(), c(2, 2))
+    expect_equal(a$get_chunks(), c(1, 1))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(2, 2))
+    expect_equal(selection$data[1,], c(1, 2))
+    expect_equal(selection$data[2,], c(3, 4))
+})
+
+test_that("Can open Zarr group and read a 2D 2-byte integer array, 2 chunks, ragged", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("2d.chunked.ragged.i2")
+
+    expect_equal(a$get_shape(), c(3, 3))
+    expect_equal(a$get_chunks(), c(2, 2))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(3, 3))
+    expect_equal(selection$data[1,], c(1, 2, 3))
+    expect_equal(selection$data[2,], c(4, 5, 6))
+    expect_equal(selection$data[3,], c(7, 8, 9))
+})
