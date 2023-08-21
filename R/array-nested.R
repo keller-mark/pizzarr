@@ -58,8 +58,10 @@ NestedArray <- R6::R6Class("NestedArray",
     #' scalar, or raw vector.
     #' @param shape The shape of the array.
     #' @param dtype The Zarr dtype of the array, as a string like ">f8".
+    #' @param order The order of the array, either "C" or "F". Only used
+    #' when `data` is a raw vector. Optional.
     #' @return A `NestedArray` instance.
-    initialize = function(data, shape = NA, dtype = NA) {
+    initialize = function(data, shape = NA, dtype = NA, order = NA) {
       if(is.null(shape) || (!is.list(shape) && is_na(shape))) {
         if(is.raw(data)) {
           stop("Cannot infer shape from raw data, please provide shape explicitly")
@@ -136,10 +138,19 @@ NestedArray <- R6::R6Class("NestedArray",
         if(private$is_zero_dim) {
           array_from_vec <- array(data = vec_from_raw, dim = c(1))
         } else {
-          array_from_vec <- array(data = vec_from_raw, dim = shape)
+          if(!is_na(order) && order == "C") {
+            # Either “C” or “F”, defining the layout of bytes within each chunk of the array.
+            # “C” means row-major order, i.e., the last dimension varies fastest;
+            # “F” means column-major order, i.e., the first dimension varies fastest.
+            # Reference: https://zarr.readthedocs.io/en/stable/spec/v2.html#metadata
+            ordered_shape <- shape[rev(seq_len(length(shape)))]
+            array_from_vec <- array(data = vec_from_raw, dim = ordered_shape)
+            array_from_vec <- aperm(array_from_vec, rev(seq_len(length(shape))))
+          } else {
+            array_from_vec <- array(data = vec_from_raw, dim = shape)
+          }
         }
         
-
         self$data <- array_from_vec
       } else if(is_scalar(data)) {
         # Create array from a scalar value.
@@ -210,17 +221,28 @@ NestedArray <- R6::R6Class("NestedArray",
     },
     #' @description
     #' Flatten the array contents.
+    #' @param order Either "C", "F", or NA.
     #' @returns The data as a flat vector.
-    flatten = function() {
-      # TODO: pass ordering C/F as argument.
-      # TODO: transpose first (if needed, based on the ordering).
-      return(as.vector(self$data))
+    flatten = function(order = NA) {
+      # Transpose first (if needed, based on the ordering).
+
+      # “C” means row-major order, i.e., the last dimension varies fastest;
+      # “F” means column-major order, i.e., the first dimension varies fastest.
+      # Reference: https://zarr.readthedocs.io/en/stable/spec/v2.html#metadata
+
+      if(!is_na(order) && order == "C" && !private$is_zero_dim) {
+        ordered_data <- aperm(self$data, rev(seq_len(length(self$shape))))
+      } else {
+        ordered_data <- self$data
+      }
+      return(as.vector(ordered_data))
     },
     #' @description
     #' Flatten the array contents and convert to a raw vector.
+    #' @param order Either "C", "F", or NA.
     #' @returns The data as a flat raw vector.
-    flatten_to_raw = function() {
-      data_as_vec <- self$flatten()
+    flatten_to_raw = function(order = NA) {
+      data_as_vec <- self$flatten(order = order)
 
       bytes_per_val <- get_dtype_numbytes(self$dtype)
       endian <- get_dtype_endianness(self$dtype)

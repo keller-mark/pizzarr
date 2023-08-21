@@ -65,7 +65,7 @@ init_array_metadata <- function(
         compressor <- "default"
     }
     if(is.na(order)) {
-        order <- "C"
+        order <- "F"
     }
 
     # guard conditions
@@ -276,7 +276,7 @@ init_array <- function(
         compressor <- "default"
     }
     if(is.na(order)) {
-        order <- "C"
+        order <- "F"
     }
 
     # normalize path
@@ -418,7 +418,7 @@ zarr_create <- function(
         fill_value <- 0
     }
     if(is.na(order)) {
-        order <- "C"
+        order <- "F"
     }
 
     # handle polymorphic store arg

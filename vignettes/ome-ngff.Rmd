@@ -1,8 +1,8 @@
 ---
-title: "OME-NGFF Demo"
+title: "Local OME-NGFF Demo"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{OME-NGFF Demo}
+  %\VignetteIndexEntry{Local OME-NGFF Demo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,6 +18,8 @@ install.packages("raster")
 ### Demo
 
 ```r
+library(pizzarr)
+
 # The path to the root of the OME-NGFF Zarr store.
 root <- system.file("extdata", "dog.ome.zarr", package="pizzarr")
 

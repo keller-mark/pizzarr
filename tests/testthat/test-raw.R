@@ -121,3 +121,62 @@ test_that("can convert a NestedArray to a raw vector, big endian 4-byte float", 
     ))
     expect_equal(na_raw, expected_out)
 })
+
+test_that("can convert a NestedArray to a raw vector, with F ordering", {
+    a <- array(data=1:10, dim=c(2, 5))
+    na <- NestedArray$new(data = a, shape = dim(a), dtype = "<u4")
+    na_raw <- na$flatten_to_raw(order = "F")
+
+    # Either “C” or “F”, defining the layout of bytes within each chunk of the array.
+    # “C” means row-major order, i.e., the last dimension varies fastest;
+    # “F” means column-major order, i.e., the first dimension varies fastest.
+    # Reference: https://zarr.readthedocs.io/en/stable/spec/v2.html#metadata
+
+    expect_equal(length(na_raw), 40)
+    expected_out <- as.raw(c(
+        # Col 1
+        0x01, 0x00, 0x00, 0x00,
+        0x02, 0x00, 0x00, 0x00,
+        # Col 2
+        0x03, 0x00, 0x00, 0x00,
+        0x04, 0x00, 0x00, 0x00,
+        # Col 3
+        0x05, 0x00, 0x00, 0x00,
+        0x06, 0x00, 0x00, 0x00,
+        # Col 4
+        0x07, 0x00, 0x00, 0x00,
+        0x08, 0x00, 0x00, 0x00,
+        # Col 5
+        0x09, 0x00, 0x00, 0x00,
+        0x0a, 0x00, 0x00, 0x00
+    ))
+    expect_equal(na_raw, expected_out)
+})
+
+test_that("can convert a NestedArray to a raw vector, with C ordering", {
+    a <- array(data=1:10, dim=c(2, 5))
+    na <- NestedArray$new(data = a, shape = dim(a), dtype = "<u4")
+    na_raw <- na$flatten_to_raw(order = "C")
+
+    # Either “C” or “F”, defining the layout of bytes within each chunk of the array.
+    # “C” means row-major order, i.e., the last dimension varies fastest;
+    # “F” means column-major order, i.e., the first dimension varies fastest.
+    # Reference: https://zarr.readthedocs.io/en/stable/spec/v2.html#metadata
+
+    expect_equal(length(na_raw), 40)
+    expected_out <- as.raw(c(
+        # Row 1
+        0x01, 0x00, 0x00, 0x00,
+        0x03, 0x00, 0x00, 0x00,
+        0x05, 0x00, 0x00, 0x00,
+        0x07, 0x00, 0x00, 0x00,
+        0x09, 0x00, 0x00, 0x00,
+        # Row 2
+        0x02, 0x00, 0x00, 0x00,
+        0x04, 0x00, 0x00, 0x00,
+        0x06, 0x00, 0x00, 0x00,
+        0x08, 0x00, 0x00, 0x00,
+        0x0a, 0x00, 0x00, 0x00
+    ))
+    expect_equal(na_raw, expected_out)
+})

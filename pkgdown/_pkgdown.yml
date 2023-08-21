@@ -80,6 +80,7 @@ articles:
     contents:
       - basics
       - ome-ngff
+      - remote-ome-ngff
   - title: Articles
     navbar: Troubleshooting
     contents:
