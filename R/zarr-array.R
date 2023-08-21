@@ -561,7 +561,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         # ) and hasattr(self._compressor, "decode_partial"):
         #     chunk = self._compressor.decode_partial(cdata, start, nitems)
         # else:
-        chunk <- private$compressor$decode(cdata)
+        chunk <- private$compressor$decode(cdata, self)
       } else {
         chunk <- cdata
       }
@@ -608,7 +608,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
       # compress
       if(!is_na(private$compressor)) {
-        cdata <- private$compressor$encode(chunk)
+        cdata <- private$compressor$encode(chunk, self)
       } else {
         cdata <- chunk
       }

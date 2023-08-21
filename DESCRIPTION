@@ -37,4 +37,5 @@ Suggests:
     bslib,
     pkgdown,
     rmarkdown,
-    crul
+    crul,
+    Rarr
