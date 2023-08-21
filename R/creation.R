@@ -576,7 +576,7 @@ zarr_open_group <- function(
         }
 
     } else if (mode == 'w') {
-        init_group(store, overwrite=True, path=path, chunk_store=chunk_store)
+        init_group(store, overwrite=TRUE, path=path, chunk_store=chunk_store)
 
     } else if(mode == "a") {
         if (!contains_group(store, path)) {

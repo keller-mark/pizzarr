@@ -54,17 +54,26 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with Blosc com
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
-    a <- g$get_item("1d.contiguous.blosc.i2")
 
-    expect_equal(a$get_shape(), c(4))
-    expect_equal(a$get_chunks(), c(4))
+    f <- function() {
+        a <- g$get_item("1d.contiguous.blosc.i2")
 
-    expect_equal(as.character(a$get_compressor()$get_config()$id), "blosc")
+        expect_equal(a$get_shape(), c(4))
+        expect_equal(a$get_chunks(), c(4))
 
-    selection <- a$get_item("...")
+        expect_equal(as.character(a$get_compressor()$get_config()$id), "blosc")
 
-    expect_equal(dim(selection$data), c(4))
-    expect_equal(selection$data, array(data=c(1, 2, 3, 4), dim=c(4)))
+        selection <- a$get_item("...")
+
+        expect_equal(dim(selection$data), c(4))
+        expect_equal(selection$data, array(data=c(1, 2, 3, 4), dim=c(4)))
+    }
+
+    if(require("Rarr", quietly=TRUE)) {
+        f()
+    } else {
+        expect_error(f())
+    }
 })
 
 test_that("Can open Zarr group and read a 1D 2-byte integer array with Zlib compression", {
