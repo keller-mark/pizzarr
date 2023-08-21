@@ -287,3 +287,21 @@ test_that("Can open Zarr group and read a 2D 2-byte integer array, 2 chunks, rag
     expect_equal(selection$data[2,], c(4, 5, 6))
     expect_equal(selection$data[3,], c(7, 8, 9))
 })
+
+
+test_that("Can open Zarr group and read a 1D 1-byte boolean array", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.contiguous.b1")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(4))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c(TRUE, FALSE, TRUE, FALSE), dim=c(4)))
+})

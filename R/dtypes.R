@@ -6,6 +6,7 @@ get_dtype_rtype <- function(dtype) {
     # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
   DTYPE_RTYPE_MAPPING <- list(
     "|b" = logical(),
+    "|b1" = logical(),
     "|u1" = integer(),
     "|i1" = integer(),
     "<b" = logical(),
@@ -37,6 +38,7 @@ get_dtype_endianness <- function(dtype) {
   # TODO: use regexes to figure this stuff out
   DTYPE_ENDIANNESS_MAPPING <- list(
     "|b" = "nr",
+    "|b1" = "nr",
     "|u1" = "nr",
     "|i1" = "nr",
     "<b" = "little",
@@ -66,6 +68,7 @@ get_dtype_numbytes <- function(dtype) {
   # TODO: use regexes to figure this stuff out
   DTYPE_NUMBYTES_MAPPING <- list(
     "|b" = 1,
+    "|b1" = 1,
     "|u1" = 1,
     "|i1" = 1,
     "<b" = 1,
@@ -95,6 +98,7 @@ get_dtype_signed <- function(dtype) {
   # TODO: use regexes to figure this stuff out
   DTYPE_SIGNED_MAPPING <- list(
     "|b" = FALSE,
+    "|b1" = FALSE,
     "|u1" = FALSE,
     "|i1" = TRUE,
     "<b" = FALSE,
@@ -140,6 +144,7 @@ get_dtype_asrtype <- function(dtype) {
     # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
   DTYPE_RTYPE_MAPPING <- list(
     "|b" = as.logical,
+    "|b1" = as.logical,
     "|u1" = as.integer,
     "|i1" = as.integer,
     "<b" = as.logical,
