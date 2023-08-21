@@ -12,7 +12,7 @@ jobs:
   pre_deploy:
     runs-on: ubuntu-latest
     env:
-      cache-version: 4
+      cache-version: 5
     steps:
       - uses: actions/checkout@v2
       - name: Set up libraries for Ubuntu
