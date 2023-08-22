@@ -1,4 +1,118 @@
 #' @keywords internal
+char_vec_to_raw <- function(char_vec, basic_type, num_bytes, byte_order) {
+  # Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/iconv.html
+  if(basic_type == "S") {
+    iconv_to <- "UTF-8"
+    max_bytes_per_char <- 1
+  } else if(basic_type == "U") {
+    if(byte_order == "little") {
+      iconv_to <- "UTF-32LE"
+    } else if(byte_order == "big") {
+      iconv_to <- "UTF-32BE"
+    } else {
+      stop("Got unexpected byte_order in char_vec_to_raw()")
+    }
+    max_bytes_per_char <- 4
+  } else {
+    stop("Unexpected basic_type in char_vec_to_raw()")
+  }
+
+  list_of_raw <- iconv(char_vec, to = iconv_to, toRaw = TRUE)
+
+  buf <- raw(length = length(list_of_raw) * num_bytes)
+
+  for(i in seq_len(length(list_of_raw))) {
+    raw_vec_i <- list_of_raw[[i]]
+
+    if(length(raw_vec_i) > num_bytes * max_bytes_per_char) {
+      stop("Unexpected length of raw_vec_i in char_vec_to_raw(): string probably too long for specified dtype")
+    }
+
+    offset_i_start <- (i-1) * num_bytes + 1
+    offset_i_stop <- offset_i_start + length(raw_vec_i) - 1
+
+    # TODO: take into account byte_order?
+    buf[offset_i_start:offset_i_stop] <- raw_vec_i
+  }
+
+  return(buf)
+}
+
+raw_to_char_vec <- function(raw_vec, basic_type, num_bytes, byte_order) {
+  # Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/iconv.html
+  if(basic_type == "S") {
+    iconv_from <- "UTF-8"
+    max_bytes_per_char <- 1
+  } else if(basic_type == "U") {
+    if(byte_order == "little") {
+      iconv_from <- "UTF-32LE"
+    } else if(byte_order == "big") {
+      iconv_from <- "UTF-32BE"
+    } else {
+      stop("Got unexpected byte_order in raw_to_char_vec()")
+    }
+    max_bytes_per_char <- 4
+  } else {
+    stop("Unexpected basic_type in raw_to_char_vec()")
+  }
+
+  null_byte <- as.raw(rep(0x00, times = max_bytes_per_char))
+
+  if(max_bytes_per_char == 1) {
+    num_chars_per_item <- num_bytes
+    remainder_null_byte <- as.raw(0x00)
+  } else {
+    num_chars_per_item <- ceiling(num_bytes / max_bytes_per_char)
+    remainder_null_byte <- as.raw(rep(0x00, times = num_bytes %% max_bytes_per_char))
+  }
+
+  list_of_raw <- list()
+  for(i in seq_len(length(raw_vec) / num_bytes)) {
+
+    offset_i_start <- (i-1) * num_bytes + 1
+    offset_i_stop <- offset_i_start + num_bytes - 1
+
+    # We get the raw vector for each string in the array.
+    raw_vec_i <- raw_vec[offset_i_start:offset_i_stop]
+
+    if(max_bytes_per_char == 1) {
+      # Since every character only uses one byte, we can simply remove all null bytes.
+      raw_vec_i <- raw_vec_i[raw_vec_i != null_byte]
+    } else {
+      # Since each character uses multiple bytes, we need to remove only those characters
+      # for which _all_ bytes are null bytes.
+
+      # TODO: would it be possible / more efficient to convert the raw vector
+      # to a uint32 vector and remove zeros, then convert back to raw?
+
+      offset_j_offset <- 0
+      for(j in seq_len(num_chars_per_item)) {
+        offset_j_start <- (j-1) * max_bytes_per_char + 1 + offset_j_offset
+        offset_j_stop <- offset_j_start + max_bytes_per_char - 1
+        offset_j_stop_remainder <- offset_j_start + num_bytes %% max_bytes_per_char
+
+
+        if(j == num_chars_per_item && all(raw_vec_i[offset_j_start:offset_j_stop_remainder] == remainder_null_byte)) {
+          raw_vec_i <- raw_vec_i[-(offset_j_start:offset_j_stop_remainder)]
+          offset_j_offset <- offset_j_offset - (offset_j_stop_remainder - offset_j_start + 1)
+        } else if(all(raw_vec_i[offset_j_start:offset_j_stop] == null_byte)) {
+          raw_vec_i <- raw_vec_i[-(offset_j_start:offset_j_stop)]
+          offset_j_offset <- offset_j_offset - (offset_j_stop - offset_j_start + 1)
+        }
+      }
+    }
+
+    # We append the raw vector for this string to the list of raw vectors.
+    # This is the input format required by `iconv`.
+    list_of_raw <- append(list_of_raw, list(raw_vec_i))
+  }
+
+  char_vec <- iconv(list_of_raw, from = iconv_from, to = "UTF-8", toRaw = FALSE)
+
+  return(char_vec)
+}
+
+#' @keywords internal
 zero_based_to_one_based <- function(selection, shape) {
   selection_list <- list()
   for(i in seq_len(length(selection))) {
@@ -42,7 +156,10 @@ zero_based_to_one_based <- function(selection, shape) {
 #' @export
 NestedArray <- R6::R6Class("NestedArray",
   private = list(
-    is_zero_dim = NULL
+    is_zero_dim = NULL,
+    basic_type = NULL,
+    byte_order = NULL,
+    num_bytes = NULL
   ),
   public = list(
     #' @field shape The shape of the array.
@@ -78,6 +195,11 @@ NestedArray <- R6::R6Class("NestedArray",
       self$shape <- shape
       self$dtype <- dtype
 
+      dtype_parts <- get_dtype_parts(dtype)
+      private$basic_type <- dtype_parts$basic_type
+      private$byte_order <- dtype_parts$byte_order
+      private$num_bytes <- dtype_parts$num_bytes
+
       private$is_zero_dim <- (is.null(shape) || length(shape) == 0)
 
       if(is.null(data)) {
@@ -88,18 +210,18 @@ NestedArray <- R6::R6Class("NestedArray",
         # Create zero-dimensional array.
 
         self$data <- data # TODO?
-      } else if(!is.raw(data) && (is.array(data) || is.numeric(data) || is.logical(data))) {
+      } else if(!is.raw(data) && (is.array(data) || is.vector(data)) && is.atomic(data)) {
         # Create array from R atomic vector or array().
 
         num_shape_elements <- compute_size(shape)
-        # TODO: check that data array has same shape as expected
+        # Check that data array has same shape as expected
         if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
           self$data <- data
         } else {
+          # Data array did not have the expected shape, so we need to reshape it.
           astype_func <- get_dtype_asrtype(dtype)
           self$data <- array(data=as.array(astype_func(data)), dim=shape)
         }
-        
       } else if(is.raw(data)) {
         # Create array from a raw vector.
 
@@ -109,7 +231,7 @@ NestedArray <- R6::R6Class("NestedArray",
         buf <- data
         # Create from ArrayBuffer or Buffer
         
-        dtype_size <- get_dtype_numbytes(dtype)
+        dtype_size <- private$num_bytes
         num_data_elements <- length(buf) / dtype_size
         if (num_shape_elements != num_data_elements) {
           stop('Buffer has ${numDataElements} of dtype ${dtype}, shape is too large or small')
@@ -123,6 +245,7 @@ NestedArray <- R6::R6Class("NestedArray",
         }
 
         endian <- get_dtype_endianness(self$dtype)
+        # Normalize to only "little" or "big" since this is what writeBin accepts.
         if(endian == "nr") {
           endian <- "little"
         }
@@ -244,21 +367,31 @@ NestedArray <- R6::R6Class("NestedArray",
     flatten_to_raw = function(order = NA) {
       data_as_vec <- self$flatten(order = order)
 
-      bytes_per_val <- get_dtype_numbytes(self$dtype)
       endian <- get_dtype_endianness(self$dtype)
+      # Normalize to only "little" or "big" since this is what writeBin accepts.
       if(endian == "nr") {
         endian <- "little"
       }
 
       # "If writeBin is called with con a raw vector, it is just an indication that a raw vector should be returned."
       # Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/readBin.html
-      buf <- writeBin(
-        data_as_vec,
-        con = raw(),
-        size = bytes_per_val,
-        endian = endian
-      )
+      if(private$basic_type %in% c("S", "U")) {
+        buf <- char_vec_to_raw(
+          data_as_vec,
+          private$basic_type,
+          private$num_bytes,
+          endian
+        )
+      } else {
+        buf <- writeBin(
+          data_as_vec,
+          con = raw(),
+          size = private$num_bytes,
+          endian = endian
+        )
+      }
       return(buf)
+      
     }
   )
 )

@@ -1,0 +1,115 @@
+library(pizzarr)
+
+test_that("NestedArray can be created from character array", {
+    a <- array(data=c("a", "b", "c", "d"), dim=c(2, 2))
+    na <- NestedArray$new(data = a, shape = dim(a), dtype = "|S1")
+
+    selection <- na$get(list(slice(1, 2), slice(1, 2)))
+
+    expect_equal(selection$data, a)
+})
+
+test_that("char_vec_to_raw works for S dtype, length 1", {
+    a <- c("a", "b", "c", "d")
+    raw_a <- char_vec_to_raw(a, "S", 1, "little")
+
+    expect_equal(raw_a, as.raw(c(
+        0x61,
+        0x62,
+        0x63,
+        0x64
+    )))
+})
+
+test_that("raw_to_char_vec works for S dtype, length 1", {
+    char_vec <- raw_to_char_vec(as.raw(c(
+        0x61,
+        0x62,
+        0x63,
+        0x64
+    )), "S", 1, "little")
+
+    expect_equal(char_vec, c("a", "b", "c", "d"))
+})
+
+test_that("char_vec_to_raw works for S dtype, length 7", {
+    a <- c("a", "b", "c", "d")
+    raw_a <- char_vec_to_raw(a, "S", 7, "little")
+
+    expect_equal(raw_a, as.raw(c(
+        0x61, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x62, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    )))
+})
+
+test_that("raw_to_char_vec works for S dtype, length 7", {
+    char_vec <- raw_to_char_vec(as.raw(c(
+        0x61, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x62, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    )), "S", 7, "little")
+
+    expect_equal(char_vec, c("a", "b", "c", "d"))
+})
+
+test_that("char_vec_to_raw works for U dtype, little endian", {
+    a <- c("a", "b", "c", "d")
+    raw_a <- char_vec_to_raw(a, "U", 9, "little")
+
+    expect_equal(raw_a, as.raw(c(
+        0x61, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x62, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    )))
+})
+
+test_that("raw_to_char_vec works for U dtype, little endian", {
+    char_vec <- raw_to_char_vec(as.raw(c(
+        0x61, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x62, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    )), "U", 9, "little")
+
+    expect_equal(char_vec, c("a", "b", "c", "d"))
+})
+
+test_that("char_vec_to_raw works for U dtype, big endian", {
+    a <- c("a", "b", "c", "d")
+    raw_a <- char_vec_to_raw(a, "U", 9, "big")
+
+    expect_equal(raw_a, as.raw(c(
+        0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00
+    )))
+})
+
+# test_that("NestedArray of characters can be created from raw array, S dtype", {
+#     a <- array(data=c("a", "b", "c", "d"), dim=c(2, 2))
+#     na <- NestedArray$new(data = a, shape = dim(a), dtype = "|S1")
+
+#     selection <- na$get(list(slice(1, 2), slice(1, 2)))
+
+#     expect_equal(selection$data, a)
+# })
+
+
+test_that("NestedArray of strings can be converted to a raw array, S dtype", {
+    a <- array(data=c("a", "b", "c", "d"), dim=c(4))
+    na <- NestedArray$new(data = a, shape = dim(a), dtype = "|S1")
+
+    na_as_raw <- na$flatten_to_raw()
+
+    expect_equal(na_as_raw, as.raw(c(
+        0x61,
+        0x62,
+        0x63,
+        0x64
+    )))
+})
