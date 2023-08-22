@@ -90,15 +90,47 @@ test_that("char_vec_to_raw works for U dtype, big endian", {
     )))
 })
 
-# test_that("NestedArray of characters can be created from raw array, S dtype", {
-#     a <- array(data=c("a", "b", "c", "d"), dim=c(2, 2))
-#     na <- NestedArray$new(data = a, shape = dim(a), dtype = "|S1")
+test_that("NestedArray of characters can be created from raw array, S dtype", {
+    a <- array(data=c("a", "b", "c", "d"), dim=c(4))
+    na <- NestedArray$new(data = as.raw(c(
+        0x61,
+        0x62,
+        0x63,
+        0x64
+    )), shape = dim(a), dtype = "|S1")
 
-#     selection <- na$get(list(slice(1, 2), slice(1, 2)))
+    selection <- na$get(list(slice(1, 4)))
 
-#     expect_equal(selection$data, a)
-# })
+    expect_equal(selection$data, a)
+})
 
+test_that("NestedArray of characters can be created from raw array, U dtype, little endian", {
+    a <- array(data=c("a", "b", "c", "d"), dim=c(4))
+    na <- NestedArray$new(data = as.raw(c(
+        0x61, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x62, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    )), shape = dim(a), dtype = "<U9")
+
+    selection <- na$get(list(slice(1, 4)))
+
+    expect_equal(selection$data, a)
+})
+
+test_that("NestedArray of characters can be created from raw array, U dtype, big endian", {
+    a <- array(data=c("a", "b", "c", "d"), dim=c(4))
+    na <- NestedArray$new(data = as.raw(c(
+        0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00
+    )), shape = dim(a), dtype = ">U9")
+
+    selection <- na$get(list(slice(1, 4)))
+
+    expect_equal(selection$data, a)
+})
 
 test_that("NestedArray of strings can be converted to a raw array, S dtype", {
     a <- array(data=c("a", "b", "c", "d"), dim=c(4))

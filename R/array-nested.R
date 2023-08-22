@@ -82,33 +82,30 @@ raw_to_char_vec <- function(raw_vec, basic_type, num_bytes, byte_order) {
       # Since each character uses multiple bytes, we need to remove only those characters
       # for which _all_ bytes are null bytes.
 
-      # TODO: would it be possible / more efficient to convert the raw vector
-      # to a uint32 vector and remove zeros, then convert back to raw?
-
-      offset_j_offset <- 0
-      for(j in seq_len(num_chars_per_item)) {
-        offset_j_start <- (j-1) * max_bytes_per_char + 1 + offset_j_offset
-        offset_j_stop <- offset_j_start + max_bytes_per_char - 1
-        offset_j_stop_remainder <- offset_j_start + num_bytes %% max_bytes_per_char
-
-
-        if(j == num_chars_per_item && all(raw_vec_i[offset_j_start:offset_j_stop_remainder] == remainder_null_byte)) {
-          raw_vec_i <- raw_vec_i[-(offset_j_start:offset_j_stop_remainder)]
-          offset_j_offset <- offset_j_offset - (offset_j_stop_remainder - offset_j_start + 1)
-        } else if(all(raw_vec_i[offset_j_start:offset_j_stop] == null_byte)) {
-          raw_vec_i <- raw_vec_i[-(offset_j_start:offset_j_stop)]
-          offset_j_offset <- offset_j_offset - (offset_j_stop - offset_j_start + 1)
-        }
-      }
+      # Convert the raw vector to an int32 vector and remove zeros, then convert back to raw,
+      # so that we only remove characters that contain all null bytes.
+      int_vec_i <- readBin(
+        con = raw_vec_i,
+        what = "integer",
+        size = max_bytes_per_char,
+        n = num_chars_per_item,
+        signed = TRUE,
+        endian = byte_order
+      )
+      int_vec_i <- int_vec_i[int_vec_i != 0]
+      raw_vec_i <- writeBin(
+        object = int_vec_i,
+        con = raw(),
+        size = max_bytes_per_char,
+        endian = byte_order
+      )
     }
 
     # We append the raw vector for this string to the list of raw vectors.
     # This is the input format required by `iconv`.
     list_of_raw <- append(list_of_raw, list(raw_vec_i))
   }
-
   char_vec <- iconv(list_of_raw, from = iconv_from, to = "UTF-8", toRaw = FALSE)
-
   return(char_vec)
 }
 
@@ -250,14 +247,24 @@ NestedArray <- R6::R6Class("NestedArray",
           endian <- "little"
         }
 
-        vec_from_raw <- readBin(
-          con = buf,
-          what = dtype_rtype,
-          size = dtype_size,
-          n = num_shape_elements,
-          signed = dtype_signed,
-          endian = endian
-        )
+        if(private$basic_type %in% c("S", "U")) {
+          vec_from_raw <- raw_to_char_vec(
+            buf,
+            private$basic_type,
+            dtype_size,
+            endian
+          )
+        } else {
+          vec_from_raw <- readBin(
+            con = buf,
+            what = dtype_rtype,
+            size = dtype_size,
+            n = num_shape_elements,
+            signed = dtype_signed,
+            endian = endian
+          )
+        }
+        
         if(private$is_zero_dim) {
           array_from_vec <- array(data = vec_from_raw, dim = c(1))
         } else {
