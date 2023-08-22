@@ -4,8 +4,6 @@
 
 A Zarr implementation for R.
 
-🚧 [work in progress](https://github.com/keller-mark/pizzarr/search?q=TODO) 🚧
-
 ## Installation
 
 Installation requires R 4.0.0 or greater.
