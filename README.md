@@ -70,7 +70,8 @@ print(selection$data)
 | `string`              |            ✔ / ✔             |  Converted to `character` in R. |
 | `Unicode`             |            ✔ / ✔             |  Converted to `character` in R.               |
 | `void *`              |            ❌ / ❌             |                                                                                                                                                                                 |
-| Structured data types |            ❌ / ❌             |                                                                                                                                                                                 |
+| Structured data types |            ❌ / ❌             |   |
+| Object data types |            ❌ / ❌             |  [On roadmap](https://github.com/keller-mark/pizzarr/issues/22) |
 
 
 Note: no effort is made to assess loss of precision due to conversion.
