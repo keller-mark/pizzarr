@@ -1,139 +1,101 @@
 # Internal utility functions for converting between Zarr and R data types.
 
+is_structured_dtype <- function(dtype) {
+  if(is.character(dtype) && length(dtype) == 1) {
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+get_dtype_parts <- function(dtype) {
+  # Check for string dtype
+  # "S": string (fixed-length sequence of char)
+  dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V)(\\d+)"
+  if(stringr::str_detect(dtype, dtype_regex)) {
+    dtype_matches <- stringr::str_match(dtype, dtype_regex)
+    result <- list(
+      dtype_str = dtype,
+      byte_order = dtype_matches[1,2],
+      basic_type = dtype_matches[1,3],
+      num_bytes = as.integer(dtype_matches[1,4])
+    )
+    return(result)
+  } else {
+    return(NA)
+  }
+}
+
+check_dtype_support <- function(dtype_parts) {
+  if(!is_na(dtype_parts) && dtype_parts$basic_type %in% c("b", "i", "u", "f", "S", "U")) {
+    return(TRUE)
+  }
+  stop(paste("Unsupported dtype:", dtype_parts))
+  return(FALSE)
+}
+
+
 
 #' @keywords internal
 get_dtype_rtype <- function(dtype) {
-    # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
-  DTYPE_RTYPE_MAPPING <- list(
-    "|b" = logical(),
-    "|b1" = logical(),
-    "|u1" = integer(),
-    "|i1" = integer(),
-    "<b" = logical(),
-    "<u1" = integer(),
-    "<i1" = integer(),
-    "<u2" = integer(),
-    "<i2" = integer(),
-    "<u4" = integer(),
-    "<i4" = integer(),
-    "<f4" = double(),
-    "<f8" = double(),
-    ">b" = logical(),
-    ">u1" = integer(),
-    ">i1" = integer(),
-    ">u2" = integer(),
-    ">i2" = integer(),
-    ">u4" = integer(),
-    ">i4" = integer(),
-    ">f4" = double(),
-    ">f8" = double()
+  dtype_parts <- get_dtype_parts(dtype)
+  check_dtype_support(dtype_parts)
+
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
+  BASICTYPE_RTYPE_MAPPING <- list(
+    "b" = logical(),
+    "u" = integer(),
+    "i" = integer(),
+    "f" = double(),
+    "S" = character(),
+    "U" = character()
   )
-  return(DTYPE_RTYPE_MAPPING[[dtype]])
-  # TODO: handle errors
-  #stop('Dtype not recognized or not supported in pizzarr')
+
+  return(BASICTYPE_RTYPE_MAPPING[[dtype_parts$basic_type]])
 }
 
 #' @keywords internal
 get_dtype_endianness <- function(dtype) {
-  # TODO: use regexes to figure this stuff out
+  dtype_parts <- get_dtype_parts(dtype)
+  check_dtype_support(dtype_parts)
+
   DTYPE_ENDIANNESS_MAPPING <- list(
-    "|b" = "nr",
-    "|b1" = "nr",
-    "|u1" = "nr",
-    "|i1" = "nr",
-    "<b" = "little",
-    "<u1" = "little",
-    "<i1" = "little",
-    "<u2" = "little",
-    "<i2" = "little",
-    "<u4" = "little",
-    "<i4" = "little",
-    "<f4" = "little",
-    "<f8" = "little",
-    ">b" = "big",
-    ">u1" = "big",
-    ">i1" = "big",
-    ">u2" = "big",
-    ">i2" = "big",
-    ">u4" = "big",
-    ">i4" = "big",
-    ">f4" = "big",
-    ">f8" = "big"
+    "|" = "nr",
+    "<" = "little",
+    ">" = "big"
   )
-  return(DTYPE_ENDIANNESS_MAPPING[[dtype]])
+  return(DTYPE_ENDIANNESS_MAPPING[[dtype_parts$byte_order]])
 }
 
 #' @keywords internal
 get_dtype_numbytes <- function(dtype) {
-  # TODO: use regexes to figure this stuff out
-  DTYPE_NUMBYTES_MAPPING <- list(
-    "|b" = 1,
-    "|b1" = 1,
-    "|u1" = 1,
-    "|i1" = 1,
-    "<b" = 1,
-    "<u1" = 1,
-    "<i1" = 1,
-    "<u2" = 2,
-    "<i2" = 2,
-    "<u4" = 4,
-    "<i4" = 4,
-    "<f4" = 4,
-    "<f8" = 8,
-    ">b" = 1,
-    ">u1" = 1,
-    ">i1" = 1,
-    ">u2" = 2,
-    ">i2" = 2,
-    ">u4" = 4,
-    ">i4" = 4,
-    ">f4" = 4,
-    ">f8" = 8
-  )
-  return(DTYPE_NUMBYTES_MAPPING[[dtype]])
+  dtype_parts <- get_dtype_parts(dtype)
+  check_dtype_support(dtype_parts)
+  return(dtype_parts$num_bytes)
 }
 
 #' @keywords internal
 get_dtype_signed <- function(dtype) {
-  # TODO: use regexes to figure this stuff out
+  dtype_parts <- get_dtype_parts(dtype)
+  check_dtype_support(dtype_parts)
+
   DTYPE_SIGNED_MAPPING <- list(
-    "|b" = FALSE,
-    "|b1" = FALSE,
-    "|u1" = FALSE,
-    "|i1" = TRUE,
-    "<b" = FALSE,
-    "<u1" = FALSE,
-    "<i1" = TRUE,
-    "<u2" = FALSE,
-    "<i2" = TRUE,
-    "<u4" = FALSE,
-    "<i4" = TRUE,
-    "<f4" = TRUE,
-    "<f8" = TRUE,
-    ">b" = FALSE,
-    ">u1" = FALSE,
-    ">i1" = TRUE,
-    ">u2" = FALSE,
-    ">i2" = TRUE,
-    ">u4" = FALSE,
-    ">i4" = TRUE,
-    ">f4" = TRUE,
-    ">f8" = TRUE
+    "b" = FALSE,
+    "u" = FALSE,
+    "i" = TRUE,
+    "f" = TRUE,
+    "S" = FALSE, # TODO: is this correct?
+    "U" = FALSE  # TODO: is this correct?
   )
-  return(DTYPE_SIGNED_MAPPING[[dtype]])
+  return(DTYPE_SIGNED_MAPPING[[dtype_parts$basic_type]])
 }
 
 #' @keywords internal
 get_dtype_from_array <- function(a) {
-  TYPEOF_RTYPE_MAPPING <- list(
-    "logical" = logical(),
-    "integer" = integer(),
-    "double" = double()
-  )
   RTYPE_DTYPE_MAPPING <- list(
-    "logical" = "|b",
+    "logical" = "|b1",
     "integer" = "<i4",
-    "double" = "<f8"
+    "double" = "<f8",
+    "character" = "|S8" # TODO: how many bytes to use here?
   )
   rtype_str <- typeof(a)
   return(RTYPE_DTYPE_MAPPING[[rtype_str]])
@@ -141,34 +103,19 @@ get_dtype_from_array <- function(a) {
 
 #' @keywords internal
 get_dtype_asrtype <- function(dtype) {
-    # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
+  dtype_parts <- get_dtype_parts(dtype)
+  check_dtype_support(dtype_parts)
+
+  # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
   DTYPE_RTYPE_MAPPING <- list(
-    "|b" = as.logical,
-    "|b1" = as.logical,
-    "|u1" = as.integer,
-    "|i1" = as.integer,
-    "<b" = as.logical,
-    "<u1" = as.integer,
-    "<i1" = as.integer,
-    "<u2" = as.integer,
-    "<i2" = as.integer,
-    "<u4" = as.integer,
-    "<i4" = as.integer,
-    "<f4" = as.double,
-    "<f8" = as.double,
-    ">b" = as.logical,
-    ">u1" = as.integer,
-    ">i1" = as.integer,
-    ">u2" = as.integer,
-    ">i2" = as.integer,
-    ">u4" = as.integer,
-    ">i4" = as.integer,
-    ">f4" = as.double,
-    ">f8" = as.double
+    "b" = as.logical,
+    "u" = as.integer,
+    "i" = as.integer,
+    "f" = as.double,
+    "S" = as.character,
+    "U" = as.character
   )
-  return(DTYPE_RTYPE_MAPPING[[dtype]])
-  # TODO: handle errors
-  #stop('Dtype not recognized or not supported in pizzarr')
+  return(DTYPE_RTYPE_MAPPING[[dtype_parts$basic_type]])
 }
 
 #' @keywords internal
