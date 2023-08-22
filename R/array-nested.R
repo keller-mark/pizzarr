@@ -42,7 +42,11 @@ zero_based_to_one_based <- function(selection, shape) {
 #' @export
 NestedArray <- R6::R6Class("NestedArray",
   private = list(
-    is_zero_dim = NULL
+    is_zero_dim = NULL,
+    dtype_basic_type = NULL,
+    dtype_byte_order = NULL,
+    dtype_num_bytes = NULL,
+    dtype_num_items = NULL
   ),
   public = list(
     #' @field shape The shape of the array.
@@ -78,6 +82,12 @@ NestedArray <- R6::R6Class("NestedArray",
       self$shape <- shape
       self$dtype <- dtype
 
+      dtype_parts <- get_dtype_parts(dtype)
+      private$dtype_basic_type <- dtype_parts$basic_type
+      private$dtype_byte_order <- dtype_parts$byte_order
+      private$dtype_num_bytes <- dtype_parts$num_bytes
+      private$dtype_num_items <- dtype_parts$num_items
+
       private$is_zero_dim <- (is.null(shape) || length(shape) == 0)
 
       if(is.null(data)) {
@@ -88,18 +98,18 @@ NestedArray <- R6::R6Class("NestedArray",
         # Create zero-dimensional array.
 
         self$data <- data # TODO?
-      } else if(!is.raw(data) && (is.array(data) || is.numeric(data) || is.logical(data))) {
+      } else if(!is.raw(data) && (is.array(data) || is.vector(data)) && is.atomic(data)) {
         # Create array from R atomic vector or array().
 
         num_shape_elements <- compute_size(shape)
-        # TODO: check that data array has same shape as expected
+        # Check that data array has same shape as expected
         if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
           self$data <- data
         } else {
+          # Data array did not have the expected shape, so we need to reshape it.
           astype_func <- get_dtype_asrtype(dtype)
           self$data <- array(data=as.array(astype_func(data)), dim=shape)
         }
-        
       } else if(is.raw(data)) {
         # Create array from a raw vector.
 
@@ -109,7 +119,7 @@ NestedArray <- R6::R6Class("NestedArray",
         buf <- data
         # Create from ArrayBuffer or Buffer
         
-        dtype_size <- get_dtype_numbytes(dtype)
+        dtype_size <- private$dtype_num_bytes
         num_data_elements <- length(buf) / dtype_size
         if (num_shape_elements != num_data_elements) {
           stop('Buffer has ${numDataElements} of dtype ${dtype}, shape is too large or small')
@@ -123,18 +133,29 @@ NestedArray <- R6::R6Class("NestedArray",
         }
 
         endian <- get_dtype_endianness(self$dtype)
+        # Normalize to only "little" or "big" since this is what writeBin accepts.
         if(endian == "nr") {
           endian <- "little"
         }
 
-        vec_from_raw <- readBin(
-          con = buf,
-          what = dtype_rtype,
-          size = dtype_size,
-          n = num_shape_elements,
-          signed = dtype_signed,
-          endian = endian
-        )
+        if(private$dtype_basic_type %in% c("S", "U")) {
+          vec_from_raw <- raw_to_char_vec(
+            buf,
+            private$dtype_basic_type,
+            private$dtype_num_items,
+            endian
+          )
+        } else {
+          vec_from_raw <- readBin(
+            con = buf,
+            what = dtype_rtype,
+            size = dtype_size,
+            n = num_shape_elements,
+            signed = dtype_signed,
+            endian = endian
+          )
+        }
+        
         if(private$is_zero_dim) {
           array_from_vec <- array(data = vec_from_raw, dim = c(1))
         } else {
@@ -244,21 +265,31 @@ NestedArray <- R6::R6Class("NestedArray",
     flatten_to_raw = function(order = NA) {
       data_as_vec <- self$flatten(order = order)
 
-      bytes_per_val <- get_dtype_numbytes(self$dtype)
       endian <- get_dtype_endianness(self$dtype)
+      # Normalize to only "little" or "big" since this is what writeBin accepts.
       if(endian == "nr") {
         endian <- "little"
       }
 
       # "If writeBin is called with con a raw vector, it is just an indication that a raw vector should be returned."
       # Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/readBin.html
-      buf <- writeBin(
-        data_as_vec,
-        con = raw(),
-        size = bytes_per_val,
-        endian = endian
-      )
+      if(private$dtype_basic_type %in% c("S", "U")) {
+        buf <- char_vec_to_raw(
+          data_as_vec,
+          private$dtype_basic_type,
+          private$dtype_num_items,
+          endian
+        )
+      } else {
+        buf <- writeBin(
+          data_as_vec,
+          con = raw(),
+          size = private$dtype_num_bytes,
+          endian = endian
+        )
+      }
       return(buf)
+      
     }
   )
 )

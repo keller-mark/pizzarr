@@ -13,11 +13,19 @@ get_dtype_parts <- function(dtype) {
   dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V)(\\d+)"
   if(stringr::str_detect(dtype, dtype_regex)) {
     dtype_matches <- stringr::str_match(dtype, dtype_regex)
+    basic_type <- dtype_matches[1,3]
+    if(basic_type == "U") {
+      byte_multiplier <- 4
+    } else {
+      byte_multiplier <- 1
+    }
+    num_items <- as.integer(dtype_matches[1,4])
     result <- list(
       dtype_str = dtype,
       byte_order = dtype_matches[1,2],
       basic_type = dtype_matches[1,3],
-      num_bytes = as.integer(dtype_matches[1,4])
+      num_bytes = num_items * byte_multiplier,
+      num_items = num_items
     )
     return(result)
   } else {

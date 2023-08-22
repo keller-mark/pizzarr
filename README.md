@@ -52,25 +52,29 @@ print(selection$data)
 
 | Zarr Data Type        | Status<br/>(reading / writing) | Notes                                                                                                                                                                           |
 |-----------------------|:------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `boolean`             |             ✔ / ✔             |                                                                                                                                                                                 |
-| `int8`                |             ✔ / ✔             |                                                                                                                                                                                 |
-| `uint8`               |             ✔ / ✔             |                                                                                                                                                                                 |
-| `int16`               |             ✔ / ✔             |                                                                                                                                                                                 |
-| `uint16`              |             ✔ / ✔             |                                                                                                                                                                                 |
-| `int32`               |             ✔ / ✔             |                                                                                                                                                                                 |
-| `uint32`              |             ✔ / ✔             |  |
-| `int64`               |             ✔ / ✔             |  |
-| `uint64`              |             ✔ / ✔             | |
-| `half` / `float16`    |             ✔ / ✔             | Converted to `double` in R. No effort is made to assess loss of precision due to conversion.                                                                                    |
-| `single` / `float32`  |             ✔ / ✔             | Converted to `double` in R. No effort is made to assess loss of precision due to conversion.                                                                                    |
-| `double` / `float64`  |             ✔ / ✔             |                                                                                                                                                                                 |
+| `b1` / `boolean`             |             ✔ / ✔             |  Converted to `logical` in R.         |
+| `i1` / `int8`                |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `u1` / `uint8`               |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `i2` / `int16`               |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `u2` / `uint16`              |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `i4` / `int32`               |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `u4` / `uint32`              |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `i8` / `int64`               |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `u8` / `uint64`              |             ✔ / ✔             |  Converted to `integer` in R.         |
+| `f2` / `float16`    |             ✔ / ✔             | Converted to `double` in R.           |
+| `f4` / `float32`  |             ✔ / ✔             | Converted to `double` in R.           |
+| `f8` / `float64`  |             ✔ / ✔             | Converted to `double` in R.           |
 | `complex`             |            ❌ / ❌             |                                                                                                                                                                                 |
 | `timedelta`           |            ❌ / ❌             |                                                                                                                                                                                 |
 | `datetime`            |            ❌ / ❌             |                                                                                                                                                                                 |
-| `string`              |            ❌ / ❌             | [On roadmap](https://github.com/keller-mark/pizzarr/issues/22)                |
-| `Unicode`             |            ❌ / ❌             | [On roadmap](https://github.com/keller-mark/pizzarr/issues/22)                |
+| `string`              |            ✔ / ✔             |  Converted to `character` in R. |
+| `Unicode`             |            ✔ / ✔             |  Converted to `character` in R.               |
 | `void *`              |            ❌ / ❌             |                                                                                                                                                                                 |
 | Structured data types |            ❌ / ❌             |                                                                                                                                                                                 |
+
+
+Note: no effort is made to assess loss of precision due to conversion.
+
 
 ### Compression tools
 
