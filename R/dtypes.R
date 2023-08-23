@@ -8,9 +8,8 @@ is_structured_dtype <- function(dtype) {
 }
 
 get_dtype_parts <- function(dtype) {
-  # Check for string dtype
-  # "S": string (fixed-length sequence of char)
-  dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V)(\\d+)"
+  # TODO: support object dtype (without digits required in regex)
+  dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V|O)(\\d+)"
   if(stringr::str_detect(dtype, dtype_regex)) {
     dtype_matches <- stringr::str_match(dtype, dtype_regex)
     basic_type <- dtype_matches[1,3]
@@ -131,3 +130,66 @@ get_typed_array_ctr <- function(dtype) {
   rtype <- get_dtype_rtype(dtype)
   return(function(dim) array(data = rtype, dim = dim))
 }
+
+#' The Zarr Dtype class.
+#' @title Dtype Class
+#' @docType class
+#' @description
+#' 
+#' @rdname Dtype
+#' @keywords internal
+Dtype <- R6::R6Class("Dtype",
+  public = list(
+    dtype = NULL,
+    byte_order = NULL,
+    basic_type = NULL,
+    num_bytes = NULL,
+    num_items = NULL,
+    #' @description
+    #' Create a new Dtype instance.
+    #' @return A `Dtype` instance.
+    initialize = function(dtype, object_codec) {
+      self$dtype <- dtype
+
+      # TODO: support dtype_str == "|O" for object dtypes
+
+      dtype_parts <- get_dtype_parts(dtype)
+      check_dtype_support(dtype_parts)
+      self$byte_order <- dtype_parts$byte_order
+      self$basic_type <- dtype_parts$basic_type
+      self$num_bytes <- dtype_parts$num_bytes
+      self$num_items <- dtype_parts$num_items
+
+      # TODO: port code from normalize_dtype in zarr-python
+      
+      self$object_codec <- object_codec
+    },
+    get_asrtype = function() {
+      return(get_dtype_asrtype(self$dtype))
+    },
+    get_rtype = function() {
+      return(get_dtype_rtype(self$dtype))
+    },
+    is_signed = function() {
+      return(get_dtype_signed(self$dtype))
+    },
+    is_structured = function() {
+      return(is_structured_dtype(self$dtype))
+    },
+    is_object = function() {
+      return(self$basic_type == "O")
+    },
+    get_byte_order = function() {
+      return(self$byte_order)
+    },
+    get_basic_type = function() {
+      return(self$basic_type)
+    },
+    get_num_bytes = function() {
+      return(self$num_bytes)
+    },
+    get_num_items = function() {
+      return(self$num_items)
+    }
+  )
+)
