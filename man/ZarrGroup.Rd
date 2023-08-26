@@ -17,6 +17,7 @@ The Zarr Group class.
 \item \href{#method-ZarrGroup-new}{\code{ZarrGroup$new()}}
 \item \href{#method-ZarrGroup-get_store}{\code{ZarrGroup$get_store()}}
 \item \href{#method-ZarrGroup-get_path}{\code{ZarrGroup$get_path()}}
+\item \href{#method-ZarrGroup-get_meta}{\code{ZarrGroup$get_meta()}}
 \item \href{#method-ZarrGroup-get_name}{\code{ZarrGroup$get_name()}}
 \item \href{#method-ZarrGroup-get_read_only}{\code{ZarrGroup$get_read_only()}}
 \item \href{#method-ZarrGroup-get_chunk_store}{\code{ZarrGroup$get_chunk_store()}}
@@ -73,6 +74,15 @@ Obtain a group member.
 \subsection{Method \code{get_path()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_path()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrGroup-get_meta"></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrGroup-get_meta}{}}}
+\subsection{Method \code{get_meta()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_meta()}\if{html}{\out{</div>}}
 }
 
 }

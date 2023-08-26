@@ -8,6 +8,7 @@
 The data as a flat vector.
 
 The data as a flat raw vector.
+Convert NestArray object to R array
 }
 \description{
 Represents a multi-dimensional array that can be
@@ -35,6 +36,7 @@ The Zarr NestedArray class.
 \item \href{#method-NestedArray-set}{\code{NestedArray$set()}}
 \item \href{#method-NestedArray-flatten}{\code{NestedArray$flatten()}}
 \item \href{#method-NestedArray-flatten_to_raw}{\code{NestedArray$flatten_to_raw()}}
+\item \href{#method-NestedArray-as.array}{\code{NestedArray$as.array()}}
 \item \href{#method-NestedArray-clone}{\code{NestedArray$clone()}}
 }
 }
@@ -122,6 +124,18 @@ Flatten the array contents and convert to a raw vector.
 \if{html}{\out{<div class="r">}}\preformatted{NestedArray$flatten_to_raw()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-NestedArray-as.array"></a>}}
+\if{latex}{\out{\hypertarget{method-NestedArray-as.array}{}}}
+\subsection{Method \code{as.array()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{NestedArray$as.array()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+array
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NestedArray-clone"></a>}}
