@@ -873,6 +873,99 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     get_dimension_separator = function() {
       return(private$dimension_separator)
+    },
+    #' Subset / slice Zarr object using bracket notation
+    #'
+    #' @param ... Contains the slicing parameters, one for each dimension.
+    #' Use empty space to get whole dimension e.g. [1:5,,]
+    #'
+    #' @return Sliced Zarr object
+    `[` = function(...) {
+      filters = substitute(...())
+      if(length(filters) != length(private$shape)){
+        stop("This Zarr object has ",length(private$shape)," dimensions, ",
+             length(filters)," were supplied")
+      }
+      filters = lapply(filters, function(x){
+        #Proceed based on type of filter
+        if(typeof(x) == "symbol"){
+          #When empty dimension, return everything
+          if(x == ""){
+            return(NULL)
+          } else {
+            stop("Unsupported filter '", as.character(x), "' supplied") 
+          }
+          
+        } else if(typeof(x) == "double"){
+          #Return single value for dimension
+          return(slice(x, x))
+        } else if(typeof(x) == "language"){
+          x = as.list(x)
+          #Return a range (supplied via : or seq())
+          if(x[[1]] == ":"){
+            return(slice(x[[2]], x[[3]]))
+          } else if(x[[1]] == "seq"){
+            argNames <- names(x)
+            from <- ifelse("from" %in% argNames, x[[which("from" == argNames)]], x[[2]])
+            to <- ifelse("to" %in% argNames, x[[which("to" == argNames)]], x[[3]])
+            if(length(x) > 3){
+              stop("Slicing with step size is not supported yet")
+              by <- ifelse("by" %in% argNames, x[[which("by" == argNames)]], x[[4]])
+            } else {
+              by <- NA
+            }
+            return(slice(from, to, by))
+          } else if(x[[1]] == "c"){
+            stop("Custom vector slicing is not supported yet")
+            # return(eval(y))
+          } else{
+            stop("Unsupported filter '", as.character(x), "' supplied")
+          }
+          
+        } else {
+          stop("Unsupported filter '", as.character(x), "' supplied")
+        }
+      })
+      return(self$get_basic_selection(filters))
+    },
+    `[<-` = function(...) {
+      stop("Updating values using bracket subsetting is currently not possible")
+    },
+    #' Convert Zarr object to R array
+    #'
+    #' @return array
+    as.array = function(){
+      return(self$get_basic_selection("...")$data)
     }
   )
 )
+
+
+#' S3 method for custom bracket subsetting
+#'
+#' @param obj 
+#' @param ... 
+#'
+#' @export
+`[.ZarrArray` <- function(obj, ...){
+  obj$`[`(...)
+}
+
+#' S3 method for custom bracket assignment
+#'
+#' @param obj 
+#' @param ... 
+#'
+#' @export
+`[<-.ZarrArray` <- function(obj, ...){
+  obj$`[<-`(...)
+}
+
+#' S3 method for as.array
+#'
+#' @param obj 
+#'
+#' @export
+as.array.ZarrArray = function(obj){
+  obj$as.array()
+}
