@@ -111,6 +111,9 @@ The Zarr Array class.
 \item \href{#method-ZarrArray-append}{\code{ZarrArray$append()}}
 \item \href{#method-ZarrArray-view}{\code{ZarrArray$view()}}
 \item \href{#method-ZarrArray-astype}{\code{ZarrArray$astype()}}
+\item \href{#method-ZarrArray-[}{\code{ZarrArray$[()}}
+\item \href{#method-ZarrArray-[<-}{\code{ZarrArray$[<-()}}
+\item \href{#method-ZarrArray-as.array}{\code{ZarrArray$as.array()}}
 \item \href{#method-ZarrArray-clone}{\code{ZarrArray$clone()}}
 }
 }
@@ -519,7 +522,8 @@ Subset the array.
 \describe{
 \item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
 
-\item{\code{value}}{The value to set, as an R array() or a Zarr NestedArray instance.}
+\item{\code{value}}{The value to set, as an R array() or a Zarr NestedArray instance.
+Subset / slice Zarr object using bracket notation}
 }
 \if{html}{\out{</div>}}
 }
@@ -621,6 +625,48 @@ Subset the array.
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$astype(dtype)}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrArray-["></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrArray-[}{}}}
+\subsection{Method \code{[()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrArray$[(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Contains the slicing parameters, one for each dimension.
+Use empty space to get whole dimension e.g. \link{1:5,,}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Sliced Zarr object
+Convert Zarr object to R array
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrArray-[<-"></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrArray-[<-}{}}}
+\subsection{Method \code{[<-()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrArray$[<-(...)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrArray-as.array"></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrArray-as.array}{}}}
+\subsection{Method \code{as.array()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrArray$as.array()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+array
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZarrArray-clone"></a>}}

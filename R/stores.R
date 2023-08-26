@@ -114,7 +114,7 @@ Store <- R6::R6Class("Store",
 #' @docType class
 #' @description
 #' Store class using directories and files on a standard file system.
-#'
+#' Adapted from https://github.com/zarr-developers/zarr_implementations/blob/c0bd932/generate_data/js/src/fsstore.js#L7 
 #' @rdname DirectoryStore
 #' @export
 DirectoryStore <- R6::R6Class("DirectoryStore",
@@ -169,14 +169,13 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
 )
 
 
-# Reference: https://github.com/zarr-developers/zarr-python/blob/a5dfc3b4/zarr/storage.py#L512
-
 #' MemoryStore for Zarr
 #' @title MemoryStore Class
 #' @docType class
 #' @description
 #' Store class that uses a hierarchy of list objects,
 #' thus all data will be held in main memory.
+#' Reference: https://github.com/zarr-developers/zarr-python/blob/a5dfc3b4/zarr/storage.py#L512
 #'
 #' @rdname MemoryStore
 #' @export
