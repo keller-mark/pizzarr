@@ -1,34 +1,34 @@
 library(pizzarr)
 
 test_that("create_zarray_meta does not throw error when simple dtype is valid", {
-  res <- create_zarray_meta(dtype = "|u1", order = "C", fill_value = 0, dimension_separator = ".")
+  res <- create_zarray_meta(dtype = Dtype$new("|u1"), order = "C", fill_value = 0, dimension_separator = ".")
   expect_equal(class(res$dtype)[[1]], "scalar")
   expect_equal(as.character(res$dtype), "|u1")
 })
 
 test_that("create_zarray_meta throws error when simple dtype byteorder is invalid", {
-  f <- function() create_zarray_meta(dtype = ":u1", order = "C", fill_value = 0, dimension_separator = ".")
+  f <- function() create_zarray_meta(dtype = Dtype$new(":u1"), order = "C", fill_value = 0, dimension_separator = ".")
   expect_error(f())
 })
 
 test_that("create_zarray_meta throws error when simple dtype basic type is invalid", {
-  f <- function() create_zarray_meta(dtype = "<Z1", order = "C", fill_value = 0, dimension_separator = ".")
+  f <- function() create_zarray_meta(dtype = Dtype$new("<Z1"), order = "C", fill_value = 0, dimension_separator = ".")
   expect_error(f())
 })
 
 test_that("create_zarray_meta throws error when order is invalid", {
-  f <- function() create_zarray_meta(dtype = "|u1", order = "A", fill_value = 0, dimension_separator = ".")
+  f <- function() create_zarray_meta(dtype = Dtype$new("|u1"), order = "A", fill_value = 0, dimension_separator = ".")
   expect_error(f())
 })
 
 test_that("create_zarray_meta throws error when dimension separator is invalid", {
-  f <- function() create_zarray_meta(dtype = "|u1", order = "C", fill_value = 0, dimension_separator = "___")
+  f <- function() create_zarray_meta(dtype = Dtype$new("|u1"), order = "C", fill_value = 0, dimension_separator = "___")
   expect_error(f())
 })
 
 
 test_that("create_zarray_meta throws error when fill_value is invalid for float dtype", {
-  f <- function() create_zarray_meta(dtype = "<f2", order = "C", fill_value = "foo")
+  f <- function() create_zarray_meta(dtype = Dtype$new("<f2"), order = "C", fill_value = "foo")
   expect_error(f())
 })
 

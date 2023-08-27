@@ -82,7 +82,7 @@ init_array_metadata <- function(
     }
 
     # normalize metadata
-    dtype <- normalize_dtype(dtype)
+    dtype <- normalize_dtype(dtype, object_codec = object_codec)
 
     # object_codec <- normalize_object_codec(dtype, object_codec) # TODO
 
@@ -91,7 +91,7 @@ init_array_metadata <- function(
 
     shape <- normalize_shape(shape)
 
-    dtype_itemsize <- get_dtype_numbytes(dtype)
+    dtype_itemsize <- dtype$num_bytes
     chunks <- normalize_chunks(chunks, shape, dtype_itemsize)
     order <- normalize_order(order)
     fill_value <- normalize_fill_value(fill_value, dtype)
@@ -130,21 +130,23 @@ init_array_metadata <- function(
         }
     }
 
-    # TODO: deal with object encoding
-    # if dtype.hasobject:
-    #     if object_codec is None:
-    #         if not filters:
-    #             # there are no filters so we can be sure there is no object codec
-    #             raise ValueError('missing object_codec for object array')
-    #         else:
-    #             # one of the filters may be an object codec, issue a warning rather
-    #             # than raise an error to maintain backwards-compatibility
-    #             warnings.warn('missing object_codec for object array; this will raise a '
-    #                           'ValueError in version 3.0', FutureWarning)
-    #     else:
-    #         filters_config.insert(0, object_codec.get_config())
-    # elif object_codec is not None:
-    #     warnings.warn('an object_codec is only needed for object arrays')
+    # Check object codec
+    if(dtype$is_object) {
+        if(is_na(object_codec)) {
+            if(length(filters_config) == 0) {
+                # there are no filters so we can be sure there is no object codec
+                stop("missing object_codec for object array")
+            } else {
+                # one of the filters may be an object codec, issue a warning rather
+                # than raise an error to maintain backwards-compatibility
+                stop("missing object_codec for object array")
+            }
+        } else {
+            filters_config <- append(filters_config, object_codec$get_config())
+        }
+    } else if(!is_na(object_codec)) {
+        warning("an object_codec is only needed for object arrays")
+    }
 
     # use null to indicate no filters
     if (length(filters_config) == 0) {
