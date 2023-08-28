@@ -871,12 +871,9 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2586
       # TODO
     },
-<<<<<<< HEAD
     get_dimension_separator = function() {
       return(private$dimension_separator)
     },
-=======
->>>>>>> 8f58162eea7b36ff147421270273c1d393e5a0de
     #' Subset / slice Zarr object using bracket notation
     #'
     #' @param ... Contains the slicing parameters, one for each dimension.
