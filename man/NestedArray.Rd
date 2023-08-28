@@ -46,7 +46,7 @@ The Zarr NestedArray class.
 \subsection{Method \code{new()}}{
 Create a new NestedArray instance.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NestedArray$new(data, shape = NA, dtype = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{NestedArray$new(data, shape = NA, dtype = NA, order = NA)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -59,6 +59,9 @@ scalar, or raw vector.}
 \item{\code{shape}}{The shape of the array.}
 
 \item{\code{dtype}}{The Zarr dtype of the array, as a string like ">f8".}
+
+\item{\code{order}}{The order of the array, either "C" or "F". Only used
+when \code{data} is a raw vector. Optional.}
 }
 \if{html}{\out{</div>}}
 }
@@ -111,9 +114,16 @@ Set a subset of the array.
 \subsection{Method \code{flatten()}}{
 Flatten the array contents.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NestedArray$flatten()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{NestedArray$flatten(order = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{order}}{Either "C", "F", or NA.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NestedArray-flatten_to_raw"></a>}}
@@ -121,9 +131,16 @@ Flatten the array contents.
 \subsection{Method \code{flatten_to_raw()}}{
 Flatten the array contents and convert to a raw vector.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NestedArray$flatten_to_raw()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{NestedArray$flatten_to_raw(order = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{order}}{Either "C", "F", or NA.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NestedArray-as.array"></a>}}

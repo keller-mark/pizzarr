@@ -111,6 +111,7 @@ The Zarr Array class.
 \item \href{#method-ZarrArray-append}{\code{ZarrArray$append()}}
 \item \href{#method-ZarrArray-view}{\code{ZarrArray$view()}}
 \item \href{#method-ZarrArray-astype}{\code{ZarrArray$astype()}}
+\item \href{#method-ZarrArray-get_dimension_separator}{\code{ZarrArray$get_dimension_separator()}}
 \item \href{#method-ZarrArray-[}{\code{ZarrArray$[()}}
 \item \href{#method-ZarrArray-[<-}{\code{ZarrArray$[<-()}}
 \item \href{#method-ZarrArray-as.array}{\code{ZarrArray$as.array()}}
@@ -623,6 +624,15 @@ Subset / slice Zarr object using bracket notation}
 \subsection{Method \code{astype()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$astype(dtype)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrArray-get_dimension_separator"></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrArray-get_dimension_separator}{}}}
+\subsection{Method \code{get_dimension_separator()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_dimension_separator()}\if{html}{\out{</div>}}
 }
 
 }
