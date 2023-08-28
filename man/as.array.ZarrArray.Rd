@@ -12,3 +12,4 @@
 \description{
 S3 method for as.array
 }
+\keyword{internal}

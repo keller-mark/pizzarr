@@ -18,3 +18,4 @@ Zarr data type notation as string
 \description{
 Convert the R data type notation to Zarr one
 }
+\keyword{internal}

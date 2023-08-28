@@ -303,7 +303,7 @@ NestedArray <- R6::R6Class("NestedArray",
 #' S3 method for as.array
 #'
 #' @param obj 
-#'
+#' @keywords internal
 #' @export
 as.array.NestedArray = function(obj){
   obj$as.array()

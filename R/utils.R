@@ -298,7 +298,7 @@ get_list_product <- function(dim_indexer_iterables) {
 #' @param x data type to check
 #' @param isArray Default = T. When true, an array is expected, otherwise a 
 #' string describing the data type
-#'
+#' @keywords internal
 #' @return Zarr data type notation as string
 get_np_dataFormat = function(x, isArray = T){
   #https://zarr.readthedocs.io/en/stable/spec/v2.html#data-type-encoding

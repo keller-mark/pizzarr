@@ -944,8 +944,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
 #' S3 method for custom bracket subsetting
 #'
 #' @param obj 
-#' @param ... 
-#'
+#' @param ...
+#' @keywords internal 
 #' @export
 `[.ZarrArray` <- function(obj, ...){
   obj$`[`(...)
@@ -954,8 +954,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
 #' S3 method for custom bracket assignment
 #'
 #' @param obj 
-#' @param ... 
-#'
+#' @param ...
+#' @keywords internal 
 #' @export
 `[<-.ZarrArray` <- function(obj, ...){
   obj$`[<-`(...)
@@ -964,7 +964,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
 #' S3 method for as.array
 #'
 #' @param obj 
-#'
+#' @keywords internal
 #' @export
 as.array.ZarrArray = function(obj){
   obj$as.array()

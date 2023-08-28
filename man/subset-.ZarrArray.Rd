@@ -8,9 +8,8 @@
 }
 \arguments{
 \item{obj}{}
-
-\item{...}{}
 }
 \description{
 S3 method for custom bracket assignment
 }
+\keyword{internal}
