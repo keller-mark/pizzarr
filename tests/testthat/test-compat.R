@@ -390,3 +390,20 @@ test_that("Can open Zarr group and read a 2D U7 string array", {
     expect_equal(dim(selection$data), c(2, 2))
     expect_equal(selection$data, array(data=c("a", "cc", "b", "d"), dim=c(2, 2)))
 })
+
+test_that("Can open Zarr group and read a 1D VLen-UTF8 string array with no compression", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    g <- ZarrGroup$new(store)
+    a <- g$get_item("1d.contiguous.raw.vlen-utf8")
+
+    expect_equal(a$get_shape(), c(4))
+    expect_equal(a$get_chunks(), c(4))
+
+    selection <- a$get_item("...")
+
+    expect_equal(dim(selection$data), c(4))
+    expect_equal(selection$data, array(data=c("a", "b", "cc", "d"), dim=c(4)))
+})

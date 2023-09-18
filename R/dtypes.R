@@ -23,7 +23,7 @@ is_structured_dtype <- function(dtype) {
 #' @keywords internal
 get_dtype_parts <- function(dtype) {
   # TODO: support object dtype (without digits required in regex)
-  dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V|O)(\\d+)"
+  dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V|O)(\\d+)?"
   if(stringr::str_detect(dtype, dtype_regex)) {
     dtype_matches <- stringr::str_match(dtype, dtype_regex)
     basic_type <- dtype_matches[1,3]
@@ -32,12 +32,19 @@ get_dtype_parts <- function(dtype) {
     } else {
       byte_multiplier <- 1
     }
-    num_items <- as.integer(dtype_matches[1,4])
+    if(!is.null(dtype_matches[1,4])) {
+      num_items <- as.integer(dtype_matches[1,4])
+      num_bytes <- num_items * byte_multiplier
+    } else {
+      # Support object dtype
+      num_items <- NA
+      num_bytes <- NA
+    }
     result <- list(
       dtype_str = dtype,
       byte_order = dtype_matches[1,2],
       basic_type = dtype_matches[1,3],
-      num_bytes = num_items * byte_multiplier,
+      num_bytes = num_bytes,
       num_items = num_items
     )
     return(result)
@@ -48,7 +55,7 @@ get_dtype_parts <- function(dtype) {
 
 #' @keywords internal
 check_dtype_support <- function(dtype_parts) {
-  if(!is_na(dtype_parts) && dtype_parts$basic_type %in% c("b", "i", "u", "f", "S", "U")) {
+  if(!is_na(dtype_parts) && dtype_parts$basic_type %in% c("b", "i", "u", "f", "S", "U", "O")) {
     return(TRUE)
   }
   stop(paste("Unsupported dtype:", dtype_parts))

@@ -1,0 +1,6 @@
+name: pizzarr-fixtures
+dependencies:
+- python==3.10
+- zarr
+- numcodecs
+- numpy

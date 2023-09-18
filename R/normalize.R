@@ -106,6 +106,7 @@ normalize_shape <- function(shape) {
 normalize_dtype <- function(dtype, object_codec = NA, filters = NA) {
   # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L152
 
+  # TODO: is filters ever used?
   if(!is_na(object_codec) && !is_na(filters)) {
     stop("expected only one of object_codec and filters to be specified in normalize_dtype")
   }

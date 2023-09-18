@@ -83,8 +83,18 @@ ZarrArray <- R6::R6Class("ZarrArray",
       meta_bytes <- private$store$get_item(mkey)
       meta <- private$store$metadata_class$decode_array_metadata(meta_bytes)
       private$meta <- meta
-      private$shape <- meta$shape
-      private$chunks <- meta$chunks
+      if(is.list(meta$shape)) {
+        private$shape <- as.integer(meta$shape)
+      } else {
+        # meta$shape might be null.
+        private$shape <- meta$shape
+      }
+      if(is.list(meta$chunks)) {
+        private$chunks <- as.integer(meta$chunks)
+      } else {
+        # meta$chunks might be null.
+        private$chunks <- meta$chunks
+      }
       private$fill_value <- meta$fill_value
       private$order <- meta$order
       if("dimension_separator" %in% names(meta) && !is.na(meta$dimension_separator) && !is.null(meta$dimension_separator)) {
@@ -98,9 +108,9 @@ ZarrArray <- R6::R6Class("ZarrArray",
       } else {
         private$compressor <- get_codec(meta$compressor)
       }
+      object_codec <- NA
       if(is_na(meta$filters) || is.null(meta$filters)) {
         private$filters <- NA
-        object_codec <- NA
       } else {
         private$filters <- list()
         for(config in meta$filters) {
@@ -110,7 +120,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
           object_codec <- private$filters[[1]]
         }
       }
-      private$dtype <- normalize_dtype(meta$dtype, filters = private$filters)
+      private$dtype <- normalize_dtype(meta$dtype, object_codec = object_codec)
     },
     load_metadata = function() {
       private$load_metadata_nosync()
