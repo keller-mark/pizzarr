@@ -169,8 +169,6 @@ Dtype <- R6::R6Class("Dtype",
     initialize = function(dtype, object_codec = NA) {
       self$dtype <- dtype
 
-      # TODO: support dtype_str == "|O" for object dtypes / dont require numeric part of dtype string
-
       dtype_parts <- get_dtype_parts(dtype)
       check_dtype_support(dtype_parts)
       self$byte_order <-  get_dtype_endianness(dtype)
@@ -182,7 +180,6 @@ Dtype <- R6::R6Class("Dtype",
       self$is_structured <- is_structured_dtype(dtype)
       self$is_object <- (self$basic_type == "O")
 
-      # TODO: port code from normalize_dtype in zarr-python
       self$object_codec <- object_codec
     },
     get_asrtype = function() {

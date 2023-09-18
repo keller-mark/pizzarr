@@ -82,6 +82,7 @@ articles:
       - basics
       - ome-ngff
       - remote-ome-ngff
+      - remote-anndata
   - title: Articles
     navbar: Troubleshooting
     contents:
