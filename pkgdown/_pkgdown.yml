@@ -46,6 +46,7 @@ reference:
   - Bz2Codec
   - LzmaCodec
   - BloscCodec
+  - VLenUtf8Codec
   - get_codec
 - title: "Attributes"
   desc: >
