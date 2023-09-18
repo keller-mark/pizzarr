@@ -3,6 +3,7 @@
 #' Convert a value to a scalar to opt-out of R default vector casting behavior.
 #' @param obj The value to convert.
 #' @return The value wrapped as a scalar.
+#' @export
 as_scalar <- function(obj) {
   return(jsonlite::unbox(obj))
 }
@@ -10,6 +11,7 @@ as_scalar <- function(obj) {
 #' Check if a value is a scalar.
 #' @param s The value to check.
 #' @return TRUE if the value is a scalar, FALSE otherwise.
+#' @export
 is_scalar <- function(s) {
   if(class(s)[[1]] == "scalar") {
     return(TRUE)

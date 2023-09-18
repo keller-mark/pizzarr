@@ -140,7 +140,7 @@ get_dtype_asrtype <- function(dtype) {
 #' @description
 #' 
 #' @rdname Dtype
-#' @keywords internal
+#' @export
 Dtype <- R6::R6Class("Dtype",
   public = list(
     #' @field dtype The original dtype string, like "<f4".

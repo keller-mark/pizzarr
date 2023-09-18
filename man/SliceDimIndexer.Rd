@@ -12,8 +12,6 @@ SliceDimIndexer Class
 \details{
 The Zarr SliceDimIndexer class.
 }
-\keyword{Reference:}
-\keyword{https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L163}
 \keyword{internal}
 \section{Super class}{
 \code{pizzarr::DimIndexer} -> \code{SliceDimIndexer}

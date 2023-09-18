@@ -12,7 +12,6 @@ Dtype Class
 \details{
 The Zarr Dtype class.
 }
-\keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
