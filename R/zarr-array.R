@@ -115,7 +115,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       } else {
         private$filters <- list()
         for(config in meta$filters) {
-          append(private$filters, get_codec(config))
+          private$filters <- append(private$filters, get_codec(config))
         }
         if(length(private$filters) == 1) {
           object_codec <- private$filters[[1]]
@@ -611,7 +611,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
           # raise RuntimeError('cannot read object array without object codec')
 
       # ensure correct chunk shape
-      return(as.raw(chunk))
+      return(chunk)
     },
     encode_chunk = function(chunk_as_raw) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2105

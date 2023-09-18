@@ -104,7 +104,6 @@ NestedArray <- R6::R6Class("NestedArray",
         self$data <- data # TODO?
       } else if(!is.raw(data) && (is.array(data) || is.vector(data)) && is.atomic(data)) {
         # Create array from R atomic vector or array().
-
         num_shape_elements <- compute_size(shape)
         # Check that data array has same shape as expected
         if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
@@ -114,6 +113,7 @@ NestedArray <- R6::R6Class("NestedArray",
           astype_func <- self$dtype_obj$get_asrtype()
           self$data <- array(data=as.array(astype_func(data)), dim=shape)
         }
+        # TODO: account for order == "C"?
       } else if(is.raw(data)) {
         # Create array from a raw vector.
 
@@ -269,6 +269,11 @@ NestedArray <- R6::R6Class("NestedArray",
     #' @returns The data as a flat raw vector.
     flatten_to_raw = function(order = NA) {
       data_as_vec <- self$flatten(order = order)
+
+      if(self$dtype_obj$is_object) {
+        # The object_codec in filters will handle the conversion to raw.
+        return(data_as_vec)
+      }
 
       endian <- self$dtype_obj$byte_order
       # Normalize to only "little" or "big" since this is what writeBin accepts.

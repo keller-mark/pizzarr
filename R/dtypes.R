@@ -63,8 +63,7 @@ check_dtype_support <- function(dtype_parts) {
 }
 
 #' @keywords internal
-get_dtype_rtype <- function(dtype) {
-  dtype_parts <- get_dtype_parts(dtype)
+get_dtype_rtype <- function(basic_type) {
 
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
   BASICTYPE_RTYPE_MAPPING <- list(
@@ -73,10 +72,11 @@ get_dtype_rtype <- function(dtype) {
     "i" = integer(),
     "f" = double(),
     "S" = character(),
-    "U" = character()
+    "U" = character(),
+    "O" = character() # TODO: will object always be character?
   )
 
-  return(BASICTYPE_RTYPE_MAPPING[[dtype_parts$basic_type]])
+  return(BASICTYPE_RTYPE_MAPPING[[basic_type]])
 }
 
 #' @keywords internal
@@ -107,7 +107,8 @@ get_dtype_signed <- function(dtype) {
     "i" = TRUE,
     "f" = TRUE,
     "S" = FALSE, # TODO: is this correct?
-    "U" = FALSE  # TODO: is this correct?
+    "U" = FALSE,  # TODO: is this correct?
+    "O" = FALSE
   )
   return(DTYPE_SIGNED_MAPPING[[dtype_parts$basic_type]])
 }
@@ -124,16 +125,12 @@ get_dtype_asrtype <- function(dtype) {
     "i" = as.integer,
     "f" = as.double,
     "S" = as.character,
-    "U" = as.character
+    "U" = as.character,
+    "O" = as.character
   )
   return(DTYPE_RTYPE_MAPPING[[dtype_parts$basic_type]])
 }
 
-#' @keywords internal
-get_typed_array_ctr <- function(dtype) {
-  rtype <- get_dtype_rtype(dtype)
-  return(function(dim) array(data = rtype, dim = dim))
-}
 
 # Reference: https://numpy.org/doc/stable/reference/arrays.dtypes.html
 
@@ -192,7 +189,7 @@ Dtype <- R6::R6Class("Dtype",
       return(get_dtype_asrtype(self$dtype))
     },
     get_rtype = function() {
-      return(get_dtype_rtype(self$dtype))
+      return(get_dtype_rtype(self$basic_type))
     },
     get_typed_array_ctr = function() {
       rtype <- self$get_rtype()
