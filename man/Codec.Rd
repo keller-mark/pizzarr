@@ -25,13 +25,15 @@ Abstract compressor for Zarr
 \subsection{Method \code{encode()}}{
 Compress data.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Codec$encode(buf)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Codec$encode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{buf}}{The un-compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,13 +47,15 @@ Compressed data.
 \subsection{Method \code{decode()}}{
 Decompress data.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Codec$decode(buf)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Codec$decode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{buf}}{The compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
 }
 \if{html}{\out{</div>}}
 }
