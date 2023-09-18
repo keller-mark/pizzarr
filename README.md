@@ -69,7 +69,7 @@ print(selection$data)
 | `Unicode`             |            ✔ / ✔             |  Converted to `character` in R.               |
 | `void *`              |            ❌ / ❌             |                                                                                                                                                                                 |
 | Structured data types |            ❌ / ❌             |   |
-| Object data types |            ❌ / ❌             |  [On roadmap](https://github.com/keller-mark/pizzarr/issues/22) |
+| Object data type - [VLenUTF8](https://numcodecs.readthedocs.io/en/stable/vlen.html#vlenutf8) |            ✔ / ✔             | Converted to `character` in R. |
 
 
 Note: no effort is made to assess loss of precision due to conversion.
