@@ -86,6 +86,7 @@ Slice <- R6::R6Class("Slice",
 #' @param step The step size.
 #' @param zero_based The index of the dimension. By default, FALSE for R-like behavior.
 #' @return A Slice instance with the specified parameters.
+#' @export
 slice <- function(start, stop = NA, step = NA, zero_based = FALSE) {
   start_offset <- ifelse(zero_based, 0, -1)
   stop_offset <- ifelse(zero_based, 0, 0)
@@ -108,7 +109,7 @@ slice <- function(start, stop = NA, step = NA, zero_based = FALSE) {
 #' @param start The start index.
 #' @param stop The stop index.
 #' @param step The step size.
-#' @keywords internal
+#' @export
 zb_slice <- function(start, stop = NA, step = NA) {
   return(slice(start, stop, step, zero_based = TRUE))
 }
@@ -116,6 +117,7 @@ zb_slice <- function(start, stop = NA, step = NA) {
 #' Check if a value is a Slice instance.
 #' @param s The value to check.
 #' @return TRUE if the value is a Slice instance, FALSE otherwise.
+#' @export
 is_slice <- function(s) {
   if(class(s)[[1]] == "Slice") {
     return(TRUE)

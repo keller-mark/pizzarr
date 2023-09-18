@@ -392,6 +392,7 @@ init_group <- function(
 #'     non-fill-value data are stored, at the expense of overhead associated
 #'     with checking the data of each chunk.
 #' @returns ZarrArray
+#' @export
 zarr_create <- function(
     shape,
     chunks=TRUE,
@@ -451,6 +452,7 @@ zarr_create <- function(
 #' @param shape : int or tuple of ints
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
+#' @export
 zarr_create_empty <- function(shape, ...) {
     return(zarr_create(shape=shape, fill_value=NA, ...))
 }
@@ -459,6 +461,7 @@ zarr_create_empty <- function(shape, ...) {
 #' @param data A base R array() or pizzarr NestedArray instance.
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
+#' @export
 zarr_create_array <- function(data, ...) {
     z <- zarr_create(...)
     z$set_item("...", data)
@@ -470,6 +473,7 @@ zarr_create_array <- function(data, ...) {
 #' @param shape : int or tuple of ints
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
+#' @export
 zarr_create_zeros <- function(shape, ...) {
     return(zarr_create(shape=shape, fill_value=0, ...))
 }
@@ -492,6 +496,7 @@ zarr_create_zeros <- function(shape, ...) {
 #' @param path : string, optional
 #'     Group path within store.
 #' @returns ZarrGroup
+#' @export
 zarr_create_group <- function(
     store = NA,
     overwrite = FALSE,
@@ -545,6 +550,7 @@ zarr_create_group <- function(
 #'     If using an fsspec URL to create the store, these will be passed to
 #'     the backend implementation. Ignored otherwise.
 #' @returns ZarrGroup
+#' @export
 zarr_open_group <- function(
     store = NA,
     mode = NA,

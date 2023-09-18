@@ -1,12 +1,12 @@
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L655
+
 #' The Zarr OIndex class.
 #' @title OIndex Class
 #' @docType class
 #' @description
-#' @keywords internal
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L655
 #'
 #' @rdname OIndex
-#' @export
+#' @keywords internal
 OIndex <- R6::R6Class("OIndex",
   public = list(
     #' @field array
@@ -21,15 +21,15 @@ OIndex <- R6::R6Class("OIndex",
   )
 )
 
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L811
+
 #' The Zarr VIndex class.
 #' @title VIndex Class
 #' @docType class
 #' @description
-#' @keywords internal
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L811
 #'
 #' @rdname VIndex
-#' @export
+#' @keywords internal
 VIndex <- R6::R6Class("VIndex",
   public = list(
     #' @field array
@@ -44,16 +44,15 @@ VIndex <- R6::R6Class("VIndex",
   )
 )
 
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L138
 
 #' The Zarr IntDimIndexer class.
 #' @title IntDimIndexer Class
 #' @docType class
 #' @description
-#' @keywords internal
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L138
 #'
 #' @rdname IntDimIndexer
-#' @export
+#' @keywords internal
 IntDimIndexer <- R6::R6Class("IntDimIndexer",
   inherit = DimIndexer,
   public = list(
@@ -95,15 +94,15 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
   )
 )
 
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L163
+
 #' The Zarr SliceDimIndexer class.
 #' @title SliceDimIndexer Class
 #' @docType class
 #' @description
-#' @keywords internal
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L163
 #'
 #' @rdname SliceDimIndexer
-#' @export
+#' @keywords internal
 SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
   inherit = DimIndexer,
   public = list(
@@ -196,15 +195,15 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
   )
 )
 
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L326
+
 #' The Zarr BasicIndexer class.
 #' @title BasicIndexer Class
 #' @docType class
 #' @description
-#' @keywords internal
-#' Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L326
 #'
 #' @rdname BasicIndexer
-#' @export
+#' @keywords internal
 BasicIndexer <- R6::R6Class("BasicIndexer",
   inherit = Indexer,
   public = list(

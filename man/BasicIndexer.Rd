@@ -12,8 +12,6 @@ BasicIndexer Class
 \details{
 The Zarr BasicIndexer class.
 }
-\keyword{Reference:}
-\keyword{https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L326}
 \keyword{internal}
 \section{Super class}{
 \code{pizzarr::Indexer} -> \code{BasicIndexer}
