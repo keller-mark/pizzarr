@@ -85,7 +85,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
       private$meta <- meta
       private$shape <- meta$shape
       private$chunks <- meta$chunks
-      private$dtype <- meta$dtype
       private$fill_value <- meta$fill_value
       private$order <- meta$order
       if("dimension_separator" %in% names(meta) && !is.na(meta$dimension_separator) && !is.null(meta$dimension_separator)) {
@@ -101,12 +100,17 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }
       if(is_na(meta$filters) || is.null(meta$filters)) {
         private$filters <- NA
+        object_codec <- NA
       } else {
         private$filters <- list()
         for(config in meta$filters) {
           append(private$filters, get_codec(config))
         }
+        if(length(private$filters) == 1) {
+          object_codec <- private$filters[[1]]
+        }
       }
+      private$dtype <- normalize_dtype(meta$dtype, filters = private$filters)
     },
     load_metadata = function() {
       private$load_metadata_nosync()
@@ -142,7 +146,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       zarray_meta <- list(
         shape = private$shape,
         chunks = private$chunks,
-        dtype = private$dtype,
+        dtype = private$dtype$dtype,
         compressor = compressor_config,
         fill_value = private$vill_value,
         order = private$order,
@@ -229,7 +233,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }, error = function(cond) {
         if(is_key_error(cond)) {
           # chunk not initialized
-          as_dtype_func <- get_dtype_asrtype(private$dtype)
+          as_dtype_func <- private$dtype$get_asrtype()
           chunk_inner <- as_dtype_func(private$fill_value)
           # From array().
           return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype, order = private$order))
@@ -477,7 +481,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # Obtain key for chunk storage
       chunk_key <- private$chunk_key(chunk_coords)
 
-      dtype_constr = get_typed_array_ctr(private$dtype)
+      dtype_constr = private$dtype$get_typed_array_ctr()
       chunk_size <- compute_size(private$chunks)
 
       if (is_total_slice(chunk_selection, private$chunks)) {

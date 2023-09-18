@@ -37,18 +37,12 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   if(!(order %in% c("C", "F"))) {
     stop("order must be 'C' or 'F'.")
   }
-  is_simple_dtype <- (length(dtype) == 1)
+  is_simple_dtype <- (!dtype$is_structured)
+  dtype_str <- dtype$dtype
   if(is_simple_dtype) {
-    dtype_vec <- str_to_vec(dtype)
-    dtype_byteorder <- dtype_vec[1]
-    dtype_basictype <- dtype_vec[2]
-    # TODO: validate dtype param's numbytes and time units
-    if(!(dtype_byteorder %in% c("<", ">", "|"))) {
-      stop("dtype byteorder must be <, >, or |.")
-    }
-    if(!(dtype_basictype %in% c("b", "i", "u", "f", "c", "m", "M", "S", "U", "V"))) {
-      stop("dtype basic type invalid.")
-    }
+    dtype_byteorder <- dtype$byte_order
+    dtype_basictype <- dtype$basic_type
+    # Validation occurs in Dtype constructor.
     
     if(dtype_basictype == "f") {
       if(!is.numeric(fill_value) && !(fill_value %in% c("NaN", "Infinity", "-Infinity"))) {
@@ -74,7 +68,7 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
     zarr_format = jsonlite::unbox(2),
     shape = shape,
     chunks = chunks,
-    dtype = jsonlite::unbox(dtype),
+    dtype = jsonlite::unbox(dtype_str),
     compressor = compressor,
     fill_value = jsonlite::unbox(fill_value),
     order = jsonlite::unbox(order),

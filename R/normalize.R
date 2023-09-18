@@ -103,16 +103,44 @@ normalize_shape <- function(shape) {
 }
 
 #' @keywords internal
-normalize_dtype <- function(dtype) {
-  # TODO
+normalize_dtype <- function(dtype, object_codec = NA, filters = NA) {
   # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/util.py#L152
+
+  if(!is_na(object_codec) && !is_na(filters)) {
+    stop("expected only one of object_codec and filters to be specified in normalize_dtype")
+  }
 
   if(is_na(dtype)) {
     # np.dtype(None) returns 'float64'
-    return("<f8")
+    if(!is_na(object_codec) || !is_na(filters)) {
+      stop("expected object_codec and filters to be NA due to NA dtype")
+    }
+    return(Dtype$new("<f8"))
   }
 
-  return(dtype)
+  # Construct Dtype instance.
+  # convenience API for object arrays
+  if("Dtype" %in% class(dtype)) {
+    return(dtype)
+  }
+  
+  if(is.character(dtype)) {
+    if(!is_na(filters)) {
+      dtype_init <- Dtype$new(dtype)
+      if(dtype_init$is_object) {
+        # Object ("|O") dtype should have one filter codec.
+        if(length(filters) == 1) {
+          return(Dtype$new(dtype, object_codec = filters[[1]]))
+        } else {
+          stop("expected filters list to have length 1 for object dtype")
+        }
+      }
+    }
+    # Filter list was NA but there could be non-NA object_codec parameter.
+    return(Dtype$new(dtype, object_codec = object_codec))
+  }
+
+  stop("dtype must be NA, string/character vector, or Dtype instance")
 }
 
 #' @keywords internal
@@ -263,7 +291,7 @@ normalize_fill_value <- function(fill_value, dtype) {
         # no fill value
         # pass
   } else {
-    rtype <- get_dtype_rtype(dtype)
+    rtype <- dtype$get_rtype()
     if (fill_value == 0) {
       if(is.logical(rtype)) {
         fill_value <- FALSE
