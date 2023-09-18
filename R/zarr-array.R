@@ -111,6 +111,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       object_codec <- NA
       if(is_na(meta$filters) || is.null(meta$filters)) {
         private$filters <- NA
+        object_codec <- NA
       } else {
         private$filters <- list()
         for(config in meta$filters) {
