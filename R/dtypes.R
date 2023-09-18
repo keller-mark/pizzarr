@@ -23,7 +23,7 @@ is_structured_dtype <- function(dtype) {
 #' @keywords internal
 get_dtype_parts <- function(dtype) {
   # TODO: support object dtype (without digits required in regex)
-  dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V|O)(\\d+)"
+  dtype_regex <- "^(\\||>|<)(b|i|u|f|c|m|M|S|U|V|O)(\\d+)?"
   if(stringr::str_detect(dtype, dtype_regex)) {
     dtype_matches <- stringr::str_match(dtype, dtype_regex)
     basic_type <- dtype_matches[1,3]
@@ -32,12 +32,19 @@ get_dtype_parts <- function(dtype) {
     } else {
       byte_multiplier <- 1
     }
-    num_items <- as.integer(dtype_matches[1,4])
+    if(!is.null(dtype_matches[1,4])) {
+      num_items <- as.integer(dtype_matches[1,4])
+      num_bytes <- num_items * byte_multiplier
+    } else {
+      # Support object dtype
+      num_items <- NA
+      num_bytes <- NA
+    }
     result <- list(
       dtype_str = dtype,
       byte_order = dtype_matches[1,2],
       basic_type = dtype_matches[1,3],
-      num_bytes = num_items * byte_multiplier,
+      num_bytes = num_bytes,
       num_items = num_items
     )
     return(result)
@@ -48,7 +55,7 @@ get_dtype_parts <- function(dtype) {
 
 #' @keywords internal
 check_dtype_support <- function(dtype_parts) {
-  if(!is_na(dtype_parts) && dtype_parts$basic_type %in% c("b", "i", "u", "f", "S", "U")) {
+  if(!is_na(dtype_parts) && dtype_parts$basic_type %in% c("b", "i", "u", "f", "S", "U", "O")) {
     return(TRUE)
   }
   stop(paste("Unsupported dtype:", dtype_parts))
@@ -56,8 +63,7 @@ check_dtype_support <- function(dtype_parts) {
 }
 
 #' @keywords internal
-get_dtype_rtype <- function(dtype) {
-  dtype_parts <- get_dtype_parts(dtype)
+get_dtype_rtype <- function(basic_type) {
 
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/nestedArray/types.ts#L32
   BASICTYPE_RTYPE_MAPPING <- list(
@@ -66,10 +72,11 @@ get_dtype_rtype <- function(dtype) {
     "i" = integer(),
     "f" = double(),
     "S" = character(),
-    "U" = character()
+    "U" = character(),
+    "O" = character() # TODO: will object always be character?
   )
 
-  return(BASICTYPE_RTYPE_MAPPING[[dtype_parts$basic_type]])
+  return(BASICTYPE_RTYPE_MAPPING[[basic_type]])
 }
 
 #' @keywords internal
@@ -100,7 +107,8 @@ get_dtype_signed <- function(dtype) {
     "i" = TRUE,
     "f" = TRUE,
     "S" = FALSE, # TODO: is this correct?
-    "U" = FALSE  # TODO: is this correct?
+    "U" = FALSE,  # TODO: is this correct?
+    "O" = FALSE
   )
   return(DTYPE_SIGNED_MAPPING[[dtype_parts$basic_type]])
 }
@@ -117,16 +125,12 @@ get_dtype_asrtype <- function(dtype) {
     "i" = as.integer,
     "f" = as.double,
     "S" = as.character,
-    "U" = as.character
+    "U" = as.character,
+    "O" = as.character
   )
   return(DTYPE_RTYPE_MAPPING[[dtype_parts$basic_type]])
 }
 
-#' @keywords internal
-get_typed_array_ctr <- function(dtype) {
-  rtype <- get_dtype_rtype(dtype)
-  return(function(dim) array(data = rtype, dim = dim))
-}
 
 # Reference: https://numpy.org/doc/stable/reference/arrays.dtypes.html
 
@@ -165,8 +169,6 @@ Dtype <- R6::R6Class("Dtype",
     initialize = function(dtype, object_codec = NA) {
       self$dtype <- dtype
 
-      # TODO: support dtype_str == "|O" for object dtypes / dont require numeric part of dtype string
-
       dtype_parts <- get_dtype_parts(dtype)
       check_dtype_support(dtype_parts)
       self$byte_order <-  get_dtype_endianness(dtype)
@@ -178,14 +180,13 @@ Dtype <- R6::R6Class("Dtype",
       self$is_structured <- is_structured_dtype(dtype)
       self$is_object <- (self$basic_type == "O")
 
-      # TODO: port code from normalize_dtype in zarr-python
       self$object_codec <- object_codec
     },
     get_asrtype = function() {
       return(get_dtype_asrtype(self$dtype))
     },
     get_rtype = function() {
-      return(get_dtype_rtype(self$dtype))
+      return(get_dtype_rtype(self$basic_type))
     },
     get_typed_array_ctr = function() {
       rtype <- self$get_rtype()

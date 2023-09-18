@@ -232,7 +232,8 @@ compute_size <- function(shape) {
 #' @param val The value to check
 #' @return Whether the value is NA
 is_na <- function(val) {
-  if(length(val) > 1) {
+  if(length(val) != 1) {
+    # Including when val is integer(0), character(0), etc.
     return(FALSE)
   } else {
     return(is.na(val))

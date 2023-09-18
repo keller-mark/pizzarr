@@ -26,13 +26,13 @@ test_that("check_dtype_support throws error for non-matched regex", {
 })
 
 test_that("get_dtype_rtype works", {
-    dtype_rtype <- get_dtype_rtype("<f8")
+    dtype_rtype <- get_dtype_rtype("f")
     expect_equal(dtype_rtype, double())
 
-    dtype_rtype <- get_dtype_rtype("<u4")
+    dtype_rtype <- get_dtype_rtype("u")
     expect_equal(dtype_rtype, integer())
 
-    dtype_rtype <- get_dtype_rtype("|b1")
+    dtype_rtype <- get_dtype_rtype("b")
     expect_equal(dtype_rtype, logical())
 })
 

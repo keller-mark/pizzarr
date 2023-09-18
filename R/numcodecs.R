@@ -374,6 +374,114 @@ BloscCodec <- R6::R6Class("BloscCodec",
   )
 )
 
+#' Variable-length UTF-8 codec for Zarr
+#' @title VLenUtf8Codec Class
+#' @docType class
+#' @description
+#' Class representing a VLenUtf8 compressor
+#'
+#' @rdname VLenUtf8Codec
+#' @export
+VLenUtf8Codec <- R6::R6Class("VLenUtf8Codec",
+  inherit = Codec,
+  public = list(
+    encode = function(vec_of_strings, zarr_arr) {
+      # Kind: array to bytes
+      # Reference: https://github.com/zarr-developers/numcodecs/blob/cb155432e36536e17a2d054c8c24b7bf6f4a7347/numcodecs/vlen.pyx#L74
+
+      num_strings <- length(vec_of_strings)
+
+      encoded_values <- list()
+      encoded_lengths <- integer(num_strings)
+
+      data_length <- 0
+
+      # first iteration to convert to bytes
+      for(i in seq_len(num_strings)) {
+        orig_str <- vec_of_strings[i]
+        if(is.na(orig_str) || is.null(orig_str)) {
+          # treat these as missing value, normalize
+          orig_str <- ""
+        }
+        encoded_str <- charToRaw(orig_str)
+        encoded_str_len <- length(encoded_str)
+        encoded_values[[i]] <- encoded_str
+        encoded_lengths[i] <- encoded_str_len
+        data_length <- data_length + encoded_str_len + 4 # 4 bytes to store item length
+      }
+
+      # setup output
+      total_length <- 4 + data_length # 4 bytes to store number of items in header
+      out <- raw(total_length)
+
+      # write header
+      out[1:4] <- writeBin(
+        num_strings,
+        con = raw(),
+        size = 4,
+        endian = "little"
+      )
+      
+      # second iteration, store data
+      pos <- 4
+      for(i in seq_len(num_strings)) {
+        l <- encoded_lengths[i]
+        out[(pos+1):(pos+4)] <- writeBin(
+          l,
+          con = raw(),
+          size = 4,
+          endian = "little"
+        )
+        pos <- pos + 4
+        out[(pos+1):(pos+l)] <- encoded_values[[i]]
+        pos <- pos + l
+      }
+
+      return(out)
+    },
+    decode = function(buf, zarr_arr) {
+      # Kind: bytes to array
+      # References:
+      # - https://github.com/manzt/zarrita.js/blob/050d128265af14ff3c82e125315f3f527112887d/packages/core/src/codecs/vlen-utf8.ts
+      # - https://github.com/zarr-developers/numcodecs/blob/cb155432e36536e17a2d054c8c24b7bf6f4a7347/numcodecs/vlen.pyx#L132
+
+      num_strings <- readBin(
+        con = buf,
+        what = integer(),
+        size = 4,
+        n = 1,
+        signed = TRUE,
+        endian = "little"
+      )
+
+      vec_of_strings <- rep(NA, times = num_strings)
+
+      pos <- 4
+      for(i in seq_len(num_strings)) {
+        num_chars <- readBin(
+          con = buf[(pos+1):(pos+4)],
+          what = integer(),
+          size = 4,
+          n = 1,
+          signed = TRUE,
+          endian = "little"
+        )
+        pos <- pos + 4
+        vec_of_strings[i] <- rawToChar(buf[(pos+1):(pos+num_chars)])
+        pos <- pos + num_chars
+      }
+
+      return(vec_of_strings)
+    },
+    get_config = function() {
+       meta <- list(
+         id = jsonlite::unbox("vlen-utf8")
+       )
+       return(meta)
+    }
+  )
+)
+
 #' Get a codec instance from the registry.
 #'
 #' @param config A codec config as a named list.
@@ -393,8 +501,10 @@ get_codec <- function(config) {
       result <- do.call(GzipCodec$new, config)
     } else if(codec_id == "lzma") {
       result <- do.call(LzmaCodec$new, config)
-    }  else if(codec_id == "blosc") {
+    } else if(codec_id == "blosc") {
       result <- do.call(BloscCodec$new, config)
+    } else if(codec_id == "vlen-utf8") {
+      result <- do.call(VLenUtf8Codec$new, config)
     } else {
       stop(paste("Unknown codec", codec_id))
     }
