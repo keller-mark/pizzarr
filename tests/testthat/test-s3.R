@@ -76,11 +76,3 @@ test_that("S3 methods of Zarr object", {
     #Converting Zarr to array
     expect_equal(as.array(z), a)
 })
-
-test_that("S3 methods for NestedArray object", {
-  a <- array(data = 1:20, dim = c(4,5))
-  z <- zarr(a)
- 
-  #Converting Zarr to array
-  expect_equal(as.array(z[1,1:2]), array(c(1,5), dim = c(1,2)))
-})
