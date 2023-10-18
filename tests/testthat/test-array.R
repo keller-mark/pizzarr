@@ -4,7 +4,7 @@ test_that("Zarr Array can load .zarray metadata", {
   store <- MemoryStore$new()
 
   zarray_meta <- store$metadata_class$encode_array_metadata(create_zarray_meta(
-    dtype = "|u1",
+    dtype = Dtype$new("|u1"),
     order = "C",
     fill_value = 0,
     shape = c(1, 2),
@@ -24,7 +24,7 @@ test_that("Zarr Array can be resized", {
   store <- MemoryStore$new()
   
   zarray_meta <- store$metadata_class$encode_array_metadata(create_zarray_meta(
-    dtype = "|u1",
+    dtype = Dtype$new("|u1"),
     order = "C",
     fill_value = 0,
     shape = c(4, 5),

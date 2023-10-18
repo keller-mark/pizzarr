@@ -16,4 +16,3 @@ zb_slice(start, stop = NA, step = NA)
 \description{
 Shortcut for Slice$new() constructor with zero-based indexing and exclusive stop index.
 }
-\keyword{internal}

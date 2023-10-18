@@ -12,8 +12,6 @@ VIndex Class
 \details{
 The Zarr VIndex class.
 }
-\keyword{Reference:}
-\keyword{https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L811}
 \keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{

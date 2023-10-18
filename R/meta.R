@@ -1,6 +1,7 @@
 
 
 # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/meta.py#L14
+#' @keywords internal
 Metadata2 <- R6::R6Class("Metadata2",
     private = list(
         ZARR_FORMAT = 2
@@ -10,7 +11,7 @@ Metadata2 <- R6::R6Class("Metadata2",
             if(is.list(s)) {
                 return(s)
             } else {
-                return(jsonlite::fromJSON(rawToChar(s)))
+                return(jsonlite::fromJSON(rawToChar(s), simplifyVector = FALSE))
             }
         },
         encode_metadata = function(meta) {

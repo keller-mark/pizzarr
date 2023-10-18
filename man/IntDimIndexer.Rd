@@ -12,8 +12,6 @@ IntDimIndexer Class
 \details{
 The Zarr IntDimIndexer class.
 }
-\keyword{Reference:}
-\keyword{https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L138}
 \keyword{internal}
 \section{Super class}{
 \code{pizzarr::DimIndexer} -> \code{IntDimIndexer}

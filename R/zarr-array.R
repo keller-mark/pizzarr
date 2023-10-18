@@ -83,9 +83,18 @@ ZarrArray <- R6::R6Class("ZarrArray",
       meta_bytes <- private$store$get_item(mkey)
       meta <- private$store$metadata_class$decode_array_metadata(meta_bytes)
       private$meta <- meta
-      private$shape <- meta$shape
-      private$chunks <- meta$chunks
-      private$dtype <- meta$dtype
+      if(is.list(meta$shape)) {
+        private$shape <- as.integer(meta$shape)
+      } else {
+        # meta$shape might be null.
+        private$shape <- meta$shape
+      }
+      if(is.list(meta$chunks)) {
+        private$chunks <- as.integer(meta$chunks)
+      } else {
+        # meta$chunks might be null.
+        private$chunks <- meta$chunks
+      }
       private$fill_value <- meta$fill_value
       private$order <- meta$order
       if("dimension_separator" %in% names(meta) && !is.na(meta$dimension_separator) && !is.null(meta$dimension_separator)) {
@@ -99,14 +108,20 @@ ZarrArray <- R6::R6Class("ZarrArray",
       } else {
         private$compressor <- get_codec(meta$compressor)
       }
+      object_codec <- NA
       if(is_na(meta$filters) || is.null(meta$filters)) {
         private$filters <- NA
+        object_codec <- NA
       } else {
         private$filters <- list()
         for(config in meta$filters) {
-          append(private$filters, get_codec(config))
+          private$filters <- append(private$filters, get_codec(config))
+        }
+        if(length(private$filters) == 1) {
+          object_codec <- private$filters[[1]]
         }
       }
+      private$dtype <- normalize_dtype(meta$dtype, object_codec = object_codec)
     },
     load_metadata = function() {
       private$load_metadata_nosync()
@@ -142,7 +157,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       zarray_meta <- list(
         shape = private$shape,
         chunks = private$chunks,
-        dtype = private$dtype,
+        dtype = private$dtype$dtype,
         compressor = compressor_config,
         fill_value = private$vill_value,
         order = private$order,
@@ -229,7 +244,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }, error = function(cond) {
         if(is_key_error(cond)) {
           # chunk not initialized
-          as_dtype_func <- get_dtype_asrtype(private$dtype)
+          as_dtype_func <- private$dtype$get_asrtype()
           chunk_inner <- as_dtype_func(private$fill_value)
           # From array().
           return(NestedArray$new(chunk_inner, shape = private$chunks, dtype = private$dtype, order = private$order))
@@ -477,7 +492,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # Obtain key for chunk storage
       chunk_key <- private$chunk_key(chunk_coords)
 
-      dtype_constr = get_typed_array_ctr(private$dtype)
+      dtype_constr = private$dtype$get_typed_array_ctr()
       chunk_size <- compute_size(private$chunks)
 
       if (is_total_slice(chunk_selection, private$chunks)) {
@@ -596,7 +611,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
           # raise RuntimeError('cannot read object array without object codec')
 
       # ensure correct chunk shape
-      return(as.raw(chunk))
+      return(chunk)
     },
     encode_chunk = function(chunk_as_raw) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2105

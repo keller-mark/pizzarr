@@ -29,7 +29,7 @@ g <- zarr_open_group(store)
 
 # Using the OME metadata, get the path to the first resolution of the image pyramid.
 attrs <- g$get_attrs()$to_list()
-resolution_paths <- attrs$multiscales$datasets[[1]]$path
+resolution_paths <- attrs$multiscales[[1]]$datasets[[1]]$path
 first_resolution <- resolution_paths[[1]]
 
 # Load the 3-dimensional array of RGB pixels (as a ZarrArray instance).

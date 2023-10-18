@@ -46,6 +46,7 @@ reference:
   - Bz2Codec
   - LzmaCodec
   - BloscCodec
+  - VLenUtf8Codec
   - get_codec
 - title: "Attributes"
   desc: >
@@ -72,6 +73,7 @@ reference:
   - as_scalar
   - is_scalar
   - is_key_error
+  - Dtype
 
 
 articles:
@@ -81,6 +83,7 @@ articles:
       - basics
       - ome-ngff
       - remote-ome-ngff
+      - remote-anndata
   - title: Articles
     navbar: Troubleshooting
     contents:

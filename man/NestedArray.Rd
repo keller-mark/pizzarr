@@ -24,6 +24,8 @@ The Zarr NestedArray class.
 
 \item{\code{dtype}}{The Zarr dtype of the array, as a string like ">f8".}
 
+\item{\code{dtype_obj}}{The Zarr dtype of the array, as a Dtype instance.}
+
 \item{\code{data}}{The array contents as a base R array.}
 }
 \if{html}{\out{</div>}}

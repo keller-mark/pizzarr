@@ -82,7 +82,7 @@ init_array_metadata <- function(
     }
 
     # normalize metadata
-    dtype <- normalize_dtype(dtype)
+    dtype <- normalize_dtype(dtype, object_codec = object_codec)
 
     # object_codec <- normalize_object_codec(dtype, object_codec) # TODO
 
@@ -91,7 +91,7 @@ init_array_metadata <- function(
 
     shape <- normalize_shape(shape)
 
-    dtype_itemsize <- get_dtype_numbytes(dtype)
+    dtype_itemsize <- dtype$num_bytes
     chunks <- normalize_chunks(chunks, shape, dtype_itemsize)
     order <- normalize_order(order)
     fill_value <- normalize_fill_value(fill_value, dtype)
@@ -130,21 +130,23 @@ init_array_metadata <- function(
         }
     }
 
-    # TODO: deal with object encoding
-    # if dtype.hasobject:
-    #     if object_codec is None:
-    #         if not filters:
-    #             # there are no filters so we can be sure there is no object codec
-    #             raise ValueError('missing object_codec for object array')
-    #         else:
-    #             # one of the filters may be an object codec, issue a warning rather
-    #             # than raise an error to maintain backwards-compatibility
-    #             warnings.warn('missing object_codec for object array; this will raise a '
-    #                           'ValueError in version 3.0', FutureWarning)
-    #     else:
-    #         filters_config.insert(0, object_codec.get_config())
-    # elif object_codec is not None:
-    #     warnings.warn('an object_codec is only needed for object arrays')
+    # Check object codec
+    if(dtype$is_object) {
+        if(is_na(object_codec)) {
+            if(length(filters_config) == 0) {
+                # there are no filters so we can be sure there is no object codec
+                stop("missing object_codec for object array")
+            } else {
+                # one of the filters may be an object codec, issue a warning rather
+                # than raise an error to maintain backwards-compatibility
+                stop("missing object_codec for object array")
+            }
+        } else {
+            filters_config <- append(filters_config, object_codec$get_config())
+        }
+    } else if(!is_na(object_codec)) {
+        warning("an object_codec is only needed for object arrays")
+    }
 
     # use null to indicate no filters
     if (length(filters_config) == 0) {
@@ -390,6 +392,7 @@ init_group <- function(
 #'     non-fill-value data are stored, at the expense of overhead associated
 #'     with checking the data of each chunk.
 #' @returns ZarrArray
+#' @export
 zarr_create <- function(
     shape,
     chunks=TRUE,
@@ -449,6 +452,7 @@ zarr_create <- function(
 #' @param shape : int or tuple of ints
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
+#' @export
 zarr_create_empty <- function(shape, ...) {
     return(zarr_create(shape=shape, fill_value=NA, ...))
 }
@@ -457,6 +461,7 @@ zarr_create_empty <- function(shape, ...) {
 #' @param data A base R array() or pizzarr NestedArray instance.
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
+#' @export
 zarr_create_array <- function(data, ...) {
     z <- zarr_create(...)
     z$set_item("...", data)
@@ -468,6 +473,7 @@ zarr_create_array <- function(data, ...) {
 #' @param shape : int or tuple of ints
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
+#' @export
 zarr_create_zeros <- function(shape, ...) {
     return(zarr_create(shape=shape, fill_value=0, ...))
 }
@@ -490,6 +496,7 @@ zarr_create_zeros <- function(shape, ...) {
 #' @param path : string, optional
 #'     Group path within store.
 #' @returns ZarrGroup
+#' @export
 zarr_create_group <- function(
     store = NA,
     overwrite = FALSE,
@@ -543,6 +550,7 @@ zarr_create_group <- function(
 #'     If using an fsspec URL to create the store, these will be passed to
 #'     the backend implementation. Ignored otherwise.
 #' @returns ZarrGroup
+#' @export
 zarr_open_group <- function(
     store = NA,
     mode = NA,

@@ -1,15 +1,14 @@
 #' Convert a string into a character vector.
 #' 
-#' @keywords internal
 #' @param s The string.
 #' @return A vector where each element is an individual character.
+#' @keywords internal
 str_to_vec <- function(s) {
   return(stringr::str_split(s, pattern = "")[[1]])
 }
 
 #' Create a list of zarray metadata.
 #' 
-#' @keywords internal
 #' @param shape
 #' @param chunks
 #' @param dtype
@@ -19,6 +18,7 @@ str_to_vec <- function(s) {
 #' @param filters
 #' @param dimension_separator
 #' @return A list.
+#' @keywords internal
 create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor = NA, fill_value = NA, order = NA, filters = NA, dimension_separator = NA) {
   # Reference: https://zarr.readthedocs.io/en/stable/spec/v2.html#metadata
   if(is.na(dimension_separator)) {
@@ -37,18 +37,12 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
   if(!(order %in% c("C", "F"))) {
     stop("order must be 'C' or 'F'.")
   }
-  is_simple_dtype <- (length(dtype) == 1)
+  is_simple_dtype <- (!dtype$is_structured)
+  dtype_str <- dtype$dtype
   if(is_simple_dtype) {
-    dtype_vec <- str_to_vec(dtype)
-    dtype_byteorder <- dtype_vec[1]
-    dtype_basictype <- dtype_vec[2]
-    # TODO: validate dtype param's numbytes and time units
-    if(!(dtype_byteorder %in% c("<", ">", "|"))) {
-      stop("dtype byteorder must be <, >, or |.")
-    }
-    if(!(dtype_basictype %in% c("b", "i", "u", "f", "c", "m", "M", "S", "U", "V"))) {
-      stop("dtype basic type invalid.")
-    }
+    dtype_byteorder <- dtype$byte_order
+    dtype_basictype <- dtype$basic_type
+    # Validation occurs in Dtype constructor.
     
     if(dtype_basictype == "f") {
       if(!is.numeric(fill_value) && !(fill_value %in% c("NaN", "Infinity", "-Infinity"))) {
@@ -74,7 +68,7 @@ create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor =
     zarr_format = jsonlite::unbox(2),
     shape = shape,
     chunks = chunks,
-    dtype = jsonlite::unbox(dtype),
+    dtype = jsonlite::unbox(dtype_str),
     compressor = compressor,
     fill_value = jsonlite::unbox(fill_value),
     order = jsonlite::unbox(order),
@@ -107,7 +101,7 @@ obj_list <- function(...) {
   retval
 }
 
-
+#' @keywords internal
 zip_numeric <- function(a, b) {
   result <- list()
   for(i in seq_len(length(a))) {
@@ -116,6 +110,7 @@ zip_numeric <- function(a, b) {
   return(result)
 }
 
+#' @keywords internal
 check_selection_length <- function(selection, shape) {
   if(length(selection) > length(shape)) {
     stop('TooManyIndicesError')
@@ -124,6 +119,7 @@ check_selection_length <- function(selection, shape) {
 
 # Returns both the sliceIndices per dimension and the output shape after slicing.
 # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L22
+#' @keywords internal
 selection_to_slice_indices <- function(selection, shape) {
   slice_indices_result <- list()
   out_shape <- c()
@@ -158,10 +154,10 @@ filter_list <- function(l, pred) {
 
 #' Convert user selections, potentially containing "...", to a list of slices
 #' that can be used internally.
-#' @keywords internal
 #' @param selection The user-provided selection list.
 #' @param shape The shape of the array, to be used to fill in ellipsis values.
 #' @returns A list of selections with ellipsis values converted to NA.
+#' @keywords internal
 replace_ellipsis <- function(selection, shape) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/indexing.ts#L67
 
@@ -221,9 +217,9 @@ replace_ellipsis <- function(selection, shape) {
   return(selection)
 }
 
-#' @keywords internal
 #' @param shape A shape vector
 #' @returns The product of shape elements.
+#' @keywords internal
 compute_size <- function(shape) {
   result <- 1
   for(val in shape) {
@@ -234,11 +230,12 @@ compute_size <- function(shape) {
 
 #' Check if a value, potentially a vector, is NA
 #'
-#' @keywords internal
 #' @param val The value to check
 #' @return Whether the value is NA
+#' @keywords internal
 is_na <- function(val) {
-  if(length(val) > 1) {
+  if(length(val) != 1) {
+    # Including when val is integer(0), character(0), etc.
     return(FALSE)
   } else {
     return(is.na(val))
@@ -260,6 +257,7 @@ chunk_fill <- function(chunk, value) {
 #' Check if an error is a KeyError.
 #' @param e The error to check.
 #' @return TRUE if the error is a KeyError, FALSE otherwise.
+#' @export
 is_key_error <- function(e) {
   return(grepl("KeyError", e$message))
 }
@@ -282,8 +280,8 @@ get_list_product_aux <- function(dim_indexer_iterables, i, partial_results) {
 
 #' Generate a product of lists.
 #' @param dim_indexer_iterables A list of lists.
-#' @keywords internal
 #' @return A list of lists.
+#' @keywords internal
 get_list_product <- function(dim_indexer_iterables) {
   # Reference: https://docs.python.org/3/library/itertools.html#itertools.product
   partial_results <- list()

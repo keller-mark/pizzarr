@@ -39,6 +39,7 @@ char_vec_to_raw <- function(char_vec, basic_type, num_chars, byte_order) {
   return(buf)
 }
 
+#' @keywords internal
 raw_to_char_vec <- function(raw_vec, basic_type, num_chars, byte_order) {
   # Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/iconv.html
   if(basic_type == "S") {
