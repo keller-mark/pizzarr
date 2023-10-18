@@ -19,8 +19,6 @@ reference:
   desc: >
     Create and manipulate Zarr arrays.
 - contents:
-  - zarr
-  - as_zarr
   - ZarrArray
   - NestedArray
 - title: "Groups"
