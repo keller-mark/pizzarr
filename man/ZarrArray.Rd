@@ -14,7 +14,32 @@ Instantiate an array from an initialized store.
 \details{
 The Zarr Array class.
 }
+\keyword{(for}
+\keyword{Assign}
+\keyword{Convert}
+\keyword{Note}
+\keyword{R}
+\keyword{S3}
+\keyword{Zarr}
+\keyword{a}
+\keyword{all}
+\keyword{array}
+\keyword{bracket}
+\keyword{data}
+\keyword{for}
 \keyword{internal}
+\keyword{into}
+\keyword{loads}
+\keyword{memory.}
+\keyword{method).}
+\keyword{notation}
+\keyword{object}
+\keyword{selection}
+\keyword{that}
+\keyword{this}
+\keyword{to}
+\keyword{using}
+\keyword{values}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -524,7 +549,7 @@ Subset the array.
 \item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
 
 \item{\code{value}}{The value to set, as an R array() or a Zarr NestedArray instance.
-Subset / slice Zarr object using bracket notation}
+Set values for a selection using bracket notation (for S3 method).}
 }
 \if{html}{\out{</div>}}
 }
@@ -654,7 +679,6 @@ Use empty space to get whole dimension e.g. \link{1:5,,}}
 }
 \subsection{Returns}{
 Sliced Zarr object
-Convert Zarr object to R array
 }
 }
 \if{html}{\out{<hr>}}

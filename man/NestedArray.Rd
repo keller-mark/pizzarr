@@ -8,7 +8,7 @@
 The data as a flat vector.
 
 The data as a flat raw vector.
-Convert NestArray object to R array
+Convert NestArray object to R array (for S3 method)
 }
 \description{
 Represents a multi-dimensional array that can be
