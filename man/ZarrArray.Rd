@@ -14,7 +14,32 @@ Instantiate an array from an initialized store.
 \details{
 The Zarr Array class.
 }
+\keyword{(for}
+\keyword{Assign}
+\keyword{Convert}
+\keyword{Note}
+\keyword{R}
+\keyword{S3}
+\keyword{Zarr}
+\keyword{a}
+\keyword{all}
+\keyword{array}
+\keyword{bracket}
+\keyword{data}
+\keyword{for}
 \keyword{internal}
+\keyword{into}
+\keyword{loads}
+\keyword{memory.}
+\keyword{method).}
+\keyword{notation}
+\keyword{object}
+\keyword{selection}
+\keyword{that}
+\keyword{this}
+\keyword{to}
+\keyword{using}
+\keyword{values}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
@@ -112,6 +137,9 @@ The Zarr Array class.
 \item \href{#method-ZarrArray-view}{\code{ZarrArray$view()}}
 \item \href{#method-ZarrArray-astype}{\code{ZarrArray$astype()}}
 \item \href{#method-ZarrArray-get_dimension_separator}{\code{ZarrArray$get_dimension_separator()}}
+\item \href{#method-ZarrArray-[}{\code{ZarrArray$[()}}
+\item \href{#method-ZarrArray-[<-}{\code{ZarrArray$[<-()}}
+\item \href{#method-ZarrArray-as.array}{\code{ZarrArray$as.array()}}
 \item \href{#method-ZarrArray-clone}{\code{ZarrArray$clone()}}
 }
 }
@@ -520,7 +548,8 @@ Subset the array.
 \describe{
 \item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
 
-\item{\code{value}}{The value to set, as an R array() or a Zarr NestedArray instance.}
+\item{\code{value}}{The value to set, as an R array() or a Zarr NestedArray instance.
+Set values for a selection using bracket notation (for S3 method).}
 }
 \if{html}{\out{</div>}}
 }
@@ -631,6 +660,47 @@ Subset the array.
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_dimension_separator()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrArray-["></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrArray-[}{}}}
+\subsection{Method \code{[()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrArray$[(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Contains the slicing parameters, one for each dimension.
+Use empty space to get whole dimension e.g. \link{1:5,,}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Sliced Zarr object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrArray-[<-"></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrArray-[<-}{}}}
+\subsection{Method \code{[<-()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrArray$[<-(...)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ZarrArray-as.array"></a>}}
+\if{latex}{\out{\hypertarget{method-ZarrArray-as.array}{}}}
+\subsection{Method \code{as.array()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ZarrArray$as.array()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+array
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZarrArray-clone"></a>}}

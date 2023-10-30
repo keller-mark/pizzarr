@@ -299,7 +299,22 @@ NestedArray <- R6::R6Class("NestedArray",
         )
       }
       return(buf)
-      
+    },
+    #' Convert NestArray object to R array (for S3 method)
+    #'
+    #' @return array
+    as.array = function() {
+      # Consider using drop() to simplify dimensions of 1
+      return(self$data)
     }
   )
 )
+
+#' S3 method for as.array
+#'
+#' @param obj 
+#' @keywords internal
+#' @export
+as.array.NestedArray = function(obj) {
+  obj$as.array()
+}
