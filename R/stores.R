@@ -140,6 +140,9 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
     #' @return The item data in a vector of type raw.
     get_item = function(key) {
       fp <- file.path(self$root, key)
+      if(!file.exists(fp)) {
+        stop("KeyError:", key)
+      }
       fp_size <- file.info(fp)$size
       fp_pointer <- file(fp, "rb")
       fp_data <- readBin(fp_pointer, what = "raw", n = fp_size)
@@ -164,6 +167,16 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
     contains_item = function(key) {
       fp <- file.path(self$root, key)
       return(file.exists(fp))
+    },
+    rmdir = function(path=NA) {
+      path <- normalize_storage_path(path)
+      dir_path <- self$root
+      if(!is.na(path)) {
+        dir_path <- file.path(self$root, path)
+      }
+      if(dir.exists(dir_path)) {
+        unlink(dir_path, recursive = TRUE)
+      }
     }
   )
 )

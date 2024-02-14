@@ -28,6 +28,7 @@ DirectoryStore for Zarr
 \item \href{#method-DirectoryStore-get_item}{\code{DirectoryStore$get_item()}}
 \item \href{#method-DirectoryStore-set_item}{\code{DirectoryStore$set_item()}}
 \item \href{#method-DirectoryStore-contains_item}{\code{DirectoryStore$contains_item()}}
+\item \href{#method-DirectoryStore-rmdir}{\code{DirectoryStore$rmdir()}}
 \item \href{#method-DirectoryStore-clone}{\code{DirectoryStore$clone()}}
 }
 }
@@ -41,7 +42,6 @@ DirectoryStore for Zarr
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_writeable"><a href='../../pizzarr/html/Store.html#method-Store-is_writeable'><code>pizzarr::Store$is_writeable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="listdir"><a href='../../pizzarr/html/Store.html#method-Store-listdir'><code>pizzarr::Store$listdir()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rename"><a href='../../pizzarr/html/Store.html#method-Store-rename'><code>pizzarr::Store$rename()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rmdir"><a href='../../pizzarr/html/Store.html#method-Store-rmdir'><code>pizzarr::Store$rmdir()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -123,6 +123,15 @@ Determine whether the store contains an item.
 \subsection{Returns}{
 A boolean value.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DirectoryStore-rmdir"></a>}}
+\if{latex}{\out{\hypertarget{method-DirectoryStore-rmdir}{}}}
+\subsection{Method \code{rmdir()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DirectoryStore$rmdir(path = NA)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DirectoryStore-clone"></a>}}

@@ -615,3 +615,179 @@ zarr_open_group <- function(
         chunk_store=chunk_store
     ))
 }
+
+#' Open an array using file-mode-like semantics.
+#' @param store : MutableMapping or string, optional
+#'     Store or path to directory in file system or name of zip file.
+#' @param mode : {'r', 'r+', 'a', 'w', 'w-'}, optional
+#'     Persistence mode: 'r' means read only (must exist); 'r+' means
+#'     read/write (must exist); 'a' means read/write (create if doesn't
+#'     exist); 'w' means create (overwrite if exists); 'w-' means create
+#'     (fail if exists).
+#' @param shape : int or tuple of ints
+#'     Array shape.
+#' @param chunks : int or tuple of ints, optional
+#'     Chunk shape. If True, will be guessed from `shape` and `dtype`. If
+#'     False, will be set to `shape`, i.e., single chunk for the whole array.
+#'     If an int, the chunk size in each dimension will be given by the value
+#'     of `chunks`. Default is True.
+#' @param dtype : string or dtype, optional
+#'     NumPy dtype.
+#' @param compressor : Codec, optional
+#'     Primary compressor.
+#' @param fill_value : object
+#'     Default value to use for uninitialized portions of the array.
+#' @param order : {'C', 'F'}, optional
+#'     Memory layout to be used within each chunk.
+#' @param store : MutableMapping or string
+#'     Store or path to directory in file system or name of zip file.
+#' @param synchronizer : object, optional
+#'     Array synchronizer.
+#' @param overwrite : bool, optional
+#'     If True, delete all pre-existing data in `store` at `path` before
+#'     creating the array.
+#' @param path : string, optional
+#'     Path under which array is stored.
+#' @param chunk_store : MutableMapping, optional
+#'     Separate storage for chunks. If not provided, `store` will be used
+#'     for storage of both chunks and metadata.
+#' @param filters : sequence of Codecs, optional
+#     Sequence of filters to use to encode chunk data prior to compression.
+#' @param cache_metadata : bool, optional
+#'     If True, array configuration metadata will be cached for the
+#'     lifetime of the object. If False, array metadata will be reloaded
+#'     prior to all data access and modification operations (may incur
+#'     overhead depending on storage and data access pattern).
+#' @param cache_attrs : bool, optional
+#'     If True (default), user attributes will be cached for attribute read
+#'     operations. If False, user attributes are reloaded from the store prior
+#'     to all attribute read operations.
+#' @param object_codec : Codec, optional
+#'     A codec to encode object arrays, only needed if dtype=object.
+#' @param dimension_separator : {'.', '/'}, optional
+#'     Separator placed between the dimensions of a chunk.
+#' @param write_empty_chunks : bool, optional
+#'     If True (default), all chunks will be stored regardless of their
+#'     contents. If False, each chunk is compared to the array's fill value
+#'     prior to storing. If a chunk is uniformly equal to the fill value, then
+#'     that chunk is not be stored, and the store entry for that chunk's key
+#'     is deleted. This setting enables sparser storage, as only chunks with
+#'     non-fill-value data are stored, at the expense of overhead associated
+#'     with checking the data of each chunk.
+#' @returns ZarrArray
+#' @export
+zarr_open_array <- function(
+    store = NA,
+    mode = NA,
+    shape = NA,
+    chunks=TRUE,
+    dtype=NA,
+    compressor=NA,
+    fill_value=NA,
+    order=NA,
+    synchronizer=NA,
+    overwrite=FALSE,
+    path=NA,
+    chunk_store=NA,
+    filters=NA,
+    cache_metadata=TRUE,
+    cache_attrs=TRUE,
+    object_codec=NA,
+    dimension_separator=NA,
+    write_empty_chunks=TRUE
+) {
+    # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/creation.py#L376
+    if(is_na(compressor)) {
+        compressor <- "default"
+    }
+    if(is.na(fill_value)) {
+        fill_value <- 0
+    }
+    if(is.na(order)) {
+        order <- "F"
+    }
+
+    if(is_na(mode)) {
+        mode <- "a"
+    }
+
+    # handle polymorphic store arg
+    store <- normalize_store_arg(store, storage_options=storage_options, mode=mode)
+    if(!is_na(chunk_store)) {
+        chunk_store <- normalize_store_arg(chunk_store, storage_options=storage_options, mode=mode)
+    }
+    path <- normalize_storage_path(path)
+
+    # ensure store is initialized
+    if(mode == "r" || mode == "r+") {
+        if (!contains_array(store, path)) {
+            if(contains_group(store, path)) {
+                stop("ContainsGroupError(path)")
+            }
+            stop("ArrayNotFoundError(path)")
+        }
+
+    } else if (mode == 'w') {
+        init_array(
+            store, shape=shape, chunks=chunks, dtype=dtype,
+            compressor=compressor, fill_value=fill_value,
+            order=order, filters=filters, overwrite=TRUE, path=path,
+            object_codec=object_codec, chunk_store=chunk_store
+        )
+
+    } else if(mode == "a") {
+        if (!contains_array(store, path)) {
+            if(contains_group(store, path)) {
+                stop("ContainGroupError(path)")
+            }
+            init_array(
+                store, shape=shape, chunks=chunks, dtype=dtype,
+                compressor=compressor, fill_value=fill_value,
+                order=order, filters=filters, path=path,
+                object_codec=object_codec, chunk_store=chunk_store
+            )
+        }
+    } else if(mode == "w-" || mode == "x") {
+        if (contains_group(store, path)) {
+            stop("ContainsGroupError(path)")
+        } else if (contains_array(store, path)) {
+            stop("ContainsArrayError(path)")
+        } else {
+            init_array(
+                store, shape=shape, chunks=chunks, dtype=dtype,
+                compressor=compressor, fill_value=fill_value,
+                order=order, filters=filters, path=path,
+                object_codec=object_codec, chunk_store=chunk_store
+            )
+        }
+    }
+
+    # determine read only status
+    read_only <- (mode == "r")
+
+    # instantiate array
+    z <- ZarrArray$new(
+        store,
+        path=path,
+        chunk_store=chunk_store,
+        synchronizer=synchronizer,
+        cache_metadata=cache_metadata,
+        cache_attrs=cache_attrs,
+        read_only=read_only,
+        write_empty_chunks=write_empty_chunks
+    )
+    return(z)
+}
+
+#' Convenience function to save a ZarrArray to the local file system.
+#' @param store : MutableMapping or string
+#'     Store or path to directory in file system or name of zip file.
+#' @param arr : ZarrArray
+#'     The array with data to save.
+#' @param ... Additional arguments to pass to zarr_create_array().
+#' @export
+zarr_save_array <- function(store, arr, ...) {
+    # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/convenience.py#L112
+    store <- normalize_store_arg(store)
+    zarr_create_array(data=arr$get_item("..."), shape=arr$get_shape(), store=store, ...)
+}
