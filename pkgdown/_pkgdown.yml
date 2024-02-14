@@ -63,6 +63,8 @@ reference:
   - zarr_create_array
   - zarr_create_group
   - zarr_open_group
+  - zarr_open_array
+  - zarr_save_array
 - title: "Utilities"
   desc: >
     Utility functions for working with Zarr arrays and groups.
