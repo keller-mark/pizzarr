@@ -38,5 +38,5 @@ test_that("zarr_save_array and zarr_open_array", {
 
     expect_equal(a, selection$data)
 
-    unlink(file.path("test_data", "test_zarr_save_array.zarr"))
+    unlink(file.path("test_data", "test_zarr_save_array.zarr"), recursive = TRUE)
 })
