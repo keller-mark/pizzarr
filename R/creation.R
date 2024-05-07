@@ -90,7 +90,7 @@ init_array_metadata <- function(
     # dtype = dtype.base
 
     shape <- normalize_shape(shape)
-
+    
     dtype_itemsize <- dtype$num_bytes
     chunks <- normalize_chunks(chunks, shape, dtype_itemsize)
     order <- normalize_order(order)
@@ -126,7 +126,7 @@ init_array_metadata <- function(
     filters_config <- list()
     if(!is_na(filters)) {
         for(f in filters) {
-            append(filters_config, f$get_config())
+            append(filters_config, list(f$get_config()))
         }
     }
 
@@ -142,7 +142,7 @@ init_array_metadata <- function(
                 stop("missing object_codec for object array")
             }
         } else {
-            filters_config <- append(filters_config, object_codec$get_config())
+            filters_config <- append(filters_config, list(object_codec$get_config()))
         }
     } else if(!is_na(object_codec)) {
         warning("an object_codec is only needed for object arrays")

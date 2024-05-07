@@ -32,13 +32,13 @@ get_dtype_parts <- function(dtype) {
     } else {
       byte_multiplier <- 1
     }
-    if(!is.null(dtype_matches[1,4])) {
+    if(!is.null(dtype_matches[1,4]) && !is.na(dtype_matches[1,4])) {
       num_items <- as.integer(dtype_matches[1,4])
       num_bytes <- num_items * byte_multiplier
     } else {
       # Support object dtype
       num_items <- NA
-      num_bytes <- NA
+      num_bytes <- 4
     }
     result <- list(
       dtype_str = dtype,
