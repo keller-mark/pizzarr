@@ -11,3 +11,5 @@ check/
 vignettes/data/
 *.Rproj
 tests/testthat/test_data
+.ipynb_checkpoints/
+*.ipynb

@@ -15,6 +15,34 @@ test_that("get_basic_selection_zd", {
     expect_equal(as.numeric(a), as.numeric(sel$data))
 })
 
+test_that("get_basic_selection_zd with anndataR IntScalar fixture", {
+    root <- system.file("extdata", "fixtures", "v2", "example.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    z <- zarr_open_array(store, path = "uns/IntScalar")
+
+    expect_equal(z$get_shape(), integer(0))
+
+    sel <- z$get_item("...")
+    scalar <- as.numeric(sel$data)
+
+    expect_equal(scalar, 1)
+})
+
+test_that("get_basic_selection_zd with anndataR StringScalar fixture", {
+    root <- system.file("extdata", "fixtures", "v2", "example.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    z <- zarr_open_array(store, path = "uns/StringScalar")
+
+    expect_equal(z$get_shape(), integer(0))
+
+    sel <- z$get_item("...")
+    scalar <- as.character(sel$data)
+
+    expect_equal(scalar, "A string")
+})
+
 test_that("get_basic_selection_1d", {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/tests/test_indexing.py#L70
     a <- array(data=42)

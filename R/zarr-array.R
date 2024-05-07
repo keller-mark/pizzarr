@@ -830,7 +830,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         private$load_metadata()
       }
       # Handle zero-dimensional arrays
-      if(is.null(private$shape)) {
+      if(is.null(private$shape) || length(private$shape) == 0) {
         return(private$get_basic_selection_zd(selection, out = out, fields = fields))
       }
       return(private$get_basic_selection_nd(selection, out = out, fields = fields))
@@ -852,7 +852,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     set_basic_selection = function(selection, value, fields = NA) {
       # Handle zero-dimensional arrays
-      if(is.null(private$shape)) {
+      if(is.null(private$shape) || length(private$shape) == 0) {
         return(private$set_basic_selection_zd(selection, value = value, fields = fields))
       }
       return(private$set_basic_selection_nd(selection, value = value, fields = fields))
