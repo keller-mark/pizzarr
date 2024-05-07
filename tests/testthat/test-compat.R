@@ -466,3 +466,11 @@ test_that("Can open Zarr group and read a 2D VLen-UTF8 string array with Blosc c
     expect_equal(dim(selection$data), c(2, 2))
     expect_equal(selection$data, array(data=c("a", "cc", "b", "d"), dim=c(2, 2)))
 })
+
+test_that("DirectoryStore can listdir", {
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    
+    store <- DirectoryStore$new(root)
+    
+    expect_equal(store$listdir("1d.chunked.i2"), c(".zarray", "0", "1"))
+})

@@ -50,3 +50,17 @@ test_that("VLenUTF8 codec can encode - array to raw", {
     100
   )))
 })
+
+test_that("VLenUTF8 codec can encode with high level API", {
+  store <- MemoryStore$new()
+  object_codec <- VLenUtf8Codec$new()
+
+  string <- LETTERS[1:5]
+  dims <- length(string)
+  data <- array(data = string, dim = dims)
+
+  z <- pizzarr::zarr_create_array(data, store = store, path = "string", dtype = "|O", object_codec = object_codec, shape = dims)
+  
+  sel <- z$get_item("...")
+  expect_equal(as.character(sel$data), string)
+})

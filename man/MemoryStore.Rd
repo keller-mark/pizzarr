@@ -30,6 +30,7 @@ MemoryStore for Zarr
 \item \href{#method-MemoryStore-get_item}{\code{MemoryStore$get_item()}}
 \item \href{#method-MemoryStore-set_item}{\code{MemoryStore$set_item()}}
 \item \href{#method-MemoryStore-contains_item}{\code{MemoryStore$contains_item()}}
+\item \href{#method-MemoryStore-listdir}{\code{MemoryStore$listdir()}}
 \item \href{#method-MemoryStore-clone}{\code{MemoryStore$clone()}}
 }
 }
@@ -41,7 +42,6 @@ MemoryStore for Zarr
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_listable"><a href='../../pizzarr/html/Store.html#method-Store-is_listable'><code>pizzarr::Store$is_listable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_readable"><a href='../../pizzarr/html/Store.html#method-Store-is_readable'><code>pizzarr::Store$is_readable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_writeable"><a href='../../pizzarr/html/Store.html#method-Store-is_writeable'><code>pizzarr::Store$is_writeable()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="listdir"><a href='../../pizzarr/html/Store.html#method-Store-listdir'><code>pizzarr::Store$listdir()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rename"><a href='../../pizzarr/html/Store.html#method-Store-rename'><code>pizzarr::Store$rename()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rmdir"><a href='../../pizzarr/html/Store.html#method-Store-rmdir'><code>pizzarr::Store$rmdir()</code></a></span></li>
 </ul>
@@ -138,6 +138,15 @@ Determine whether the store contains an item.
 \subsection{Returns}{
 A boolean value.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-MemoryStore-listdir"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-listdir}{}}}
+\subsection{Method \code{listdir()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MemoryStore$listdir(key)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-MemoryStore-clone"></a>}}
