@@ -194,9 +194,6 @@ normalize_chunks <- function(chunks, shape, typesize) {
 
   # handle auto-chunking
   if(is_na(chunks) || isTRUE(chunks)) {
-    print(chunks)
-    print(shape)
-    print(typesize)
     return(guess_chunks(shape, typesize))
   }
 
