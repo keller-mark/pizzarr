@@ -791,3 +791,49 @@ zarr_save_array <- function(store, arr, ...) {
     store <- normalize_store_arg(store)
     zarr_create_array(data=arr$get_item("..."), shape=arr$get_shape(), store=store, ...)
 }
+
+#' Convenience function to open a group or array using file-mode-like semantics.
+#' @param store : MutableMapping or string, optional
+#'     Store or path to directory in file system or name of zip file.
+#' @param mode : {'r', 'r+', 'a', 'w', 'w-'}, optional
+#'     Persistence mode: 'r' means read only (must exist); 'r+' means
+#'     read/write (must exist); 'a' means read/write (create if doesn't
+#'     exist); 'w' means create (overwrite if exists); 'w-' means create
+#'     (fail if exists).
+#' @param path : str or NA, optional
+#'     The path within the store to open.
+#' @param ... Additional arguments to pass to zarr_open_array or zarr_open_group.
+#' @returns ZarrArray or ZarrGroup
+#' @export
+zarr_open <- function(store = NA, mode = NA, path = NA, ...) {
+    kwargs <- list(...)
+
+    if(is_na(mode)) {
+        mode <- "a"
+    }
+
+    store <- normalize_store_arg(store)
+    path <- normalize_storage_path(path)
+
+    if(mode %in% c("w", "w-", "x")) {
+        if("shape" %in% names(kwargs)) {
+            return(zarr_open_array(store=store, mode=mode, path=path, ...))
+        } else {
+            return(zarr_open_group(store=store, mode=mode, path=path, ...))
+        }
+    } else if(mode == "a") {
+        if("shape" %in% names(kwargs) || contains_array(store, path)) {
+            return(zarr_open_array(store=store, mode=mode, path=path, ...))
+        } else {
+            return(zarr_open_group(store=store, mode=mode, path=path, ...))
+        }
+    } else {
+        if(contains_array(store, path)) {
+            return(zarr_open_array(store=store, mode=mode, path=path, ...))
+        } else if(contains_group(store, path)) {
+            return(zarr_open_group(store=store, mode=mode, path=path, ...))
+        } else {
+            stop("PathNotFoundError(path)")
+        }
+    }
+}
