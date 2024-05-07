@@ -32,7 +32,7 @@ Store <- R6::R6Class("Store",
         # TODO
       },
       #' @keywords internal
-      rmdir_from_keys = function() {
+      rmdir_from_keys = function(path) {
         # TODO
       }
    ),
@@ -297,6 +297,17 @@ MemoryStore <- R6::R6Class("MemoryStore",
         stop("KeyError:", key)
       }
       return(sort(names(item)))
+     },
+     rmdir = function(item) {
+      parent_and_key <- self$get_parent(item)
+      parent <- parent_and_key$parent
+      key <- parent_and_key$key
+
+      if(key %in% names(parent)) {
+        parent[[key]] <- NULL
+      } else {
+        stop("KeyError:", item)
+      }
      }
    )
 )
