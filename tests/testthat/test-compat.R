@@ -10,6 +10,16 @@ test_that("Can open Zarr group using convenience function", {
     expect_equal(a$get_shape(), c(4))
 })
 
+test_that("Can open Zarr group or array using convenience function", {
+
+    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    g <- zarr_open(root)
+    a <- zarr_open(root, path="1d.contiguous.lz4.i2")
+
+    expect_equal(class(g)[1], "ZarrGroup")
+    expect_equal(class(a)[1], "ZarrArray")
+})
+
 test_that("Can open Zarr group and read a 1D 2-byte integer array with LZ4 compression", {
 
     root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")

@@ -62,6 +62,7 @@ reference:
   - zarr_create_zeros
   - zarr_create_array
   - zarr_create_group
+  - zarr_open
   - zarr_open_group
   - zarr_open_array
   - zarr_save_array
