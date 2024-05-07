@@ -14,7 +14,7 @@ Attributes <- R6::R6Class("Attributes",
     cached_aslist = NULL,
 
     get_nosync = function() {
-
+      
     }
   ),
   public = list(
@@ -44,7 +44,15 @@ Attributes <- R6::R6Class("Attributes",
       self$synchronizer <- synchronizer
     },
     to_list = function() {
-      return(self$store$metadata_class$decode_metadata(self$store$get_item(self$key)))
+      attrs_list <- tryCatch({
+        return(self$store$metadata_class$decode_metadata(self$store$get_item(self$key)))
+      }, error = function(cond) {
+        if(is_key_error(cond)) {
+          return(obj_list())
+        }
+        stop(cond)
+      })
+      return(attrs_list)
     },
     refresh = function() {
       # TODO
