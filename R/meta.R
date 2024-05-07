@@ -7,15 +7,15 @@ Metadata2 <- R6::R6Class("Metadata2",
         ZARR_FORMAT = 2
     ),
     public = list(
-        decode_metadata = function(s) {
+        decode_metadata = function(s, auto_unbox=FALSE) {
             if(is.list(s)) {
                 return(s)
             } else {
-                return(jsonlite::fromJSON(rawToChar(s), simplifyVector = FALSE))
+                return(jsonlite::fromJSON(rawToChar(s), simplifyVector = FALSE, auto_unbox = auto_unbox))
             }
         },
-        encode_metadata = function(meta) {
-            return(charToRaw(jsonlite::toJSON(meta)))
+        encode_metadata = function(meta, auto_unbox=FALSE) {
+            return(charToRaw(jsonlite::toJSON(meta, auto_unbox = auto_unbox)))
         },
         decode_array_metadata = function(s) {
             meta <- self$decode_metadata(s)

@@ -14,7 +14,31 @@ Attributes <- R6::R6Class("Attributes",
     cached_aslist = NULL,
 
     get_nosync = function() {
-      
+      attrs_list <- tryCatch({
+        return(self$store$metadata_class$decode_metadata(self$store$get_item(self$key), auto_unbox = TRUE))
+      }, error = function(cond) {
+        if(is_key_error(cond)) {
+          return(obj_list())
+        }
+        stop(cond)
+      })
+      return(attrs_list)
+    },
+    put_nosync = function(d) {
+      self$store$set_item(self$key, self$store$metadata_class$encode_metadata(d, auto_unbox = TRUE))
+      if(self$cache) {
+        private$cached_aslist <- d
+      }
+    },
+    set_item_nosync = function(item, value) {
+      d <- private$get_nosync()
+      d[[item]] <- value
+      private$put_nosync(d)
+    },
+    del_item_nosync = function(item) {
+      d <- private$get_nosync()
+      d[[item]] <- NULL
+      private$put_nosync(d)
     }
   ),
   public = list(
@@ -44,27 +68,33 @@ Attributes <- R6::R6Class("Attributes",
       self$synchronizer <- synchronizer
     },
     to_list = function() {
-      attrs_list <- tryCatch({
-        return(self$store$metadata_class$decode_metadata(self$store$get_item(self$key)))
-      }, error = function(cond) {
-        if(is_key_error(cond)) {
-          return(obj_list())
-        }
-        stop(cond)
-      })
-      return(attrs_list)
+      if(self$cache && !is_na(private$cached_aslist)) {
+        return(private$cached_aslist)
+      }
+      d <- private$get_nosync()
+      if(self$cache) {
+        private$cached_aslist <- d
+      }
+      return(d)
     },
     refresh = function() {
-      # TODO
+      if(self$cache) {
+        private$cached_aslist <- private$get_nosync()
+      }
     },
     contains = function(x) {
-      # TODO
+      return(x %in% names(self$to_list()))
     },
     get_item = function(item) {
-      # TODO
+      return(self$to_list()[[item]])
     },
     set_item = function(item, value) {
-      # TODO
+      # TODO: support synchronizer
+      private$set_item_nosync(item, value)
+    },
+    del_item = function(item) {
+      # TODO: support synchronizer
+      private$del_item_nosync(item)
     }
   )
 )
