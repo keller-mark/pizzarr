@@ -177,6 +177,15 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
       if(dir.exists(dir_path)) {
         unlink(dir_path, recursive = TRUE)
       }
+    },
+    listdir = function(key) {
+      dir_path <- file.path(self$root, key)
+      if(!dir.exists(dir_path)) {
+        stop("KeyError:", key)
+      }
+      dir_list <- sort(list.files(dir_path, full.names = FALSE, all.files = TRUE, include.dirs = TRUE))
+      dir_list <- dir_list[!dir_list %in% c(".", "..")]
+      return(dir_list)
     }
   )
 )
@@ -281,6 +290,13 @@ MemoryStore <- R6::R6Class("MemoryStore",
          return(FALSE)
        })
        return(result)
+     },
+     listdir = function(key) {
+      item <- self$get_item(key)
+      if(!is.list(item)) {
+        stop("KeyError:", key)
+      }
+      return(sort(names(item)))
      }
    )
 )

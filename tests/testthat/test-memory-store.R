@@ -48,3 +48,14 @@ test_that("Zarr MemoryStore, can set and get twice nested values", {
   value_world <- store$get_item("hello/world")
   expect_equal(value_world, list(a = 0xdead, b = 0xdead))
 })
+
+test_that("Zarr MemoryStore, can listdir", {
+  store <- MemoryStore$new()
+  store$set_item("hello/there/a", c(0xbeef))
+  store$set_item("hello/there/b", c(0xbeef))
+  store$set_item("hello/world/a", c(0xdead))
+  store$set_item("hello/world/b", c(0xdead))
+
+  expect_equal(store$listdir("hello"), c("there", "world"))
+  expect_equal(store$listdir("hello/there"), c("a", "b"))
+})
