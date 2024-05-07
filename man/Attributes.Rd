@@ -43,6 +43,7 @@ The Zarr Attributes class.
 \item \href{#method-Attributes-contains}{\code{Attributes$contains()}}
 \item \href{#method-Attributes-get_item}{\code{Attributes$get_item()}}
 \item \href{#method-Attributes-set_item}{\code{Attributes$set_item()}}
+\item \href{#method-Attributes-del_item}{\code{Attributes$del_item()}}
 \item \href{#method-Attributes-clone}{\code{Attributes$clone()}}
 }
 }
@@ -114,6 +115,15 @@ An \code{Attributes} instance.
 \subsection{Method \code{set_item()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$set_item(item, value)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Attributes-del_item"></a>}}
+\if{latex}{\out{\hypertarget{method-Attributes-del_item}{}}}
+\subsection{Method \code{del_item()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Attributes$del_item(item)}\if{html}{\out{</div>}}
 }
 
 }
