@@ -254,3 +254,20 @@ test_that("get_basic_selection_3d(one-based) - can get_item for three-dimensiona
     # [2,]    8   10
     expect_equal(expected_out, sel$data)
 })
+
+test_that("Can read 2D string array", {
+    root <- system.file("extdata", "fixtures", "v2", "example.zarr", package="pizzarr")
+    store <- DirectoryStore$new(root)
+    z <- zarr_open_array(store, path = "uns/String2D")
+    nested_arr <- z$get_item("...")
+    data <- nested_arr$data
+
+    row1 <- c("row0col0", "row1col0", "row2col0", "row3col0", "row4col0", "row5col0", "row6col0", "row7col0", "row8col0", "row9col0")
+    row2 <- c("row0col1", "row1col1", "row2col1", "row3col1", "row4col1", "row5col1", "row6col1", "row7col1", "row8col1", "row9col1")
+    row3 <- c("row0col2", "row1col2", "row2col2", "row3col2", "row4col2", "row5col2", "row6col2", "row7col2", "row8col2", "row9col2")
+    row4 <- c("row0col3", "row1col3", "row2col3", "row3col3", "row4col3", "row5col3", "row6col3", "row7col3", "row8col3", "row9col3")
+    row5 <- c("row0col4", "row1col4", "row2col4", "row3col4", "row4col4", "row5col4", "row6col4", "row7col4", "row8col4", "row9col4")
+
+    expected_arr <- t(array(data = c(row1, row2, row3, row4, row5), dim = c(10, 5)))
+    expect_equal(expected_arr, data)
+})

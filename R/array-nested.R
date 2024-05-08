@@ -109,11 +109,18 @@ NestedArray <- R6::R6Class("NestedArray",
         if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
           self$data <- data
         } else {
-          # Data array did not have the expected shape, so we need to reshape it.
           astype_func <- self$dtype_obj$get_asrtype()
-          self$data <- array(data=as.array(astype_func(data)), dim=shape)
+
+          # Data array did not have the expected shape, so we need to reshape it.
+          if(!is_na(order) && order == "C") {
+            ordered_shape <- shape[rev(seq_len(length(shape)))]
+            array_from_vec <- array(data = as.array(astype_func(data)), dim = ordered_shape)
+            self$data <- aperm(array_from_vec, rev(seq_len(length(shape))))
+          } else {
+            astype_func <- self$dtype_obj$get_asrtype()
+            self$data <- array(data=as.array(astype_func(data)), dim=shape)
+          }
         }
-        # TODO: account for order == "C"?
       } else if(is.raw(data)) {
         # Create array from a raw vector.
 
