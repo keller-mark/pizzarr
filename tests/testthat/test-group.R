@@ -34,3 +34,43 @@ test_that("create array within a nested group", {
 
     expect_equal(zb_sel$data, ob_sel$data)
 })
+
+test_that("create group with overwrite = TRUE", {
+    store <- MemoryStore$new()
+    z <- zarr_create_group(store = store, path = "foo")
+
+    z2 <- zarr_create_group(store = store, path = "foo", overwrite = TRUE)
+
+    name <- z$get_name()
+    expect_equal(name, "/foo")
+
+    name2 <- z2$get_name()
+    expect_equal(name2, "/foo")
+})
+
+
+test_that("open group twice with MemoryStore", {
+    store <- MemoryStore$new()
+    z <- zarr_open_group(store = store, path = "foo")
+
+    z2 <- zarr_open_group(store = store, path = "foo")
+
+    name <- z$get_name()
+    expect_equal(name, "/foo")
+
+    name2 <- z2$get_name()
+    expect_equal(name2, "/foo")
+})
+
+test_that("open group twice with DirectoryStore", {
+    store <- DirectoryStore$new(tempdir())
+    z <- zarr_open_group(store = store, path = "foo")
+
+    z2 <- zarr_open_group(store = store, path = "foo")
+
+    name <- z$get_name()
+    expect_equal(name, "/foo")
+
+    name2 <- z2$get_name()
+    expect_equal(name2, "/foo")
+})

@@ -31,6 +31,7 @@ MemoryStore for Zarr
 \item \href{#method-MemoryStore-set_item}{\code{MemoryStore$set_item()}}
 \item \href{#method-MemoryStore-contains_item}{\code{MemoryStore$contains_item()}}
 \item \href{#method-MemoryStore-listdir}{\code{MemoryStore$listdir()}}
+\item \href{#method-MemoryStore-rmdir}{\code{MemoryStore$rmdir()}}
 \item \href{#method-MemoryStore-clone}{\code{MemoryStore$clone()}}
 }
 }
@@ -43,7 +44,6 @@ MemoryStore for Zarr
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_readable"><a href='../../pizzarr/html/Store.html#method-Store-is_readable'><code>pizzarr::Store$is_readable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_writeable"><a href='../../pizzarr/html/Store.html#method-Store-is_writeable'><code>pizzarr::Store$is_writeable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rename"><a href='../../pizzarr/html/Store.html#method-Store-rename'><code>pizzarr::Store$rename()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rmdir"><a href='../../pizzarr/html/Store.html#method-Store-rmdir'><code>pizzarr::Store$rmdir()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -86,7 +86,7 @@ A list with the keys \code{parent} and \code{key}.
 \subsection{Method \code{get_item()}}{
 Get an item from the store.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MemoryStore$get_item(item)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MemoryStore$get_item(item = NA)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -144,7 +144,16 @@ A boolean value.
 \if{latex}{\out{\hypertarget{method-MemoryStore-listdir}{}}}
 \subsection{Method \code{listdir()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MemoryStore$listdir(key)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MemoryStore$listdir(key = NA)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-MemoryStore-rmdir"></a>}}
+\if{latex}{\out{\hypertarget{method-MemoryStore-rmdir}{}}}
+\subsection{Method \code{rmdir()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MemoryStore$rmdir(item)}\if{html}{\out{</div>}}
 }
 
 }

@@ -32,7 +32,7 @@ Store <- R6::R6Class("Store",
         # TODO
       },
       #' @keywords internal
-      rmdir_from_keys = function() {
+      rmdir_from_keys = function(path) {
         # TODO
       }
    ),
@@ -178,8 +178,12 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
         unlink(dir_path, recursive = TRUE)
       }
     },
-    listdir = function(key) {
-      dir_path <- file.path(self$root, key)
+    listdir = function(key=NA) {
+      if(is_na(key)) {
+        dir_path <- self$root
+      } else {
+        dir_path <- file.path(self$root, key)
+      }
       if(!dir.exists(dir_path)) {
         stop("KeyError:", key)
       }
@@ -235,7 +239,10 @@ MemoryStore <- R6::R6Class("MemoryStore",
      #' Get an item from the store.
      #' @param item The item key.
      #' @return The item data in a vector of type raw.
-     get_item = function(item) {
+     get_item = function(item=NA) {
+       if(is_na(item)) {
+        return(self$root)
+       }
        parent_and_key <- self$get_parent(item)
        parent <- parent_and_key$parent
        key <- parent_and_key$key
@@ -291,12 +298,15 @@ MemoryStore <- R6::R6Class("MemoryStore",
        })
        return(result)
      },
-     listdir = function(key) {
+     listdir = function(key=NA) {
       item <- self$get_item(key)
       if(!is.list(item)) {
         stop("KeyError:", key)
       }
       return(sort(names(item)))
+     },
+     rmdir = function(item) {
+      self$set_item(item, NULL)
      }
    )
 )

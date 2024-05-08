@@ -56,6 +56,23 @@ test_that("Zarr MemoryStore, can listdir", {
   store$set_item("hello/world/a", c(0xdead))
   store$set_item("hello/world/b", c(0xdead))
 
+  expect_equal(store$listdir(), c("hello"))
   expect_equal(store$listdir("hello"), c("there", "world"))
   expect_equal(store$listdir("hello/there"), c("a", "b"))
+})
+
+test_that("Zarr MemoryStore, can rmdir", {
+  store <- MemoryStore$new()
+  store$set_item("hello/there/a", c(0xbeef))
+  store$set_item("hello/there/b", c(0xbeef))
+  store$set_item("hello/world/a", c(0xdead))
+  store$set_item("hello/world/b", c(0xdead))
+
+  store$rmdir("hello/there")
+  f <- function() store$listdir("hello/there")
+  expect_error(f())
+  expect_equal(store$listdir("hello"), c("world"))
+
+  store$rmdir("hello")
+  expect_equal(store$listdir(), character(0))
 })

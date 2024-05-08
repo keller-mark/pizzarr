@@ -138,7 +138,7 @@ A boolean value.
 \if{latex}{\out{\hypertarget{method-DirectoryStore-listdir}{}}}
 \subsection{Method \code{listdir()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DirectoryStore$listdir(key)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DirectoryStore$listdir(key = NA)}\if{html}{\out{</div>}}
 }
 
 }
