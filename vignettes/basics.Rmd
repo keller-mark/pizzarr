@@ -91,3 +91,27 @@ a <- g$get_item("1d.contiguous.lz4.i2")
 
 print(a$get_shape())
 ```
+
+## Get attributes from a root group and ZarrArray
+
+```{r}
+root <- system.file("extdata", "dog.ome.zarr", package="pizzarr")
+
+z <- zarr_open(root)
+
+class(z)
+
+attrs <- z$get_attrs()$to_list()
+
+names(attrs)
+
+lengths(attrs$omero)
+
+z$get_store()$listdir()
+
+a <- z$get_item("4")
+
+class(a)
+
+a$get_attrs()$to_list()
+```
