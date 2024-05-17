@@ -358,7 +358,9 @@ HttpStore <- R6::R6Class("HttpStore",
       segments <- stringr::str_split(private$url, "/")[[1]]
       private$domain <- paste(segments[1:3], collapse="/")
       private$base_path <- paste(segments[4:length(segments)], collapse="/")
-
+      
+      if(!requireNamespace("crul", quietly = TRUE)) stop("HttpStore requires the crul package")
+      
       private$client <- crul::HttpClient$new(
         url = private$domain,
         opts = private$options,
