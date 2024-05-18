@@ -4,12 +4,12 @@
 #' @title OIndex Class
 #' @docType class
 #' @description
-#'
+#'  TODO
 #' @rdname OIndex
 #' @keywords internal
 OIndex <- R6::R6Class("OIndex",
   public = list(
-    #' @field array
+    #' @field array array
     #' @keywords internal
     array = NULL,
     #' @description
@@ -27,12 +27,12 @@ OIndex <- R6::R6Class("OIndex",
 #' @title VIndex Class
 #' @docType class
 #' @description
-#'
+#'  TODO
 #' @rdname VIndex
 #' @keywords internal
 VIndex <- R6::R6Class("VIndex",
   public = list(
-    #' @field array
+    #' @field array array
     #' @keywords internal
     array = NULL,
     #' @description
@@ -50,19 +50,19 @@ VIndex <- R6::R6Class("VIndex",
 #' @title IntDimIndexer Class
 #' @docType class
 #' @description
-#'
+#'  TODO
 #' @rdname IntDimIndexer
 #' @keywords internal
 IntDimIndexer <- R6::R6Class("IntDimIndexer",
   inherit = DimIndexer,
   public = list(
-    #' @field dim_sel
+    #' @field dim_sel TODO
     #' @keywords internal
     dim_sel = NULL,
-    #' @field dim_len
+    #' @field dim_len TODO
     #' @keywords internal
     dim_len = NULL,
-    #' @field dim_chunk_len
+    #' @field dim_chunk_len TODO
     #' @keywords internal
     dim_chunk_len = NULL,
     #' @description
@@ -100,7 +100,7 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
 #' @title SliceDimIndexer Class
 #' @docType class
 #' @description
-#'
+#'  TODO
 #' @rdname SliceDimIndexer
 #' @keywords internal
 SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
@@ -201,13 +201,13 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
 #' @title BasicIndexer Class
 #' @docType class
 #' @description
-#'
+#'  TODO
 #' @rdname BasicIndexer
 #' @keywords internal
 BasicIndexer <- R6::R6Class("BasicIndexer",
   inherit = Indexer,
   public = list(
-    #' @field dim_indexers
+    #' @field dim_indexers TODO
     #' @keywords internal
     dim_indexers = NULL,
     #' @description

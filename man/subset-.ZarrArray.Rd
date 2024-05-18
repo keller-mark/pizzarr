@@ -7,7 +7,9 @@
 \method{[}{ZarrArray}(obj, ...) <- value
 }
 \arguments{
-\item{obj}{}
+\item{obj}{TODO}
+
+\item{...}{ODO}
 }
 \description{
 S3 method for custom bracket assignment

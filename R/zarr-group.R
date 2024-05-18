@@ -10,31 +10,31 @@
 #' @export
 ZarrGroup <- R6::R6Class("ZarrGroup",
   private = list(
-    #' @field store
+    #' @field store TODO
     #' @keywords internal
     store = NULL,
-    #' @field path
+    #' @field path TODO
     #' @keywords internal
     path = NULL,
-    #' @field read_only
+    #' @field read_only TODO
     #' @keywords internal
     read_only = NULL,
-    #' @field chunk_store
+    #' @field chunk_store TODO
     #' @keywords internal
     chunk_store = NULL,
-    #' @field cache_attrs
+    #' @field cache_attrs TODO
     #' @keywords internal
     cache_attrs = NULL,
-    #' @field synchronizer
+    #' @field synchronizer TODO
     #' @keywords internal
     synchronizer = NULL,
-    #' @field key_prefix
+    #' @field key_prefix TODO
     #' @keywords internal
     key_prefix = NULL,
-    #' @field meta
+    #' @field meta TODO
     #' @keywords internal
     meta = NULL,
-    #' @field attrs
+    #' @field attrs TODO
     #' @keywords internal
     attrs = NULL,
     item_path = function(item) {

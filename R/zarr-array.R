@@ -34,46 +34,46 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' @field write_empty_chunks If True, all chunks will be stored regardless of their contents. If False (default), each chunk is compared to the array's fill value prior to storing. If a chunk is uniformly equal to the fill value, then that chunk is not be stored, and the store entry for that chunk's key is deleted.
     #' @keywords internal
     write_empty_chunks = NULL,
-    #' @field key_prefix
+    #' @field key_prefix TODO
     #' @keywords internal
     key_prefix = NULL,
-    #' @field is_view
+    #' @field is_view TODO
     #' @keywords internal
     is_view = NULL,
-    #' @field attrs
+    #' @field attrs TODO
     #' @keywords internal
     attrs = NULL,
-    #' @field meta
+    #' @field meta TODO
     #' @keywords internal
     meta = NULL,
-    #' @field shape
+    #' @field shape TODO
     #' @keywords internal
     shape = NULL,
-    #' @field chunks
+    #' @field chunks TODO
     #' @keywords internal
     chunks = NULL,
-    #' @field dtype
+    #' @field dtype TODO
     #' @keywords internal
     dtype = NULL,
-    #' @field fill_value
+    #' @field fill_value TODO
     #' @keywords internal
     fill_value = NULL,
-    #' @field order
+    #' @field order TODO
     #' @keywords internal
     order = NULL,
-    #' @field dimension_separator
+    #' @field dimension_separator TODO
     #' @keywords internal
     dimension_separator = NULL,
-    #' @field compressor
+    #' @field compressor TODO
     #' @keywords internal
     compressor = NULL,
-    #' @field filters
+    #' @field filters TODO
     #' @keywords internal
     filters = NULL,
-    #' @field vindex
+    #' @field vindex TODO
     #' @keywords internal
     vindex = NULL,
-    #' @field oindex
+    #' @field oindex TODO
     #' @keywords internal
     oindex = NULL,
     #' @description

@@ -20,6 +20,7 @@ HttpStore for Zarr
 \item \href{#method-HttpStore-new}{\code{HttpStore$new()}}
 \item \href{#method-HttpStore-get_item}{\code{HttpStore$get_item()}}
 \item \href{#method-HttpStore-contains_item}{\code{HttpStore$contains_item()}}
+\item \href{#method-HttpStore-listdir}{\code{HttpStore$listdir()}}
 \item \href{#method-HttpStore-clone}{\code{HttpStore$clone()}}
 }
 }
@@ -31,7 +32,6 @@ HttpStore for Zarr
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_listable"><a href='../../pizzarr/html/Store.html#method-Store-is_listable'><code>pizzarr::Store$is_listable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_readable"><a href='../../pizzarr/html/Store.html#method-Store-is_readable'><code>pizzarr::Store$is_readable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_writeable"><a href='../../pizzarr/html/Store.html#method-Store-is_writeable'><code>pizzarr::Store$is_writeable()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="listdir"><a href='../../pizzarr/html/Store.html#method-Store-listdir'><code>pizzarr::Store$listdir()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rename"><a href='../../pizzarr/html/Store.html#method-Store-rename'><code>pizzarr::Store$rename()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rmdir"><a href='../../pizzarr/html/Store.html#method-Store-rmdir'><code>pizzarr::Store$rmdir()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="set_item"><a href='../../pizzarr/html/Store.html#method-Store-set_item'><code>pizzarr::Store$set_item()</code></a></span></li>
@@ -73,6 +73,16 @@ The item data in a vector of type raw.
 \subsection{Method \code{contains_item()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{HttpStore$contains_item(item)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HttpStore-listdir"></a>}}
+\if{latex}{\out{\hypertarget{method-HttpStore-listdir}{}}}
+\subsection{Method \code{listdir()}}{
+listdir on an HttpStore requires consolodated metadata.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{HttpStore$listdir()}\if{html}{\out{</div>}}
 }
 
 }

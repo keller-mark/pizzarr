@@ -5,9 +5,7 @@
 \alias{Dtype}
 \title{Dtype Class}
 \description{
-Dtype Class
-
-Dtype Class
+TODO
 }
 \details{
 The Zarr Dtype class.

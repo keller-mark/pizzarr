@@ -11,6 +11,52 @@ Instantiate a group from an initialized store.
 The Zarr Group class.
 }
 \keyword{internal}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{store}}{TODO}
+
+\item{\code{path}}{TODO}
+
+\item{\code{read_only}}{TODO}
+
+\item{\code{chunk_store}}{TODO}
+
+\item{\code{cache_attrs}}{TODO}
+
+\item{\code{synchronizer}}{TODO}
+
+\item{\code{key_prefix}}{TODO}
+
+\item{\code{meta}}{TODO}
+
+\item{\code{attrs}}{TODO}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{store}}{TODO}
+
+\item{\code{path}}{TODO}
+
+\item{\code{read_only}}{TODO}
+
+\item{\code{chunk_store}}{TODO}
+
+\item{\code{cache_attrs}}{TODO}
+
+\item{\code{synchronizer}}{TODO}
+
+\item{\code{key_prefix}}{TODO}
+
+\item{\code{meta}}{TODO}
+
+\item{\code{attrs}}{TODO}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

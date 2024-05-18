@@ -8,19 +8,19 @@
 #' @export
 Store <- R6::R6Class("Store",
    private = list(
-      #' @field readable
+      #' @field readable TODO
       #' @keywords internal
       readable = NULL,
-      #' @field writable
+      #' @field writable TODO
       #' @keywords internal
       writeable = NULL,
-      #' @field erasable
+      #' @field erasable TODO
       #' @keywords internal
       erasable = NULL,
-      #' @field listable
+      #' @field listable TODO
       #' @keywords internal
       listable = NULL,
-      #' @field store_version
+      #' @field store_version TODO
       #' @keywords internal
       store_version = NULL,
       #' @keywords internal
@@ -37,7 +37,7 @@ Store <- R6::R6Class("Store",
       }
    ),
    public = list(
-    #' @field metadata_class
+    #' @field metadata_class TODO
     #' @keywords internal
     metadata_class = NULL,
     initialize = function() {

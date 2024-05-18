@@ -8,15 +8,7 @@ str_to_vec <- function(s) {
 }
 
 #' Create a list of zarray metadata.
-#' 
-#' @param shape
-#' @param chunks
-#' @param dtype
-#' @param compressor
-#' @param fill_value
-#' @param order
-#' @param filters
-#' @param dimension_separator
+#' @inheritParams zarr_create
 #' @return A list.
 #' @keywords internal
 create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor = NA, fill_value = NA, order = NA, filters = NA, dimension_separator = NA) {

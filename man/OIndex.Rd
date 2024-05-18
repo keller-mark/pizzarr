@@ -5,14 +5,19 @@
 \alias{OIndex}
 \title{OIndex Class}
 \description{
-OIndex Class
-
-OIndex Class
+TODO
 }
 \details{
 The Zarr OIndex class.
 }
 \keyword{internal}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{array}}{array}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

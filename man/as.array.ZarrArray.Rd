@@ -7,7 +7,7 @@
 \method{as.array}{ZarrArray}(obj)
 }
 \arguments{
-\item{obj}{}
+\item{obj}{TODO}
 }
 \description{
 S3 method for as.array

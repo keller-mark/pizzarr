@@ -58,6 +58,34 @@ The Zarr Array class.
 \item{\code{cache_attrs}}{If True (default), user attributes will be cached. If False, attributes will be reloaded prior to all data access and modification.}
 
 \item{\code{write_empty_chunks}}{If True, all chunks will be stored regardless of their contents. If False (default), each chunk is compared to the array's fill value prior to storing. If a chunk is uniformly equal to the fill value, then that chunk is not be stored, and the store entry for that chunk's key is deleted.}
+
+\item{\code{key_prefix}}{TODO}
+
+\item{\code{is_view}}{TODO}
+
+\item{\code{attrs}}{TODO}
+
+\item{\code{meta}}{TODO}
+
+\item{\code{shape}}{TODO}
+
+\item{\code{chunks}}{TODO}
+
+\item{\code{dtype}}{TODO}
+
+\item{\code{fill_value}}{TODO}
+
+\item{\code{order}}{TODO}
+
+\item{\code{dimension_separator}}{TODO}
+
+\item{\code{compressor}}{TODO}
+
+\item{\code{filters}}{TODO}
+
+\item{\code{vindex}}{TODO}
+
+\item{\code{oindex}}{TODO}
 }
 \if{html}{\out{</div>}}
 }
@@ -79,6 +107,34 @@ The Zarr Array class.
 \item{\code{cache_attrs}}{If True (default), user attributes will be cached. If False, attributes will be reloaded prior to all data access and modification.}
 
 \item{\code{write_empty_chunks}}{If True, all chunks will be stored regardless of their contents. If False (default), each chunk is compared to the array's fill value prior to storing. If a chunk is uniformly equal to the fill value, then that chunk is not be stored, and the store entry for that chunk's key is deleted.}
+
+\item{\code{key_prefix}}{TODO}
+
+\item{\code{is_view}}{TODO}
+
+\item{\code{attrs}}{TODO}
+
+\item{\code{meta}}{TODO}
+
+\item{\code{shape}}{TODO}
+
+\item{\code{chunks}}{TODO}
+
+\item{\code{dtype}}{TODO}
+
+\item{\code{fill_value}}{TODO}
+
+\item{\code{order}}{TODO}
+
+\item{\code{dimension_separator}}{TODO}
+
+\item{\code{compressor}}{TODO}
+
+\item{\code{filters}}{TODO}
+
+\item{\code{vindex}}{TODO}
+
+\item{\code{oindex}}{TODO}
 }
 \if{html}{\out{</div>}}
 }

@@ -5,9 +5,7 @@
 \alias{SliceDimIndexer}
 \title{SliceDimIndexer Class}
 \description{
-SliceDimIndexer Class
-
-SliceDimIndexer Class
+TODO
 }
 \details{
 The Zarr SliceDimIndexer class.

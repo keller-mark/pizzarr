@@ -11,6 +11,38 @@ Class representing an abstract store
 Abstract store for Zarr
 }
 \keyword{internal}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{readable}}{TODO}
+
+\item{\code{writable}}{TODO}
+
+\item{\code{erasable}}{TODO}
+
+\item{\code{listable}}{TODO}
+
+\item{\code{store_version}}{TODO}
+
+\item{\code{metadata_class}}{TODO}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{readable}}{TODO}
+
+\item{\code{writable}}{TODO}
+
+\item{\code{erasable}}{TODO}
+
+\item{\code{listable}}{TODO}
+
+\item{\code{store_version}}{TODO}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

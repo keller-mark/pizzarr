@@ -5,9 +5,7 @@
 \alias{IntDimIndexer}
 \title{IntDimIndexer Class}
 \description{
-IntDimIndexer Class
-
-IntDimIndexer Class
+TODO
 }
 \details{
 The Zarr IntDimIndexer class.
@@ -15,6 +13,17 @@ The Zarr IntDimIndexer class.
 \keyword{internal}
 \section{Super class}{
 \code{pizzarr::DimIndexer} -> \code{IntDimIndexer}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{dim_sel}}{TODO}
+
+\item{\code{dim_len}}{TODO}
+
+\item{\code{dim_chunk_len}}{TODO}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{

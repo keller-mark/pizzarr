@@ -5,9 +5,7 @@
 \alias{BasicIndexer}
 \title{BasicIndexer Class}
 \description{
-BasicIndexer Class
-
-BasicIndexer Class
+TODO
 }
 \details{
 The Zarr BasicIndexer class.
@@ -15,6 +13,13 @@ The Zarr BasicIndexer class.
 \keyword{internal}
 \section{Super class}{
 \code{pizzarr::Indexer} -> \code{BasicIndexer}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{dim_indexers}}{TODO}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{

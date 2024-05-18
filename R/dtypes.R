@@ -138,7 +138,7 @@ get_dtype_asrtype <- function(dtype) {
 #' @title Dtype Class
 #' @docType class
 #' @description
-#' 
+#'  TODO
 #' @rdname Dtype
 #' @export
 Dtype <- R6::R6Class("Dtype",
