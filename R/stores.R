@@ -311,6 +311,11 @@ MemoryStore <- R6::R6Class("MemoryStore",
    )
 )
 
+one_hour <- 60^2
+# per-session http get cache
+mem_get <- memoise::memoise(\(client, path) client$get(path), 
+                            ~memoise::timeout(one_hour))
+
 # Reference: https://github.com/manzt/zarrita.js/blob/main/packages/storage/src/fetch.ts
 
 #' HttpStore for Zarr
@@ -339,7 +344,9 @@ HttpStore <- R6::R6Class("HttpStore",
         key <- item
       }
       
-      res <- private$client$get(paste(private$base_path, key, sep="/"))
+      # mem_get caches in memory on a per-session basis.
+      res <- mem_get(private$client, paste(private$base_path, key, sep="/"))
+      
       return(res)
     }
   ),
@@ -378,6 +385,30 @@ HttpStore <- R6::R6Class("HttpStore",
     contains_item = function(item) {
       res <- private$make_request(item)
       return(res$status_code == 200)
+    },
+    #' @description
+    #' Fetches .zmetadata from the store evaluates its names
+    #' @return character vector of unique keys that do note  start with a `.`. 
+    listdir = function() {
+      res <- private$make_request(".zmetadata")
+      
+      out <- NULL
+      
+      if(res$status_code == 200) {
+        tryCatch({
+        meta <- jsonlite::fromJSON(res$parse("UTF-8"))
+        out <- names(meta$metadata) |>
+          stringr::str_subset("^\\.", negate = TRUE) |>
+          stringr::str_split("/") |>
+          vapply(\(x) head(x, 1), "") |>
+          unique()
+        }, error = \(e) warning("\n\nError parsing .zmetadata:\n\n", e))
+      } else {
+        message(".zmetadata not found for this http store. Can't listdir")
+      }
+      
+      return(out)
+      
     }
   )
 )

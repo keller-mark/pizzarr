@@ -80,11 +80,14 @@ The item data in a vector of type raw.
 \if{html}{\out{<a id="method-HttpStore-listdir"></a>}}
 \if{latex}{\out{\hypertarget{method-HttpStore-listdir}{}}}
 \subsection{Method \code{listdir()}}{
-listdir on an HttpStore requires consolodated metadata.
+Fetches .zmetadata from the store evaluates its names
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{HttpStore$listdir()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+character vector of unique keys that do note  start with a \code{.}.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-HttpStore-clone"></a>}}
