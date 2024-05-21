@@ -42,10 +42,22 @@ HttpStore for Zarr
 \if{html}{\out{<a id="method-HttpStore-new"></a>}}
 \if{latex}{\out{\hypertarget{method-HttpStore-new}{}}}
 \subsection{Method \code{new()}}{
+Create a \code{HttpStore} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{HttpStore$new(url, options = NA, headers = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{url}}{character url of store}
+
+\item{\code{options}}{crul options}
+
+\item{\code{headers}}{crul headers}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-HttpStore-get_item"></a>}}
@@ -71,10 +83,21 @@ The item data in a vector of type raw.
 \if{html}{\out{<a id="method-HttpStore-contains_item"></a>}}
 \if{latex}{\out{\hypertarget{method-HttpStore-contains_item}{}}}
 \subsection{Method \code{contains_item()}}{
+Determine whether the store contains an item.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{HttpStore$contains_item(item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{item}}{The item key.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A boolean value.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-HttpStore-clone"></a>}}

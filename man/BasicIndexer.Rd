@@ -5,9 +5,7 @@
 \alias{BasicIndexer}
 \title{BasicIndexer Class}
 \description{
-BasicIndexer Class
-
-BasicIndexer Class
+TODO
 }
 \details{
 The Zarr BasicIndexer class.
@@ -15,6 +13,13 @@ The Zarr BasicIndexer class.
 \keyword{internal}
 \section{Super class}{
 \code{pizzarr::Indexer} -> \code{BasicIndexer}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{dim_indexers}}{TODO}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -33,6 +38,15 @@ Create a new VIndex instance.
 \if{html}{\out{<div class="r">}}\preformatted{BasicIndexer$new(selection, array)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selection}}{selection TODO}
+
+\item{\code{array}}{array TODO}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A \code{VIndex} instance.
 }
@@ -41,10 +55,14 @@ A \code{VIndex} instance.
 \if{html}{\out{<a id="method-BasicIndexer-iter"></a>}}
 \if{latex}{\out{\hypertarget{method-BasicIndexer-iter}{}}}
 \subsection{Method \code{iter()}}{
+TODO
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BasicIndexer$iter()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+TODO
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BasicIndexer-clone"></a>}}

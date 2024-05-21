@@ -45,6 +45,19 @@ Create a new Blosc compressor.
 \if{html}{\out{<div class="r">}}\preformatted{BloscCodec$new(cname = "lz4", clevel = 5, shuffle = TRUE, blocksize = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{cname}}{The compression algorithm to use.}
+
+\item{\code{clevel}}{The compression level.}
+
+\item{\code{shuffle}}{The shuffle filter to use.}
+
+\item{\code{blocksize}}{The block size.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A new \code{BloscCodec} object.
 }
@@ -53,24 +66,51 @@ A new \code{BloscCodec} object.
 \if{html}{\out{<a id="method-BloscCodec-encode"></a>}}
 \if{latex}{\out{\hypertarget{method-BloscCodec-encode}{}}}
 \subsection{Method \code{encode()}}{
+Compress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BloscCodec$encode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{buf}}{The un-compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BloscCodec-decode"></a>}}
 \if{latex}{\out{\hypertarget{method-BloscCodec-decode}{}}}
 \subsection{Method \code{decode()}}{
+Decompress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BloscCodec$decode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{buf}}{The compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Un-compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-BloscCodec-get_config"></a>}}
 \if{latex}{\out{\hypertarget{method-BloscCodec-get_config}{}}}
 \subsection{Method \code{get_config()}}{
+Get Configuration
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BloscCodec$get_config()}\if{html}{\out{</div>}}
 }

@@ -15,6 +15,33 @@ create_zarray_meta(
   dimension_separator = NA
 )
 }
+\arguments{
+\item{shape}{: int or tuple of ints
+Array shape.}
+
+\item{chunks}{: int or tuple of ints, optional
+Chunk shape. If True, will be guessed from \code{shape} and \code{dtype}. If
+False, will be set to \code{shape}, i.e., single chunk for the whole array.
+If an int, the chunk size in each dimension will be given by the value
+of \code{chunks}. Default is True.}
+
+\item{dtype}{: string or dtype, optional
+NumPy dtype.}
+
+\item{compressor}{: Codec, optional
+Primary compressor.}
+
+\item{fill_value}{: object
+Default value to use for uninitialized portions of the array.}
+
+\item{order}{: {'C', 'F'}, optional
+Memory layout to be used within each chunk.}
+
+\item{filters}{: sequence of Codecs, optional}
+
+\item{dimension_separator}{: {'.', '/'}, optional
+Separator placed between the dimensions of a chunk.}
+}
 \value{
 A list.
 }

@@ -10,7 +10,16 @@ Instantiate a group from an initialized store.
 \details{
 The Zarr Group class.
 }
+\keyword{TODO}
+\keyword{attrs}
+\keyword{cache_attrs}
+\keyword{chunk_store}
 \keyword{internal}
+\keyword{key_prefix}
+\keyword{meta}
+\keyword{path}
+\keyword{read_only}
+\keyword{synchronizer}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -50,19 +59,30 @@ Create a new ZarrGroup instance.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{store}}{Group store, already initialized.}
+
+\item{\code{path}}{character path}
+
+\item{\code{read_only}}{logical read only?}
+
+\item{\code{chunk_store}}{TODO}
+
+\item{\code{cache_attrs}}{logical cache attributes?}
+
+\item{\code{synchronizer}}{TODO}
+
+\item{\code{cache_metadata}}{logical cache metadata?}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 A \code{ZarrGroup} instance.
-Test for group membership.
-Obtain a group member.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZarrGroup-get_store"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_store}{}}}
 \subsection{Method \code{get_store()}}{
+Get group store
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_store()}\if{html}{\out{</div>}}
 }
@@ -72,6 +92,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-get_path"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_path}{}}}
 \subsection{Method \code{get_path()}}{
+Get group path
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_path()}\if{html}{\out{</div>}}
 }
@@ -81,6 +102,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-get_meta"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_meta}{}}}
 \subsection{Method \code{get_meta()}}{
+Get group metadata
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_meta()}\if{html}{\out{</div>}}
 }
@@ -90,6 +112,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-get_name"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_name}{}}}
 \subsection{Method \code{get_name()}}{
+Get group name
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_name()}\if{html}{\out{</div>}}
 }
@@ -99,6 +122,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-get_read_only"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_read_only}{}}}
 \subsection{Method \code{get_read_only()}}{
+Is store read only?
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_read_only()}\if{html}{\out{</div>}}
 }
@@ -108,6 +132,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-get_chunk_store"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_chunk_store}{}}}
 \subsection{Method \code{get_chunk_store()}}{
+Get group chunk store
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_chunk_store()}\if{html}{\out{</div>}}
 }
@@ -117,6 +142,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-get_synchronizer"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_synchronizer}{}}}
 \subsection{Method \code{get_synchronizer()}}{
+Get group synchronizer
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_synchronizer()}\if{html}{\out{</div>}}
 }
@@ -126,6 +152,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-get_attrs"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_attrs}{}}}
 \subsection{Method \code{get_attrs()}}{
+Get group attributes
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_attrs()}\if{html}{\out{</div>}}
 }
@@ -135,28 +162,54 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-contains_item"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-contains_item}{}}}
 \subsection{Method \code{contains_item()}}{
+Test for group membership.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$contains_item(item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{item}}{character item to test for}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZarrGroup-get_item"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-get_item}{}}}
 \subsection{Method \code{get_item()}}{
+Obtain a group member.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$get_item(item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{item}}{character item to test for}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZarrGroup-create_group"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-create_group}{}}}
 \subsection{Method \code{create_group()}}{
+greate a group
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$create_group(name, overwrite = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{name}}{character group name}
+
+\item{\code{overwrite}}{logical overwrite?}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZarrGroup-create_dataset"></a>}}
@@ -169,6 +222,10 @@ Obtain a group member.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{name}}{character group name}
+
+\item{\code{data}}{data to add to group}
+
 \item{\code{...}}{Extra arguments to pass to zarr_create() or array().}
 }
 \if{html}{\out{</div>}}
