@@ -34,6 +34,13 @@ Create a new OIndex instance.
 \if{html}{\out{<div class="r">}}\preformatted{OIndex$new(array)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{array}}{array}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 An \code{OIndex} instance.
 }

@@ -13,8 +13,6 @@ The Zarr Attributes class.
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{cached_aslist}}{The attributes cached as a list.}
-
 \item{\code{store}}{Attributes store, already initialized.}
 
 \item{\code{key}}{The key under which the attributes will be stored.}
@@ -24,13 +22,6 @@ The Zarr Attributes class.
 \item{\code{cache}}{If True (default), attributes will be cached locally.}
 
 \item{\code{synchronizer}}{Only necessary if attributes may be modified from multiple threads or processes.}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{cached_aslist}}{The attributes cached as a list.}
 }
 \if{html}{\out{</div>}}
 }
@@ -66,6 +57,14 @@ Create a new Attributes instance.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{store}}{Attributes store, already initialized.}
+
+\item{\code{key}}{description key to use for attributes (.attrs is default)}
+
+\item{\code{read_only}}{logical}
+
+\item{\code{cache}}{logical}
+
+\item{\code{synchronizer}}{object}
 }
 \if{html}{\out{</div>}}
 }
@@ -108,6 +107,13 @@ check if object contains item
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$contains(x)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{object}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 logical
 }

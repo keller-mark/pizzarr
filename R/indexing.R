@@ -14,6 +14,7 @@ OIndex <- R6::R6Class("OIndex",
     array = NULL,
     #' @description
     #' Create a new OIndex instance.
+    #' @param array array
     #' @return An `OIndex` instance.
     initialize = function(array) {
       self$array <- array
@@ -37,6 +38,7 @@ VIndex <- R6::R6Class("VIndex",
     array = NULL,
     #' @description
     #' Create a new VIndex instance.
+    #' @param array array
     #' @return A `VIndex` instance.
     initialize = function(array) {
       self$array <- array
@@ -67,6 +69,9 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
     dim_chunk_len = NULL,
     #' @description
     #' Create a new IntDimIndexer instance.
+    #' @param dim_sel integer dimention selection
+    #' @param dim_len integer dimension length
+    #' @param dim_chunk_len integer dimension chunk length
     #' @return A `IntDimIndexer` instance.
     initialize = function(dim_sel, dim_len, dim_chunk_len) {
       # Normalize
@@ -77,6 +82,9 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
       self$dim_chunk_len <- dim_chunk_len
       self$num_items <- 1
     },
+    #' @description 
+    #' TODO
+    #' @return a `ChunkDimProjection` instance
     iter = function() {
       # TODO: use generator/yield features from async package
       dim_chunk_index <- floor(self$dim_sel / self$dim_chunk_len)
@@ -106,15 +114,29 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
 SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
   inherit = DimIndexer,
   public = list(
+    #' @field dim_len dimension length
+    #' @keywords internal
     dim_len = NULL,
+    #' @field dim_chunk_len dimension chunk length
+    #' @keywords internal
     dim_chunk_len = NULL,
+    #' @field num_chunks number of chunks
+    #' @keywords internal
     num_chunks = NULL,
+    #' @field start start
+    #' @keywords internal
     start = NULL,
+    #' @field stop stop
+    #' @keywords internal
     stop = NULL,
+    #' @field step step
+    #' @keywords internal
     step = NULL,
-    
     #' @description
     #' Create a new SliceDimIndexer instance.
+    #' @param dim_sel integer dimention selection
+    #' @param dim_len integer dimension length
+    #' @param dim_chunk_len integer dimension chunk length
     #' @return A `SliceDimIndexer` instance.
     initialize = function(dim_sel, dim_len, dim_chunk_len) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L311
@@ -130,6 +152,9 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
       self$num_items <- max(0, ceiling((self$stop - self$start) / self$step))
       self$num_chunks <- ceiling(self$dim_len / self$dim_chunk_len)
     },
+    #' @description 
+    #' TODO
+    #' @return TODO
     iter = function() {
       # TODO: use generator/yield features from async package
       dim_chunk_index_from <- floor(self$start / self$dim_chunk_len)
@@ -212,6 +237,8 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
     dim_indexers = NULL,
     #' @description
     #' Create a new VIndex instance.
+    #' @param selection selection TODO
+    #' @param array array TODO
     #' @return A `VIndex` instance.
     initialize = function(selection, array) {
       shape <- array$get_shape()
@@ -249,6 +276,9 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
 
       self$dim_indexers <- dim_indexers
     },
+    #' @description 
+    #' TODO
+    #' @return TODO
     iter = function() {
       # TODO: use generator/yield features from async package
       result <- list()

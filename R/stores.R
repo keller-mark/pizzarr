@@ -8,20 +8,10 @@
 #' @export
 Store <- R6::R6Class("Store",
    private = list(
-      #' @field readable TODO
-      #' @keywords internal
       readable = NULL,
-      #' @field writable TODO
-      #' @keywords internal
       writeable = NULL,
-      #' @field erasable TODO
-      #' @keywords internal
       erasable = NULL,
-      #' @field listable TODO
-      #' @keywords internal
       listable = NULL,
-      #' @field store_version TODO
-      #' @keywords internal
       store_version = NULL,
       #' @keywords internal
       listdir_from_keys = function(path) {
@@ -40,6 +30,8 @@ Store <- R6::R6Class("Store",
     #' @field metadata_class TODO
     #' @keywords internal
     metadata_class = NULL,
+    #' @description 
+    #' Create a `Store` object 
     initialize = function() {
       private$readable <- TRUE
       private$writeable <- TRUE
@@ -48,21 +40,34 @@ Store <- R6::R6Class("Store",
       private$store_version <- 2
       self$metadata_class <- Metadata2$new()
     },
+    #' @description
+    #' test if Store is readable
     is_readable = function() {
       return(private$readable)
     },
+    #' @description
+    #' test if Store is writeable
     is_writeable = function() {
       return(private$writeable)
     },
+    #' @description
+    #' test if Store is eraseable
     is_erasable = function() {
       return(private$erasable)
     },
+    #' @description
+    #' test if Store is listable
     is_listable = function() {
       return(private$listable)
     },
+    #' @description
+    #' close the store
     close = function() {
       # Do nothing by default
     },
+    #' @description
+    #' list the store directory
+    #' @param path character path
     listdir = function(path=NA) {
       if(is.na(path)) {
         path <- ""
@@ -70,12 +75,19 @@ Store <- R6::R6Class("Store",
       path <- normalize_storage_path(path)
       return(private$listdir_from_keys(path))
     },
+    #' @description
+    #' rename a Store
+    #' @param src_path character source path
+    #' @param dst_path character destination path
     rename = function(src_path, dst_path) {
       if(!self$is_erasable()) {
         stop("Store is not erasable, cannot call 'rename'")
       }
       private$rename_from_keys(src_path, dst_path)
     },
+    #' @description
+    #' remove a path within a Store
+    #' @param path character path
     rmdir = function(path) {
       if(!self$is_erasable()) {
         stop("Store is not erasable, cannot call 'rmdir'")
@@ -168,6 +180,9 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
       fp <- file.path(self$root, key)
       return(file.exists(fp))
     },
+    #' @description
+    #' remove a path within a Store
+    #' @param path character path
     rmdir = function(path=NA) {
       path <- normalize_storage_path(path)
       dir_path <- self$root
@@ -178,6 +193,9 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
         unlink(dir_path, recursive = TRUE)
       }
     },
+    #' @description
+    #' list the store directory
+    #' @param key character key
     listdir = function(key=NA) {
       if(is_na(key)) {
         dir_path <- self$root
@@ -298,6 +316,9 @@ MemoryStore <- R6::R6Class("MemoryStore",
        })
        return(result)
      },
+     #' @description
+     #' list the store directory
+     #' @param key character key
      listdir = function(key=NA) {
       item <- self$get_item(key)
       if(!is.list(item)) {
@@ -305,6 +326,9 @@ MemoryStore <- R6::R6Class("MemoryStore",
       }
       return(sort(names(item)))
      },
+     #' @description
+     #' remove a path within a Store
+     #' @param item character item
      rmdir = function(item) {
       self$set_item(item, NULL)
      }
@@ -344,6 +368,11 @@ HttpStore <- R6::R6Class("HttpStore",
     }
   ),
   public = list(
+    #' @description 
+    #' Create a `HttpStore` object 
+    #' @param url character url of store
+    #' @param options crul options
+    #' @param headers crul headers
     initialize = function(url, options = NA, headers = NA) {
       super$initialize()
       # Remove trailing slash if necessary.
@@ -375,6 +404,10 @@ HttpStore <- R6::R6Class("HttpStore",
       res <- private$make_request(item)
       return(res$content)
     },
+    #' @description
+    #' Determine whether the store contains an item.
+    #' @param item The item key.
+    #' @return A boolean value.
     contains_item = function(item) {
       res <- private$make_request(item)
       return(res$status_code == 200)

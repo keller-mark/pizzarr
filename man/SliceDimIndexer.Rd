@@ -14,6 +14,23 @@ The Zarr SliceDimIndexer class.
 \section{Super class}{
 \code{pizzarr::DimIndexer} -> \code{SliceDimIndexer}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{dim_len}}{dimension length}
+
+\item{\code{dim_chunk_len}}{dimension chunk length}
+
+\item{\code{num_chunks}}{number of chunks}
+
+\item{\code{start}}{start}
+
+\item{\code{stop}}{stop}
+
+\item{\code{step}}{step}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -31,6 +48,17 @@ Create a new SliceDimIndexer instance.
 \if{html}{\out{<div class="r">}}\preformatted{SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dim_sel}}{integer dimention selection}
+
+\item{\code{dim_len}}{integer dimension length}
+
+\item{\code{dim_chunk_len}}{integer dimension chunk length}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A \code{SliceDimIndexer} instance.
 }
@@ -39,10 +67,14 @@ A \code{SliceDimIndexer} instance.
 \if{html}{\out{<a id="method-SliceDimIndexer-iter"></a>}}
 \if{latex}{\out{\hypertarget{method-SliceDimIndexer-iter}{}}}
 \subsection{Method \code{iter()}}{
+TODO
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SliceDimIndexer$iter()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+TODO
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SliceDimIndexer-clone"></a>}}

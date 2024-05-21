@@ -10,7 +10,7 @@
 #' @export
 Attributes <- R6::R6Class("Attributes",
   private = list(
-    #' @field cached_aslist The attributes cached as a list.
+
     cached_aslist = NULL,
 
     get_nosync = function() {
@@ -55,6 +55,10 @@ Attributes <- R6::R6Class("Attributes",
     #' @description
     #' Create a new Attributes instance.
     #' @param store Attributes store, already initialized.
+    #' @param key description key to use for attributes (.attrs is default)
+    #' @param read_only logical
+    #' @param cache logical
+    #' @param synchronizer object
     #' @return An `Attributes` instance.
     initialize = function(store, key = NA, read_only = FALSE, cache = TRUE, synchronizer = NA) {
       if(is_na(key)) {
@@ -85,11 +89,14 @@ Attributes <- R6::R6Class("Attributes",
     #' @return None
     refresh = function() {
       if(self$cache) {
-        private$cached_aslist <- private$get_nosync()
+        new_val <- private$get_nosync()
+        
+        private$cached_aslist <- new_val
       }
     },
     #' @description
     #' check if object contains item
+    #' @param x object
     #' @return logical
     contains = function(x) {
       return(x %in% names(self$to_list()))

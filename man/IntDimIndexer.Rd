@@ -42,6 +42,17 @@ Create a new IntDimIndexer instance.
 \if{html}{\out{<div class="r">}}\preformatted{IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dim_sel}}{integer dimention selection}
+
+\item{\code{dim_len}}{integer dimension length}
+
+\item{\code{dim_chunk_len}}{integer dimension chunk length}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A \code{IntDimIndexer} instance.
 }
@@ -50,10 +61,14 @@ A \code{IntDimIndexer} instance.
 \if{html}{\out{<a id="method-IntDimIndexer-iter"></a>}}
 \if{latex}{\out{\hypertarget{method-IntDimIndexer-iter}{}}}
 \subsection{Method \code{iter()}}{
+TODO
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntDimIndexer$iter()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+a \code{ChunkDimProjection} instance
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-IntDimIndexer-clone"></a>}}

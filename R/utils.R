@@ -209,6 +209,7 @@ replace_ellipsis <- function(selection, shape) {
   return(selection)
 }
 
+#' Compute Size
 #' @param shape A shape vector
 #' @returns The product of shape elements.
 #' @keywords internal

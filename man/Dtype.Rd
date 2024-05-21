@@ -69,6 +69,7 @@ A \code{Dtype} instance.
 \if{html}{\out{<a id="method-Dtype-get_asrtype"></a>}}
 \if{latex}{\out{\hypertarget{method-Dtype-get_asrtype}{}}}
 \subsection{Method \code{get_asrtype()}}{
+Get as R type
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dtype$get_asrtype()}\if{html}{\out{</div>}}
 }
@@ -78,6 +79,7 @@ A \code{Dtype} instance.
 \if{html}{\out{<a id="method-Dtype-get_rtype"></a>}}
 \if{latex}{\out{\hypertarget{method-Dtype-get_rtype}{}}}
 \subsection{Method \code{get_rtype()}}{
+basic type R type
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dtype$get_rtype()}\if{html}{\out{</div>}}
 }
@@ -87,6 +89,7 @@ A \code{Dtype} instance.
 \if{html}{\out{<a id="method-Dtype-get_typed_array_ctr"></a>}}
 \if{latex}{\out{\hypertarget{method-Dtype-get_typed_array_ctr}{}}}
 \subsection{Method \code{get_typed_array_ctr()}}{
+get typed array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dtype$get_typed_array_ctr()}\if{html}{\out{</div>}}
 }

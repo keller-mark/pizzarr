@@ -14,32 +14,7 @@ Abstract store for Zarr
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{readable}}{TODO}
-
-\item{\code{writable}}{TODO}
-
-\item{\code{erasable}}{TODO}
-
-\item{\code{listable}}{TODO}
-
-\item{\code{store_version}}{TODO}
-
 \item{\code{metadata_class}}{TODO}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{readable}}{TODO}
-
-\item{\code{writable}}{TODO}
-
-\item{\code{erasable}}{TODO}
-
-\item{\code{listable}}{TODO}
-
-\item{\code{store_version}}{TODO}
 }
 \if{html}{\out{</div>}}
 }
@@ -65,6 +40,7 @@ Abstract store for Zarr
 \if{html}{\out{<a id="method-Store-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-new}{}}}
 \subsection{Method \code{new()}}{
+Create a \code{Store} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$new()}\if{html}{\out{</div>}}
 }
@@ -74,6 +50,7 @@ Abstract store for Zarr
 \if{html}{\out{<a id="method-Store-is_readable"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-is_readable}{}}}
 \subsection{Method \code{is_readable()}}{
+test if Store is readable
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$is_readable()}\if{html}{\out{</div>}}
 }
@@ -83,6 +60,7 @@ Abstract store for Zarr
 \if{html}{\out{<a id="method-Store-is_writeable"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-is_writeable}{}}}
 \subsection{Method \code{is_writeable()}}{
+test if Store is writeable
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$is_writeable()}\if{html}{\out{</div>}}
 }
@@ -92,6 +70,7 @@ Abstract store for Zarr
 \if{html}{\out{<a id="method-Store-is_erasable"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-is_erasable}{}}}
 \subsection{Method \code{is_erasable()}}{
+test if Store is eraseable
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$is_erasable()}\if{html}{\out{</div>}}
 }
@@ -101,6 +80,7 @@ Abstract store for Zarr
 \if{html}{\out{<a id="method-Store-is_listable"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-is_listable}{}}}
 \subsection{Method \code{is_listable()}}{
+test if Store is listable
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$is_listable()}\if{html}{\out{</div>}}
 }
@@ -110,6 +90,7 @@ Abstract store for Zarr
 \if{html}{\out{<a id="method-Store-close"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-close}{}}}
 \subsection{Method \code{close()}}{
+close the store
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$close()}\if{html}{\out{</div>}}
 }
@@ -119,28 +100,54 @@ Abstract store for Zarr
 \if{html}{\out{<a id="method-Store-listdir"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-listdir}{}}}
 \subsection{Method \code{listdir()}}{
+list the store directory
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$listdir(path = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{character path}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Store-rename"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-rename}{}}}
 \subsection{Method \code{rename()}}{
+rename a Store
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$rename(src_path, dst_path)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{src_path}}{character source path}
+
+\item{\code{dst_path}}{character destination path}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Store-rmdir"></a>}}
 \if{latex}{\out{\hypertarget{method-Store-rmdir}{}}}
 \subsection{Method \code{rmdir()}}{
+remove a path within a Store
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Store$rmdir(path)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{character path}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Store-get_item"></a>}}
