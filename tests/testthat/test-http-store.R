@@ -52,6 +52,10 @@ vcr::use_cassette("http_listdir", {
     z <- pizzarr::HttpStore$new(url)
     expect_equal(class(z), c("HttpStore", "Store", "R6"))
     
+    z$set_cache_time_seconds(1234)
+    
+    expect_equal(z$get_cache_time_seconds(), 1234)
+    
     vars <- z$listdir()
     
     expect_equal(vars, 
