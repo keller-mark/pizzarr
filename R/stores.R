@@ -355,6 +355,7 @@ HttpStore <- R6::R6Class("HttpStore",
     options = NULL,
     headers = NULL,
     client = NULL,
+    cache_time_seconds = 3600,
     make_request = function(item) {
       # Remove leading slash if necessary.
       if(substr(item, 1, 1) == "/") {
@@ -363,7 +364,13 @@ HttpStore <- R6::R6Class("HttpStore",
         key <- item
       }
       
-      res <- private$client$get(paste(private$base_path, key, sep="/"))
+      # per-session http get cache
+      mem_get <- memoise::memoise(\(client, path) client$get(path), 
+                                  ~memoise::timeout(private$cache_time_seconds))
+      
+      # mem_get caches in memory on a per-session basis.
+      res <- mem_get(private$client, paste(private$base_path, key, sep="/"))
+      
       return(res)
     }
   ),
@@ -411,6 +418,41 @@ HttpStore <- R6::R6Class("HttpStore",
     contains_item = function(item) {
       res <- private$make_request(item)
       return(res$status_code == 200)
+    },
+    #' @description
+    #' Fetches .zmetadata from the store evaluates its names
+    #' @return character vector of unique keys that do note  start with a `.`. 
+    listdir = function() {
+      res <- private$make_request(".zmetadata")
+      
+      out <- NULL
+      
+      if(res$status_code == 200) {
+        tryCatch({
+        meta <- jsonlite::fromJSON(res$parse("UTF-8"))
+        out <- names(meta$metadata) |>
+          stringr::str_subset("^\\.", negate = TRUE) |>
+          stringr::str_split("/") |>
+          vapply(\(x) head(x, 1), "") |>
+          unique()
+        }, error = \(e) warning("\n\nError parsing .zmetadata:\n\n", e))
+      } else {
+        message(".zmetadata not found for this http store. Can't listdir")
+      }
+      
+      return(out)
+      
+    },
+    #' @description 
+    #' Get cache time of http requests.
+    get_cache_time_seconds = function() {
+      return(private$cache_time_seconds)
+    },
+    #' @description
+    #' Set cache time of http requests.
+    #' @param seconds number of seconds until cache is invalid -- 0 for no cache
+    set_cache_time_seconds = function(seconds) {
+      private$cache_time_seconds <- seconds
     }
   )
 )

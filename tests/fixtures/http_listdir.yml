@@ -1,0 +1,1213 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://usgs.osn.mghpcc.org/mdmf/gdp/hawaii_present.zarr/.zmetadata
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      content-length: '66174'
+      accept-ranges: bytes
+      last-modified: Tue, 14 May 2024 21:08:11 GMT
+      x-rgw-object-type: Normal
+      etag: '"f67e6e8dafe537836d70b4ea1d179e6c"'
+      x-amz-meta-mtime: '1715275844.519'
+      x-amz-request-id: tx00000a3896b3d979c2d36-00664ce9f4-23795-default
+      content-type: binary/octet-stream
+      date: Tue, 21 May 2024 18:37:41 GMT
+    body:
+      encoding: ''
+      file: no
+      string: |-
+        {
+            "metadata": {
+                ".zattrs": {
+                    "ADAPT_DT_MAX": 48.0,
+                    "ADAPT_DT_MIN": 12.0,
+                    "ADAPT_DT_START": 5.0,
+                    "AER_ANGEXP_OPT": 1,
+                    "AER_ANGEXP_VAL": 1.2999999523162842,
+                    "AER_AOD550_OPT": 1,
+                    "AER_AOD550_VAL": 0.11999999731779099,
+                    "AER_ASY_OPT": 1,
+                    "AER_ASY_VAL": 1.401298464324817e-45,
+                    "AER_OPT": 1,
+                    "AER_SSA_OPT": 1,
+                    "AER_SSA_VAL": 1.401298464324817e-45,
+                    "AER_TYPE": 1,
+                    "BLDT": 0.0,
+                    "BL_PBL_PHYSICS": 5,
+                    "BOTTOM-TOP_GRID_DIMENSION": 51,
+                    "BOTTOM-TOP_PATCH_END_STAG": 51,
+                    "BOTTOM-TOP_PATCH_END_UNSTAG": 50,
+                    "BOTTOM-TOP_PATCH_START_STAG": 1,
+                    "BOTTOM-TOP_PATCH_START_UNSTAG": 1,
+                    "BUCKET_J": 1000000000.0,
+                    "BUCKET_MM": 100.0,
+                    "CEN_LAT": 20.10027313232422,
+                    "CEN_LON": -155.95272827148438,
+                    "CUDT": 0.0,
+                    "CU_PHYSICS": 0,
+                    "DAMPCOEF": 0.20000000298023224,
+                    "DAMP_OPT": 3,
+                    "DFI_OPT": 0,
+                    "DIFF_6TH_FACTOR": 0.11999999731779099,
+                    "DIFF_6TH_OPT": 2,
+                    "DIFF_OPT": 1,
+                    "DT": 9.604999542236328,
+                    "DX": 800.0,
+                    "DY": 800.0,
+                    "FEEDBACK": 0,
+                    "GFDDA_END_H": 0,
+                    "GFDDA_INTERVAL_M": 0,
+                    "GMT": 0.0,
+                    "GRAV_SETTLING": 2,
+                    "GRIDTYPE": "C",
+                    "GRID_FDDA": 0,
+                    "GRID_ID": 1,
+                    "GRID_SFDDA": 0,
+                    "HYPSOMETRIC_OPT": 2,
+                    "ICLOUD": 1,
+                    "ICLOUD_CU": 0,
+                    "ISFFLX": 1,
+                    "ISFTCFLX": 0,
+                    "ISHALLOW": 0,
+                    "ISICE": 24,
+                    "ISLAKE": -1,
+                    "ISOILWATER": 14,
+                    "ISURBAN": 1,
+                    "ISWATER": 16,
+                    "I_PARENT_START": 1,
+                    "JULDAY": 335,
+                    "JULYR": 1989,
+                    "J_PARENT_START": 1,
+                    "KHDIF": 0.0,
+                    "KM_OPT": 4,
+                    "KVDIF": 0.0,
+                    "MAP_PROJ": 3,
+                    "MAP_PROJ_CHAR": "Mercator",
+                    "MFSHCONV": 0,
+                    "MMINLU": "USGS",
+                    "MOAD_CEN_LAT": 0.0,
+                    "MOIST_ADV_OPT": 4,
+                    "MP_PHYSICS": 6,
+                    "Metadata_Conventions": "Unidata Dataset Discovery v1.0",
+                    "NCO": "4.6.8",
+                    "NUM_LAND_CAT": 24,
+                    "OBS_NUDGE_OPT": 0,
+                    "PARENT_GRID_RATIO": 1,
+                    "PARENT_ID": 0,
+                    "POLE_LAT": 90.0,
+                    "POLE_LON": 0.0,
+                    "PREC_ACC_DT": 0.0,
+                    "RADT": 4.0,
+                    "RA_LW_PHYSICS": 4,
+                    "RA_SW_PHYSICS": 4,
+                    "SCALAR_ADV_OPT": 4,
+                    "SCALAR_PBLMIX": 0,
+                    "SF_LAKE_PHYSICS": 0,
+                    "SF_OCEAN_PHYSICS": 0,
+                    "SF_SFCLAY_PHYSICS": 5,
+                    "SF_SURFACE_PHYSICS": 2,
+                    "SF_URBAN_PHYSICS": 0,
+                    "SGFDDA_END_H": 0,
+                    "SGFDDA_INTERVAL_M": 0,
+                    "SHCU_PHYSICS": 0,
+                    "SIMULATION_INITIALIZATION_TYPE": "REAL-DATA CASE",
+                    "SIMULATION_START_DATE": "1989-12-01_00:00:00",
+                    "SKEBS_ON": 0,
+                    "SMOOTH_OPTION": 0,
+                    "SOUTH-NORTH_GRID_DIMENSION": 436,
+                    "SOUTH-NORTH_PATCH_END_STAG": 436,
+                    "SOUTH-NORTH_PATCH_END_UNSTAG": 435,
+                    "SOUTH-NORTH_PATCH_START_STAG": 1,
+                    "SOUTH-NORTH_PATCH_START_UNSTAG": 1,
+                    "SPEC_BDY_FINAL_MU": 1,
+                    "SST_UPDATE": 1,
+                    "STAND_LON": 166.0,
+                    "START_DATE": "1989-12-01_00:00:00",
+                    "SURFACE_INPUT_SOURCE": 1,
+                    "SWINT_OPT": 0,
+                    "SWRAD_SCAT": 1.0,
+                    "TITLE": " OUTPUT FROM WRF V3.7 MODEL",
+                    "TKE_ADV_OPT": 1,
+                    "TRACER_PBLMIX": 1,
+                    "TRUELAT1": 0.0,
+                    "TRUELAT2": 0.0,
+                    "USE_Q_DIABATIC": 0,
+                    "USE_THETA_M": 0,
+                    "WEST-EAST_GRID_DIMENSION": 456,
+                    "WEST-EAST_PATCH_END_STAG": 456,
+                    "WEST-EAST_PATCH_END_UNSTAG": 455,
+                    "WEST-EAST_PATCH_START_STAG": 1,
+                    "WEST-EAST_PATCH_START_UNSTAG": 1,
+                    "W_DAMPING": 0,
+                    "YSU_TOPDOWN_PBLMIX": 0,
+                    "acknowledgment": "https://www.sciencebase.gov/catalog/item/5a2710b6e4b03852bafb5b21",
+                    "cdm_data_type": "Grid",
+                    "conventions": "CF-1.7.3",
+                    "creator_email": "chunxi@hawaii.edu",
+                    "creator_name": "Chunxi Zhang",
+                    "date_issued": "",
+                    "geospatial_lat_max": "21.244751",
+                    "geospatial_lat_min": "18.906525",
+                    "geospatial_lon_max": "-154.79422",
+                    "geospatial_lon_min": "-157.334305",
+                    "history": "Thu Aug 16 12:26:57 2018: ncwa -a Time hawaii_static_vars_time.nc hawaii_static_vars.nc\nThu Aug 16 12:26:53 2018: ncks -O -v XLONG,XLAT,HGT,LANDMASK -d Time,1 RCP45/1990/wrfout_hawaii_hourly_1990-01-01.nc hawaii_static_vars_time.nc\nTue Sep  5 17:28:10 2017: ncks -O -d west_east,209,388 -d south_north,41,245 -v HGT,LANDMASK,XLAT,XLONG,LAI,LU_INDEX,GRDFLX,TSK,GSW,GLW,HFX,PSFC,LH,T2,Q2,U10,V10,RAINNC,I_RAINNC,FGDP,CFRACL,CFRACT,LWP,SNOW,SNOWC,SNOWH /Volumes/data/hawaii_800m_rcp45_1990-1991/1990/wrfout_d01_1990-01-01_00:00:00 ./rcp45/1990/wrfout_hawaii_hourly_1990-01-01.nc",
+                    "history_of_appended_files": "Wed Nov 14 13:21:25 2018: Appended file temp/Time_hawaii_1990.nc had following \"history\" attribute:\nWed Nov 14 13:20:21 2018: ncap2 -O -v -s Time=XTIME hawaii_1990.nc temp/Time_hawaii_1990.nc\nWed Nov 14 13:20:21 2018: ncatted -a coordinates,,m,c,XLONG XLAT Time hawaii_1990.nc\nWed Nov 14 13:05:16 2018: ncatted -a coordinates,,m,c,XLONG XLAT Time hawaii_1990.nc\nWed Nov 14 13:02:31 2018: ncatted -a coordinates,,m,c,XLONG XLAT Time hawaii_1990.nc\nWed Nov 14 12:54:45 2018: ncatted -a coordinates,,m,c,XLONG XLAT Time hawaii_1990.nc\nWed Nov 14 12:51:47 2018: ncatted -a coordinates,,m,c,XLONG XLAT Time hawaii_1990.nc\nWed Nov 14 11:15:47 2018: ncks -A -C -v Time temp/hawaii_1990.nc_Time.nc hawaii_1990.nc\nWed Nov 14 11:14:48 2018: ncatted -a coordinates,,m,c,XLONG XLAT Time hawaii_1990.nc\nThu Aug 16 17:44:29 2018: ncks --fix_rec_dmn Time hawaii_1990.nc fixed/hawaii_1990.nc\nMon Jul  2 09:12:32 2018: ncap2 -O -L 0 --cnk_plc=unchunk --fl_fmt=netcdf4 -s SNOWC=short(10000*SNOWC); CFRACL=short(10000*CFRACL); CFRACT=short(10000*CFRACT); LU_INDEX=short(LU_INDEX); hawaii_1990.nc proc/hawaii_1990.nc\nThu Jun 28 12:46:51 2018: ncrcat -O 1990/wrfout_hawaii_hourly_1990-01-01.nc 1990/wrfout_hawaii_hourly_1990-01-02.nc 1990/wrfout_hawaii_hourly_1990-01-03.nc 1990/wrfout_hawaii_hourly_1990-01-04.nc 1990/wrfout_hawaii_hourly_1990-01-05.nc 1990/wrfout_hawaii_hourly_1990-01-06.nc 1990/wrfout_hawaii_hourly_1990-01-07.nc 1990/wrfout_hawaii_hourly_1990-01-08.nc 1990/wrfout_hawaii_hourly_1990-01-09.nc 1990/wrfout_hawaii_hourly_1990-01-10.nc 1990/wrfout_hawaii_hourly_1990-01-11.nc 1990/wrfout_hawaii_hourly_1990-01-12.nc 1990/wrfout_hawaii_hourly_1990-01-13.nc 1990/wrfout_hawaii_hourly_1990-01-14.nc 1990/wrfout_hawaii_hourly_1990-01-15.nc 1990/wrfout_hawaii_hourly_1990-01-16.nc 1990/wrfout_hawaii_hourly_1990-01-17.nc 1990/wrfout_hawaii_hourly_1990-01-18.nc 1990/wrfout_hawaii_hourly_1990-01-19.nc 1990/wrfout_hawaii_hourly_1990-01-20.nc 1990/wrfout_hawaii_hourly_1990-01-21.nc 1990/wrfout_hawaii_hourly_1990-01-22.nc 1990/wrfout_hawaii_hourly_1990-01-23.nc 1990/wrfout_hawaii_hourly_1990-01-24.nc 1990/wrfout_hawaii_hourly_1990-01-25.nc 1990/wrfout_hawaii_hourly_1990-01-26.nc 1990/wrfout_hawaii_hourly_1990-01-27.nc 1990/wrfout_hawaii_hourly_1990-01-28.nc 1990/wrfout_hawaii_hourly_1990-01-29.nc 1990/wrfout_hawaii_hourly_1990-01-30.nc 1990/wrfout_hawaii_hourly_1990-01-31.nc 1990/wrfout_hawaii_hourly_1990-02-01.nc 1990/wrfout_hawaii_hourly_1990-02-02.nc 1990/wrfout_hawaii_hourly_1990-02-03.nc 1990/wrfout_hawaii_hourly_1990-02-04.nc 1990/wrfout_hawaii_hourly_1990-02-05.nc 1990/wrfout_hawaii_hourly_1990-02-06.nc 1990/wrfout_hawaii_hourly_1990-02-07.nc 1990/wrfout_hawaii_hourly_1990-02-08.nc 1990/wrfout_hawaii_hourly_1990-02-09.nc 1990/wrfout_hawaii_hourly_1990-02-10.nc 1990/wrfout_hawaii_hourly_1990-02-11.nc 1990/wrfout_hawaii_hourly_1990-02-12.nc 1990/wrfout_hawaii_hourly_1990-02-13.nc 1990/wrfout_hawaii_hourly_1990-02-14.nc 1990/wrfout_hawaii_hourly_1990-02-15.nc 1990/wrfout_hawaii_hourly_1990-02-16.nc 1990/wrfout_hawaii_hourly_1990-02-17.nc 1990/wrfout_hawaii_hourly_1990-02-18.nc 1990/wrfout_hawaii_hourly_1990-02-19.nc 1990/wrfout_hawaii_hourly_1990-02-20.nc 1990/wrfout_hawaii_hourly_1990-02-21.nc 1990/wrfout_hawaii_hourly_1990-02-22.nc 1990/wrfout_hawaii_hourly_1990-02-23.nc 1990/wrfout_hawaii_hourly_1990-02-24.nc 1990/wrfout_hawaii_hourly_1990-02-25.nc 1990/wrfout_hawaii_hourly_1990-02-26.nc 1990/wrfout_hawaii_hourly_1990-02-27.nc 1990/wrfout_hawaii_hourly_1990-02-28.nc 1990/wrfout_hawaii_hourly_1990-03-01.nc 1990/wrfout_hawaii_hourly_1990-03-02.nc 1990/wrfout_hawaii_hourly_1990-03-03.nc 1990/wrfout_hawaii_hourly_1990-03-04.nc 1990/wrfout_hawaii_hourly_1990-03-05.nc 1990/wrfout_hawaii_hourly_1990-03-06.nc 1990/wrfout_hawaii_hourly_1990-03-07.nc 1990/wrfout_hawaii_hourly_1990-03-08.nc 1990/wrfout_hawaii_hourly_1990-03-09.nc 1990/wrfout_hawaii_hourly_1990-03-10.nc 1990/wrfout_hawaii_hourly_1990-03-11.nc 1990/wrfout_hawaii_hourly_1990-03-12.nc 1990/wrfout_hawaii_hourly_1990-03-13.nc 1990/wrfout_hawaii_hourly_1990-03-14.nc 1990/wrfout_hawaii_hourly_1990-03-15.nc 1990/wrfout_hawaii_hourly_1990-03-16.nc 1990/wrfout_hawaii_hourly_1990-03-17.nc 1990/wrfout_hawaii_hourly_1990-03-18.nc 1990/wrfout_hawaii_hourly_1990-03-19.nc 1990/wrfout_hawaii_hourly_1990-03-20.nc 1990/wrfout_hawaii_hourly_1990-03-21.nc 1990/wrfout_hawaii_hourly_1990-03-22.nc 1990/wrfout_hawaii_hourly_1990-03-23.nc 1990/wrfout_hawaii_hourly_1990-03-24.nc 1990/wrfout_hawaii_hourly_1990-03-25.nc 1990/wrfout_hawaii_hourly_1990-03-26.nc 1990/wrfout_hawaii_hourly_1990-03-27.nc 1990/wrfout_hawaii_hourly_1990-03-28.nc 1990/wrfout_hawaii_hourly_1990-03-29.nc 1990/wrfout_hawaii_hourly_1990-03-30.nc 1990/wrfout_hawaii_hourly_1990-03-31.nc 1990/wrfout_hawaii_hourly_1990-04-01.nc 1990/wrfout_hawaii_hourly_1990-04-02.nc 1990/wrfout_hawaii_hourly_1990-04-03.nc 1990/wrfout_hawaii_hourly_1990-04-04.nc 1990/wrfout_hawaii_hourly_1990-04-05.nc 1990/wrfout_hawaii_hourly_1990-04-06.nc 1990/wrfout_hawaii_hourly_1990-04-07.nc 1990/wrfout_hawaii_hourly_1990-04-08.nc 1990/wrfout_hawaii_hourly_1990-04-09.nc 1990/wrfout_hawaii_hourly_1990-04-10.nc 1990/wrfout_hawaii_hourly_1990-04-11.nc 1990/wrfout_hawaii_hourly_1990-04-12.nc 1990/wrfout_hawaii_hourly_1990-04-13.nc 1990/wrfout_hawaii_hourly_1990-04-14.nc 1990/wrfout_hawaii_hourly_1990-04-15.nc 1990/wrfout_hawaii_hourly_1990-04-16.nc 1990/wrfout_hawaii_hourly_1990-04-17.nc 1990/wrfout_hawaii_hourly_1990-04-18.nc 1990/wrfout_hawaii_hourly_1990-04-19.nc 1990/wrfout_hawaii_hourly_1990-04-20.nc 1990/wrfout_hawaii_hourly_1990-04-21.nc 1990/wrfout_hawaii_hourly_1990-04-22.nc 1990/wrfout_hawaii_hourly_1990-04-23.nc 1990/wrfout_hawaii_hourly_1990-04-24.nc 1990/wrfout_hawaii_hourly_1990-04-25.nc 1990/wrfout_hawaii_hourly_1990-04-26.nc 1990/wrfout_hawaii_hourly_1990-04-27.nc 1990/wrfout_hawaii_hourly_1990-04-28.nc 1990/wrfout_hawaii_hourly_1990-04-29.nc 1990/wrfout_hawaii_hourly_1990-04-30.nc 1990/wrfout_hawaii_hourly_1990-05-01.nc 1990/wrfout_hawaii_hourly_1990-05-02.nc 1990/wrfout_hawaii_hourly_1990-05-03.nc 1990/wrfout_hawaii_hourly_1990-05-04.nc 1990/wrfout_hawaii_hourly_1990-05-05.nc 1990/wrfout_hawaii_hourly_1990-05-06.nc 1990/wrfout_hawaii_hourly_1990-05-07.nc 1990/wrfout_hawaii_hourly_1990-05-08.nc 1990/wrfout_hawaii_hourly_1990-05-09.nc 1990/wrfout_hawaii_hourly_1990-05-10.nc 1990/wrfout_hawaii_hourly_1990-05-11.nc 1990/wrfout_hawaii_hourly_1990-05-12.nc 1990/wrfout_hawaii_hourly_1990-05-13.nc 1990/wrfout_hawaii_hourly_1990-05-14.nc 1990/wrfout_hawaii_hourly_1990-05-15.nc 1990/wrfout_hawaii_hourly_1990-05-16.nc 1990/wrfout_hawaii_hourly_1990-05-17.nc 1990/wrfout_hawaii_hourly_1990-05-18.nc 1990/wrfout_hawaii_hourly_1990-05-19.nc 1990/wrfout_hawaii_hourly_1990-05-20.nc 1990/wrfout_hawaii_hourly_1990-05-21.nc 1990/wrfout_hawaii_hourly_1990-05-22.nc 1990/wrfout_hawaii_hourly_1990-05-23.nc 1990/wrfout_hawaii_hourly_1990-05-24.nc 1990/wrfout_hawaii_hourly_1990-05-25.nc 1990/wrfout_hawaii_hourly_1990-05-26.nc 1990/wrfout_hawaii_hourly_1990-05-27.nc 1990/wrfout_hawaii_hourly_1990-05-28.nc 1990/wrfout_hawaii_hourly_1990-05-29.nc 1990/wrfout_hawaii_hourly_1990-05-30.nc 1990/wrfout_hawaii_hourly_1990-05-31.nc 1990/wrfout_hawaii_hourly_1990-06-01.nc 1990/wrfout_hawaii_hourly_1990-06-02.nc 1990/wrfout_hawaii_hourly_1990-06-03.nc 1990/wrfout_hawaii_hourly_1990-06-04.nc 1990/wrfout_hawaii_hourly_1990-06-05.nc 1990/wrfout_hawaii_hourly_1990-06-06.nc 1990/wrfout_hawaii_hourly_1990-06-07.nc 1990/wrfout_hawaii_hourly_1990-06-08.nc 1990/wrfout_hawaii_hourly_1990-06-09.nc 1990/wrfout_hawaii_hourly_1990-06-10.nc 1990/wrfout_hawaii_hourly_1990-06-11.nc 1990/wrfout_hawaii_hourly_1990-06-12.nc 1990/wrfout_hawaii_hourly_1990-06-13.nc 1990/wrfout_hawaii_hourly_1990-06-14.nc 1990/wrfout_hawaii_hourly_1990-06-15.nc 1990/wrfout_hawaii_hourly_1990-06-16.nc 1990/wrfout_hawaii_hourly_1990-06-17.nc 1990/wrfout_hawaii_hourly_1990-06-18.nc 1990/wrfout_hawaii_hourly_1990-06-19.nc 1990/wrfout_hawaii_hourly_1990-06-20.nc 1990/wrfout_hawaii_hourly_1990-06-21.nc 1990/wrfout_hawaii_hourly_1990-06-22.nc 1990/wrfout_hawaii_hourly_1990-06-23.nc 1990/wrfout_hawaii_hourly_1990-06-24.nc 1990/wrfout_hawaii_hourly_1990-06-25.nc 1990/wrfout_hawaii_hourly_1990-06-26.nc 1990/wrfout_hawaii_hourly_1990-06-27.nc 1990/wrfout_hawaii_hourly_1990-06-28.nc 1990/wrfout_hawaii_hourly_1990-06-29.nc 1990/wrfout_hawaii_hourly_1990-06-30.nc 1990/wrfout_hawaii_hourly_1990-07-01.nc 1990/wrfout_hawaii_hourly_1990-07-02.nc 1990/wrfout_hawaii_hourly_1990-07-03.nc 1990/wrfout_hawaii_hourly_1990-07-04.nc 1990/wrfout_hawaii_hourly_1990-07-05.nc 1990/wrfout_hawaii_hourly_1990-07-06.nc 1990/wrfout_hawaii_hourly_1990-07-07.nc 1990/wrfout_hawaii_hourly_1990-07-08.nc 1990/wrfout_hawaii_hourly_1990-07-09.nc 1990/wrfout_hawaii_hourly_1990-07-10.nc 1990/wrfout_hawaii_hourly_1990-07-11.nc 1990/wrfout_hawaii_hourly_1990-07-12.nc 1990/wrfout_hawaii_hourly_1990-07-13.nc 1990/wrfout_hawaii_hourly_1990-07-14.nc 1990/wrfout_hawaii_hourly_1990-07-15.nc 1990/wrfout_hawaii_hourly_1990-07-16.nc 1990/wrfout_hawaii_hourly_1990-07-17.nc 1990/wrfout_hawaii_hourly_1990-07-18.nc 1990/wrfout_hawaii_hourly_1990-07-19.nc 1990/wrfout_hawaii_hourly_1990-07-20.nc 1990/wrfout_hawaii_hourly_1990-07-21.nc 1990/wrfout_hawaii_hourly_1990-07-22.nc 1990/wrfout_hawaii_hourly_1990-07-23.nc 1990/wrfout_hawaii_hourly_1990-07-24.nc 1990/wrfout_hawaii_hourly_1990-07-25.nc 1990/wrfout_hawaii_hourly_1990-07-26.nc 1990/wrfout_hawaii_hourly_1990-07-27.nc 1990/wrfout_hawaii_hourly_1990-07-28.nc 1990/wrfout_hawaii_hourly_1990-07-29.nc 1990/wrfout_hawaii_hourly_1990-07-30.nc 1990/wrfout_hawaii_hourly_1990-07-31.nc 1990/wrfout_hawaii_hourly_1990-08-01.nc 1990/wrfout_hawaii_hourly_1990-08-02.nc 1990/wrfout_hawaii_hourly_1990-08-03.nc 1990/wrfout_hawaii_hourly_1990-08-04.nc 1990/wrfout_hawaii_hourly_1990-08-05.nc 1990/wrfout_hawaii_hourly_1990-08-06.nc 1990/wrfout_hawaii_hourly_1990-08-07.nc 1990/wrfout_hawaii_hourly_1990-08-08.nc 1990/wrfout_hawaii_hourly_1990-08-09.nc 1990/wrfout_hawaii_hourly_1990-08-10.nc 1990/wrfout_hawaii_hourly_1990-08-11.nc 1990/wrfout_hawaii_hourly_1990-08-12.nc 1990/wrfout_hawaii_hourly_1990-08-13.nc 1990/wrfout_hawaii_hourly_1990-08-14.nc 1990/wrfout_hawaii_hourly_1990-08-15.nc 1990/wrfout_hawaii_hourly_1990-08-16.nc 1990/wrfout_hawaii_hourly_1990-08-17.nc 1990/wrfout_hawaii_hourly_1990-08-18.nc 1990/wrfout_hawaii_hourly_1990-08-19.nc 1990/wrfout_hawaii_hourly_1990-08-20.nc 1990/wrfout_hawaii_hourly_1990-08-21.nc 1990/wrfout_hawaii_hourly_1990-08-22.nc 1990/wrfout_hawaii_hourly_1990-08-23.nc 1990/wrfout_hawaii_hourly_1990-08-24.nc 1990/wrfout_hawaii_hourly_1990-08-25.nc 1990/wrfout_hawaii_hourly_1990-08-26.nc 1990/wrfout_hawaii_hourly_1990-08-27.nc 1990/wrfout_hawaii_hourly_1990-08-28.nc 1990/wrfout_hawaii_hourly_1990-08-29.nc 1990/wrfout_hawaii_hourly_1990-08-30.nc 1990/wrfout_hawaii_hourly_1990-08-31.nc 1990/wrfout_hawaii_hourly_1990-09-01.nc 1990/wrfout_hawaii_hourly_1990-09-02.nc 1990/wrfout_hawaii_hourly_1990-09-03.nc 1990/wrfout_hawaii_hourly_1990-09-04.nc 1990/wrfout_hawaii_hourly_1990-09-05.nc 1990/wrfout_hawaii_hourly_1990-09-06.nc 1990/wrfout_hawaii_hourly_1990-09-07.nc 1990/wrfout_hawaii_hourly_1990-09-08.nc 1990/wrfout_hawaii_hourly_1990-09-09.nc 1990/wrfout_hawaii_hourly_1990-09-10.nc 1990/wrfout_hawaii_hourly_1990-09-11.nc 1990/wrfout_hawaii_hourly_1990-09-12.nc 1990/wrfout_hawaii_hourly_1990-09-13.nc 1990/wrfout_hawaii_hourly_1990-09-14.nc 1990/wrfout_hawaii_hourly_1990-09-15.nc 1990/wrfout_hawaii_hourly_1990-09-16.nc 1990/wrfout_hawaii_hourly_1990-09-17.nc 1990/wrfout_hawaii_hourly_1990-09-18.nc 1990/wrfout_hawaii_hourly_1990-09-19.nc 1990/wrfout_hawaii_hourly_1990-09-20.nc 1990/wrfout_hawaii_hourly_1990-09-21.nc 1990/wrfout_hawaii_hourly_1990-09-22.nc 1990/wrfout_hawaii_hourly_1990-09-23.nc 1990/wrfout_hawaii_hourly_1990-09-24.nc 1990/wrfout_hawaii_hourly_1990-09-25.nc 1990/wrfout_hawaii_hourly_1990-09-26.nc 1990/wrfout_hawaii_hourly_1990-09-27.nc 1990/wrfout_hawaii_hourly_1990-09-28.nc 1990/wrfout_hawaii_hourly_1990-09-29.nc 1990/wrfout_hawaii_hourly_1990-09-30.nc 1990/wrfout_hawaii_hourly_1990-10-01.nc 1990/wrfout_hawaii_hourly_1990-10-02.nc 1990/wrfout_hawaii_hourly_1990-10-03.nc 1990/wrfout_hawaii_hourly_1990-10-04.nc 1990/wrfout_hawaii_hourly_1990-10-05.nc 1990/wrfout_hawaii_hourly_1990-10-06.nc 1990/wrfout_hawaii_hourly_1990-10-07.nc 1990/wrfout_hawaii_hourly_1990-10-08.nc 1990/wrfout_hawaii_hourly_1990-10-09.nc 1990/wrfout_hawaii_hourly_1990-10-10.nc 1990/wrfout_hawaii_hourly_1990-10-11.nc 1990/wrfout_hawaii_hourly_1990-10-12.nc 1990/wrfout_hawaii_hourly_1990-10-13.nc 1990/wrfout_hawaii_hourly_1990-10-14.nc 1990/wrfout_hawaii_hourly_1990-10-15.nc 1990/wrfout_hawaii_hourly_1990-10-16.nc 1990/wrfout_hawaii_hourly_1990-10-17.nc 1990/wrfout_hawaii_hourly_1990-10-18.nc 1990/wrfout_hawaii_hourly_1990-10-19.nc 1990/wrfout_hawaii_hourly_1990-10-20.nc 1990/wrfout_hawaii_hourly_1990-10-21.nc 1990/wrfout_hawaii_hourly_1990-10-22.nc 1990/wrfout_hawaii_hourly_1990-10-23.nc 1990/wrfout_hawaii_hourly_1990-10-24.nc 1990/wrfout_hawaii_hourly_1990-10-25.nc 1990/wrfout_hawaii_hourly_1990-10-26.nc 1990/wrfout_hawaii_hourly_1990-10-27.nc 1990/wrfout_hawaii_hourly_1990-10-28.nc 1990/wrfout_hawaii_hourly_1990-10-29.nc 1990/wrfout_hawaii_hourly_1990-10-30.nc 1990/wrfout_hawaii_hourly_1990-10-31.nc 1990/wrfout_hawaii_hourly_1990-11-01.nc 1990/wrfout_hawaii_hourly_1990-11-02.nc 1990/wrfout_hawaii_hourly_1990-11-03.nc 1990/wrfout_hawaii_hourly_1990-11-04.nc 1990/wrfout_hawaii_hourly_1990-11-05.nc 1990/wrfout_hawaii_hourly_1990-11-06.nc 1990/wrfout_hawaii_hourly_1990-11-07.nc 1990/wrfout_hawaii_hourly_1990-11-08.nc 1990/wrfout_hawaii_hourly_1990-11-09.nc 1990/wrfout_hawaii_hourly_1990-11-10.nc 1990/wrfout_hawaii_hourly_1990-11-11.nc 1990/wrfout_hawaii_hourly_1990-11-12.nc 1990/wrfout_hawaii_hourly_1990-11-13.nc 1990/wrfout_hawaii_hourly_1990-11-14.nc 1990/wrfout_hawaii_hourly_1990-11-15.nc 1990/wrfout_hawaii_hourly_1990-11-16.nc 1990/wrfout_hawaii_hourly_1990-11-17.nc 1990/wrfout_hawaii_hourly_1990-11-18.nc 1990/wrfout_hawaii_hourly_1990-11-19.nc 1990/wrfout_hawaii_hourly_1990-11-20.nc 1990/wrfout_hawaii_hourly_1990-11-21.nc 1990/wrfout_hawaii_hourly_1990-11-22.nc 1990/wrfout_hawaii_hourly_1990-11-23.nc 1990/wrfout_hawaii_hourly_1990-11-24.nc 1990/wrfout_hawaii_hourly_1990-11-25.nc 1990/wrfout_hawaii_hourly_1990-11-26.nc 1990/wrfout_hawaii_hourly_1990-11-27.nc 1990/wrfout_hawaii_hourly_1990-11-28.nc 1990/wrfout_hawaii_hourly_1990-11-29.nc 1990/wrfout_hawaii_hourly_1990-11-30.nc 1990/wrfout_hawaii_hourly_1990-12-01.nc 1990/wrfout_hawaii_hourly_1990-12-02.nc 1990/wrfout_hawaii_hourly_1990-12-03.nc 1990/wrfout_hawaii_hourly_1990-12-04.nc 1990/wrfout_hawaii_hourly_1990-12-05.nc 1990/wrfout_hawaii_hourly_1990-12-06.nc 1990/wrfout_hawaii_hourly_1990-12-07.nc 1990/wrfout_hawaii_hourly_1990-12-08.nc 1990/wrfout_hawaii_hourly_1990-12-09.nc 1990/wrfout_hawaii_hourly_1990-12-10.nc 1990/wrfout_hawaii_hourly_1990-12-11.nc 1990/wrfout_hawaii_hourly_1990-12-12.nc 1990/wrfout_hawaii_hourly_1990-12-13.nc 1990/wrfout_hawaii_hourly_1990-12-14.nc 1990/wrfout_hawaii_hourly_1990-12-15.nc 1990/wrfout_hawaii_hourly_1990-12-16.nc 1990/wrfout_hawaii_hourly_1990-12-17.nc 1990/wrfout_hawaii_hourly_1990-12-18.nc 1990/wrfout_hawaii_hourly_1990-12-19.nc 1990/wrfout_hawaii_hourly_1990-12-20.nc 1990/wrfout_hawaii_hourly_1990-12-21.nc 1990/wrfout_hawaii_hourly_1990-12-22.nc 1990/wrfout_hawaii_hourly_1990-12-23.nc 1990/wrfout_hawaii_hourly_1990-12-24.nc 1990/wrfout_hawaii_hourly_1990-12-25.nc 1990/wrfout_hawaii_hourly_1990-12-26.nc 1990/wrfout_hawaii_hourly_1990-12-27.nc 1990/wrfout_hawaii_hourly_1990-12-28.nc 1990/wrfout_hawaii_hourly_1990-12-29.nc 1990/wrfout_hawaii_hourly_1990-12-30.nc 1990/wrfout_hawaii_hourly_1990-12-31.nc hawaii_1990.nc\nWed Jun 27 10:53:36 2018: ncatted -O -a ,global,d,, time_no_latlon/1990/wrfout_hawaii_hourly_1990-01-01.nc\nWed Nov 14 11:15:47 2018: Appended file temp/hawaii_1990.nc_Time.nc had following \"history\" attribute:\nWed Nov 14 11:14:48 2018: ncap2 -O -v -s Time=XTIME hawaii_1990.nc temp/hawaii_1990.nc_Time.nc\nWed Nov 14 11:14:48 2018: ncatted -a coordinates,,m,c,XLONG XLAT Time hawaii_1990.nc\nThu Aug 16 17:44:29 2018: ncks --fix_rec_dmn Time hawaii_1990.nc fixed/hawaii_1990.nc\nMon Jul  2 09:12:32 2018: ncap2 -O -L 0 --cnk_plc=unchunk --fl_fmt=netcdf4 -s SNOWC=short(10000*SNOWC); CFRACL=short(10000*CFRACL); CFRACT=short(10000*CFRACT); LU_INDEX=short(LU_INDEX); hawaii_1990.nc proc/hawaii_1990.nc\nThu Jun 28 12:46:51 2018: ncrcat -O 1990/wrfout_hawaii_hourly_1990-01-01.nc 1990/wrfout_hawaii_hourly_1990-01-02.nc 1990/wrfout_hawaii_hourly_1990-01-03.nc 1990/wrfout_hawaii_hourly_1990-01-04.nc 1990/wrfout_hawaii_hourly_1990-01-05.nc 1990/wrfout_hawaii_hourly_1990-01-06.nc 1990/wrfout_hawaii_hourly_1990-01-07.nc 1990/wrfout_hawaii_hourly_1990-01-08.nc 1990/wrfout_hawaii_hourly_1990-01-09.nc 1990/wrfout_hawaii_hourly_1990-01-10.nc 1990/wrfout_hawaii_hourly_1990-01-11.nc 1990/wrfout_hawaii_hourly_1990-01-12.nc 1990/wrfout_hawaii_hourly_1990-01-13.nc 1990/wrfout_hawaii_hourly_1990-01-14.nc 1990/wrfout_hawaii_hourly_1990-01-15.nc 1990/wrfout_hawaii_hourly_1990-01-16.nc 1990/wrfout_hawaii_hourly_1990-01-17.nc 1990/wrfout_hawaii_hourly_1990-01-18.nc 1990/wrfout_hawaii_hourly_1990-01-19.nc 1990/wrfout_hawaii_hourly_1990-01-20.nc 1990/wrfout_hawaii_hourly_1990-01-21.nc 1990/wrfout_hawaii_hourly_1990-01-22.nc 1990/wrfout_hawaii_hourly_1990-01-23.nc 1990/wrfout_hawaii_hourly_1990-01-24.nc 1990/wrfout_hawaii_hourly_1990-01-25.nc 1990/wrfout_hawaii_hourly_1990-01-26.nc 1990/wrfout_hawaii_hourly_1990-01-27.nc 1990/wrfout_hawaii_hourly_1990-01-28.nc 1990/wrfout_hawaii_hourly_1990-01-29.nc 1990/wrfout_hawaii_hourly_1990-01-30.nc 1990/wrfout_hawaii_hourly_1990-01-31.nc 1990/wrfout_hawaii_hourly_1990-02-01.nc 1990/wrfout_hawaii_hourly_1990-02-02.nc 1990/wrfout_hawaii_hourly_1990-02-03.nc 1990/wrfout_hawaii_hourly_1990-02-04.nc 1990/wrfout_hawaii_hourly_1990-02-05.nc 1990/wrfout_hawaii_hourly_1990-02-06.nc 1990/wrfout_hawaii_hourly_1990-02-07.nc 1990/wrfout_hawaii_hourly_1990-02-08.nc 1990/wrfout_hawaii_hourly_1990-02-09.nc 1990/wrfout_hawaii_hourly_1990-02-10.nc 1990/wrfout_hawaii_hourly_1990-02-11.nc 1990/wrfout_hawaii_hourly_1990-02-12.nc 1990/wrfout_hawaii_hourly_1990-02-13.nc 1990/wrfout_hawaii_hourly_1990-02-14.nc 1990/wrfout_hawaii_hourly_1990-02-15.nc 1990/wrfout_hawaii_hourly_1990-02-16.nc 1990/wrfout_hawaii_hourly_1990-02-17.nc 1990/wrfout_hawaii_hourly_1990-02-18.nc 1990/wrfout_hawaii_hourly_1990-02-19.nc 1990/wrfout_hawaii_hourly_1990-02-20.nc 1990/wrfout_hawaii_hourly_1990-02-21.nc 1990/wrfout_hawaii_hourly_1990-02-22.nc 1990/wrfout_hawaii_hourly_1990-02-23.nc 1990/wrfout_hawaii_hourly_1990-02-24.nc 1990/wrfout_hawaii_hourly_1990-02-25.nc 1990/wrfout_hawaii_hourly_1990-02-26.nc 1990/wrfout_hawaii_hourly_1990-02-27.nc 1990/wrfout_hawaii_hourly_1990-02-28.nc 1990/wrfout_hawaii_hourly_1990-03-01.nc 1990/wrfout_hawaii_hourly_1990-03-02.nc 1990/wrfout_hawaii_hourly_1990-03-03.nc 1990/wrfout_hawaii_hourly_1990-03-04.nc 1990/wrfout_hawaii_hourly_1990-03-05.nc 1990/wrfout_hawaii_hourly_1990-03-06.nc 1990/wrfout_hawaii_hourly_1990-03-07.nc 1990/wrfout_hawaii_hourly_1990-03-08.nc 1990/wrfout_hawaii_hourly_1990-03-09.nc 1990/wrfout_hawaii_hourly_1990-03-10.nc 1990/wrfout_hawaii_hourly_1990-03-11.nc 1990/wrfout_hawaii_hourly_1990-03-12.nc 1990/wrfout_hawaii_hourly_1990-03-13.nc 1990/wrfout_hawaii_hourly_1990-03-14.nc 1990/wrfout_hawaii_hourly_1990-03-15.nc 1990/wrfout_hawaii_hourly_1990-03-16.nc 1990/wrfout_hawaii_hourly_1990-03-17.nc 1990/wrfout_hawaii_hourly_1990-03-18.nc 1990/wrfout_hawaii_hourly_1990-03-19.nc 1990/wrfout_hawaii_hourly_1990-03-20.nc 1990/wrfout_hawaii_hourly_1990-03-21.nc 1990/wrfout_hawaii_hourly_1990-03-22.nc 1990/wrfout_hawaii_hourly_1990-03-23.nc 1990/wrfout_hawaii_hourly_1990-03-24.nc 1990/wrfout_hawaii_hourly_1990-03-25.nc 1990/wrfout_hawaii_hourly_1990-03-26.nc 1990/wrfout_hawaii_hourly_1990-03-27.nc 1990/wrfout_hawaii_hourly_1990-03-28.nc 1990/wrfout_hawaii_hourly_1990-03-29.nc 1990/wrfout_hawaii_hourly_1990-03-30.nc 1990/wrfout_hawaii_hourly_1990-03-31.nc 1990/wrfout_hawaii_hourly_1990-04-01.nc 1990/wrfout_hawaii_hourly_1990-04-02.nc 1990/wrfout_hawaii_hourly_1990-04-03.nc 1990/wrfout_hawaii_hourly_1990-04-04.nc 1990/wrfout_hawaii_hourly_1990-04-05.nc 1990/wrfout_hawaii_hourly_1990-04-06.nc 1990/wrfout_hawaii_hourly_1990-04-07.nc 1990/wrfout_hawaii_hourly_1990-04-08.nc 1990/wrfout_hawaii_hourly_1990-04-09.nc 1990/wrfout_hawaii_hourly_1990-04-10.nc 1990/wrfout_hawaii_hourly_1990-04-11.nc 1990/wrfout_hawaii_hourly_1990-04-12.nc 1990/wrfout_hawaii_hourly_1990-04-13.nc 1990/wrfout_hawaii_hourly_1990-04-14.nc 1990/wrfout_hawaii_hourly_1990-04-15.nc 1990/wrfout_hawaii_hourly_1990-04-16.nc 1990/wrfout_hawaii_hourly_1990-04-17.nc 1990/wrfout_hawaii_hourly_1990-04-18.nc 1990/wrfout_hawaii_hourly_1990-04-19.nc 1990/wrfout_hawaii_hourly_1990-04-20.nc 1990/wrfout_hawaii_hourly_1990-04-21.nc 1990/wrfout_hawaii_hourly_1990-04-22.nc 1990/wrfout_hawaii_hourly_1990-04-23.nc 1990/wrfout_hawaii_hourly_1990-04-24.nc 1990/wrfout_hawaii_hourly_1990-04-25.nc 1990/wrfout_hawaii_hourly_1990-04-26.nc 1990/wrfout_hawaii_hourly_1990-04-27.nc 1990/wrfout_hawaii_hourly_1990-04-28.nc 1990/wrfout_hawaii_hourly_1990-04-29.nc 1990/wrfout_hawaii_hourly_1990-04-30.nc 1990/wrfout_hawaii_hourly_1990-05-01.nc 1990/wrfout_hawaii_hourly_1990-05-02.nc 1990/wrfout_hawaii_hourly_1990-05-03.nc 1990/wrfout_hawaii_hourly_1990-05-04.nc 1990/wrfout_hawaii_hourly_1990-05-05.nc 1990/wrfout_hawaii_hourly_1990-05-06.nc 1990/wrfout_hawaii_hourly_1990-05-07.nc 1990/wrfout_hawaii_hourly_1990-05-08.nc 1990/wrfout_hawaii_hourly_1990-05-09.nc 1990/wrfout_hawaii_hourly_1990-05-10.nc 1990/wrfout_hawaii_hourly_1990-05-11.nc 1990/wrfout_hawaii_hourly_1990-05-12.nc 1990/wrfout_hawaii_hourly_1990-05-13.nc 1990/wrfout_hawaii_hourly_1990-05-14.nc 1990/wrfout_hawaii_hourly_1990-05-15.nc 1990/wrfout_hawaii_hourly_1990-05-16.nc 1990/wrfout_hawaii_hourly_1990-05-17.nc 1990/wrfout_hawaii_hourly_1990-05-18.nc 1990/wrfout_hawaii_hourly_1990-05-19.nc 1990/wrfout_hawaii_hourly_1990-05-20.nc 1990/wrfout_hawaii_hourly_1990-05-21.nc 1990/wrfout_hawaii_hourly_1990-05-22.nc 1990/wrfout_hawaii_hourly_1990-05-23.nc 1990/wrfout_hawaii_hourly_1990-05-24.nc 1990/wrfout_hawaii_hourly_1990-05-25.nc 1990/wrfout_hawaii_hourly_1990-05-26.nc 1990/wrfout_hawaii_hourly_1990-05-27.nc 1990/wrfout_hawaii_hourly_1990-05-28.nc 1990/wrfout_hawaii_hourly_1990-05-29.nc 1990/wrfout_hawaii_hourly_1990-05-30.nc 1990/wrfout_hawaii_hourly_1990-05-31.nc 1990/wrfout_hawaii_hourly_1990-06-01.nc 1990/wrfout_hawaii_hourly_1990-06-02.nc 1990/wrfout_hawaii_hourly_1990-06-03.nc 1990/wrfout_hawaii_hourly_1990-06-04.nc 1990/wrfout_hawaii_hourly_1990-06-05.nc 1990/wrfout_hawaii_hourly_1990-06-06.nc 1990/wrfout_hawaii_hourly_1990-06-07.nc 1990/wrfout_hawaii_hourly_1990-06-08.nc 1990/wrfout_hawaii_hourly_1990-06-09.nc 1990/wrfout_hawaii_hourly_1990-06-10.nc 1990/wrfout_hawaii_hourly_1990-06-11.nc 1990/wrfout_hawaii_hourly_1990-06-12.nc 1990/wrfout_hawaii_hourly_1990-06-13.nc 1990/wrfout_hawaii_hourly_1990-06-14.nc 1990/wrfout_hawaii_hourly_1990-06-15.nc 1990/wrfout_hawaii_hourly_1990-06-16.nc 1990/wrfout_hawaii_hourly_1990-06-17.nc 1990/wrfout_hawaii_hourly_1990-06-18.nc 1990/wrfout_hawaii_hourly_1990-06-19.nc 1990/wrfout_hawaii_hourly_1990-06-20.nc 1990/wrfout_hawaii_hourly_1990-06-21.nc 1990/wrfout_hawaii_hourly_1990-06-22.nc 1990/wrfout_hawaii_hourly_1990-06-23.nc 1990/wrfout_hawaii_hourly_1990-06-24.nc 1990/wrfout_hawaii_hourly_1990-06-25.nc 1990/wrfout_hawaii_hourly_1990-06-26.nc 1990/wrfout_hawaii_hourly_1990-06-27.nc 1990/wrfout_hawaii_hourly_1990-06-28.nc 1990/wrfout_hawaii_hourly_1990-06-29.nc 1990/wrfout_hawaii_hourly_1990-06-30.nc 1990/wrfout_hawaii_hourly_1990-07-01.nc 1990/wrfout_hawaii_hourly_1990-07-02.nc 1990/wrfout_hawaii_hourly_1990-07-03.nc 1990/wrfout_hawaii_hourly_1990-07-04.nc 1990/wrfout_hawaii_hourly_1990-07-05.nc 1990/wrfout_hawaii_hourly_1990-07-06.nc 1990/wrfout_hawaii_hourly_1990-07-07.nc 1990/wrfout_hawaii_hourly_1990-07-08.nc 1990/wrfout_hawaii_hourly_1990-07-09.nc 1990/wrfout_hawaii_hourly_1990-07-10.nc 1990/wrfout_hawaii_hourly_1990-07-11.nc 1990/wrfout_hawaii_hourly_1990-07-12.nc 1990/wrfout_hawaii_hourly_1990-07-13.nc 1990/wrfout_hawaii_hourly_1990-07-14.nc 1990/wrfout_hawaii_hourly_1990-07-15.nc 1990/wrfout_hawaii_hourly_1990-07-16.nc 1990/wrfout_hawaii_hourly_1990-07-17.nc 1990/wrfout_hawaii_hourly_1990-07-18.nc 1990/wrfout_hawaii_hourly_1990-07-19.nc 1990/wrfout_hawaii_hourly_1990-07-20.nc 1990/wrfout_hawaii_hourly_1990-07-21.nc 1990/wrfout_hawaii_hourly_1990-07-22.nc 1990/wrfout_hawaii_hourly_1990-07-23.nc 1990/wrfout_hawaii_hourly_1990-07-24.nc 1990/wrfout_hawaii_hourly_1990-07-25.nc 1990/wrfout_hawaii_hourly_1990-07-26.nc 1990/wrfout_hawaii_hourly_1990-07-27.nc 1990/wrfout_hawaii_hourly_1990-07-28.nc 1990/wrfout_hawaii_hourly_1990-07-29.nc 1990/wrfout_hawaii_hourly_1990-07-30.nc 1990/wrfout_hawaii_hourly_1990-07-31.nc 1990/wrfout_hawaii_hourly_1990-08-01.nc 1990/wrfout_hawaii_hourly_1990-08-02.nc 1990/wrfout_hawaii_hourly_1990-08-03.nc 1990/wrfout_hawaii_hourly_1990-08-04.nc 1990/wrfout_hawaii_hourly_1990-08-05.nc 1990/wrfout_hawaii_hourly_1990-08-06.nc 1990/wrfout_hawaii_hourly_1990-08-07.nc 1990/wrfout_hawaii_hourly_1990-08-08.nc 1990/wrfout_hawaii_hourly_1990-08-09.nc 1990/wrfout_hawaii_hourly_1990-08-10.nc 1990/wrfout_hawaii_hourly_1990-08-11.nc 1990/wrfout_hawaii_hourly_1990-08-12.nc 1990/wrfout_hawaii_hourly_1990-08-13.nc 1990/wrfout_hawaii_hourly_1990-08-14.nc 1990/wrfout_hawaii_hourly_1990-08-15.nc 1990/wrfout_hawaii_hourly_1990-08-16.nc 1990/wrfout_hawaii_hourly_1990-08-17.nc 1990/wrfout_hawaii_hourly_1990-08-18.nc 1990/wrfout_hawaii_hourly_1990-08-19.nc 1990/wrfout_hawaii_hourly_1990-08-20.nc 1990/wrfout_hawaii_hourly_1990-08-21.nc 1990/wrfout_hawaii_hourly_1990-08-22.nc 1990/wrfout_hawaii_hourly_1990-08-23.nc 1990/wrfout_hawaii_hourly_1990-08-24.nc 1990/wrfout_hawaii_hourly_1990-08-25.nc 1990/wrfout_hawaii_hourly_1990-08-26.nc 1990/wrfout_hawaii_hourly_1990-08-27.nc 1990/wrfout_hawaii_hourly_1990-08-28.nc 1990/wrfout_hawaii_hourly_1990-08-29.nc 1990/wrfout_hawaii_hourly_1990-08-30.nc 1990/wrfout_hawaii_hourly_1990-08-31.nc 1990/wrfout_hawaii_hourly_1990-09-01.nc 1990/wrfout_hawaii_hourly_1990-09-02.nc 1990/wrfout_hawaii_hourly_1990-09-03.nc 1990/wrfout_hawaii_hourly_1990-09-04.nc 1990/wrfout_hawaii_hourly_1990-09-05.nc 1990/wrfout_hawaii_hourly_1990-09-06.nc 1990/wrfout_hawaii_hourly_1990-09-07.nc 1990/wrfout_hawaii_hourly_1990-09-08.nc 1990/wrfout_hawaii_hourly_1990-09-09.nc 1990/wrfout_hawaii_hourly_1990-09-10.nc 1990/wrfout_hawaii_hourly_1990-09-11.nc 1990/wrfout_hawaii_hourly_1990-09-12.nc 1990/wrfout_hawaii_hourly_1990-09-13.nc 1990/wrfout_hawaii_hourly_1990-09-14.nc 1990/wrfout_hawaii_hourly_1990-09-15.nc 1990/wrfout_hawaii_hourly_1990-09-16.nc 1990/wrfout_hawaii_hourly_1990-09-17.nc 1990/wrfout_hawaii_hourly_1990-09-18.nc 1990/wrfout_hawaii_hourly_1990-09-19.nc 1990/wrfout_hawaii_hourly_1990-09-20.nc 1990/wrfout_hawaii_hourly_1990-09-21.nc 1990/wrfout_hawaii_hourly_1990-09-22.nc 1990/wrfout_hawaii_hourly_1990-09-23.nc 1990/wrfout_hawaii_hourly_1990-09-24.nc 1990/wrfout_hawaii_hourly_1990-09-25.nc 1990/wrfout_hawaii_hourly_1990-09-26.nc 1990/wrfout_hawaii_hourly_1990-09-27.nc 1990/wrfout_hawaii_hourly_1990-09-28.nc 1990/wrfout_hawaii_hourly_1990-09-29.nc 1990/wrfout_hawaii_hourly_1990-09-30.nc 1990/wrfout_hawaii_hourly_1990-10-01.nc 1990/wrfout_hawaii_hourly_1990-10-02.nc 1990/wrfout_hawaii_hourly_1990-10-03.nc 1990/wrfout_hawaii_hourly_1990-10-04.nc 1990/wrfout_hawaii_hourly_1990-10-05.nc 1990/wrfout_hawaii_hourly_1990-10-06.nc 1990/wrfout_hawaii_hourly_1990-10-07.nc 1990/wrfout_hawaii_hourly_1990-10-08.nc 1990/wrfout_hawaii_hourly_1990-10-09.nc 1990/wrfout_hawaii_hourly_1990-10-10.nc 1990/wrfout_hawaii_hourly_1990-10-11.nc 1990/wrfout_hawaii_hourly_1990-10-12.nc 1990/wrfout_hawaii_hourly_1990-10-13.nc 1990/wrfout_hawaii_hourly_1990-10-14.nc 1990/wrfout_hawaii_hourly_1990-10-15.nc 1990/wrfout_hawaii_hourly_1990-10-16.nc 1990/wrfout_hawaii_hourly_1990-10-17.nc 1990/wrfout_hawaii_hourly_1990-10-18.nc 1990/wrfout_hawaii_hourly_1990-10-19.nc 1990/wrfout_hawaii_hourly_1990-10-20.nc 1990/wrfout_hawaii_hourly_1990-10-21.nc 1990/wrfout_hawaii_hourly_1990-10-22.nc 1990/wrfout_hawaii_hourly_1990-10-23.nc 1990/wrfout_hawaii_hourly_1990-10-24.nc 1990/wrfout_hawaii_hourly_1990-10-25.nc 1990/wrfout_hawaii_hourly_1990-10-26.nc 1990/wrfout_hawaii_hourly_1990-10-27.nc 1990/wrfout_hawaii_hourly_1990-10-28.nc 1990/wrfout_hawaii_hourly_1990-10-29.nc 1990/wrfout_hawaii_hourly_1990-10-30.nc 1990/wrfout_hawaii_hourly_1990-10-31.nc 1990/wrfout_hawaii_hourly_1990-11-01.nc 1990/wrfout_hawaii_hourly_1990-11-02.nc 1990/wrfout_hawaii_hourly_1990-11-03.nc 1990/wrfout_hawaii_hourly_1990-11-04.nc 1990/wrfout_hawaii_hourly_1990-11-05.nc 1990/wrfout_hawaii_hourly_1990-11-06.nc 1990/wrfout_hawaii_hourly_1990-11-07.nc 1990/wrfout_hawaii_hourly_1990-11-08.nc 1990/wrfout_hawaii_hourly_1990-11-09.nc 1990/wrfout_hawaii_hourly_1990-11-10.nc 1990/wrfout_hawaii_hourly_1990-11-11.nc 1990/wrfout_hawaii_hourly_1990-11-12.nc 1990/wrfout_hawaii_hourly_1990-11-13.nc 1990/wrfout_hawaii_hourly_1990-11-14.nc 1990/wrfout_hawaii_hourly_1990-11-15.nc 1990/wrfout_hawaii_hourly_1990-11-16.nc 1990/wrfout_hawaii_hourly_1990-11-17.nc 1990/wrfout_hawaii_hourly_1990-11-18.nc 1990/wrfout_hawaii_hourly_1990-11-19.nc 1990/wrfout_hawaii_hourly_1990-11-20.nc 1990/wrfout_hawaii_hourly_1990-11-21.nc 1990/wrfout_hawaii_hourly_1990-11-22.nc 1990/wrfout_hawaii_hourly_1990-11-23.nc 1990/wrfout_hawaii_hourly_1990-11-24.nc 1990/wrfout_hawaii_hourly_1990-11-25.nc 1990/wrfout_hawaii_hourly_1990-11-26.nc 1990/wrfout_hawaii_hourly_1990-11-27.nc 1990/wrfout_hawaii_hourly_1990-11-28.nc 1990/wrfout_hawaii_hourly_1990-11-29.nc 1990/wrfout_hawaii_hourly_1990-11-30.nc 1990/wrfout_hawaii_hourly_1990-12-01.nc 1990/wrfout_hawaii_hourly_1990-12-02.nc 1990/wrfout_hawaii_hourly_1990-12-03.nc 1990/wrfout_hawaii_hourly_1990-12-04.nc 1990/wrfout_hawaii_hourly_1990-12-05.nc 1990/wrfout_hawaii_hourly_1990-12-06.nc 1990/wrfout_hawaii_hourly_1990-12-07.nc 1990/wrfout_hawaii_hourly_1990-12-08.nc 1990/wrfout_hawaii_hourly_1990-12-09.nc 1990/wrfout_hawaii_hourly_1990-12-10.nc 1990/wrfout_hawaii_hourly_1990-12-11.nc 1990/wrfout_hawaii_hourly_1990-12-12.nc 1990/wrfout_hawaii_hourly_1990-12-13.nc 1990/wrfout_hawaii_hourly_1990-12-14.nc 1990/wrfout_hawaii_hourly_1990-12-15.nc 1990/wrfout_hawaii_hourly_1990-12-16.nc 1990/wrfout_hawaii_hourly_1990-12-17.nc 1990/wrfout_hawaii_hourly_1990-12-18.nc 1990/wrfout_hawaii_hourly_1990-12-19.nc 1990/wrfout_hawaii_hourly_1990-12-20.nc 1990/wrfout_hawaii_hourly_1990-12-21.nc 1990/wrfout_hawaii_hourly_1990-12-22.nc 1990/wrfout_hawaii_hourly_1990-12-23.nc 1990/wrfout_hawaii_hourly_1990-12-24.nc 1990/wrfout_hawaii_hourly_1990-12-25.nc 1990/wrfout_hawaii_hourly_1990-12-26.nc 1990/wrfout_hawaii_hourly_1990-12-27.nc 1990/wrfout_hawaii_hourly_1990-12-28.nc 1990/wrfout_hawaii_hourly_1990-12-29.nc 1990/wrfout_hawaii_hourly_1990-12-30.nc 1990/wrfout_hawaii_hourly_1990-12-31.nc hawaii_1990.nc\nWed Jun 27 10:53:36 2018: ncatted -O -a ,global,d,, time_no_latlon/1990/wrfout_hawaii_hourly_1990-01-01.nc\n",
+                    "id": "cida.usgs.gov/hawaii_2018",
+                    "license": "Freely available",
+                    "naming_authority": "cida.usgs.gov",
+                    "nco_openmp_thread_number": 1,
+                    "project": "Mapping Current and Future Exchange of Water Between Clouds and Vegetation in Hawai'i's Mountains",
+                    "publisher_email": "wwatkins@usgs.gov",
+                    "publisher_name": "David Watkins",
+                    "publisher_url": "https://water.usgs.gov/",
+                    "summary": "Clouds often come in contact with vegetation (often named fogs) within a certain elevation range on Hawai\u2018i\u2019s mountains. Propelled by strong winds, cloud droplets are driven onto the stems and leaves of plants where they are deposited. Some of the water that accumulates on the plants in this way drips to the ground, adding additional water over and above the water supplied by rainfall. Prior observations show that the amount of cloud water intercepted by vegetation is substantial, but also quite variable from place to place. It is, therefore, important to create a map for the complex spatial patterns of cloud water interception (CWI) in Hawai\u2018i. In this project, we propose to create the CWI map at 0.8-km resolution based on the 20-year present-day climate simulations using the Hawai\u2019i Regional Climate Model (HRCM) equipped with a well-tested fog deposition scheme. The map will be verified against measurements at five representative observational sites across the Hawaiian Islands. We will also assess the projected changes in the CWI patterns in Hawai\u2019i by the later 21st century under both weak and strong global warming scenarios.",
+                    "time_coverage_end": "2009-12-31",
+                    "time_coverage_start": "1990-01-01",
+                    "title": "Very fine resolution dynamically downscaled climate data for Hawaii"
+                },
+                ".zgroup": {
+                    "zarr_format": 2
+                },
+                "CFRACL/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<i2",
+                    "fill_value": null,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "CFRACL/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "LOW CLOUD FRACTION (ETA GREATER THAN 0.69)",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "scale_factor": 9.999999747378752e-05,
+                    "stagger": "",
+                    "units": ""
+                },
+                "CFRACT/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<i2",
+                    "fill_value": null,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "CFRACT/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "TOTAL CLOUD FRACTION",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "scale_factor": 9.999999747378752e-05,
+                    "stagger": "",
+                    "units": ""
+                },
+                "FGDP/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "FGDP/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "Accumulated fog deposition",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "mm"
+                },
+                "GLW/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "GLW/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "DOWNWARD LONG WAVE FLUX AT GROUND SURFACE",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "W m-2"
+                },
+                "GRDFLX/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "GRDFLX/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "GROUND HEAT FLUX",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "W m-2"
+                },
+                "GSW/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "GSW/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "NET SHORT WAVE FLUX AT GROUND SURFACE",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "W m-2"
+                },
+                "HFX/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "HFX/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "UPWARD HEAT FLUX AT THE SURFACE",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "W m-2"
+                },
+                "HGT/.zarray": {
+                    "chunks": [
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "HGT/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "south_north",
+                        "west_east"
+                    ],
+                    "cell_methods": "Time: mean",
+                    "coordinates": "XLAT XLONG",
+                    "description": "Terrain Height",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "m"
+                },
+                "I_RAINNC/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<i4",
+                    "fill_value": null,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "I_RAINNC/.zattrs": {
+                    "FieldType": 106,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "BUCKET FOR RAINNC",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": ""
+                },
+                "LAI/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "LAI/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "LEAF AREA INDEX",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "m-2/m-2"
+                },
+                "LANDMASK/.zarray": {
+                    "chunks": [
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<i8",
+                    "fill_value": null,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "LANDMASK/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "south_north",
+                        "west_east"
+                    ],
+                    "cell_methods": "Time: mean",
+                    "coordinates": "XLAT XLONG",
+                    "description": "LAND MASK (1 FOR LAND, 0 FOR WATER)",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": ""
+                },
+                "LH/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "LH/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "LATENT HEAT FLUX AT THE SURFACE",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "W m-2"
+                },
+                "LU_INDEX/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<i2",
+                    "fill_value": null,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "LU_INDEX/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "LAND USE CATEGORY",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": ""
+                },
+                "LWP/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "LWP/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "LIQUID CLOUD WATER PATH",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "kg m-2"
+                },
+                "PSFC/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "PSFC/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "SFC PRESSURE",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "Pa"
+                },
+                "Q2/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "Q2/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "QV at 2 M",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "kg kg-1"
+                },
+                "RAINNC/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "RAINNC/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "ACCUMULATED TOTAL GRID SCALE PRECIPITATION",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "mm"
+                },
+                "SNOW/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "SNOW/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "SNOW WATER EQUIVALENT",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "kg m-2"
+                },
+                "SNOWC/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<i2",
+                    "fill_value": null,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "SNOWC/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "FLAG INDICATING SNOW COVERAGE (1 FOR SNOW COVER)",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "scale_factor": 9.999999747378752e-05,
+                    "stagger": "",
+                    "units": ""
+                },
+                "SNOWH/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "SNOWH/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "PHYSICAL SNOW DEPTH",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "m"
+                },
+                "T2/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "T2/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "TEMP at 2 M",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "K"
+                },
+                "TSK/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "TSK/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "SURFACE SKIN TEMPERATURE",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "K"
+                },
+                "Time/.zarray": {
+                    "chunks": [
+                        43824
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<i4",
+                    "fill_value": -999,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296
+                    ],
+                    "zarr_format": 2
+                },
+                "Time/.zattrs": {
+                    "_ARRAY_DIMENSIONS": [
+                        "Time"
+                    ],
+                    "_CoordinateAxisType": "Time",
+                    "calendar": "proleptic_gregorian",
+                    "standard_name": "time",
+                    "units": "hours since 1990-01-01"
+                },
+                "U10/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "U10/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "U at 10 M",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "m s-1"
+                },
+                "V10/.zarray": {
+                    "chunks": [
+                        2496,
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        175296,
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "V10/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "Time",
+                        "south_north",
+                        "west_east"
+                    ],
+                    "coordinates": "XLONG XLAT Time",
+                    "description": "V at 10 M",
+                    "grid_mapping": "crs: XLAT XLONG",
+                    "stagger": "",
+                    "units": "m s-1"
+                },
+                "XLAT/.zarray": {
+                    "chunks": [
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "XLAT/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "south_north",
+                        "west_east"
+                    ],
+                    "cell_methods": "Time: mean",
+                    "description": "LATITUDE, SOUTH IS NEGATIVE",
+                    "stagger": "",
+                    "units": "degree_north"
+                },
+                "XLONG/.zarray": {
+                    "chunks": [
+                        25,
+                        21
+                    ],
+                    "compressor": {
+                        "blocksize": 0,
+                        "clevel": 5,
+                        "cname": "lz4",
+                        "id": "blosc",
+                        "shuffle": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        205,
+                        180
+                    ],
+                    "zarr_format": 2
+                },
+                "XLONG/.zattrs": {
+                    "FieldType": 104,
+                    "MemoryOrder": "XY ",
+                    "_ARRAY_DIMENSIONS": [
+                        "south_north",
+                        "west_east"
+                    ],
+                    "cell_methods": "Time: mean",
+                    "description": "LONGITUDE, WEST IS NEGATIVE",
+                    "stagger": "",
+                    "units": "degree_east"
+                },
+                "crs/.zarray": {
+                    "chunks": [],
+                    "compressor": null,
+                    "dtype": "<i8",
+                    "fill_value": null,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [],
+                    "zarr_format": 2
+                },
+                "crs/.zattrs": {
+                    "_ARRAY_DIMENSIONS": [],
+                    "epsg_code": "EPSG:4326",
+                    "grid_mapping_name": "latitude_longitude",
+                    "inverse_flattening": 298.257223563,
+                    "semi_major_axis": 6378137.0
+                }
+            },
+            "zarr_consolidated_format": 1
+        }
+  recorded_at: 2024-05-21 18:37:41 GMT
+  recorded_with: vcr/1.2.2, webmockr/0.9.0
