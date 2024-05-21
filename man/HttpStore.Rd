@@ -21,6 +21,8 @@ HttpStore for Zarr
 \item \href{#method-HttpStore-get_item}{\code{HttpStore$get_item()}}
 \item \href{#method-HttpStore-contains_item}{\code{HttpStore$contains_item()}}
 \item \href{#method-HttpStore-listdir}{\code{HttpStore$listdir()}}
+\item \href{#method-HttpStore-get_cache_time_seconds}{\code{HttpStore$get_cache_time_seconds()}}
+\item \href{#method-HttpStore-set_cache_time_seconds}{\code{HttpStore$set_cache_time_seconds()}}
 \item \href{#method-HttpStore-clone}{\code{HttpStore$clone()}}
 }
 }
@@ -87,6 +89,33 @@ Fetches .zmetadata from the store evaluates its names
 
 \subsection{Returns}{
 character vector of unique keys that do note  start with a \code{.}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HttpStore-get_cache_time_seconds"></a>}}
+\if{latex}{\out{\hypertarget{method-HttpStore-get_cache_time_seconds}{}}}
+\subsection{Method \code{get_cache_time_seconds()}}{
+Get cache time of http requests.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{HttpStore$get_cache_time_seconds()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HttpStore-set_cache_time_seconds"></a>}}
+\if{latex}{\out{\hypertarget{method-HttpStore-set_cache_time_seconds}{}}}
+\subsection{Method \code{set_cache_time_seconds()}}{
+Set cache time of http requests.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{HttpStore$set_cache_time_seconds(seconds)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seconds}}{number of seconds until cache is invalid -- 0 for no cache}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

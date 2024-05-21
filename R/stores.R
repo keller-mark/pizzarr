@@ -311,11 +311,6 @@ MemoryStore <- R6::R6Class("MemoryStore",
    )
 )
 
-one_hour <- 60^2
-# per-session http get cache
-mem_get <- memoise::memoise(\(client, path) client$get(path), 
-                            ~memoise::timeout(one_hour))
-
 # Reference: https://github.com/manzt/zarrita.js/blob/main/packages/storage/src/fetch.ts
 
 #' HttpStore for Zarr
@@ -336,6 +331,7 @@ HttpStore <- R6::R6Class("HttpStore",
     options = NULL,
     headers = NULL,
     client = NULL,
+    cache_time_seconds = 3600,
     make_request = function(item) {
       # Remove leading slash if necessary.
       if(substr(item, 1, 1) == "/") {
@@ -343,6 +339,10 @@ HttpStore <- R6::R6Class("HttpStore",
       } else {
         key <- item
       }
+      
+      # per-session http get cache
+      mem_get <- memoise::memoise(\(client, path) client$get(path), 
+                                  ~memoise::timeout(private$cache_time_seconds))
       
       # mem_get caches in memory on a per-session basis.
       res <- mem_get(private$client, paste(private$base_path, key, sep="/"))
@@ -409,6 +409,17 @@ HttpStore <- R6::R6Class("HttpStore",
       
       return(out)
       
+    },
+    #' @description 
+    #' Get cache time of http requests.
+    get_cache_time_seconds = function() {
+      return(private$cache_time_seconds)
+    },
+    #' @description
+    #' Set cache time of http requests.
+    #' @param seconds number of seconds until cache is invalid -- 0 for no cache
+    set_cache_time_seconds = function(seconds) {
+      private$cache_time_seconds <- seconds
     }
   )
 )

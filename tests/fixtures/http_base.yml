@@ -21,9 +21,9 @@ http_interactions:
       last-modified: Tue, 21 Jun 2022 09:56:41 GMT
       x-rgw-object-type: Normal
       etag: '"e20297935e73dd0154104d4ea53040ab"'
-      x-amz-request-id: tx00000000000000127fe73-00664b5555-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb667-00664ce9ee-23c1c2dd-default
       content-type: binary/octet-stream
-      date: Mon, 20 May 2024 13:51:17 GMT
+      date: Tue, 21 May 2024 18:37:34 GMT
       connection: Keep-Alive
     body:
       encoding: ''
@@ -32,7 +32,7 @@ http_interactions:
         {
             "zarr_format": 2
         }
-  recorded_at: 2024-05-20 13:51:25 GMT
+  recorded_at: 2024-05-21 18:37:39 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -52,16 +52,16 @@ http_interactions:
     headers:
       status: HTTP/1.1 404 Not Found
       content-length: '218'
-      x-amz-request-id: tx00000000000000127fe76-00664b5556-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb668-00664ce9ee-23c1c2dd-default
       accept-ranges: bytes
       content-type: application/xml
-      date: Mon, 20 May 2024 13:51:18 GMT
+      date: Tue, 21 May 2024 18:37:34 GMT
       connection: Keep-Alive
     body:
       encoding: ''
       file: no
-      string: <?xml version="1.0" encoding="UTF-8"?><Error><Code>NoSuchKey</Code><BucketName>idr</BucketName><RequestId>tx00000000000000127fe76-00664b5556-23b74c3c-default</RequestId><HostId>23b74c3c-default-default</HostId></Error>
-  recorded_at: 2024-05-20 13:51:25 GMT
+      string: <?xml version="1.0" encoding="UTF-8"?><Error><Code>NoSuchKey</Code><BucketName>idr</BucketName><RequestId>tx000000000000000fdb668-00664ce9ee-23c1c2dd-default</RequestId><HostId>23c1c2dd-default-default</HostId></Error>
+  recorded_at: 2024-05-21 18:37:39 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -85,9 +85,9 @@ http_interactions:
       last-modified: Tue, 21 Jun 2022 09:56:41 GMT
       x-rgw-object-type: Normal
       etag: '"e20297935e73dd0154104d4ea53040ab"'
-      x-amz-request-id: tx00000000000000127fe77-00664b5556-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb669-00664ce9ef-23c1c2dd-default
       content-type: binary/octet-stream
-      date: Mon, 20 May 2024 13:51:18 GMT
+      date: Tue, 21 May 2024 18:37:35 GMT
       connection: Keep-Alive
     body:
       encoding: ''
@@ -96,7 +96,7 @@ http_interactions:
         {
             "zarr_format": 2
         }
-  recorded_at: 2024-05-20 13:51:25 GMT
+  recorded_at: 2024-05-21 18:37:39 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -120,9 +120,9 @@ http_interactions:
       last-modified: Thu, 03 Nov 2022 14:27:19 GMT
       x-rgw-object-type: Normal
       etag: '"e19cd75f8e4dd63abd8b28ecf79d782a"'
-      x-amz-request-id: tx00000000000000127fe78-00664b5557-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb66a-00664ce9ef-23c1c2dd-default
       content-type: application/octet-stream
-      date: Mon, 20 May 2024 13:51:19 GMT
+      date: Tue, 21 May 2024 18:37:35 GMT
       connection: Keep-Alive
     body:
       encoding: ''
@@ -243,7 +243,7 @@ http_interactions:
                 "version": "0.4"
             }
         }
-  recorded_at: 2024-05-20 13:51:25 GMT
+  recorded_at: 2024-05-21 18:37:39 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -267,9 +267,9 @@ http_interactions:
       last-modified: Tue, 21 Jun 2022 09:56:41 GMT
       x-rgw-object-type: Normal
       etag: '"ad51a6a73623888d81367c6b7deac026"'
-      x-amz-request-id: tx00000000000000127fe79-00664b5557-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb66b-00664ce9f0-23c1c2dd-default
       content-type: binary/octet-stream
-      date: Mon, 20 May 2024 13:51:19 GMT
+      date: Tue, 21 May 2024 18:37:36 GMT
       connection: Keep-Alive
     body:
       encoding: ''
@@ -302,7 +302,66 @@ http_interactions:
             ],
             "zarr_format": 2
         }
-  recorded_at: 2024-05-20 13:51:25 GMT
+  recorded_at: 2024-05-21 18:37:39 GMT
+  recorded_with: vcr/1.2.2, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0062A/6001240.zarr/0/.zarray
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      content-length: '417'
+      accept-ranges: bytes
+      last-modified: Tue, 21 Jun 2022 09:56:41 GMT
+      x-rgw-object-type: Normal
+      etag: '"ad51a6a73623888d81367c6b7deac026"'
+      x-amz-request-id: tx000000000000000fdb66d-00664ce9f0-23c1c2dd-default
+      content-type: binary/octet-stream
+      date: Tue, 21 May 2024 18:37:36 GMT
+      connection: Keep-Alive
+    body:
+      encoding: ''
+      file: no
+      string: |-
+        {
+            "chunks": [
+                1,
+                1,
+                275,
+                271
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dimension_separator": "/",
+            "dtype": "<u2",
+            "fill_value": 0,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                2,
+                236,
+                275,
+                271
+            ],
+            "zarr_format": 2
+        }
+  recorded_at: 2024-05-21 18:37:39 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -322,16 +381,16 @@ http_interactions:
     headers:
       status: HTTP/1.1 404 Not Found
       content-length: '218'
-      x-amz-request-id: tx00000000000000127fe7c-00664b5557-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb66f-00664ce9f0-23c1c2dd-default
       accept-ranges: bytes
       content-type: application/xml
-      date: Mon, 20 May 2024 13:51:19 GMT
+      date: Tue, 21 May 2024 18:37:36 GMT
       connection: Keep-Alive
     body:
       encoding: ''
       file: no
-      string: <?xml version="1.0" encoding="UTF-8"?><Error><Code>NoSuchKey</Code><BucketName>idr</BucketName><RequestId>tx00000000000000127fe7c-00664b5557-23b74c3c-default</RequestId><HostId>23b74c3c-default-default</HostId></Error>
-  recorded_at: 2024-05-20 13:51:25 GMT
+      string: <?xml version="1.0" encoding="UTF-8"?><Error><Code>NoSuchKey</Code><BucketName>idr</BucketName><RequestId>tx000000000000000fdb66f-00664ce9f0-23c1c2dd-default</RequestId><HostId>23c1c2dd-default-default</HostId></Error>
+  recorded_at: 2024-05-21 18:37:39 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -355,9 +414,9 @@ http_interactions:
       last-modified: Tue, 21 Jun 2022 09:56:41 GMT
       x-rgw-object-type: Normal
       etag: '"5f728b88b61d9c7a9031e4d0317b7fe0"'
-      x-amz-request-id: tx00000000000000127fe7d-00664b5558-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb670-00664ce9f1-23c1c2dd-default
       content-type: binary/octet-stream
-      date: Mon, 20 May 2024 13:51:20 GMT
+      date: Tue, 21 May 2024 18:37:37 GMT
       connection: Keep-Alive
     body:
       encoding: ''
@@ -1660,7 +1719,7 @@ http_interactions:
         FQKNChEBogoWASgYDwIA1PECAQEEAwUFBwUHCAMCBQUCAwBCBH8CAgIDBgIEZwfUCwIAARoDYggGBgUG
         Ba4jIQEDZc4PKwPcBwIA/wcBAQUGBwQFCAcFBQMCAgEEBQYGBAIAHgLjAgIA/wEBAwQFBwcHCAkHBwYH
         BQUDVQbYDwIABAHDXn8FBAQFBQQEGgLpBQIAAVoGDzQE5w8CAP//////////AVAAAAAAAA==
-  recorded_at: 2024-05-20 13:51:26 GMT
+  recorded_at: 2024-05-21 18:37:39 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -1684,9 +1743,9 @@ http_interactions:
       last-modified: Tue, 21 Jun 2022 09:56:43 GMT
       x-rgw-object-type: Normal
       etag: '"95b12cdef0feb28caeb1a8cf84ce0f26"'
-      x-amz-request-id: tx00000000000000127fe7e-00664b5558-23b74c3c-default
+      x-amz-request-id: tx000000000000000fdb673-00664ce9f3-23c1c2dd-default
       content-type: binary/octet-stream
-      date: Mon, 20 May 2024 13:51:20 GMT
+      date: Tue, 21 May 2024 18:37:39 GMT
       connection: Keep-Alive
     body:
       encoding: ''
@@ -3021,5 +3080,5 @@ http_interactions:
         AzADEQTbPAHBDAI7BAJCAw8Hh8sPAgACAYAIATQEAgkBA4sIBoEIDzYAAg8CAMgBEQEBAgARAso6AwIA
         AUEcDyoD2QUCAAOQCgRIBQI/BAIdhw8QAeIBEgEBTwYVBP+lAa4QDw4B5AESAQI3BANpBgFXBgIZAA8C
         AOYB9SkBJgIPDPCwDwIAMgGJCgFUrg9PADIPAgD///////+VDxAK6A8CAP//HVAAAAAAAA==
-  recorded_at: 2024-05-20 13:51:26 GMT
+  recorded_at: 2024-05-21 18:37:40 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
