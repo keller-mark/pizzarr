@@ -1,11 +1,24 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/slice.ts#L78
 
+#' Abstract Slice object
+#' @title Slice Class
+#' @docType class
+#' @description
+#' Class representing an slice of a ZARR store
+#' @noRd
 #' @keywords internal
 Slice <- R6::R6Class("Slice",
   public = list(
+    #' @field start start index
     start = NULL,
+    #' @field stop stop index
     stop = NULL,
+    #' @field step step size
     step = NULL,
+    #' @description Create a new `Slice` object
+    #' @param start integer start index of slice
+    #' @param stop integer stop index of slice
+    #' @param step integer step size of slice
     initialize = function(start, stop = NA, step = NA) {
       if(is.na(stop)) {
         stop <- start
@@ -22,11 +35,12 @@ Slice <- R6::R6Class("Slice",
       self$step <- step
     },
     #' @description
-    #' This method takes a single integer argument `length` and computes information about the
-    #' slice that the slice object would describe if applied to a sequence of `length` items.
+    #' This method takes a single integer argument `length_param` and computes information about the
+    #' slice that the slice object would describe if applied to a sequence of `length_param` items.
     #' It returns a tuple of three integers; respectively these are the start and stop indices
     # and the step or stride length of the slice. Missing or out-of-bounds indices are handled
     # in a manner consistent with regular slices.
+    #' @param length_param integer length parameter for calculation of slices
     indices = function(length_param) {
       start <- 0
       stop <- 0

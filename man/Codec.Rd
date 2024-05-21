@@ -67,6 +67,7 @@ Un-compressed data.
 \if{html}{\out{<a id="method-Codec-get_config"></a>}}
 \if{latex}{\out{\hypertarget{method-Codec-get_config}{}}}
 \subsection{Method \code{get_config()}}{
+Get Configuration
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Codec$get_config()}\if{html}{\out{</div>}}
 }

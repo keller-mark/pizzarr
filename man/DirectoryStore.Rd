@@ -128,19 +128,35 @@ A boolean value.
 \if{html}{\out{<a id="method-DirectoryStore-rmdir"></a>}}
 \if{latex}{\out{\hypertarget{method-DirectoryStore-rmdir}{}}}
 \subsection{Method \code{rmdir()}}{
+remove a path within a Store
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DirectoryStore$rmdir(path = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{character path}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DirectoryStore-listdir"></a>}}
 \if{latex}{\out{\hypertarget{method-DirectoryStore-listdir}{}}}
 \subsection{Method \code{listdir()}}{
+list the store directory
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DirectoryStore$listdir(key = NA)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{key}}{character key}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DirectoryStore-clone"></a>}}

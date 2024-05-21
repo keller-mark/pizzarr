@@ -39,6 +39,13 @@ Create a new Zlib compressor.
 \if{html}{\out{<div class="r">}}\preformatted{ZlibCodec$new(level = 6)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{level}}{The compression level, between 1 and 22.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A new \code{ZlibCodec} object.
 }
@@ -47,24 +54,51 @@ A new \code{ZlibCodec} object.
 \if{html}{\out{<a id="method-ZlibCodec-encode"></a>}}
 \if{latex}{\out{\hypertarget{method-ZlibCodec-encode}{}}}
 \subsection{Method \code{encode()}}{
+Compress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZlibCodec$encode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{buf}}{The un-compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZlibCodec-decode"></a>}}
 \if{latex}{\out{\hypertarget{method-ZlibCodec-decode}{}}}
 \subsection{Method \code{decode()}}{
+Decompress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZlibCodec$decode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{buf}}{The compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Un-compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ZlibCodec-get_config"></a>}}
 \if{latex}{\out{\hypertarget{method-ZlibCodec-get_config}{}}}
 \subsection{Method \code{get_config()}}{
+Get Configuration
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZlibCodec$get_config()}\if{html}{\out{</div>}}
 }

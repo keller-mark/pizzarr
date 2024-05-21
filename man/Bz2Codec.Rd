@@ -39,6 +39,13 @@ Create a new Bz2 compressor.
 \if{html}{\out{<div class="r">}}\preformatted{Bz2Codec$new(level = 6)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{level}}{The compression level, between 1 and 22.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A new \code{Bz2Codec} object.
 }
@@ -47,24 +54,51 @@ A new \code{Bz2Codec} object.
 \if{html}{\out{<a id="method-Bz2Codec-encode"></a>}}
 \if{latex}{\out{\hypertarget{method-Bz2Codec-encode}{}}}
 \subsection{Method \code{encode()}}{
+Compress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bz2Codec$encode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{buf}}{The un-compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Bz2Codec-decode"></a>}}
 \if{latex}{\out{\hypertarget{method-Bz2Codec-decode}{}}}
 \subsection{Method \code{decode()}}{
+Decompress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bz2Codec$decode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{buf}}{The compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Un-compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Bz2Codec-get_config"></a>}}
 \if{latex}{\out{\hypertarget{method-Bz2Codec-get_config}{}}}
 \subsection{Method \code{get_config()}}{
+Get Configuration
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bz2Codec$get_config()}\if{html}{\out{</div>}}
 }
