@@ -22,9 +22,9 @@ http_interactions:
       x-rgw-object-type: Normal
       etag: '"f67e6e8dafe537836d70b4ea1d179e6c"'
       x-amz-meta-mtime: '1715275844.519'
-      x-amz-request-id: tx00000a3896b3d979c2d36-00664ce9f4-23795-default
+      x-amz-request-id: tx000007c2deb8f64d24d99-00664e4e43-23795-default
       content-type: binary/octet-stream
-      date: Tue, 21 May 2024 18:37:41 GMT
+      date: Wed, 22 May 2024 19:57:55 GMT
     body:
       encoding: ''
       file: no
@@ -1209,5 +1209,5 @@ http_interactions:
             },
             "zarr_consolidated_format": 1
         }
-  recorded_at: 2024-05-21 18:37:41 GMT
+  recorded_at: 2024-05-22 19:57:55 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0

@@ -1,7 +1,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zarray
+    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zmetadata
     body:
       encoding: ''
       string: ''
@@ -24,127 +24,25 @@ http_interactions:
       x-frame-options: deny
       x-xss-protection: 1; mode=block
       content-type: text/plain; charset=utf-8
-      x-github-request-id: 2DB2:3E4D39:274A54:2C6CB2:664D5F26
+      x-github-request-id: 4802:2E6C42:274FA0:2AF33D:664E4E42
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
+      date: Wed, 22 May 2024 19:57:56 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
+      x-served-by: cache-iad-kjyo7100123-IAD
       x-cache: MISS
       x-cache-hits: '0'
-      x-timer: S1716346663.241154,VS0,VE66
+      x-timer: S1716407877.644522,VS0,VE55
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: 78eb0a2003c6997a9c51f4d6938d691b2c414888
-      expires: Wed, 22 May 2024 03:02:43 GMT
+      x-fastly-request-id: 5a7afde6e271a8b036b1bf0a2e4275e62ecb6d99
+      expires: Wed, 22 May 2024 20:02:56 GMT
       source-age: '0'
     body:
       encoding: ''
       file: no
       string: '404: Not Found'
-  recorded_at: 2024-05-22 02:57:44 GMT
-  recorded_with: vcr/1.2.2, webmockr/0.9.0
-- request:
-    method: get
-    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zgroup
-    body:
-      encoding: ''
-      string: ''
-    headers:
-      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
-      Accept-Encoding: gzip, deflate
-      Accept: application/json, text/xml, application/xml, */*
-  response:
-    status:
-      status_code: '200'
-      message: OK
-      explanation: Request fulfilled, document follows
-    headers:
-      status: HTTP/1.1 200 OK
-      connection: keep-alive
-      content-length: '42'
-      cache-control: max-age=300
-      content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
-      content-type: text/plain; charset=utf-8
-      etag: W/"0c7ebcff37d1b4338eb72d93fc44ba2a7df27a94c26a5d54fa5818e45675e698"
-      strict-transport-security: max-age=31536000
-      x-content-type-options: nosniff
-      x-frame-options: deny
-      x-xss-protection: 1; mode=block
-      x-github-request-id: E956:25DC3C:3FF4B9:46FF94:664D5DFC
-      content-encoding: gzip
-      accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
-      via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
-      x-cache: HIT
-      x-cache-hits: '0'
-      x-timer: S1716346663.404699,VS0,VE1
-      vary: Authorization,Accept-Encoding,Origin
-      access-control-allow-origin: '*'
-      cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: 9a9be22c1d9f0e885943e24d2baefa0a457c1858
-      expires: Wed, 22 May 2024 03:02:43 GMT
-      source-age: '287'
-    body:
-      encoding: ''
-      file: no
-      string: |-
-        {
-            "zarr_format": 2
-        }
-  recorded_at: 2024-05-22 02:57:44 GMT
-  recorded_with: vcr/1.2.2, webmockr/0.9.0
-- request:
-    method: get
-    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zgroup
-    body:
-      encoding: ''
-      string: ''
-    headers:
-      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
-      Accept-Encoding: gzip, deflate
-      Accept: application/json, text/xml, application/xml, */*
-  response:
-    status:
-      status_code: '200'
-      message: OK
-      explanation: Request fulfilled, document follows
-    headers:
-      status: HTTP/1.1 200 OK
-      connection: keep-alive
-      content-length: '42'
-      cache-control: max-age=300
-      content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
-      content-type: text/plain; charset=utf-8
-      etag: W/"0c7ebcff37d1b4338eb72d93fc44ba2a7df27a94c26a5d54fa5818e45675e698"
-      strict-transport-security: max-age=31536000
-      x-content-type-options: nosniff
-      x-frame-options: deny
-      x-xss-protection: 1; mode=block
-      x-github-request-id: E956:25DC3C:3FF4B9:46FF94:664D5DFC
-      content-encoding: gzip
-      accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
-      via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
-      x-cache: HIT
-      x-cache-hits: '1'
-      x-timer: S1716346664.503987,VS0,VE5
-      vary: Authorization,Accept-Encoding,Origin
-      access-control-allow-origin: '*'
-      cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: a84a292697b4b8ceeb1cd232d922b7dcb0d7ef71
-      expires: Wed, 22 May 2024 03:02:43 GMT
-      source-age: '288'
-    body:
-      encoding: ''
-      file: no
-      string: |-
-        {
-            "zarr_format": 2
-        }
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -171,25 +69,25 @@ http_interactions:
       x-frame-options: deny
       x-xss-protection: 1; mode=block
       content-type: text/plain; charset=utf-8
-      x-github-request-id: 2DB2:3E4D39:274A54:2C6CB2:664D5F26
+      x-github-request-id: DB60:145271:1B72D7:1E623C:664E4E44
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
+      date: Wed, 22 May 2024 19:57:56 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
-      x-cache: HIT
-      x-cache-hits: '1'
-      x-timer: S1716346664.597588,VS0,VE2
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: MISS
+      x-cache-hits: '0'
+      x-timer: S1716407877.786034,VS0,VE64
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: 26b35ab6d5a50ed43653f64fa78bb86bb60dd8fd
-      expires: Wed, 22 May 2024 03:02:43 GMT
+      x-fastly-request-id: 8d218cbebb3073468dc6d194fbd2217b0b524fc7
+      expires: Wed, 22 May 2024 20:02:56 GMT
       source-age: '0'
     body:
       encoding: ''
       file: no
       string: '404: Not Found'
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -218,21 +116,21 @@ http_interactions:
       x-content-type-options: nosniff
       x-frame-options: deny
       x-xss-protection: 1; mode=block
-      x-github-request-id: E956:25DC3C:3FF4B9:46FF94:664D5DFC
+      x-github-request-id: 98E8:1BEFB0:7AC5:920B:664E4E44
       content-encoding: gzip
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
+      date: Wed, 22 May 2024 19:57:56 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
-      x-cache: HIT
-      x-cache-hits: '2'
-      x-timer: S1716346664.679775,VS0,VE0
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: MISS
+      x-cache-hits: '0'
+      x-timer: S1716407877.916922,VS0,VE70
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: f101c3752ecbdcf93d765975375912a850276a3b
-      expires: Wed, 22 May 2024 03:02:43 GMT
-      source-age: '288'
+      x-fastly-request-id: c7eea921a4e182beefa5ca5b6cad8396d5ec3224
+      expires: Wed, 22 May 2024 20:02:56 GMT
+      source-age: '0'
     body:
       encoding: ''
       file: no
@@ -240,7 +138,7 @@ http_interactions:
         {
             "zarr_format": 2
         }
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -269,21 +167,213 @@ http_interactions:
       x-content-type-options: nosniff
       x-frame-options: deny
       x-xss-protection: 1; mode=block
-      x-github-request-id: E956:25DC3C:3FF4B9:46FF94:664D5DFC
+      x-github-request-id: 98E8:1BEFB0:7AC5:920B:664E4E44
       content-encoding: gzip
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
+      date: Wed, 22 May 2024 19:57:57 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: HIT
+      x-cache-hits: '1'
+      x-timer: S1716407877.063871,VS0,VE1
+      vary: Authorization,Accept-Encoding,Origin
+      access-control-allow-origin: '*'
+      cross-origin-resource-policy: cross-origin
+      x-fastly-request-id: ef2a22992e72a0291f4e8c833bcb59926f31ca4c
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '0'
+    body:
+      encoding: ''
+      file: no
+      string: |-
+        {
+            "zarr_format": 2
+        }
+  recorded_at: 2024-05-22 19:57:58 GMT
+  recorded_with: vcr/1.2.2, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zarray
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '404'
+      message: Not Found
+      explanation: Nothing matches the given URI
+    headers:
+      status: HTTP/1.1 404 Not Found
+      connection: keep-alive
+      content-length: '14'
+      content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+      strict-transport-security: max-age=31536000
+      x-content-type-options: nosniff
+      x-frame-options: deny
+      x-xss-protection: 1; mode=block
+      content-type: text/plain; charset=utf-8
+      x-github-request-id: DB60:145271:1B72D7:1E623C:664E4E44
+      accept-ranges: bytes
+      date: Wed, 22 May 2024 19:57:57 GMT
+      via: 1.1 varnish
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: HIT
+      x-cache-hits: '1'
+      x-timer: S1716407877.148387,VS0,VE2
+      vary: Authorization,Accept-Encoding,Origin
+      access-control-allow-origin: '*'
+      cross-origin-resource-policy: cross-origin
+      x-fastly-request-id: 5d37196276857b3a0a3591b451c6cb52f83cd27e
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '0'
+    body:
+      encoding: ''
+      file: no
+      string: '404: Not Found'
+  recorded_at: 2024-05-22 19:57:58 GMT
+  recorded_with: vcr/1.2.2, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zgroup
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      connection: keep-alive
+      content-length: '42'
+      cache-control: max-age=300
+      content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+      content-type: text/plain; charset=utf-8
+      etag: W/"0c7ebcff37d1b4338eb72d93fc44ba2a7df27a94c26a5d54fa5818e45675e698"
+      strict-transport-security: max-age=31536000
+      x-content-type-options: nosniff
+      x-frame-options: deny
+      x-xss-protection: 1; mode=block
+      x-github-request-id: 98E8:1BEFB0:7AC5:920B:664E4E44
+      content-encoding: gzip
+      accept-ranges: bytes
+      date: Wed, 22 May 2024 19:57:57 GMT
+      via: 1.1 varnish
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: HIT
+      x-cache-hits: '2'
+      x-timer: S1716407877.238640,VS0,VE0
+      vary: Authorization,Accept-Encoding,Origin
+      access-control-allow-origin: '*'
+      cross-origin-resource-policy: cross-origin
+      x-fastly-request-id: f4bb84f33871c422092c5cd7408648348e7434c8
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '0'
+    body:
+      encoding: ''
+      file: no
+      string: |-
+        {
+            "zarr_format": 2
+        }
+  recorded_at: 2024-05-22 19:57:58 GMT
+  recorded_with: vcr/1.2.2, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zmetadata
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '404'
+      message: Not Found
+      explanation: Nothing matches the given URI
+    headers:
+      status: HTTP/1.1 404 Not Found
+      connection: keep-alive
+      content-length: '14'
+      content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+      strict-transport-security: max-age=31536000
+      x-content-type-options: nosniff
+      x-frame-options: deny
+      x-xss-protection: 1; mode=block
+      content-type: text/plain; charset=utf-8
+      x-github-request-id: 4802:2E6C42:274FA0:2AF33D:664E4E42
+      accept-ranges: bytes
+      date: Wed, 22 May 2024 19:57:57 GMT
+      via: 1.1 varnish
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: HIT
+      x-cache-hits: '1'
+      x-timer: S1716407877.332299,VS0,VE1
+      vary: Authorization,Accept-Encoding,Origin
+      access-control-allow-origin: '*'
+      cross-origin-resource-policy: cross-origin
+      x-fastly-request-id: a5990582add9d603b5743b518956a90107998980
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '1'
+    body:
+      encoding: ''
+      file: no
+      string: '404: Not Found'
+  recorded_at: 2024-05-22 19:57:58 GMT
+  recorded_with: vcr/1.2.2, webmockr/0.9.0
+- request:
+    method: get
+    uri: https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr/.zgroup
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      connection: keep-alive
+      content-length: '42'
+      cache-control: max-age=300
+      content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+      content-type: text/plain; charset=utf-8
+      etag: W/"0c7ebcff37d1b4338eb72d93fc44ba2a7df27a94c26a5d54fa5818e45675e698"
+      strict-transport-security: max-age=31536000
+      x-content-type-options: nosniff
+      x-frame-options: deny
+      x-xss-protection: 1; mode=block
+      x-github-request-id: 98E8:1BEFB0:7AC5:920B:664E4E44
+      content-encoding: gzip
+      accept-ranges: bytes
+      date: Wed, 22 May 2024 19:57:57 GMT
+      via: 1.1 varnish
+      x-served-by: cache-iad-kjyo7100123-IAD
       x-cache: HIT
       x-cache-hits: '3'
-      x-timer: S1716346664.768558,VS0,VE0
+      x-timer: S1716407877.422725,VS0,VE0
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: 32c4e52a202a0f846c997cccaf22a84d7257e0b4
-      expires: Wed, 22 May 2024 03:02:43 GMT
-      source-age: '288'
+      x-fastly-request-id: c8304b3f32dd6bcac54586f929d05aac6fada8de
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '0'
     body:
       encoding: ''
       file: no
@@ -291,7 +381,7 @@ http_interactions:
         {
             "zarr_format": 2
         }
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -318,25 +408,25 @@ http_interactions:
       x-frame-options: deny
       x-xss-protection: 1; mode=block
       content-type: text/plain; charset=utf-8
-      x-github-request-id: 2DB2:3E4D39:274A54:2C6CB2:664D5F26
+      x-github-request-id: DB60:145271:1B72D7:1E623C:664E4E44
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
+      date: Wed, 22 May 2024 19:57:57 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
+      x-served-by: cache-iad-kjyo7100123-IAD
       x-cache: HIT
       x-cache-hits: '2'
-      x-timer: S1716346664.854466,VS0,VE0
+      x-timer: S1716407878.500679,VS0,VE0
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: 7b9026833cc0f597ef17181e737abbf330380275
-      expires: Wed, 22 May 2024 03:02:43 GMT
+      x-fastly-request-id: 6cf6a1139e4f5263167f154bf4f82f268aaed2a7
+      expires: Wed, 22 May 2024 20:02:57 GMT
       source-age: '0'
     body:
       encoding: ''
       file: no
       string: '404: Not Found'
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -365,21 +455,21 @@ http_interactions:
       x-content-type-options: nosniff
       x-frame-options: deny
       x-xss-protection: 1; mode=block
-      x-github-request-id: E956:25DC3C:3FF4B9:46FF94:664D5DFC
+      x-github-request-id: 98E8:1BEFB0:7AC5:920B:664E4E44
       content-encoding: gzip
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:43 GMT
+      date: Wed, 22 May 2024 19:57:57 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
+      x-served-by: cache-iad-kjyo7100123-IAD
       x-cache: HIT
       x-cache-hits: '4'
-      x-timer: S1716346664.952671,VS0,VE0
+      x-timer: S1716407878.584913,VS0,VE0
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: 4c7913e7fcb8082a3a1f24361b0f5ba64098592c
-      expires: Wed, 22 May 2024 03:02:43 GMT
-      source-age: '288'
+      x-fastly-request-id: 4f16ab701325e2c5b399b8a23d158b42335286b1
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '1'
     body:
       encoding: ''
       file: no
@@ -387,7 +477,7 @@ http_interactions:
         {
             "zarr_format": 2
         }
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -416,21 +506,21 @@ http_interactions:
       x-content-type-options: nosniff
       x-frame-options: deny
       x-xss-protection: 1; mode=block
-      x-github-request-id: 38C0:3DBEC0:26E7E2:2BF0F8:664D5E49
+      x-github-request-id: 4C96:145271:1B733A:1E62B0:664E4E44
       content-encoding: gzip
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:44 GMT
+      date: Wed, 22 May 2024 19:57:57 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
-      x-cache: HIT
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: MISS
       x-cache-hits: '0'
-      x-timer: S1716346664.079011,VS0,VE1
+      x-timer: S1716407878.716620,VS0,VE64
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: f12c8bda2aad7a72b673f0d6f10494de9de7769a
-      expires: Wed, 22 May 2024 03:02:44 GMT
-      source-age: '222'
+      x-fastly-request-id: 72bf71392ffa10f07198258dd6c03afdf74f2826
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '0'
     body:
       encoding: ''
       file: no
@@ -501,7 +591,7 @@ http_interactions:
                 "version": "0.3"
             }
         }
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -530,21 +620,21 @@ http_interactions:
       x-content-type-options: nosniff
       x-frame-options: deny
       x-xss-protection: 1; mode=block
-      x-github-request-id: AF2C:30C926:3F78D4:4682DC:664D5E4C
+      x-github-request-id: 6B24:4670B:29A7A5:2D52C1:664E4E45
       content-encoding: gzip
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:44 GMT
+      date: Wed, 22 May 2024 19:57:57 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
-      x-cache: HIT
+      x-served-by: cache-iad-kjyo7100123-IAD
+      x-cache: MISS
       x-cache-hits: '0'
-      x-timer: S1716346664.169401,VS0,VE1
+      x-timer: S1716407878.872697,VS0,VE68
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: d8f6bfb8b46535fb9bc4cad3e9cb6df260854e40
-      expires: Wed, 22 May 2024 03:02:44 GMT
-      source-age: '219'
+      x-fastly-request-id: d15b9c373c24fa453ee62ac35236ab3ed6d6b41d
+      expires: Wed, 22 May 2024 20:02:57 GMT
+      source-age: '0'
     body:
       encoding: ''
       file: no
@@ -570,7 +660,7 @@ http_interactions:
             ],
             "zarr_format": 2
         }
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0
 - request:
     method: get
@@ -599,21 +689,21 @@ http_interactions:
       x-content-type-options: nosniff
       x-frame-options: deny
       x-xss-protection: 1; mode=block
-      x-github-request-id: AF2C:30C926:3F78D4:4682DC:664D5E4C
+      x-github-request-id: 6B24:4670B:29A7A5:2D52C1:664E4E45
       content-encoding: gzip
       accept-ranges: bytes
-      date: Wed, 22 May 2024 02:57:44 GMT
+      date: Wed, 22 May 2024 19:57:58 GMT
       via: 1.1 varnish
-      x-served-by: cache-chi-kigq8000109-CHI
+      x-served-by: cache-iad-kjyo7100123-IAD
       x-cache: HIT
       x-cache-hits: '1'
-      x-timer: S1716346664.268416,VS0,VE1
+      x-timer: S1716407878.044082,VS0,VE1
       vary: Authorization,Accept-Encoding,Origin
       access-control-allow-origin: '*'
       cross-origin-resource-policy: cross-origin
-      x-fastly-request-id: 626ca08c407ede43bea092f73f98332c08ad525a
-      expires: Wed, 22 May 2024 03:02:44 GMT
-      source-age: '219'
+      x-fastly-request-id: 139aad19a03c96218b274dc66bf8ca069d8130a6
+      expires: Wed, 22 May 2024 20:02:58 GMT
+      source-age: '0'
     body:
       encoding: ''
       file: no
@@ -639,5 +729,5 @@ http_interactions:
             ],
             "zarr_format": 2
         }
-  recorded_at: 2024-05-22 02:57:44 GMT
+  recorded_at: 2024-05-22 19:57:58 GMT
   recorded_with: vcr/1.2.2, webmockr/0.9.0

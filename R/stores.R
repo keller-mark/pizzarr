@@ -355,6 +355,7 @@ HttpStore <- R6::R6Class("HttpStore",
     options = NULL,
     headers = NULL,
     client = NULL,
+    zmetadata = NULL,
     cache_time_seconds = 3600,
     make_request = function(item) {
       # Remove leading slash if necessary.
@@ -372,6 +373,20 @@ HttpStore <- R6::R6Class("HttpStore",
       res <- mem_get(private$client, paste(private$base_path, key, sep="/"))
       
       return(res)
+    },
+    get_zmetadata = function() {
+      res <- private$make_request(".zmetadata")
+      
+      if(res$status_code == 200) {
+        out <- tryCatch({
+          jsonlite::fromJSON(res$parse("UTF-8"))
+        }, error = \(e) {
+          warning("\n\nError parsing .zmetadata:\n\n", e)
+          NULL
+        })
+      } else out <- NULL
+      
+      return(out)
     }
   ),
   public = list(
@@ -402,6 +417,8 @@ HttpStore <- R6::R6Class("HttpStore",
         opts = private$options,
         headers = private$headers
       )
+      
+      private$zmetadata <- private$get_zmetadata()
     },
     #' @description
     #' Get an item from the store.
@@ -423,20 +440,17 @@ HttpStore <- R6::R6Class("HttpStore",
     #' Fetches .zmetadata from the store evaluates its names
     #' @return character vector of unique keys that do note  start with a `.`. 
     listdir = function() {
-      res <- private$make_request(".zmetadata")
-      
-      out <- NULL
-      
-      if(res$status_code == 200) {
+
+      if(!is.null(private$zmetadata)) {
         tryCatch({
-        meta <- jsonlite::fromJSON(res$parse("UTF-8"))
-        out <- names(meta$metadata) |>
-          stringr::str_subset("^\\.", negate = TRUE) |>
-          stringr::str_split("/") |>
-          vapply(\(x) head(x, 1), "") |>
-          unique()
+          out <- names(private$zmetadata$metadata) |>
+            stringr::str_subset("^\\.", negate = TRUE) |>
+            stringr::str_split("/") |>
+            vapply(\(x) head(x, 1), "") |>
+            unique()
         }, error = \(e) warning("\n\nError parsing .zmetadata:\n\n", e))
       } else {
+        out <- NULL
         message(".zmetadata not found for this http store. Can't listdir")
       }
       
