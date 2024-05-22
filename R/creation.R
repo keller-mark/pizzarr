@@ -808,12 +808,14 @@ zarr_save_array <- function(store, arr, ...) {
 zarr_open <- function(store = NA, mode = NA, path = NA, ...) {
     kwargs <- list(...)
 
-    if(is_na(mode)) {
-        mode <- "a"
-    }
-
     store <- normalize_store_arg(store)
     path <- normalize_storage_path(path)
+    
+    if(is_na(mode)) {
+        mode <- "a"
+        if(inherits(store, "HttpStore"))
+          mode <- "r"
+    }
 
     if(mode %in% c("w", "w-", "x")) {
         if("shape" %in% names(kwargs)) {

@@ -74,10 +74,14 @@ vcr::use_cassette("http_github_pattern", {
     
     url <- "https://raw.githubusercontent.com/keller-mark/pizzarr/main/inst/extdata/dog.ome.zarr"
     
-    z <- pizzarr::HttpStore$new(url)
-    expect_equal(class(z), c("HttpStore", "Store", "R6"))
+    z <- zarr_open(url)
     
-    g <- zarr_open_group(z)
+    s <- pizzarr::HttpStore$new(url)
+    expect_equal(class(s), c("HttpStore", "Store", "R6"))
+    
+    g <- zarr_open_group(s, mode = "r", path = NA)
+    
+    expect_equal(z, g)
     
     attrs <- g$get_attrs()$to_list()
     
