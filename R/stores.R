@@ -399,8 +399,8 @@ HttpStore <- R6::R6Class("HttpStore",
     initialize = function(url, options = NA, headers = NA) {
       super$initialize()
       # Remove trailing slash if necessary.
-      if(substr(url, length(url), length(url)) == "/") {
-        private$url <- substr(url, 1, length(url)-1)
+      if(substr(url, nchar(url), nchar(url)) == "/") {
+        private$url <- substr(url, 1, nchar(url)-1)
       } else {
         private$url <- url
       }
