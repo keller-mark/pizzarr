@@ -15,6 +15,7 @@ Attributes <- R6::R6Class("Attributes",
 
     get_nosync = function() {
       attrs_list <- tryCatch({
+        # TODO: use consolidated metadata?
         return(self$store$metadata_class$decode_metadata(self$store$get_item(self$key), auto_unbox = TRUE))
       }, error = function(cond) {
         if(is_key_error(cond)) {
@@ -69,6 +70,13 @@ Attributes <- R6::R6Class("Attributes",
       self$read_only <- read_only
       self$cache <- cache
       private$cached_aslist <- NA
+      
+      check_cached <- try_from_zmeta(key, store)
+      
+      if(cache & !is.null(check_cached)) {
+        private$cached_aslist <- store$get_consolidated_metadata()$metadata[[key]]
+      }
+      
       self$synchronizer <- synchronizer
     },
     #' @description

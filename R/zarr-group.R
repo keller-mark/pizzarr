@@ -136,19 +136,34 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
         stop("ContainsArrayError(path)")
       }
 
-      # initialize metadata
-      meta_bytes <- tryCatch({
-        m_key <- paste0(private$key_prefix, GROUP_META_KEY)
-        meta_bytes <- store$get_item(m_key)
-      }, error = function(cond) {
-        if(is_key_error(cond)) {
-          stop("GroupNotFoundError(path) in Group$new")
-        } else {
-          stop(cond$message)
-        }
-      })
-      private$meta <- private$store$metadata_class$decode_group_metadata(meta_bytes)
-
+      m_key <- paste0(private$key_prefix, GROUP_META_KEY)
+      
+      # use consolidated metadata if exists
+      meta <- try_from_zmeta(m_key, store)
+      
+      if(!is.null(meta)) {
+        
+        private$meta <- meta
+        
+      } else {
+        
+        # initialize metadata
+        meta_bytes <- tryCatch({
+          
+          meta_bytes <- store$get_item(m_key)
+          
+        }, error = function(cond) {
+          if(is_key_error(cond)) {
+            stop("GroupNotFoundError(path) in Group$new")
+          } else {
+            stop(cond$message)
+          }
+        })
+        
+        private$meta <- private$store$metadata_class$decode_group_metadata(meta_bytes)
+        
+      }
+      
       # setup attributes
       a_key <- paste0(private$key_prefix, ATTRS_KEY)
       private$attrs <- Attributes$new(store, key = a_key, read_only = read_only, cache = cache_attrs, synchronizer = synchronizer)

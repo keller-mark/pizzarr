@@ -23,6 +23,7 @@ HttpStore for Zarr
 \item \href{#method-HttpStore-listdir}{\code{HttpStore$listdir()}}
 \item \href{#method-HttpStore-get_cache_time_seconds}{\code{HttpStore$get_cache_time_seconds()}}
 \item \href{#method-HttpStore-set_cache_time_seconds}{\code{HttpStore$set_cache_time_seconds()}}
+\item \href{#method-HttpStore-get_consolidated_metadata}{\code{HttpStore$get_consolidated_metadata()}}
 \item \href{#method-HttpStore-clone}{\code{HttpStore$clone()}}
 }
 }
@@ -140,6 +141,16 @@ Set cache time of http requests.
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HttpStore-get_consolidated_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-HttpStore-get_consolidated_metadata}{}}}
+\subsection{Method \code{get_consolidated_metadata()}}{
+Get consolidated metadata if it exists.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{HttpStore$get_consolidated_metadata()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-HttpStore-clone"></a>}}

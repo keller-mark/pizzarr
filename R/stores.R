@@ -358,13 +358,8 @@ HttpStore <- R6::R6Class("HttpStore",
     zmetadata = NULL,
     cache_time_seconds = 3600,
     make_request = function(item) {
-      # Remove leading slash if necessary.
-      if(substr(item, 1, 1) == "/") {
-        key <- substr(item, 2, length(item))
-      } else {
-        key <- item
-      }
-      
+      key <- item_to_key(item)
+
       # per-session http get cache
       mem_get <- memoise::memoise(\(client, path) client$get(path), 
                                   ~memoise::timeout(private$cache_time_seconds))
@@ -433,8 +428,18 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param item The item key.
     #' @return A boolean value.
     contains_item = function(item) {
-      res <- private$make_request(item)
-      return(res$status_code == 200)
+      
+      # use consolidated metadata if it exists
+      if(!is.null(try_from_zmeta(item_to_key(item), self))) {
+        return(TRUE)
+      } else if(!is.null(self$get_consolidated_metadata())) {
+        return(FALSE)
+      } else {
+        res <- private$make_request(item)
+        
+        return(res$status_code == 200)        
+      }
+
     },
     #' @description
     #' Fetches .zmetadata from the store evaluates its names
@@ -467,6 +472,11 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param seconds number of seconds until cache is invalid -- 0 for no cache
     set_cache_time_seconds = function(seconds) {
       private$cache_time_seconds <- seconds
+    },
+    #' @description
+    #' Get consolidated metadata if it exists.
+    get_consolidated_metadata = function() {
+      return(private$zmetadata)
     }
   )
 )
