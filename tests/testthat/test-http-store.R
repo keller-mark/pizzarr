@@ -45,9 +45,9 @@ vcr::use_cassette("http_base", {
 
 vcr::use_cassette("http_listdir", {
   
-  test_that("http_listdir", {
+  test_that("http listdir and zmeta", {
     
-    url<- "https://usgs.osn.mghpcc.org/mdmf/gdp/hawaii_present.zarr"
+    url<- "https://raw.githubusercontent.com/DOI-USGS/rnz/main/inst/extdata/bcsd.zarr/"
     
     z <- pizzarr::HttpStore$new(url)
     expect_equal(class(z), c("HttpStore", "Store", "R6"))
@@ -59,10 +59,16 @@ vcr::use_cassette("http_listdir", {
     vars <- z$listdir()
     
     expect_equal(vars, 
-                 c("CFRACL", "CFRACT", "FGDP", "GLW", "GRDFLX", "GSW", "HFX", 
-                   "HGT", "I_RAINNC", "LAI", "LANDMASK", "LH", "LU_INDEX", "LWP", 
-                   "PSFC", "Q2", "RAINNC", "SNOW", "SNOWC", "SNOWH", "T2", "TSK", 
-                   "Time", "U10", "V10", "XLAT", "XLONG", "crs"))
+                 c("latitude", "longitude", "pr", "tas", "time"))
+    
+    g <- pizzarr::zarr_open_group(z)
+    
+    expect_equal(length(names(g$get_attrs()$to_list())), 30)
+    
+    expect_equal(g$get_item("latitude")$get_attrs()$get_item("units"), "degrees_north")
+    
+    expect_equal(names(g$get_store()$get_consolidated_metadata()$metadata),
+                 names(z$get_consolidated_metadata()$metadata))
     
   })
   
