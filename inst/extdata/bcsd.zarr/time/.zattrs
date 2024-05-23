@@ -1,0 +1,9 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time"
+    ],
+    "_CoordinateAxisType": "Time",
+    "calendar": "standard",
+    "standard_name": "time",
+    "units": "days since 1950-01-01"
+}
