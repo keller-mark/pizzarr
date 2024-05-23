@@ -33,6 +33,7 @@ Abstract store for Zarr
 \item \href{#method-Store-get_item}{\code{Store$get_item()}}
 \item \href{#method-Store-set_item}{\code{Store$set_item()}}
 \item \href{#method-Store-contains_item}{\code{Store$contains_item()}}
+\item \href{#method-Store-get_consolidated_metadata}{\code{Store$get_consolidated_metadata()}}
 \item \href{#method-Store-clone}{\code{Store$clone()}}
 }
 }
@@ -207,6 +208,16 @@ Determine whether the store contains an item.
 \subsection{Returns}{
 A boolean value.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Store-get_consolidated_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-Store-get_consolidated_metadata}{}}}
+\subsection{Method \code{get_consolidated_metadata()}}{
+Get consolidated metadata if it exists.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Store$get_consolidated_metadata()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Store-clone"></a>}}

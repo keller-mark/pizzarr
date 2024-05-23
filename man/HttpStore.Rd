@@ -23,7 +23,6 @@ HttpStore for Zarr
 \item \href{#method-HttpStore-listdir}{\code{HttpStore$listdir()}}
 \item \href{#method-HttpStore-get_cache_time_seconds}{\code{HttpStore$get_cache_time_seconds()}}
 \item \href{#method-HttpStore-set_cache_time_seconds}{\code{HttpStore$set_cache_time_seconds()}}
-\item \href{#method-HttpStore-get_consolidated_metadata}{\code{HttpStore$get_consolidated_metadata()}}
 \item \href{#method-HttpStore-clone}{\code{HttpStore$clone()}}
 }
 }
@@ -31,6 +30,7 @@ HttpStore for Zarr
 <details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="close"><a href='../../pizzarr/html/Store.html#method-Store-close'><code>pizzarr::Store$close()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="get_consolidated_metadata"><a href='../../pizzarr/html/Store.html#method-Store-get_consolidated_metadata'><code>pizzarr::Store$get_consolidated_metadata()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_erasable"><a href='../../pizzarr/html/Store.html#method-Store-is_erasable'><code>pizzarr::Store$is_erasable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_listable"><a href='../../pizzarr/html/Store.html#method-Store-is_listable'><code>pizzarr::Store$is_listable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_readable"><a href='../../pizzarr/html/Store.html#method-Store-is_readable'><code>pizzarr::Store$is_readable()</code></a></span></li>
@@ -141,16 +141,6 @@ Set cache time of http requests.
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-HttpStore-get_consolidated_metadata"></a>}}
-\if{latex}{\out{\hypertarget{method-HttpStore-get_consolidated_metadata}{}}}
-\subsection{Method \code{get_consolidated_metadata()}}{
-Get consolidated metadata if it exists.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{HttpStore$get_consolidated_metadata()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-HttpStore-clone"></a>}}
