@@ -87,7 +87,7 @@ vcr::use_cassette("http_github_pattern", {
     
     g <- zarr_open_group(s, mode = "r", path = NA)
     
-    expect_equal(z, g)
+    expect_equal(z$get_attrs()$to_list(), g$get_attrs()$to_list())
     
     attrs <- g$get_attrs()$to_list()
     

@@ -362,16 +362,14 @@ HttpStore <- R6::R6Class("HttpStore",
     headers = NULL,
     client = NULL,
     zmetadata = NULL,
+    mem_get = NULL,
     cache_time_seconds = 3600,
     make_request = function(item) {
       key <- item_to_key(item)
-
-      # per-session http get cache
-      mem_get <- memoise::memoise(\(client, path) client$get(path), 
-                                  ~memoise::timeout(private$cache_time_seconds))
       
       # mem_get caches in memory on a per-session basis.
-      res <- mem_get(private$client, paste(private$base_path, key, sep="/"))
+      res <- private$mem_get(private$client, 
+                             paste(private$base_path, key, sep="/"))
       
       return(res)
     },
@@ -418,6 +416,9 @@ HttpStore <- R6::R6Class("HttpStore",
         opts = private$options,
         headers = private$headers
       )
+      
+      private$mem_get <-  memoise::memoise(function(client, path) client$get(path), 
+                                           ~memoise::timeout(private$cache_time_seconds))
       
       private$zmetadata <- private$get_zmetadata()
     },
