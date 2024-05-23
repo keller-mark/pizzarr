@@ -47,7 +47,7 @@ vcr::use_cassette("http_listdir", {
   
   test_that("http listdir and zmeta", {
     
-    url<- "https://raw.githubusercontent.com/DOI-USGS/rnz/main/inst/extdata/bcsd.zarr/"
+    url<- "https://raw.githubusercontent.com/DOI-USGS/rnz/main/inst/extdata/bcsd.zarr"
     
     z <- pizzarr::HttpStore$new(url)
     expect_equal(class(z), c("HttpStore", "Store", "R6"))

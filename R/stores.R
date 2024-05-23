@@ -13,6 +13,7 @@ Store <- R6::R6Class("Store",
       erasable = NULL,
       listable = NULL,
       store_version = NULL,
+      zmetadata = NULL,
       #' @keywords internal
       listdir_from_keys = function(path) {
         # TODO
@@ -115,7 +116,12 @@ Store <- R6::R6Class("Store",
      #' @return A boolean value.
      contains_item = function(key) {
 
-     }
+     },
+    #' @description
+    #' Get consolidated metadata if it exists.
+    get_consolidated_metadata = function() {
+      return(private$zmetadata)
+    }
    )
 )
 
@@ -472,11 +478,6 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param seconds number of seconds until cache is invalid -- 0 for no cache
     set_cache_time_seconds = function(seconds) {
       private$cache_time_seconds <- seconds
-    },
-    #' @description
-    #' Get consolidated metadata if it exists.
-    get_consolidated_metadata = function() {
-      return(private$zmetadata)
     }
   )
 )
