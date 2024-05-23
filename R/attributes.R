@@ -74,7 +74,7 @@ Attributes <- R6::R6Class("Attributes",
       check_cached <- try_from_zmeta(key, store)
       
       if(cache & !is.null(check_cached)) {
-        private$cached_aslist <- store$get_consolidated_metadata()$metadata[[key]]
+        private$cached_aslist <- check_cached
       }
       
       self$synchronizer <- synchronizer
