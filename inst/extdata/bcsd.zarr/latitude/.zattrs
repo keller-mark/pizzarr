@@ -1,0 +1,11 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "latitude"
+    ],
+    "_CoordinateAxisType": "Lat",
+    "axis": "Y",
+    "bounds": "latitude_bnds",
+    "long_name": "Latitude",
+    "standard_name": "latitude",
+    "units": "degrees_north"
+}

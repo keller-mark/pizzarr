@@ -20,6 +20,9 @@ HttpStore for Zarr
 \item \href{#method-HttpStore-new}{\code{HttpStore$new()}}
 \item \href{#method-HttpStore-get_item}{\code{HttpStore$get_item()}}
 \item \href{#method-HttpStore-contains_item}{\code{HttpStore$contains_item()}}
+\item \href{#method-HttpStore-listdir}{\code{HttpStore$listdir()}}
+\item \href{#method-HttpStore-get_cache_time_seconds}{\code{HttpStore$get_cache_time_seconds()}}
+\item \href{#method-HttpStore-set_cache_time_seconds}{\code{HttpStore$set_cache_time_seconds()}}
 \item \href{#method-HttpStore-clone}{\code{HttpStore$clone()}}
 }
 }
@@ -27,11 +30,11 @@ HttpStore for Zarr
 <details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="close"><a href='../../pizzarr/html/Store.html#method-Store-close'><code>pizzarr::Store$close()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="get_consolidated_metadata"><a href='../../pizzarr/html/Store.html#method-Store-get_consolidated_metadata'><code>pizzarr::Store$get_consolidated_metadata()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_erasable"><a href='../../pizzarr/html/Store.html#method-Store-is_erasable'><code>pizzarr::Store$is_erasable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_listable"><a href='../../pizzarr/html/Store.html#method-Store-is_listable'><code>pizzarr::Store$is_listable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_readable"><a href='../../pizzarr/html/Store.html#method-Store-is_readable'><code>pizzarr::Store$is_readable()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="is_writeable"><a href='../../pizzarr/html/Store.html#method-Store-is_writeable'><code>pizzarr::Store$is_writeable()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="listdir"><a href='../../pizzarr/html/Store.html#method-Store-listdir'><code>pizzarr::Store$listdir()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rename"><a href='../../pizzarr/html/Store.html#method-Store-rename'><code>pizzarr::Store$rename()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="rmdir"><a href='../../pizzarr/html/Store.html#method-Store-rmdir'><code>pizzarr::Store$rmdir()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="pizzarr" data-topic="Store" data-id="set_item"><a href='../../pizzarr/html/Store.html#method-Store-set_item'><code>pizzarr::Store$set_item()</code></a></span></li>
@@ -97,6 +100,46 @@ Determine whether the store contains an item.
 }
 \subsection{Returns}{
 A boolean value.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HttpStore-listdir"></a>}}
+\if{latex}{\out{\hypertarget{method-HttpStore-listdir}{}}}
+\subsection{Method \code{listdir()}}{
+Fetches .zmetadata from the store evaluates its names
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{HttpStore$listdir()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+character vector of unique keys that do note  start with a \code{.}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HttpStore-get_cache_time_seconds"></a>}}
+\if{latex}{\out{\hypertarget{method-HttpStore-get_cache_time_seconds}{}}}
+\subsection{Method \code{get_cache_time_seconds()}}{
+Get cache time of http requests.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{HttpStore$get_cache_time_seconds()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HttpStore-set_cache_time_seconds"></a>}}
+\if{latex}{\out{\hypertarget{method-HttpStore-set_cache_time_seconds}{}}}
+\subsection{Method \code{set_cache_time_seconds()}}{
+Set cache time of http requests.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{HttpStore$set_cache_time_seconds(seconds)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seconds}}{number of seconds until cache is invalid -- 0 for no cache}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

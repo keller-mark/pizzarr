@@ -79,10 +79,18 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' @description
     #' (Re)load metadata from store.
     load_metadata_nosync = function() {
+
       mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
-      meta_bytes <- private$store$get_item(mkey)
-      meta <- private$store$metadata_class$decode_array_metadata(meta_bytes)
+      
+      meta <- try_from_zmeta(mkey, private$store)
+      
+      if(is.null(meta)) {
+        meta_bytes <- private$store$get_item(mkey)
+        meta <- private$store$metadata_class$decode_array_metadata(meta_bytes)
+      }
+      
       private$meta <- meta
+      
       if(is.list(meta$shape)) {
         private$shape <- as.integer(meta$shape)
       } else {

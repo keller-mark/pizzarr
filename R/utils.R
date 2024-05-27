@@ -283,3 +283,18 @@ get_list_product <- function(dim_indexer_iterables) {
   }
   return(partial_results)
 }
+
+#' @keywords internal
+item_to_key <- function(item) {
+  # Remove leading slash if necessary.
+  if(substr(item, 1, 1) == "/") {
+    key <- substr(item, 2, length(item))
+  } else {
+    key <- item
+  }
+  key
+}
+
+try_from_zmeta <- function(key, store) {
+  store$get_consolidated_metadata()$metadata[[key]]
+}

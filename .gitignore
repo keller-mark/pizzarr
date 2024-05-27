@@ -13,3 +13,4 @@ vignettes/data/
 tests/testthat/test_data
 .ipynb_checkpoints/
 *.ipynb
+.Renviron

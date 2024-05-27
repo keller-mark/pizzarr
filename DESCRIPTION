@@ -25,7 +25,8 @@ Imports:
     methods,
     R6,
     qs,
-    stringr
+    stringr,
+    memoise
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -38,4 +39,5 @@ Suggests:
     pkgdown,
     rmarkdown,
     crul,
-    Rarr
+    Rarr,
+    vcr (>= 0.6.0)

@@ -39,7 +39,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}/*
-          key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{ env.cache-version }}-deps
+          key: ${{ hashFiles('DESCRIPTION') }}-${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{ env.cache-version }}-deps
       - name: Install dependencies
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: |

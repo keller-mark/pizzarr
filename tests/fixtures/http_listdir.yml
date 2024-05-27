@@ -1,0 +1,236 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://raw.githubusercontent.com/DOI-USGS/rnz/main/inst/extdata/bcsd.zarr/.zmetadata
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      User-Agent: libcurl/8.3.0 r-curl/5.2.1 crul/1.4.2
+      Accept-Encoding: gzip, deflate
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: '200'
+      message: OK
+      explanation: Request fulfilled, document follows
+    headers:
+      status: HTTP/1.1 200 OK
+      connection: keep-alive
+      content-length: '1630'
+      cache-control: max-age=300
+      content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+      content-type: text/plain; charset=utf-8
+      etag: W/"5d843dfb722c72344a5c1d9c2f2f26e2ebecef8c09464e426182dd613abe2de2"
+      strict-transport-security: max-age=31536000
+      x-content-type-options: nosniff
+      x-frame-options: deny
+      x-xss-protection: 1; mode=block
+      x-github-request-id: C9A0:2E1F0A:E4FCF1:10550D3:664F3D72
+      content-encoding: gzip
+      accept-ranges: bytes
+      date: Thu, 23 May 2024 13:16:07 GMT
+      via: 1.1 varnish
+      x-served-by: cache-iad-kiad7000164-IAD
+      x-cache: HIT
+      x-cache-hits: '0'
+      x-timer: S1716470168.762871,VS0,VE1
+      vary: Authorization,Accept-Encoding,Origin
+      access-control-allow-origin: '*'
+      cross-origin-resource-policy: cross-origin
+      x-fastly-request-id: ae1f9d2726d515b4f0e8fad7cb142a9c221e509e
+      expires: Thu, 23 May 2024 13:21:07 GMT
+      source-age: '153'
+    body:
+      encoding: ''
+      file: no
+      string: |-
+        {
+            "metadata": {
+                ".zattrs": {
+                    "CDI": "Climate Data Interface version 1.5.6 (http://code.zmaw.de/projects/cdi)",
+                    "CDO": "Climate Data Operators version 1.5.6.1 (http://code.zmaw.de/projects/cdo)",
+                    "Conventions": "CF-1.0",
+                    "History": "Translated to CF-1.0 Conventions by Netcdf-Java CDM (CFGridWriter2)\nOriginal Dataset = bcsd_obs; Translation Date = 2019-01-03T20:03:59.756Z",
+                    "Metadata_Conventions": "Unidata Dataset Discovery v1.0",
+                    "NCO": "netCDF Operators version 4.7.6 (Homepage = http://nco.sf.net, Code = http://github.com/nco/nco)",
+                    "acknowledgment": "Maurer, E.P., A.W. Wood, J.C. Adam, D.P. Lettenmaier, and B. Nijssen, 2002, A Long-Term Hydrologically-Based Data Set of Land Surface Fluxes and States for the Conterminous United States, J. Climate 15(22), 3237-3251",
+                    "cdm_data_type": "Grid",
+                    "date_created": "2014",
+                    "date_issued": "2015-11-01",
+                    "geospatial_lat_max": 37.0625,
+                    "geospatial_lat_min": 33.0625,
+                    "geospatial_lon_max": -74.9375,
+                    "geospatial_lon_min": -84.9375,
+                    "history": "Mon Jan  7 18:59:08 2019: ncks -4 -L3 bcsd_obs_1999_two_var.nc bcsd_obs_1999_two_var.nc.comp\nThu May 08 12:07:18 2014: cdo monsum gridded_obs/daily/gridded_obs.daily.Prcp.1950.nc gridded_obs/monthly/gridded_obs.monthly.pr.1950.nc",
+                    "id": "cida.usgs.gov/bcsd_obs",
+                    "institution": "Varies, see http://gdo-dcp.ucllnl.org/downscaled_cmip_projections/",
+                    "keywords": "Atmospheric Temperature, Air Temperature Atmosphere, Precipitation, Rain, Maximum Daily Temperature, Minimum  Daily Temperature",
+                    "keywords_vocabulary": "GCMD Science Keywords",
+                    "license": "Freely available",
+                    "naming_authority": "cida.usgs.gov",
+                    "processing_level": "Gridded meteorological observations",
+                    "publisher_email": "dblodgett@usgs.gov",
+                    "publisher_name": "Center for Integrated Data Analytics",
+                    "publisher_url": "https://www.cida.usgs.gov/",
+                    "summary": "These are the monthly observational data used for BCSD downscaling. See: http://gdo-dcp.ucllnl.org/downscaled_cmip_projections/dcpInterface.html#About for more information.",
+                    "time_coverage_end": "1999-12-15T00:00",
+                    "time_coverage_resolution": "P1M",
+                    "time_coverage_start": "1950-01-15T00:00",
+                    "title": "Monthly Gridded Meteorological Observations"
+                },
+                ".zgroup": {
+                    "zarr_format": 2
+                },
+                "latitude/.zarray": {
+                    "chunks": [
+                        33
+                    ],
+                    "compressor": {
+                        "id": "zstd",
+                        "level": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        33
+                    ],
+                    "zarr_format": 2
+                },
+                "latitude/.zattrs": {
+                    "_ARRAY_DIMENSIONS": [
+                        "latitude"
+                    ],
+                    "_CoordinateAxisType": "Lat",
+                    "axis": "Y",
+                    "bounds": "latitude_bnds",
+                    "long_name": "Latitude",
+                    "standard_name": "latitude",
+                    "units": "degrees_north"
+                },
+                "longitude/.zarray": {
+                    "chunks": [
+                        81
+                    ],
+                    "compressor": {
+                        "id": "zstd",
+                        "level": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        81
+                    ],
+                    "zarr_format": 2
+                },
+                "longitude/.zattrs": {
+                    "_ARRAY_DIMENSIONS": [
+                        "longitude"
+                    ],
+                    "_CoordinateAxisType": "Lon",
+                    "axis": "X",
+                    "bounds": "longitude_bnds",
+                    "long_name": "Longitude",
+                    "standard_name": "longitude",
+                    "units": "degrees_east"
+                },
+                "pr/.zarray": {
+                    "chunks": [
+                        12,
+                        33,
+                        81
+                    ],
+                    "compressor": {
+                        "id": "zstd",
+                        "level": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": 1.0000000200408773e+20,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        12,
+                        33,
+                        81
+                    ],
+                    "zarr_format": 2
+                },
+                "pr/.zattrs": {
+                    "_ARRAY_DIMENSIONS": [
+                        "time",
+                        "latitude",
+                        "longitude"
+                    ],
+                    "coordinates": "time latitude longitude ",
+                    "long_name": "monthly_sum_pr",
+                    "name": "pr",
+                    "units": "mm/m"
+                },
+                "tas/.zarray": {
+                    "chunks": [
+                        12,
+                        33,
+                        81
+                    ],
+                    "compressor": {
+                        "id": "zstd",
+                        "level": 1
+                    },
+                    "dtype": "<f4",
+                    "fill_value": 1.0000000200408773e+20,
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        12,
+                        33,
+                        81
+                    ],
+                    "zarr_format": 2
+                },
+                "tas/.zattrs": {
+                    "_ARRAY_DIMENSIONS": [
+                        "time",
+                        "latitude",
+                        "longitude"
+                    ],
+                    "coordinates": "time latitude longitude ",
+                    "long_name": "monthly_avg_tas",
+                    "missing_value": 1.0000000200408773e+20,
+                    "name": "tas",
+                    "units": "C"
+                },
+                "time/.zarray": {
+                    "chunks": [
+                        12
+                    ],
+                    "compressor": {
+                        "id": "zstd",
+                        "level": 1
+                    },
+                    "dtype": "<f8",
+                    "fill_value": "NaN",
+                    "filters": null,
+                    "order": "C",
+                    "shape": [
+                        12
+                    ],
+                    "zarr_format": 2
+                },
+                "time/.zattrs": {
+                    "_ARRAY_DIMENSIONS": [
+                        "time"
+                    ],
+                    "_CoordinateAxisType": "Time",
+                    "calendar": "standard",
+                    "standard_name": "time",
+                    "units": "days since 1950-01-01"
+                }
+            },
+            "zarr_consolidated_format": 1
+        }
+  recorded_at: 2024-05-23 13:16:08 GMT
+  recorded_with: vcr/1.2.2, webmockr/0.9.0

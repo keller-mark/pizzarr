@@ -1,0 +1,12 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "latitude",
+        "longitude"
+    ],
+    "coordinates": "time latitude longitude ",
+    "long_name": "monthly_avg_tas",
+    "missing_value": 1.0000000200408773e+20,
+    "name": "tas",
+    "units": "C"
+}

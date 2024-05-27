@@ -13,6 +13,7 @@ Store <- R6::R6Class("Store",
       erasable = NULL,
       listable = NULL,
       store_version = NULL,
+      zmetadata = NULL,
       #' @keywords internal
       listdir_from_keys = function(path) {
         # TODO
@@ -115,7 +116,12 @@ Store <- R6::R6Class("Store",
      #' @return A boolean value.
      contains_item = function(key) {
 
-     }
+     },
+    #' @description
+    #' Get consolidated metadata if it exists.
+    get_consolidated_metadata = function() {
+      return(private$zmetadata)
+    }
    )
 )
 
@@ -355,16 +361,31 @@ HttpStore <- R6::R6Class("HttpStore",
     options = NULL,
     headers = NULL,
     client = NULL,
+    zmetadata = NULL,
+    mem_get = NULL,
+    cache_time_seconds = 3600,
     make_request = function(item) {
-      # Remove leading slash if necessary.
-      if(substr(item, 1, 1) == "/") {
-        key <- substr(item, 2, length(item))
-      } else {
-        key <- item
-      }
+      key <- item_to_key(item)
       
-      res <- private$client$get(paste(private$base_path, key, sep="/"))
+      # mem_get caches in memory on a per-session basis.
+      res <- private$mem_get(private$client, 
+                             paste(private$base_path, key, sep="/"))
+      
       return(res)
+    },
+    get_zmetadata = function() {
+      res <- private$make_request(".zmetadata")
+      
+      if(res$status_code == 200) {
+        out <- tryCatch({
+          jsonlite::fromJSON(res$parse("UTF-8"))
+        }, error = \(e) {
+          warning("\n\nError parsing .zmetadata:\n\n", e)
+          NULL
+        })
+      } else out <- NULL
+      
+      return(out)
     }
   ),
   public = list(
@@ -376,8 +397,8 @@ HttpStore <- R6::R6Class("HttpStore",
     initialize = function(url, options = NA, headers = NA) {
       super$initialize()
       # Remove trailing slash if necessary.
-      if(substr(url, length(url), length(url)) == "/") {
-        private$url <- substr(url, 1, length(url)-1)
+      if(substr(url, nchar(url), nchar(url)) == "/") {
+        private$url <- substr(url, 1, nchar(url)-1)
       } else {
         private$url <- url
       }
@@ -395,6 +416,11 @@ HttpStore <- R6::R6Class("HttpStore",
         opts = private$options,
         headers = private$headers
       )
+      
+      private$mem_get <-  memoise::memoise(function(client, path) client$get(path), 
+                                           ~memoise::timeout(private$cache_time_seconds))
+      
+      private$zmetadata <- private$get_zmetadata()
     },
     #' @description
     #' Get an item from the store.
@@ -409,8 +435,50 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param item The item key.
     #' @return A boolean value.
     contains_item = function(item) {
-      res <- private$make_request(item)
-      return(res$status_code == 200)
+      
+      # use consolidated metadata if it exists
+      if(!is.null(try_from_zmeta(item_to_key(item), self))) {
+        return(TRUE)
+      } else if(!is.null(self$get_consolidated_metadata())) {
+        return(FALSE)
+      } else {
+        res <- private$make_request(item)
+        
+        return(res$status_code == 200)        
+      }
+
+    },
+    #' @description
+    #' Fetches .zmetadata from the store evaluates its names
+    #' @return character vector of unique keys that do note  start with a `.`. 
+    listdir = function() {
+
+      if(!is.null(private$zmetadata)) {
+        tryCatch({
+          out <- names(private$zmetadata$metadata) |>
+            stringr::str_subset("^\\.", negate = TRUE) |>
+            stringr::str_split("/") |>
+            vapply(\(x) head(x, 1), "") |>
+            unique()
+        }, error = \(e) warning("\n\nError parsing .zmetadata:\n\n", e))
+      } else {
+        out <- NULL
+        message(".zmetadata not found for this http store. Can't listdir")
+      }
+      
+      return(out)
+      
+    },
+    #' @description 
+    #' Get cache time of http requests.
+    get_cache_time_seconds = function() {
+      return(private$cache_time_seconds)
+    },
+    #' @description
+    #' Set cache time of http requests.
+    #' @param seconds number of seconds until cache is invalid -- 0 for no cache
+    set_cache_time_seconds = function(seconds) {
+      private$cache_time_seconds <- seconds
     }
   )
 )
