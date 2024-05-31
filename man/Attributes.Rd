@@ -13,8 +13,6 @@ The Zarr Attributes class.
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{cached_aslist}}{The attributes cached as a list.}
-
 \item{\code{store}}{Attributes store, already initialized.}
 
 \item{\code{key}}{The key under which the attributes will be stored.}
@@ -24,13 +22,6 @@ The Zarr Attributes class.
 \item{\code{cache}}{If True (default), attributes will be cached locally.}
 
 \item{\code{synchronizer}}{Only necessary if attributes may be modified from multiple threads or processes.}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{cached_aslist}}{The attributes cached as a list.}
 }
 \if{html}{\out{</div>}}
 }
@@ -66,6 +57,14 @@ Create a new Attributes instance.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{store}}{Attributes store, already initialized.}
+
+\item{\code{key}}{description key to use for attributes (.attrs is default)}
+
+\item{\code{read_only}}{logical}
+
+\item{\code{cache}}{logical}
+
+\item{\code{synchronizer}}{object}
 }
 \if{html}{\out{</div>}}
 }
@@ -77,55 +76,109 @@ An \code{Attributes} instance.
 \if{html}{\out{<a id="method-Attributes-to_list"></a>}}
 \if{latex}{\out{\hypertarget{method-Attributes-to_list}{}}}
 \subsection{Method \code{to_list()}}{
+convert attributes to list
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$to_list()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+list
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Attributes-refresh"></a>}}
 \if{latex}{\out{\hypertarget{method-Attributes-refresh}{}}}
 \subsection{Method \code{refresh()}}{
+refresh attributes
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$refresh()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+None
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Attributes-contains"></a>}}
 \if{latex}{\out{\hypertarget{method-Attributes-contains}{}}}
 \subsection{Method \code{contains()}}{
+check if object contains item
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$contains(x)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{object}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+logical
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Attributes-get_item"></a>}}
 \if{latex}{\out{\hypertarget{method-Attributes-get_item}{}}}
 \subsection{Method \code{get_item()}}{
+get attribute
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$get_item(item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{item}}{character}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+item as list
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Attributes-set_item"></a>}}
 \if{latex}{\out{\hypertarget{method-Attributes-set_item}{}}}
 \subsection{Method \code{set_item()}}{
+set attribute
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$set_item(item, value)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{item}}{character}
+
+\item{\code{value}}{value to add or update}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+none
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Attributes-del_item"></a>}}
 \if{latex}{\out{\hypertarget{method-Attributes-del_item}{}}}
 \subsection{Method \code{del_item()}}{
+delete attribute
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Attributes$del_item(item)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{item}}{character}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+none
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Attributes-clone"></a>}}

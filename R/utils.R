@@ -8,15 +8,7 @@ str_to_vec <- function(s) {
 }
 
 #' Create a list of zarray metadata.
-#' 
-#' @param shape
-#' @param chunks
-#' @param dtype
-#' @param compressor
-#' @param fill_value
-#' @param order
-#' @param filters
-#' @param dimension_separator
+#' @inheritParams zarr_create
 #' @return A list.
 #' @keywords internal
 create_zarray_meta <- function(shape = NA, chunks = NA, dtype = NA, compressor = NA, fill_value = NA, order = NA, filters = NA, dimension_separator = NA) {
@@ -217,6 +209,7 @@ replace_ellipsis <- function(selection, shape) {
   return(selection)
 }
 
+#' Compute Size
 #' @param shape A shape vector
 #' @returns The product of shape elements.
 #' @keywords internal
@@ -289,4 +282,19 @@ get_list_product <- function(dim_indexer_iterables) {
     partial_results <- get_list_product_aux(dim_indexer_iterables, i, partial_results)
   }
   return(partial_results)
+}
+
+#' @keywords internal
+item_to_key <- function(item) {
+  # Remove leading slash if necessary.
+  if(substr(item, 1, 1) == "/") {
+    key <- substr(item, 2, length(item))
+  } else {
+    key <- item
+  }
+  key
+}
+
+try_from_zmeta <- function(key, store) {
+  store$get_consolidated_metadata()$metadata[[key]]
 }

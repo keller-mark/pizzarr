@@ -5,14 +5,19 @@
 \alias{VIndex}
 \title{VIndex Class}
 \description{
-VIndex Class
-
-VIndex Class
+TODO
 }
 \details{
 The Zarr VIndex class.
 }
 \keyword{internal}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{array}}{array}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -29,6 +34,13 @@ Create a new VIndex instance.
 \if{html}{\out{<div class="r">}}\preformatted{VIndex$new(array)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{array}}{array}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A \code{VIndex} instance.
 }

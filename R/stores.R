@@ -8,21 +8,12 @@
 #' @export
 Store <- R6::R6Class("Store",
    private = list(
-      #' @field readable
-      #' @keywords internal
       readable = NULL,
-      #' @field writable
-      #' @keywords internal
       writeable = NULL,
-      #' @field erasable
-      #' @keywords internal
       erasable = NULL,
-      #' @field listable
-      #' @keywords internal
       listable = NULL,
-      #' @field store_version
-      #' @keywords internal
       store_version = NULL,
+      zmetadata = NULL,
       #' @keywords internal
       listdir_from_keys = function(path) {
         # TODO
@@ -37,9 +28,11 @@ Store <- R6::R6Class("Store",
       }
    ),
    public = list(
-    #' @field metadata_class
+    #' @field metadata_class TODO
     #' @keywords internal
     metadata_class = NULL,
+    #' @description 
+    #' Create a `Store` object 
     initialize = function() {
       private$readable <- TRUE
       private$writeable <- TRUE
@@ -48,21 +41,34 @@ Store <- R6::R6Class("Store",
       private$store_version <- 2
       self$metadata_class <- Metadata2$new()
     },
+    #' @description
+    #' test if Store is readable
     is_readable = function() {
       return(private$readable)
     },
+    #' @description
+    #' test if Store is writeable
     is_writeable = function() {
       return(private$writeable)
     },
+    #' @description
+    #' test if Store is eraseable
     is_erasable = function() {
       return(private$erasable)
     },
+    #' @description
+    #' test if Store is listable
     is_listable = function() {
       return(private$listable)
     },
+    #' @description
+    #' close the store
     close = function() {
       # Do nothing by default
     },
+    #' @description
+    #' list the store directory
+    #' @param path character path
     listdir = function(path=NA) {
       if(is.na(path)) {
         path <- ""
@@ -70,12 +76,19 @@ Store <- R6::R6Class("Store",
       path <- normalize_storage_path(path)
       return(private$listdir_from_keys(path))
     },
+    #' @description
+    #' rename a Store
+    #' @param src_path character source path
+    #' @param dst_path character destination path
     rename = function(src_path, dst_path) {
       if(!self$is_erasable()) {
         stop("Store is not erasable, cannot call 'rename'")
       }
       private$rename_from_keys(src_path, dst_path)
     },
+    #' @description
+    #' remove a path within a Store
+    #' @param path character path
     rmdir = function(path) {
       if(!self$is_erasable()) {
         stop("Store is not erasable, cannot call 'rmdir'")
@@ -103,7 +116,12 @@ Store <- R6::R6Class("Store",
      #' @return A boolean value.
      contains_item = function(key) {
 
-     }
+     },
+    #' @description
+    #' Get consolidated metadata if it exists.
+    get_consolidated_metadata = function() {
+      return(private$zmetadata)
+    }
    )
 )
 
@@ -168,6 +186,9 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
       fp <- file.path(self$root, key)
       return(file.exists(fp))
     },
+    #' @description
+    #' remove a path within a Store
+    #' @param path character path
     rmdir = function(path=NA) {
       path <- normalize_storage_path(path)
       dir_path <- self$root
@@ -178,6 +199,9 @@ DirectoryStore <- R6::R6Class("DirectoryStore",
         unlink(dir_path, recursive = TRUE)
       }
     },
+    #' @description
+    #' list the store directory
+    #' @param key character key
     listdir = function(key=NA) {
       if(is_na(key)) {
         dir_path <- self$root
@@ -298,6 +322,9 @@ MemoryStore <- R6::R6Class("MemoryStore",
        })
        return(result)
      },
+     #' @description
+     #' list the store directory
+     #' @param key character key
      listdir = function(key=NA) {
       item <- self$get_item(key)
       if(!is.list(item)) {
@@ -305,6 +332,9 @@ MemoryStore <- R6::R6Class("MemoryStore",
       }
       return(sort(names(item)))
      },
+     #' @description
+     #' remove a path within a Store
+     #' @param item character item
      rmdir = function(item) {
       self$set_item(item, NULL)
      }
@@ -331,24 +361,44 @@ HttpStore <- R6::R6Class("HttpStore",
     options = NULL,
     headers = NULL,
     client = NULL,
+    zmetadata = NULL,
+    mem_get = NULL,
+    cache_time_seconds = 3600,
     make_request = function(item) {
-      # Remove leading slash if necessary.
-      if(substr(item, 1, 1) == "/") {
-        key <- substr(item, 2, length(item))
-      } else {
-        key <- item
-      }
+      key <- item_to_key(item)
       
-      res <- private$client$get(paste(private$base_path, key, sep="/"))
+      # mem_get caches in memory on a per-session basis.
+      res <- private$mem_get(private$client, 
+                             paste(private$base_path, key, sep="/"))
+      
       return(res)
+    },
+    get_zmetadata = function() {
+      res <- private$make_request(".zmetadata")
+      
+      if(res$status_code == 200) {
+        out <- tryCatch({
+          jsonlite::fromJSON(res$parse("UTF-8"))
+        }, error = \(e) {
+          warning("\n\nError parsing .zmetadata:\n\n", e)
+          NULL
+        })
+      } else out <- NULL
+      
+      return(out)
     }
   ),
   public = list(
+    #' @description 
+    #' Create a `HttpStore` object 
+    #' @param url character url of store
+    #' @param options crul options
+    #' @param headers crul headers
     initialize = function(url, options = NA, headers = NA) {
       super$initialize()
       # Remove trailing slash if necessary.
-      if(substr(url, length(url), length(url)) == "/") {
-        private$url <- substr(url, 1, length(url)-1)
+      if(substr(url, nchar(url), nchar(url)) == "/") {
+        private$url <- substr(url, 1, nchar(url)-1)
       } else {
         private$url <- url
       }
@@ -358,12 +408,19 @@ HttpStore <- R6::R6Class("HttpStore",
       segments <- stringr::str_split(private$url, "/")[[1]]
       private$domain <- paste(segments[1:3], collapse="/")
       private$base_path <- paste(segments[4:length(segments)], collapse="/")
-
+      
+      if(!requireNamespace("crul", quietly = TRUE)) stop("HttpStore requires the crul package")
+      
       private$client <- crul::HttpClient$new(
         url = private$domain,
         opts = private$options,
         headers = private$headers
       )
+      
+      private$mem_get <-  memoise::memoise(function(client, path) client$get(path), 
+                                           ~memoise::timeout(private$cache_time_seconds))
+      
+      private$zmetadata <- private$get_zmetadata()
     },
     #' @description
     #' Get an item from the store.
@@ -373,9 +430,55 @@ HttpStore <- R6::R6Class("HttpStore",
       res <- private$make_request(item)
       return(res$content)
     },
+    #' @description
+    #' Determine whether the store contains an item.
+    #' @param item The item key.
+    #' @return A boolean value.
     contains_item = function(item) {
-      res <- private$make_request(item)
-      return(res$status_code == 200)
+      
+      # use consolidated metadata if it exists
+      if(!is.null(try_from_zmeta(item_to_key(item), self))) {
+        return(TRUE)
+      } else if(!is.null(self$get_consolidated_metadata())) {
+        return(FALSE)
+      } else {
+        res <- private$make_request(item)
+        
+        return(res$status_code == 200)        
+      }
+
+    },
+    #' @description
+    #' Fetches .zmetadata from the store evaluates its names
+    #' @return character vector of unique keys that do note  start with a `.`. 
+    listdir = function() {
+
+      if(!is.null(private$zmetadata)) {
+        tryCatch({
+          out <- names(private$zmetadata$metadata) |>
+            stringr::str_subset("^\\.", negate = TRUE) |>
+            stringr::str_split("/") |>
+            vapply(\(x) head(x, 1), "") |>
+            unique()
+        }, error = \(e) warning("\n\nError parsing .zmetadata:\n\n", e))
+      } else {
+        out <- NULL
+        message(".zmetadata not found for this http store. Can't listdir")
+      }
+      
+      return(out)
+      
+    },
+    #' @description 
+    #' Get cache time of http requests.
+    get_cache_time_seconds = function() {
+      return(private$cache_time_seconds)
+    },
+    #' @description
+    #' Set cache time of http requests.
+    #' @param seconds number of seconds until cache is invalid -- 0 for no cache
+    set_cache_time_seconds = function(seconds) {
+      private$cache_time_seconds <- seconds
     }
   )
 )

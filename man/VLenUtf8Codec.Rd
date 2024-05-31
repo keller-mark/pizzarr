@@ -26,24 +26,51 @@ Variable-length UTF-8 codec for Zarr
 \if{html}{\out{<a id="method-VLenUtf8Codec-encode"></a>}}
 \if{latex}{\out{\hypertarget{method-VLenUtf8Codec-encode}{}}}
 \subsection{Method \code{encode()}}{
+Compress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{VLenUtf8Codec$encode(vec_of_strings, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{vec_of_strings}}{The un-compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-VLenUtf8Codec-decode"></a>}}
 \if{latex}{\out{\hypertarget{method-VLenUtf8Codec-decode}{}}}
 \subsection{Method \code{decode()}}{
+Decompress data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{VLenUtf8Codec$decode(buf, zarr_arr)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{buf}}{The compressed data.}
+
+\item{\code{zarr_arr}}{The ZarrArray instance.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Un-compressed data.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-VLenUtf8Codec-get_config"></a>}}
 \if{latex}{\out{\hypertarget{method-VLenUtf8Codec-get_config}{}}}
 \subsection{Method \code{get_config()}}{
+Get Configuration
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{VLenUtf8Codec$get_config()}\if{html}{\out{</div>}}
 }

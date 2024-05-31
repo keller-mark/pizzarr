@@ -138,7 +138,7 @@ get_dtype_asrtype <- function(dtype) {
 #' @title Dtype Class
 #' @docType class
 #' @description
-#' 
+#'  TODO
 #' @rdname Dtype
 #' @export
 Dtype <- R6::R6Class("Dtype",
@@ -182,12 +182,18 @@ Dtype <- R6::R6Class("Dtype",
 
       self$object_codec <- object_codec
     },
+    #' @description
+    #' Get as R type
     get_asrtype = function() {
       return(get_dtype_asrtype(self$dtype))
     },
+    #' @description
+    #' basic type R type
     get_rtype = function() {
       return(get_dtype_rtype(self$basic_type))
     },
+    #' @description
+    #' get typed array
     get_typed_array_ctr = function() {
       rtype <- self$get_rtype()
       return(function(dim) array(data = rtype, dim = dim))
