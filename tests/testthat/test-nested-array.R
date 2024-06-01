@@ -53,3 +53,16 @@ test_that("NestedArray can be set using list of zb_slices", {
 
     expect_equal(python_sel$data, new_a)
 })
+
+test_that("zero_based_to_one_based", {
+  
+  s <- list(slice(1, 11, 1))
+
+  expect_equal(zero_based_to_one_based(s, shape = c(20, 20)), 
+               list(c(1:11)))
+  
+  s <- list(slice(1, 11, 2))
+  
+  expect_equal(zero_based_to_one_based(s, shape = c(20, 20)), 
+               list(seq(1, 11, 2)))
+})

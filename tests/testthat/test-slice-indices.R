@@ -37,3 +37,13 @@ test_that("slice gets converted to zb_slice", {
     expect_equal(s1$stop, s2$stop)
     expect_equal(s1$step, s2$step)
 })
+
+test_that("step size greater than 1", {
+  g <- zarr_volcano()
+  
+  s <- slice(1, 21, 2)
+  
+  d <- g$get_item("volcano")$get_item(list(s, s))$data
+  
+  expect_equal(dim(d), c(11, 11))
+})

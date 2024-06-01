@@ -8,6 +8,8 @@ zero_based_to_one_based <- function(selection, shape) {
     # before accessing data on the internal self$data.
     sel_start <- sel$start + 1 # Add one, since R indexing is zero-based.
     sel_stop <- sel$stop # Do not subtract one, since R indexing is inclusive.
+    sel_step <- sel$step
+    if(is.na(sel_step)) sel_step <- 1
     # TODO: convert these warnings to errors once we know internals do indexing correctly
     if(sel_start < 1) {
       sel_start <- 1
@@ -25,7 +27,9 @@ zero_based_to_one_based <- function(selection, shape) {
       sel_stop <- shape[i]
       message("IndexError: NestedArray$get() received slice with stop index out of bounds - too high")
     }
-    selection_list <- append(selection_list, list(c(sel_start:sel_stop))) # TODO: support non-1 step
+    selection_list <- append(selection_list, list(seq(from = sel_start, 
+                                                      to = sel_stop, 
+                                                      by = sel_step)))
   }
   return(selection_list)
 }
