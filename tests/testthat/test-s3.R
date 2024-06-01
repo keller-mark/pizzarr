@@ -76,3 +76,14 @@ test_that("S3 methods of Zarr object", {
     #Converting Zarr to array
     expect_equal(as.array(z), a)
 })
+
+test_that("Zarr Array can be accessed with ", {
+  g <- zarr_volcano()
+  
+  a <- g$get_item("volcano")
+  
+  sub <- a[1:10,1]
+  
+  expect_equal(class(sub), c("NestedArray", "R6"))
+  expect_equal(dim(sub$as.array()), 10, 1)
+})
