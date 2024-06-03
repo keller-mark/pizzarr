@@ -13,7 +13,7 @@ as_scalar <- function(obj) {
 #' @return TRUE if the value is a scalar, FALSE otherwise.
 #' @export
 is_scalar <- function(s) {
-  if(class(s)[[1]] == "scalar") {
+  if(is.atomic(s) && length(s) == 1L && !is.character(s) && Im(s)==0) {
     return(TRUE)
   }
   return(FALSE)
