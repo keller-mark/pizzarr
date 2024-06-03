@@ -131,4 +131,12 @@ test_that("selection functionality", {
   
   expect_equal(sub_a$shape, c(a$get_shape()[1], 10))
   
+  sub_a <- a$get_item(list(1, "..."))
+  
+  expect_equal(sub_a$shape, c(1, a$get_shape()[2]))
+  
+  sub_a <- a$get_item(list("...", slice(1, 10)))
+  
+  expect_equal(sub_a$shape, c(a$get_shape()[1], 10))
+  
 })
