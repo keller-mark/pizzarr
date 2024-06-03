@@ -1,0 +1,183 @@
+---
+title: "Getting Started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+  knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
+
+# Introduction
+
+Pizzarr implements an object oriented zarr client library that represents zarr stores, groups, attributes, and arrays.
+
+For those not familiar with zarr, a "store" implies how the entire zarr dataset is... stored. e.g. in memory, on disk, or on the internet. A group is a container that may be in a hierarchy, it can contain group level attributes, arrays, and / or child groups. Attributes are key value pairs carried by both groups and attributes. Arrays are where the actual data reside and can be chunked and compressed in a variety of ways.
+
+When you encounter a zarr store, you would usually first look in the "root group" metadata and list the groups and arrays recursively to figure out what the store contains. From there, you might look at metadata associated with arrays and any child groups the store contains to figure out what they are or how you might want to work with them. 
+
+Some zarr stores include what's known as "consolidated metadata". It is consolidated because all the metadata from all the groups and arrays in the store are consolidated into a single json file contained in the root group. This can be super convenient or even required if the store doesn't support "listing" like you do with `ls` at a terminal (http stores for example). The problem with consolidated metadata is that it can get out of sync with what the dataset actually contains, so it is usually created once a dataset is done and ready to be made "read only".
+
+# pizzarr classes: 
+
+`Store` class: Implements a variety of ways to store zarr data. Is the container for all groups and arrays in a zarr dataset.
+`ZarrGroup` class: Supports getting and setting attributes of a group and creating groups and arrays within a group.
+`ZarrArray` class: Supports a variety of operations for getting and setting attributes and data from an array.
+`Attributes` class: Supports access to attributes carried by groups and arrays.
+`Codec`class: Supports encoding and decoding arrays according to the implemented compressor.
+`Dtype` class: Supports handling R data types as zarr codec compatible data types.
+
+# Core use cases:
+
+## Create stores, groups, and arrays
+
+An empty store can be created with one of the store implementations or by specifying
+the store type when creating a group or an array.
+
+```{r}
+library(pizzarr)
+
+# get an empty store to add to later
+mem_store <- MemoryStore$new()
+
+class(mem_store)
+
+# create a store in line when creating an empty array
+demo_array <- zarr_create(c(1,2,3), store = NA)
+
+demo_array_store <- demo_array$get_store()
+
+class(demo_array_store)
+
+demo_array_store$listdir()
+
+# or create a store when creating a group to contain arrays
+# notice that passing a path creates a directory store
+store_path <- file.path(tempdir(), "demo.zarr")
+
+demo_group <- zarr_create_group(store = store_path)
+
+demo_group_store <- demo_group$get_store()
+
+basename(demo_group_store$root)
+
+class(demo_group_store)
+
+demo_group_store$listdir()
+
+```
+## Set and get attributes
+
+We now have 1) an empty memory store, 2) an empty array in a memory store, and 3) a group defined within a directory store. Now we'll create a group using our existing empty memory store and add some attributes to it, retrieve them, and delete them.  
+
+```{r}
+
+demo_mem_store_group <- zarr_create_group(mem_store)
+
+demo_mem_store_group$get_attrs()$key
+
+demo_mem_store_group$get_attrs()$set_item("this is", "an attribute")
+
+demo_mem_store_group$get_attrs()$to_list()
+
+demo_mem_store_group$get_attrs()$del_item("this is")
+
+demo_mem_store_group$get_attrs()$to_list()
+
+```
+Notice that we can do the same thing on arrays -- which can also carry attributes.
+
+```{r}
+
+demo_array_store$listdir()
+
+demo_array$get_attrs()$set_item("this is", "array metadata")
+
+demo_array$get_attrs()$to_list()
+
+# notice that when we added the item, our demo array store got a .zattrs
+demo_array_store$listdir()
+
+```
+## Set values of an array
+
+Now that we have the ability to create stores, groups, and arrays and know how to add attributes to groups and arrays, let's look at how to add data. For this, we'll use the directory store we created above. 
+
+```{r}
+
+zarr_volcano <- zarr_create_array(volcano, # the R array classic
+                                  shape = dim(volcano),
+                                  store = demo_group_store, # the store we want the array in
+                                  path = "volcano") # the path we want the array stored in
+
+demo_group_store$listdir()
+
+zarr_volcano$get_shape()
+
+all.equal(zarr_volcano$as.array(), 
+          volcano) 
+
+```
+
+Now that we have an array in a zarr store, we can pull out subsets of it with pizzarr R6 methods or with the `S3` method for `[`.
+
+```{r}
+sub_zarr_volcano <- zarr_volcano$get_item(list(slice(1, 10), slice(1, 20)))
+
+all.equal(sub_zarr_volcano$as.array(), 
+          volcano[1:10, 1:20]) 
+
+sub_zarr_volcano <- zarr_volcano[1:10, 1:20]
+
+class(sub_zarr_volcano)
+
+sub_zarr_volcano$shape
+
+all.equal(sub_zarr_volcano$as.array(), 
+          volcano[1:10, 1:20]) 
+
+```
+
+Notice that we can also update the values of an array with the `set_item()` method.
+
+```{r}
+
+# this woll work once implemented?
+# zarr_volcano[1:10, 1:20] <- zarr_volcano[1:10, 1:20] * 10
+
+zarr_volcano$set_item(list(slice(1, 10), slice(1, 20)), 
+                      zarr_volcano[1:10, 1:20]$as.array() * 10)
+
+```
+
+The `slice()` function is great but the `selection` input to the `get_item()` and `set_item()` methods can also accept other kinds of inputs. Namely, scalars to select single indices and a couple of special character strings.  
+
+`"..."` selects everything else. It can be used to the left, right, or in the middle of the selection list but can only be used once.
+`":"` selects everything along a single dimension and can be used as many times as needed.
+
+```{r}
+
+sub_zarr_volcano <- zarr_volcano$get_item(list(1, "..."))
+
+sub_zarr_volcano$shape
+
+sub_zarr_volcano <- zarr_volcano$get_item(list(":", 1))
+
+sub_zarr_volcano$shape
+
+sub_zarr_volcano <- zarr_volcano$get_item(list("..."))
+
+sub_zarr_volcano$shape
+
+sub_zarr_volcano <- zarr_volcano$get_item(list(slice(1, 20, 2), slice(1, 10, 1)))
+
+sub_zarr_volcano$shape
+
+```
