@@ -5,6 +5,9 @@
 #' @docType class
 #' @description
 #' Instantiate an array from an initialized store.
+#' @param selection Selections are lists containing either scalars, strings, or Slice objects. Two character
+#' literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific 
+#' array dimension.
 #'
 #' @rdname ZarrArray
 #' @export
@@ -961,7 +964,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' Subset the array.
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
     #' @returns A subset of the array, as a NestedArray instance.
     get_item = function(selection) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
@@ -970,7 +972,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_basic_selection = function(selection = NA, out = NA, fields = NA) {
@@ -986,7 +988,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_orthogonal_selection = function(selection = NA, out = NA, fields = NA) {
@@ -994,7 +996,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_coordinate_selection = function(selection = NA, out = NA, fields = NA) {
@@ -1002,7 +1004,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_mask_selection = function(selection = NA, out = NA, fields = NA) {
@@ -1010,14 +1012,14 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' Set a subset of the array.
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value The value to set, as an R array() or a Zarr NestedArray instance.
     set_item = function(selection, value) {
       self$set_basic_selection(selection, value)
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_basic_selection = function(selection, value, fields = NA) {
@@ -1029,7 +1031,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_orthogonal_selection = function(selection, value, fields = NA) {
@@ -1037,7 +1039,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_coordinate_selection = function(selection, value, fields = NA) {
@@ -1045,7 +1047,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_mask_selection = function(selection, value, fields = NA) {

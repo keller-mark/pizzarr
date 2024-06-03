@@ -226,7 +226,10 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
 #' @title BasicIndexer Class
 #' @docType class
 #' @description
-#'  TODO
+#'  An indexer class to normalize a selection of an array and provide an iterator 
+#'  of indexes over the dimensions of an array.
+#' @param selection selection as with ZarrArray, scalar, string, or Slice. "..." and ":" supported for string 
+#' @param array ZarrArray object that will be indexed
 #' @rdname BasicIndexer
 #' @keywords internal
 BasicIndexer <- R6::R6Class("BasicIndexer",
@@ -237,10 +240,9 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
     dim_indexers = NULL,
     #' @description
     #' Create a new VIndex instance.
-    #' @param selection selection TODO
-    #' @param array array TODO
     #' @return A `VIndex` instance.
     initialize = function(selection, array) {
+      
       shape <- array$get_shape()
       chunks <- array$get_chunks()
 
@@ -277,8 +279,8 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
       self$dim_indexers <- dim_indexers
     },
     #' @description 
-    #' TODO
-    #' @return TODO
+    #'   An iterator over the dimensions of an array
+    #' @return A list of ChunkProjection objects
     iter = function() {
       # TODO: use generator/yield features from async package
       result <- list()

@@ -338,7 +338,7 @@ init_group <- function(
 }
 
 
-#' Create an array
+#' Create an empty array
 #' @param shape : int or tuple of ints
 #'     Array shape.
 #' @param chunks : int or tuple of ints, optional

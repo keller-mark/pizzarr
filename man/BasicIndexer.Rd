@@ -5,7 +5,8 @@
 \alias{BasicIndexer}
 \title{BasicIndexer Class}
 \description{
-TODO
+An indexer class to normalize a selection of an array and provide an iterator
+of indexes over the dimensions of an array.
 }
 \details{
 The Zarr BasicIndexer class.
@@ -41,9 +42,9 @@ Create a new VIndex instance.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{selection TODO}
+\item{\code{selection}}{selection as with ZarrArray, scalar, string, or Slice. "..." and ":" supported for string}
 
-\item{\code{array}}{array TODO}
+\item{\code{array}}{ZarrArray object that will be indexed}
 }
 \if{html}{\out{</div>}}
 }
@@ -55,13 +56,13 @@ A \code{VIndex} instance.
 \if{html}{\out{<a id="method-BasicIndexer-iter"></a>}}
 \if{latex}{\out{\hypertarget{method-BasicIndexer-iter}{}}}
 \subsection{Method \code{iter()}}{
-TODO
+An iterator over the dimensions of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BasicIndexer$iter()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-TODO
+A list of ChunkProjection objects
 }
 }
 \if{html}{\out{<hr>}}

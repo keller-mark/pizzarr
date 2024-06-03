@@ -94,7 +94,7 @@ Slice <- R6::R6Class("Slice",
   )
 )
 
-#' Shortcut for Slice$new() constructor.
+#' Convenience function for the internal Slice class constructor.
 #' @param start The start index.
 #' @param stop The stop index.
 #' @param step The step size.
@@ -119,7 +119,8 @@ slice <- function(start, stop = NA, step = NA, zero_based = FALSE) {
   ))
 }
 
-#' Shortcut for Slice$new() constructor with zero-based indexing and exclusive stop index.
+#' Convenience function for the internal Sliceclass constructor 
+#' with zero-based indexing and exclusive stop index.
 #' @param start The start index.
 #' @param stop The stop index.
 #' @param step The step size.
