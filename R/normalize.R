@@ -13,7 +13,8 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
       }
     } else if(is_integer_list(dim_sel)) { # TODO: should this be is_integer_vec?
       stop('TypeError(Integer array selections are not supported (yet))')
-    } else if(!is.environment(dim_sel) && (is.na(dim_sel) || dim_sel == ":")) {
+    } else if(!is.null(dim_sel) && !is.environment(dim_sel) && 
+              (is.na(dim_sel) || dim_sel == ":")) {
       selection[[i]] <- zb_slice(NA, NA, 1)
     }
   }

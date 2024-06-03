@@ -13,7 +13,7 @@ as_scalar <- function(obj) {
 #' @return TRUE if the value is a scalar, FALSE otherwise.
 #' @export
 is_scalar <- function(s) {
-  if(is.atomic(s) && length(s) == 1L && !is.character(s) && Im(s)==0) {
+  if(class(s)[[1]] == "scalar") {
     return(TRUE)
   }
   return(FALSE)
@@ -21,7 +21,7 @@ is_scalar <- function(s) {
 
 #' @keywords internal
 is_integer <- function(s) {
-  if(is_scalar(s) && is.numeric(s)) {
+  if(is.atomic(s) && is.numeric(s) && all(s %% 1 == 0)) {
     return(TRUE)
   }
   return(FALSE)
@@ -29,7 +29,7 @@ is_integer <- function(s) {
 
 #' @keywords internal
 is_integer_vec <- function(s) {
-  if(!is_scalar(s) && is.numeric(s)) {
+  if(is.atomic(s) && length(s) > 1 && is.numeric(s) && all(s %% 1) == 0) {
     return(TRUE)
   }
   return(FALSE)
