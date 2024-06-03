@@ -1,6 +1,11 @@
 #' @keywords internal
 zero_based_to_one_based <- function(selection, shape) {
+
+  if(!all(vapply(selection, is_slice, logical(length = 1)))) 
+    stop("selection must be a list of slices")
+  
   selection_list <- list()
+  
   for(i in seq_len(length(selection))) {
     sel <- selection[[i]]
     # We assume the selection uses zero-based indexing,
@@ -226,17 +231,15 @@ NestedArray <- R6::R6Class("NestedArray",
       # value should be a NestedArray.
       selection_list <- zero_based_to_one_based(selection, self$shape)
 
-      value_data <- value$data
-
       if("NestedArray" %in% class(value)) {
         value_data <- value$data
-      } else if(is_scalar(value)) {
+      } else if(is_scalar(value) | is.array(value)) {
         value_data <- value
       } else {
         message(value)
         stop("Got unexpected type for value in NestedArray$set()")
       }
-
+      
       # Cannot figure out how to dynamically set values in an array
       # of arbitrary dimensions.
       # Tried: abind::afill <- but it doesn't seem to work with arbitrary dims or do.call

@@ -118,3 +118,17 @@ test_that("basic indexer for array that spans multiple chunks where shape is not
     expect_equal(sdi2$num_items, 5)
     expect_equal(sdi2$num_chunks, 4)
 })
+
+test_that("selection functionality", {
+
+  a <- zarr_volcano()$get_item("volcano")
+  
+  sub_a <- a$get_item(list(slice(1, 10), "..."))
+  
+  expect_equal(sub_a$shape, c(10, a$get_shape()[2]))
+  
+  sub_a <- a$get_item(list(":", slice(1, 10)))
+  
+  expect_equal(sub_a$shape, c(a$get_shape()[1], 10))
+  
+})
