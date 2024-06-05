@@ -194,3 +194,11 @@ test_that("get_list_product", {
     list('D', 'y')
   ))
 })
+
+test_that("NaN in json", {
+  check <- try_fromJSON('{"name": NaN}')
+  
+  expect_equal(check, list(name = NULL))
+  
+  expect_warning(try_fromJSON("borked", "test warning"), "test warning")
+})
