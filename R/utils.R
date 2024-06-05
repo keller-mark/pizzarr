@@ -298,3 +298,22 @@ item_to_key <- function(item) {
 try_from_zmeta <- function(key, store) {
   store$get_consolidated_metadata()$metadata[[key]]
 }
+
+try_fromJSON <- function(json, warn_message = "Error parsing json was", 
+                         simplifyVector = FALSE) {
+  out <- tryCatch({
+    jsonlite::fromJSON(json, simplifyVector)
+  }, error = \(e) {
+    if(grepl("NaN", e)) {
+      tryCatch({
+        jsonlite::fromJSON(gsub("NaN", "null", json), simplifyVector)
+      }, error = \(e) {
+        warning("\n\n", warn_message, "\n\n", e)
+        NULL
+      })
+    } else {
+      warning("\n\n", warn_message, "\n\n", e)
+      NULL
+    }
+  })
+}

@@ -377,12 +377,7 @@ HttpStore <- R6::R6Class("HttpStore",
       res <- private$make_request(".zmetadata")
       
       if(res$status_code == 200) {
-        out <- tryCatch({
-          jsonlite::fromJSON(res$parse("UTF-8"))
-        }, error = \(e) {
-          warning("\n\nError parsing .zmetadata:\n\n", e)
-          NULL
-        })
+        out <- try_fromJSON(res$parse("UTF-8"))
       } else out <- NULL
       
       return(out)

@@ -11,7 +11,7 @@ Metadata2 <- R6::R6Class("Metadata2",
             if(is.list(s)) {
                 return(s)
             } else {
-                return(jsonlite::fromJSON(rawToChar(s), simplifyVector = FALSE, auto_unbox = auto_unbox))
+                return(try_fromJSON(rawToChar(s), simplifyVector = FALSE))
             }
         },
         encode_metadata = function(meta, auto_unbox=FALSE) {
