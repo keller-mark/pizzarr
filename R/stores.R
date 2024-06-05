@@ -346,6 +346,7 @@ MemoryStore <- R6::R6Class("MemoryStore",
 #' HttpStore for Zarr
 #' @title HttpStore Class
 #' @docType class
+#' @importFrom memoise memoise timeout
 #' @description
 #' Store class that uses HTTP requests.
 #' Read-only. Depends on the `crul` package.
@@ -412,8 +413,8 @@ HttpStore <- R6::R6Class("HttpStore",
         headers = private$headers
       )
       
-      private$mem_get <-  memoise::memoise(function(client, path) client$get(path), 
-                                           ~memoise::timeout(private$cache_time_seconds))
+      private$mem_get <-  memoise(function(client, path) client$get(path), 
+                                           ~timeout(private$cache_time_seconds))
       
       private$zmetadata <- private$get_zmetadata()
     },

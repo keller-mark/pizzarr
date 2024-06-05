@@ -1038,7 +1038,7 @@ Set values for a selection using bracket notation (for S3 method).
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{Contains the slicing parameters, one for each dimension.
-Use empty space to get whole dimension e.g. \link{1:5,,}}
+Use empty space to get whole dimension e.g. \code{[1:5,,]}}
 }
 \if{html}{\out{</div>}}
 }
@@ -1059,7 +1059,7 @@ Assign values for a selection using bracket notation (for S3 method).
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{Contains the slicing parameters, one for each dimension.
-Use empty space to get whole dimension e.g. \link{1:5,,}}
+Use empty space to get whole dimension e.g. \code{[1:5,,]}}
 }
 \if{html}{\out{</div>}}
 }

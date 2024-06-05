@@ -3,6 +3,7 @@
 #' The Zarr Array class.
 #' @title ZarrArray Class
 #' @docType class
+#' @importFrom R6 R6Class
 #' @description
 #' Instantiate an array from an initialized store.
 #' @param selection Selections are lists containing either scalars, strings, or Slice objects. Two character
@@ -1107,7 +1108,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' Set values for a selection using bracket notation (for S3 method).
     #'
     #' @param ... Contains the slicing parameters, one for each dimension.
-    #' Use empty space to get whole dimension e.g. [1:5,,]
+    #' Use empty space to get whole dimension e.g. \code{[1:5,,]}
     #'
     #' @return Sliced Zarr object
     #' @keywords internal
@@ -1160,7 +1161,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' @description
     #' Assign values for a selection using bracket notation (for S3 method).
     #' @param ... Contains the slicing parameters, one for each dimension.
-    #' Use empty space to get whole dimension e.g. [1:5,,]
+    #' Use empty space to get whole dimension e.g. \code{[1:5,,]}
     #' @keywords internal
     `[<-` = function(...) {
       stop("Assignment using bracket notation is not yet supported - use set_item() directly")
@@ -1199,8 +1200,9 @@ ZarrArray <- R6::R6Class("ZarrArray",
 #' S3 method for as.array
 #'
 #' @param obj object 
+#' @param ... not used
 #' @keywords internal
 #' @export
-as.array.ZarrArray = function(obj) {
-  obj$as.array()
+as.array.ZarrArray = function(x, ...) {
+  x$as.array()
 }

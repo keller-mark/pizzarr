@@ -4,9 +4,11 @@
 \alias{as.array.ZarrArray}
 \title{S3 method for as.array}
 \usage{
-\method{as.array}{ZarrArray}(obj)
+\method{as.array}{ZarrArray}(x, ...)
 }
 \arguments{
+\item{...}{not used}
+
 \item{obj}{object}
 }
 \description{

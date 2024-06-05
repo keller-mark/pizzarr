@@ -4,10 +4,10 @@
 \alias{as.array.NestedArray}
 \title{S3 method for as.array}
 \usage{
-\method{as.array}{NestedArray}(obj)
+\method{as.array}{NestedArray}(x, ...)
 }
 \arguments{
-\item{obj}{}
+\item{x}{}
 }
 \description{
 S3 method for as.array

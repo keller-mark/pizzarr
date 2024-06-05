@@ -619,6 +619,9 @@ zarr_open_group <- function(
 #' Open an array using file-mode-like semantics.
 #' @param store : MutableMapping or string, optional
 #'     Store or path to directory in file system or name of zip file.
+#' @param storage_options : dict
+#'     If using an fsspec URL to create the store, these will be passed to
+#'     the backend implementation. Ignored otherwise.
 #' @param mode : {'r', 'r+', 'a', 'w', 'w-'}, optional
 #'     Persistence mode: 'r' means read only (must exist); 'r+' means
 #'     read/write (must exist); 'a' means read/write (create if doesn't
@@ -678,6 +681,7 @@ zarr_open_group <- function(
 #' @export
 zarr_open_array <- function(
     store = NA,
+    storage_options = NA,
     mode = NA,
     shape = NA,
     chunks=TRUE,
