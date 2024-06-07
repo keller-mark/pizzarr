@@ -1176,7 +1176,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
   )
 )
 
-
 #' S3 method for custom bracket subsetting
 #'
 #' @param obj object
@@ -1189,12 +1188,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
 #' S3 method for custom bracket assignment
 #'
-#' @param obj object 
-#' @param ... dots
+#' @param value array or ZarrArray
 #' @keywords internal 
 #' @export
-`[<-.ZarrArray` <- function(obj, ...) {
-  obj$`[<-`(...)
+`[<-.ZarrArray` <- function(obj, ..., value) {
+  obj$`[<-`(value)
 }
 
 #' S3 method for as.array
