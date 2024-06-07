@@ -2,7 +2,7 @@ library(pizzarr)
 
 test_that("Can open Zarr group using convenience function", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     g <- zarr_open_group(root)
     a <- g$get_item("1d.contiguous.lz4.i2")
@@ -12,7 +12,7 @@ test_that("Can open Zarr group using convenience function", {
 
 test_that("Can open Zarr group or array using convenience function", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     g <- zarr_open(root)
     a <- zarr_open(root, path="1d.contiguous.lz4.i2")
 
@@ -22,7 +22,7 @@ test_that("Can open Zarr group or array using convenience function", {
 
 test_that("Can open Zarr group and read a 1D 2-byte integer array with LZ4 compression", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -41,7 +41,7 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with LZ4 compr
 
 test_that("Can open Zarr group and read a 1D 2-byte integer array with Zstd compression", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -60,7 +60,7 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with Zstd comp
 
 test_that("Can open Zarr group and read a 1D 2-byte integer array with Blosc compression", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -88,7 +88,7 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with Blosc com
 
 test_that("Can open Zarr group and read a 1D 2-byte integer array with Zlib compression", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -107,7 +107,7 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with Zlib comp
 
 test_that("Can open Zarr group and read a 1D 2-byte integer array with no compression", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -126,7 +126,7 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with no compre
 
 test_that("Can open Zarr group and read a 1D 4-byte integer array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -143,7 +143,7 @@ test_that("Can open Zarr group and read a 1D 4-byte integer array", {
 
 test_that("Can open Zarr group and read a 1D 1-byte unsigned integer array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -160,7 +160,7 @@ test_that("Can open Zarr group and read a 1D 1-byte unsigned integer array", {
 
 test_that("Can open Zarr group and read a 1D 4-byte float array, little endian", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -177,7 +177,7 @@ test_that("Can open Zarr group and read a 1D 4-byte float array, little endian",
 
 test_that("Can open Zarr group and read a 1D 4-byte float array, big endian", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -194,7 +194,7 @@ test_that("Can open Zarr group and read a 1D 4-byte float array, big endian", {
 
 test_that("Can open Zarr group and read a 1D 8-byte float array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -211,7 +211,7 @@ test_that("Can open Zarr group and read a 1D 8-byte float array", {
 
 test_that("Can open Zarr group and read a 1D 2-byte float array, 2 chunks", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -228,7 +228,7 @@ test_that("Can open Zarr group and read a 1D 2-byte float array, 2 chunks", {
 
 test_that("Can open Zarr group and read a 1D 2-byte float array, 2 chunks, ragged", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -245,7 +245,7 @@ test_that("Can open Zarr group and read a 1D 2-byte float array, 2 chunks, ragge
 
 test_that("Can open Zarr group and read a 2D 2-byte integer array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -263,7 +263,7 @@ test_that("Can open Zarr group and read a 2D 2-byte integer array", {
 
 test_that("Can open Zarr group and read a 2D 2-byte integer array, 2 chunks", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -281,7 +281,7 @@ test_that("Can open Zarr group and read a 2D 2-byte integer array, 2 chunks", {
 
 test_that("Can open Zarr group and read a 2D 2-byte integer array, 2 chunks, ragged", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -301,7 +301,7 @@ test_that("Can open Zarr group and read a 2D 2-byte integer array, 2 chunks, rag
 
 test_that("Can open Zarr group and read a 1D 1-byte boolean array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -318,7 +318,7 @@ test_that("Can open Zarr group and read a 1D 1-byte boolean array", {
 
 test_that("Can open Zarr group and read a 1D S7 string array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -335,7 +335,7 @@ test_that("Can open Zarr group and read a 1D S7 string array", {
 
 test_that("Can open Zarr group and read a 1D U7 string array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -352,7 +352,7 @@ test_that("Can open Zarr group and read a 1D U7 string array", {
 
 test_that("Can open Zarr group and read a 1D U13 little endian string array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -369,7 +369,7 @@ test_that("Can open Zarr group and read a 1D U13 little endian string array", {
 
 test_that("Can open Zarr group and read a 1D U13 big endian string array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -386,7 +386,7 @@ test_that("Can open Zarr group and read a 1D U13 big endian string array", {
 
 test_that("Can open Zarr group and read a 2D U7 string array", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -403,7 +403,7 @@ test_that("Can open Zarr group and read a 2D U7 string array", {
 
 test_that("Can open Zarr group and read a 1D VLen-UTF8 string array with no compression", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -420,7 +420,7 @@ test_that("Can open Zarr group and read a 1D VLen-UTF8 string array with no comp
 
 test_that("Can open Zarr group and read a 1D VLen-UTF8 string array with Blosc compression", {
 
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -436,7 +436,7 @@ test_that("Can open Zarr group and read a 1D VLen-UTF8 string array with Blosc c
 })
 
 test_that("Can open Zarr group and read a 2D VLen-UTF8 string array with no compression", {
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -452,7 +452,7 @@ test_that("Can open Zarr group and read a 2D VLen-UTF8 string array with no comp
 })
 
 test_that("Can open Zarr group and read a 2D VLen-UTF8 string array with Blosc compression", {
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     g <- ZarrGroup$new(store)
@@ -468,7 +468,7 @@ test_that("Can open Zarr group and read a 2D VLen-UTF8 string array with Blosc c
 })
 
 test_that("DirectoryStore can listdir", {
-    root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+    root <- pizzarr_sample("fixtures/v2/data.zarr")
     
     store <- DirectoryStore$new(root)
     

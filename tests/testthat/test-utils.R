@@ -1,5 +1,19 @@
 library(pizzarr)
 
+test_that("demo data", {
+  
+  demo_data <- pizzarr_sample()
+  
+  expect_true(all(dir.exists(demo_data)))
+  
+  expect_true(all(grepl("zarr$", demo_data)))
+
+  expect_error(pizzarr_sample("borked"), "Dataset not found")
+  
+  expect_true(grepl("bcsd.zarr", pizzarr_sample("bcsd")))
+  
+})
+
 test_that("create_zarray_meta does not throw error when simple dtype is valid", {
   res <- create_zarray_meta(dtype = Dtype$new("|u1"), order = "C", fill_value = 0, dimension_separator = ".")
   expect_equal(class(res$dtype)[[1]], "scalar")
