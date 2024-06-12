@@ -1,10 +1,10 @@
 #' @keywords internal
-normalize_list_selection <- function(selection, shape, convert_integer_selection_to_slices = FALSE) {
+normalize_list_selection <- function(selection, shape, convert_integer_selection_to_slices = TRUE) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/indexing.ts#L45
   selection <- replace_ellipsis(selection, shape)
 
   for(i in seq_along(selection)) {
-    dim_sel <- selection[i]
+    dim_sel <- selection[[i]]
     if(is_integer(dim_sel)) {
       if(convert_integer_selection_to_slices) {
         selection[[i]] <- zb_slice(dim_sel, dim_sel + 1, 1)
@@ -13,7 +13,8 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
       }
     } else if(is_integer_list(dim_sel)) { # TODO: should this be is_integer_vec?
       stop('TypeError(Integer array selections are not supported (yet))')
-    } else if(is.na(dim_sel) || dim_sel == ":") {
+    } else if(!is.null(dim_sel) && !is.environment(dim_sel) && 
+              (is.na(dim_sel) || dim_sel == ":")) {
       selection[[i]] <- zb_slice(NA, NA, 1)
     }
   }
@@ -96,7 +97,7 @@ normalize_storage_path <- function(path) {
 normalize_shape <- function(shape) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
   if(!is.null(shape)) {
-    shape <- ensure_vec(shape)
+    shape <- ensure_integer_vec(shape)
     return(floor(shape))
   }
   return(shape)

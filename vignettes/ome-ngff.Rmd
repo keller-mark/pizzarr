@@ -21,7 +21,7 @@ install.packages("raster")
 library(pizzarr)
 
 # The path to the root of the OME-NGFF Zarr store.
-root <- system.file("extdata", "dog.ome.zarr", package="pizzarr")
+root <- pizzarr_sample("dog.ome.zarr")
 
 # Open the OME-NGFF as a DirectoryStore.
 store <- DirectoryStore$new(root)

@@ -686,7 +686,9 @@ Subset the array.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 }
 \if{html}{\out{</div>}}
 }
@@ -703,7 +705,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{out}}{TODO}
 
@@ -724,7 +728,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{out}}{TODO}
 
@@ -745,7 +751,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{out}}{TODO}
 
@@ -766,7 +774,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{out}}{TODO}
 
@@ -787,7 +797,9 @@ Set a subset of the array.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{value}}{The value to set, as an R array() or a Zarr NestedArray instance.}
 }
@@ -806,7 +818,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{value}}{TODO}
 
@@ -827,7 +841,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{value}}{TODO}
 
@@ -848,7 +864,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{value}}{TODO}
 
@@ -869,7 +887,9 @@ TODO
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects.}
+\item{\code{selection}}{Selections are lists containing either scalars, strings, or Slice objects. Two character
+literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific
+array dimension.}
 
 \item{\code{value}}{TODO}
 
@@ -1018,7 +1038,7 @@ Set values for a selection using bracket notation (for S3 method).
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{Contains the slicing parameters, one for each dimension.
-Use empty space to get whole dimension e.g. \link{1:5,,}}
+Use empty space to get whole dimension e.g. \code{[1:5,,]}}
 }
 \if{html}{\out{</div>}}
 }
@@ -1039,7 +1059,7 @@ Assign values for a selection using bracket notation (for S3 method).
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{...}}{Contains the slicing parameters, one for each dimension.
-Use empty space to get whole dimension e.g. \link{1:5,,}}
+Use empty space to get whole dimension e.g. \code{[1:5,,]}}
 }
 \if{html}{\out{</div>}}
 }

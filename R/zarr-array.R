@@ -3,8 +3,12 @@
 #' The Zarr Array class.
 #' @title ZarrArray Class
 #' @docType class
+#' @importFrom R6 R6Class
 #' @description
 #' Instantiate an array from an initialized store.
+#' @param selection Selections are lists containing either scalars, strings, or Slice objects. Two character
+#' literals are supported: "..." selects all remaining array dimensions and ":" selects all of a specific 
+#' array dimension.
 #'
 #' @rdname ZarrArray
 #' @export
@@ -415,7 +419,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # // the selection. This minimises the number of iterations in the main for loop.
 
       selection_shape <- indexer$shape
-      selection_shape_vec <- ensure_vec(indexer$shape)
+      selection_shape_vec <- ensure_integer_vec(indexer$shape)
       
       # Check value shape
       if (length(selection_shape) == 0) {
@@ -423,12 +427,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
       } else if (is_scalar(value)) {
         # Setting a scalar value
       } else if("array" %in% class(value)) {
-        if (!all(ensure_vec(dim(value)) == selection_shape_vec)) {
+        if (!all(ensure_integer_vec(dim(value)) == selection_shape_vec)) {
           stop("Shape mismatch in source array and set selection: ${dim(value)} and ${selectionShape}")
         }
         value <- NestedArray$new(value, shape = selection_shape_vec, dtype=private$dtype, order = private$order)
       } else if ("NestedArray" %in% class(value)) {
-        if (!all(ensure_vec(value$shape) == selection_shape_vec)) {
+        if (!all(ensure_integer_vec(value$shape) == selection_shape_vec)) {
           stop("Shape mismatch in source NestedArray and set selection: ${value.shape} and ${selectionShape}")
         }
       } else {
@@ -961,7 +965,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' Subset the array.
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
     #' @returns A subset of the array, as a NestedArray instance.
     get_item = function(selection) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
@@ -970,7 +973,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_basic_selection = function(selection = NA, out = NA, fields = NA) {
@@ -986,7 +989,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_orthogonal_selection = function(selection = NA, out = NA, fields = NA) {
@@ -994,7 +997,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_coordinate_selection = function(selection = NA, out = NA, fields = NA) {
@@ -1002,7 +1005,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param out TODO
     #' @param fields TODO
     get_mask_selection = function(selection = NA, out = NA, fields = NA) {
@@ -1010,14 +1013,14 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' Set a subset of the array.
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value The value to set, as an R array() or a Zarr NestedArray instance.
     set_item = function(selection, value) {
       self$set_basic_selection(selection, value)
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_basic_selection = function(selection, value, fields = NA) {
@@ -1029,7 +1032,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_orthogonal_selection = function(selection, value, fields = NA) {
@@ -1037,7 +1040,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_coordinate_selection = function(selection, value, fields = NA) {
@@ -1045,7 +1048,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     },
     #' @description
     #' TODO
-    #' @param selection Selections are lists containing either scalars, strings, or Slice objects.
+
     #' @param value TODO
     #' @param fields TODO
     set_mask_selection = function(selection, value, fields = NA) {
@@ -1105,7 +1108,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' Set values for a selection using bracket notation (for S3 method).
     #'
     #' @param ... Contains the slicing parameters, one for each dimension.
-    #' Use empty space to get whole dimension e.g. [1:5,,]
+    #' Use empty space to get whole dimension e.g. \code{[1:5,,]}
     #'
     #' @return Sliced Zarr object
     #' @keywords internal
@@ -1158,7 +1161,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' @description
     #' Assign values for a selection using bracket notation (for S3 method).
     #' @param ... Contains the slicing parameters, one for each dimension.
-    #' Use empty space to get whole dimension e.g. [1:5,,]
+    #' Use empty space to get whole dimension e.g. \code{[1:5,,]}
     #' @keywords internal
     `[<-` = function(...) {
       stop("Assignment using bracket notation is not yet supported - use set_item() directly")
@@ -1173,7 +1176,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
   )
 )
 
-
 #' S3 method for custom bracket subsetting
 #'
 #' @param obj object
@@ -1186,19 +1188,19 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
 #' S3 method for custom bracket assignment
 #'
-#' @param obj object 
-#' @param ... dots
+#' @param value array or ZarrArray
 #' @keywords internal 
 #' @export
-`[<-.ZarrArray` <- function(obj, ...) {
-  obj$`[<-`(...)
+`[<-.ZarrArray` <- function(obj, ..., value) {
+  obj$`[<-`(value)
 }
 
 #' S3 method for as.array
 #'
 #' @param obj object 
+#' @param ... not used
 #' @keywords internal
 #' @export
-as.array.ZarrArray = function(obj) {
-  obj$as.array()
+as.array.ZarrArray = function(x, ...) {
+  x$as.array()
 }

@@ -18,15 +18,13 @@ BugReports: https://github.com/keller-mark/pizzarr/issues
 URL: https://github.com/keller-mark/pizzarr
 Depends: R (>= 4.0.0)
 Imports:
-    Matrix,
-    rjson,
     jsonlite,
     stats,
-    methods,
     R6,
     qs,
     stringr,
-    memoise
+    memoise,
+    utils
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

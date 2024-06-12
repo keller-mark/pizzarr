@@ -1,6 +1,11 @@
 #' @keywords internal
 zero_based_to_one_based <- function(selection, shape) {
+
+  if(!all(vapply(selection, is_slice, logical(length = 1)))) 
+    stop("selection must be a list of slices")
+  
   selection_list <- list()
+  
   for(i in seq_len(length(selection))) {
     sel <- selection[[i]]
     # We assume the selection uses zero-based indexing,
@@ -8,6 +13,8 @@ zero_based_to_one_based <- function(selection, shape) {
     # before accessing data on the internal self$data.
     sel_start <- sel$start + 1 # Add one, since R indexing is zero-based.
     sel_stop <- sel$stop # Do not subtract one, since R indexing is inclusive.
+    sel_step <- sel$step
+    if(is.na(sel_step)) sel_step <- 1
     # TODO: convert these warnings to errors once we know internals do indexing correctly
     if(sel_start < 1) {
       sel_start <- 1
@@ -25,7 +32,9 @@ zero_based_to_one_based <- function(selection, shape) {
       sel_stop <- shape[i]
       message("IndexError: NestedArray$get() received slice with stop index out of bounds - too high")
     }
-    selection_list <- append(selection_list, list(c(sel_start:sel_stop))) # TODO: support non-1 step
+    selection_list <- append(selection_list, list(seq(from = sel_start, 
+                                                      to = sel_stop, 
+                                                      by = sel_step)))
   }
   return(selection_list)
 }
@@ -106,7 +115,7 @@ NestedArray <- R6::R6Class("NestedArray",
         # Create array from R atomic vector or array().
         num_shape_elements <- compute_size(shape)
         # Check that data array has same shape as expected
-        if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
+        if(!is.null(dim(data)) && all(ensure_integer_vec(dim(data)) == ensure_integer_vec(shape))) {
           self$data <- data
         } else {
           astype_func <- self$dtype_obj$get_asrtype()
@@ -222,17 +231,15 @@ NestedArray <- R6::R6Class("NestedArray",
       # value should be a NestedArray.
       selection_list <- zero_based_to_one_based(selection, self$shape)
 
-      value_data <- value$data
-
       if("NestedArray" %in% class(value)) {
         value_data <- value$data
-      } else if(is_scalar(value)) {
+      } else if(is_scalar(value) | is.array(value)) {
         value_data <- value
       } else {
         message(value)
         stop("Got unexpected type for value in NestedArray$set()")
       }
-
+      
       # Cannot figure out how to dynamically set values in an array
       # of arbitrary dimensions.
       # Tried: abind::afill <- but it doesn't seem to work with arbitrary dims or do.call
@@ -319,9 +326,9 @@ NestedArray <- R6::R6Class("NestedArray",
 
 #' S3 method for as.array
 #'
-#' @param obj 
+#' @param x 
 #' @keywords internal
 #' @export
-as.array.NestedArray = function(obj) {
-  obj$as.array()
+as.array.NestedArray = function(x, ...) {
+  x$as.array()
 }

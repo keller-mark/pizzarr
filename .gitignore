@@ -14,3 +14,4 @@ tests/testthat/test_data
 .ipynb_checkpoints/
 *.ipynb
 .Renviron
+pkgdown/favicon/

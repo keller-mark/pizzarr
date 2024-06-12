@@ -2,7 +2,7 @@
 % Please edit documentation in R/slicing.R
 \name{slice}
 \alias{slice}
-\title{Shortcut for Slice$new() constructor.}
+\title{Convenience function for the internal Slice class constructor.}
 \usage{
 slice(start, stop = NA, step = NA, zero_based = FALSE)
 }
@@ -19,5 +19,5 @@ slice(start, stop = NA, step = NA, zero_based = FALSE)
 A Slice instance with the specified parameters.
 }
 \description{
-Shortcut for Slice$new() constructor.
+Convenience function for the internal Slice class constructor.
 }

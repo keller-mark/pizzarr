@@ -1,3 +1,57 @@
+#' pizzarr demo data
+#' @details
+#' For directory stores, unzips the store to a temporary directory
+#' and returns the resulting path.
+#' 
+#' @param dataset character defining which demo dataset is desired, 
+#' If NULL, all are returned
+#' @param outdir character directory path to store sample zarr stores
+#' 
+#' @return path to ready to use zarr store
+#' @export
+#' @examples
+#' zarr_samples <- pizzarr_sample()
+#' 
+#' #printing without system path for example
+#' gsub(tempdir(), "...", zarr_samples, fixed = TRUE)
+#' 
+pizzarr_sample <- function(dataset = NULL, 
+                           outdir = file.path(tempdir(TRUE), "pizzarr_sample")) {
+  # will unzip here
+  tdir <- outdir
+  dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
+  
+  # source data
+  sdir <- system.file("extdata", package = "pizzarr")
+  zarr_zips <- list.files(sdir, pattern = ".zarr.zip", 
+                         full.names = TRUE, recursive = TRUE)
+  
+  avail <- gsub(paste0(sdir, "/"), "", gsub(".zip", "", zarr_zips))
+  
+  # if dataset is specified select it
+  if(!is.null(dataset)) {
+    f <- grepl(dataset, zarr_zips, fixed = TRUE)
+    zarr_zips <- zarr_zips[f]
+    
+    # if dataset not found, stop and print available datasets
+    if(length(zarr_zips) == 0) {
+      stop("Dataset not found\n\tMust be one of:\n\t  \"",
+           paste(avail, collapse = "\"\n\t  \""), "\"")
+    }
+    
+    avail <- avail[f]
+  }
+  
+  # in case zarr_zips is all, loop over them and unzip
+  for(z in seq_along(zarr_zips)) {
+    utils::unzip(zarr_zips[z], 
+                 exdir = file.path(tdir, dirname(avail[z])))
+  }
+  
+  return(file.path(tdir, avail))
+  
+}
+
 #' Convert a string into a character vector.
 #' 
 #' @param s The string.
@@ -297,4 +351,23 @@ item_to_key <- function(item) {
 
 try_from_zmeta <- function(key, store) {
   store$get_consolidated_metadata()$metadata[[key]]
+}
+
+try_fromJSON <- function(json, warn_message = "Error parsing json was", 
+                         simplifyVector = FALSE) {
+  out <- tryCatch({
+    jsonlite::fromJSON(json, simplifyVector)
+  }, error = \(e) {
+    if(grepl("NaN", e)) {
+      tryCatch({
+        jsonlite::fromJSON(gsub("NaN", "null", json), simplifyVector)
+      }, error = \(e) {
+        warning("\n\n", warn_message, "\n\n", e)
+        NULL
+      })
+    } else {
+      warning("\n\n", warn_message, "\n\n", e)
+      NULL
+    }
+  })
 }

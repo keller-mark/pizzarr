@@ -11,7 +11,7 @@ Metadata2 <- R6::R6Class("Metadata2",
             if(is.list(s)) {
                 return(s)
             } else {
-                return(jsonlite::fromJSON(rawToChar(s), simplifyVector = FALSE, auto_unbox = auto_unbox))
+                return(try_fromJSON(rawToChar(s), simplifyVector = FALSE))
             }
         },
         encode_metadata = function(meta, auto_unbox=FALSE) {
@@ -19,26 +19,30 @@ Metadata2 <- R6::R6Class("Metadata2",
         },
         decode_array_metadata = function(s) {
             meta <- self$decode_metadata(s)
-            # TODO: check zarr format is v2
+            validate_v2_meta(meta)
             return(meta)
         },
         decode_group_metadata = function(s) {
             meta <- self$decode_metadata(s)
-            # TODO: check zarr format is v2
+            validate_v2_meta(meta)
             return(meta)
         },
         encode_array_metadata = function(meta) {
             clean_meta <- meta
-            clean_meta[['zarr_format']] <- private$ZARR_FORMAT
+            clean_meta[['zarr_format']] <- jsonlite::unbox(private$ZARR_FORMAT)
             # TODO: clean up meta even further
             return(self$encode_metadata(clean_meta))
         },
         encode_group_metadata = function(meta = NA) {
             meta <- obj_list()
-            meta[['zarr_format']] <- private$ZARR_FORMAT
+            meta[['zarr_format']] <- jsonlite::unbox(private$ZARR_FORMAT)
             return(self$encode_metadata(meta))
         }
     )
 )
+
+validate_v2_meta <- function(meta) {
+  if(meta$zarr_format != 2) stop("unsupported zarr format ", meta$zarr_format)
+}
 
 # TODO: v3 metadata

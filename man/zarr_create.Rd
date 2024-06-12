@@ -2,7 +2,7 @@
 % Please edit documentation in R/creation.R
 \name{zarr_create}
 \alias{zarr_create}
-\title{Create an array}
+\title{Create an empty array}
 \usage{
 zarr_create(
   shape,
@@ -99,5 +99,5 @@ with checking the data of each chunk.}
 ZarrArray
 }
 \description{
-Create an array
+Create an empty array
 }

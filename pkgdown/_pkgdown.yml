@@ -76,6 +76,7 @@ reference:
   - as_scalar
   - is_scalar
   - is_key_error
+  - pizzarr_sample
   - Dtype
 
 

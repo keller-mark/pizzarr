@@ -6,6 +6,7 @@
 \usage{
 zarr_open_array(
   store = NA,
+  storage_options = NA,
   mode = NA,
   shape = NA,
   chunks = TRUE,
@@ -28,6 +29,10 @@ zarr_open_array(
 \arguments{
 \item{store}{: MutableMapping or string
 Store or path to directory in file system or name of zip file.}
+
+\item{storage_options}{: dict
+If using an fsspec URL to create the store, these will be passed to
+the backend implementation. Ignored otherwise.}
 
 \item{mode}{: {'r', 'r+', 'a', 'w', 'w-'}, optional
 Persistence mode: 'r' means read only (must exist); 'r+' means

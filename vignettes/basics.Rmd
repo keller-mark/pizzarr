@@ -64,7 +64,7 @@ print(a$get_shape())
 ## List arrays in a zarr root group
 
 ```{r}
-root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+root <- pizzarr_sample("fixtures/v2/data.zarr")
 
 z <- zarr_open(root)
 
@@ -80,7 +80,7 @@ print(store$listdir())
 ## Open a ZarrArray from a DirectoryStore (convenience)
 
 ```{r}
-root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+root <- pizzarr_sample("fixtures/v2/data.zarr")
 
 g <- zarr_open_group(root)
 a <- g$get_item("1d.contiguous.lz4.i2")
@@ -91,7 +91,7 @@ print(a$get_shape())
 ## Open a ZarrArray from a DirectoryStore
 
 ```{r}
-root <- system.file("extdata", "fixtures", "v2", "data.zarr", package="pizzarr")
+root <- pizzarr_sample("fixtures/v2/data.zarr")
     
 store <- DirectoryStore$new(root)
 g <- ZarrGroup$new(store)
@@ -103,7 +103,7 @@ print(a$get_shape())
 ## Get attributes from a root group and ZarrArray
 
 ```{r}
-root <- system.file("extdata", "dog.ome.zarr", package="pizzarr")
+root <- pizzarr_sample("dog.ome.zarr")
 
 z <- zarr_open(root)
 
