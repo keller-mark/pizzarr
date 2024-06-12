@@ -115,7 +115,7 @@ NestedArray <- R6::R6Class("NestedArray",
         # Create array from R atomic vector or array().
         num_shape_elements <- compute_size(shape)
         # Check that data array has same shape as expected
-        if(!is.null(dim(data)) && all(ensure_vec(dim(data)) == ensure_vec(shape))) {
+        if(!is.null(dim(data)) && all(ensure_integer_vec(dim(data)) == ensure_integer_vec(shape))) {
           self$data <- data
         } else {
           astype_func <- self$dtype_obj$get_asrtype()

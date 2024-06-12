@@ -97,7 +97,7 @@ normalize_storage_path <- function(path) {
 normalize_shape <- function(shape) {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/util.ts#L69
   if(!is.null(shape)) {
-    shape <- ensure_vec(shape)
+    shape <- ensure_integer_vec(shape)
     return(floor(shape))
   }
   return(shape)

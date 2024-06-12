@@ -419,7 +419,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # // the selection. This minimises the number of iterations in the main for loop.
 
       selection_shape <- indexer$shape
-      selection_shape_vec <- ensure_vec(indexer$shape)
+      selection_shape_vec <- ensure_integer_vec(indexer$shape)
       
       # Check value shape
       if (length(selection_shape) == 0) {
@@ -427,12 +427,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
       } else if (is_scalar(value)) {
         # Setting a scalar value
       } else if("array" %in% class(value)) {
-        if (!all(ensure_vec(dim(value)) == selection_shape_vec)) {
+        if (!all(ensure_integer_vec(dim(value)) == selection_shape_vec)) {
           stop("Shape mismatch in source array and set selection: ${dim(value)} and ${selectionShape}")
         }
         value <- NestedArray$new(value, shape = selection_shape_vec, dtype=private$dtype, order = private$order)
       } else if ("NestedArray" %in% class(value)) {
-        if (!all(ensure_vec(value$shape) == selection_shape_vec)) {
+        if (!all(ensure_integer_vec(value$shape) == selection_shape_vec)) {
           stop("Shape mismatch in source NestedArray and set selection: ${value.shape} and ${selectionShape}")
         }
       } else {
