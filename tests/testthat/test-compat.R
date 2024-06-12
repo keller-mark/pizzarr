@@ -2,7 +2,7 @@ library(pizzarr)
 
 test_that("Can open Zarr group using convenience function", {
 
-    root <- pizzarr_sample("fixtures/v2/data.zarr")
+    root <- pizzarr_sample(file.path("fixtures", "v2", "data.zarr"))
     
     g <- zarr_open_group(root)
     a <- g$get_item("1d.contiguous.lz4.i2")
