@@ -1,7 +1,5 @@
 # pizzarr <a href="https://keller-mark.github.io/pizzarr/"><img src="man/figures/logo.png" align="right" height="139" alt="pizzarr website" /></a>
 
-# pizzarr
-
 A Zarr implementation for R.
 
 ## Installation
