@@ -119,7 +119,7 @@ slice <- function(start, stop = NA, step = NA, zero_based = FALSE) {
   ))
 }
 
-#' Convenience function for the internal Sliceclass constructor 
+#' Convenience function for the internal Slice class constructor 
 #' with zero-based indexing and exclusive stop index.
 #' @param start The start index.
 #' @param stop The stop index.

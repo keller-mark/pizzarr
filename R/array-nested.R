@@ -239,24 +239,27 @@ NestedArray <- R6::R6Class("NestedArray",
         message(value)
         stop("Got unexpected type for value in NestedArray$set()")
       }
-      
-      # Cannot figure out how to dynamically set values in an array
-      # of arbitrary dimensions.
-      # Tried: abind::afill <- but it doesn't seem to work with arbitrary dims or do.call
-      if(length(selection_list) == 1) {
-        self$data[selection_list[[1]]] <- value_data
-      } else if(length(selection_list) == 2) {
-        self$data[selection_list[[1]], selection_list[[2]]] <- value_data
-      } else if(length(selection_list) == 3) {
-        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]]] <- value_data
-      } else if(length(selection_list) == 4) {
-        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]]] <- value_data
-      } else if(length(selection_list) == 5) {
-        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]]] <- value_data
-      } else if(length(selection_list) == 6) {
-        self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]], selection_list[[6]]] <- value_data
-      } else {
-        stop("NestedArray$set() can only handle up to 6D arrays at the moment. Please make a feature request if you need to handle more dims.")
+
+      # Only set values if the array is not meant to be empty.
+      if(sum(length(value_data)) > 0 || sum(dim(value_data)) > 0) {
+        # Cannot figure out how to dynamically set values in an array
+        # of arbitrary dimensions.
+        # Tried: abind::afill <- but it doesn't seem to work with arbitrary dims or do.call
+        if(length(selection_list) == 1) {
+          self$data[selection_list[[1]]] <- value_data
+        } else if(length(selection_list) == 2) {
+          self$data[selection_list[[1]], selection_list[[2]]] <- value_data
+        } else if(length(selection_list) == 3) {
+          self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]]] <- value_data
+        } else if(length(selection_list) == 4) {
+          self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]]] <- value_data
+        } else if(length(selection_list) == 5) {
+          self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]]] <- value_data
+        } else if(length(selection_list) == 6) {
+          self$data[selection_list[[1]], selection_list[[2]], selection_list[[3]], selection_list[[4]], selection_list[[5]], selection_list[[6]]] <- value_data
+        } else {
+          stop("NestedArray$set() can only handle up to 6D arrays at the moment. Please make a feature request if you need to handle more dims.")
+        }
       }
     },
     #' @description
