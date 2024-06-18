@@ -41,9 +41,35 @@ test_that("slice gets converted to zb_slice", {
 test_that("step size greater than 1", {
   g <- zarr_volcano()
   
-  s <- slice(1, 21, 2)
+  s1 <- slice(1, 11, 1)
+  s2 <- slice(1, 11, 2)
+  s3 <- slice(1, 11, 3)
   
-  d <- g$get_item("volcano")$get_item(list(s, s))$data
+  d1 <- g$get_item("volcano")$get_item(list(s1, s1))$data
+  d2 <- g$get_item("volcano")$get_item(list(s2, s2))$data
+  d3 <- g$get_item("volcano")$get_item(list(s3, s3))$data
   
-  expect_equal(dim(d), c(11, 11))
+  expect_equal(dim(d1), c(11, 11))
+  expect_equal(dim(d2), c(6, 6))
+  expect_equal(dim(d3), c(4, 4))
+
+  # ground truth for the volcano section with step size 2
+  a2 <- t(array(data=c(
+    100, 101, 101, 101, 100, 101,
+    102, 103, 103, 103, 102, 103,
+    104, 105, 105, 105, 104, 104,
+    105, 106, 107, 107, 106, 105,
+    107, 108, 109, 109, 108, 108,
+    109, 110, 111, 111, 110, 112
+  ), dim=c(6, 6)))
+  expect_equal(d2, a2)
+
+  # ground truth for the volcano section with step size 3
+  a3 <- t(array(data=c(
+    100, 101, 101, 100,
+    103, 104, 104, 103,
+    105, 107, 107, 105,
+    108, 110, 110, 108
+  ), dim=c(4, 4)))
+  expect_equal(d3, a3)
 })
