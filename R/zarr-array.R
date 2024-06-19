@@ -454,30 +454,22 @@ ZarrArray <- R6::R6Class("ZarrArray",
         stop("Unknown data type for setting :(")
       }
 
-      # TODO: use queue to handle async iterator
-      for (proj in indexer$iter()) {
-        chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
-        private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
-
-        # TODO: use queue to handle async iterator
-        if(getOption("pizzarr.parallel_write_enabled")) {
-          if(!requireNamespace("foreach", quietly=TRUE)) {
-            stop("Parallel writing requires the 'foreach' package.")
-          }
-          # If optional package "foreach" is installed, try to run in parallel.
-          foreach::foreach(proj=indexer$iter(), .combine = c, .inorder = FALSE, .init = NULL) %dopar% {
-            chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
-            private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
-            NULL # return null since we are not using the combined result
-          }
-        } else {
-          # Foreach package was not installed, instead use a normal for loop.
-          for (proj in indexer$iter()) {
-            chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
-            private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
-          }
+      if(getOption("pizzarr.parallel_write_enabled")) {
+        if(!requireNamespace("foreach", quietly=TRUE)) {
+          stop("Parallel writing requires the 'foreach' package.")
         }
-        
+        # If optional package "foreach" is installed, try to run in parallel.
+        foreach::foreach(proj=indexer$iter(), .combine = c, .inorder = FALSE, .init = NULL) %dopar% {
+          chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
+          private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
+          NULL # return null since we are not using the combined result
+        }
+      } else {
+        # Foreach package was not installed, instead use a normal for loop.
+        for (proj in indexer$iter()) {
+          chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
+          private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
+        }
       }
     },
     #' @description
