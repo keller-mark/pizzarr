@@ -79,7 +79,7 @@ test_that("Can open Zarr group and read a 1D 2-byte integer array with Blosc com
         expect_equal(selection$data, array(data=c(1, 2, 3, 4), dim=c(4)))
     }
 
-    if(require("Rarr", quietly=TRUE)) {
+    if(requireNamespace("Rarr", quietly=TRUE)) {
         f()
     } else {
         expect_error(f())

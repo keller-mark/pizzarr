@@ -363,16 +363,36 @@ HttpStore <- R6::R6Class("HttpStore",
     headers = NULL,
     client = NULL,
     zmetadata = NULL,
-    mem_get = NULL,
-    cache_time_seconds = 3600,
+    make_request_memoized = NULL,
+    cache_enabled = NULL,
+    cache_time_seconds = NULL,
     make_request = function(item) {
       key <- item_to_key(item)
-      
-      # mem_get caches in memory on a per-session basis.
-      res <- private$mem_get(private$client, 
-                             paste(private$base_path, key, sep="/"))
-      
-      return(res)
+
+      # For some reason, the crul::HttpClient fails in parallel settings
+      # (when used inside foreach %dopar% loops). This alternative
+      # with HttpRequest and AsyncVaried seems to work.
+      # Reference: https://docs.ropensci.org/crul/articles/async.html
+      req <- crul::HttpRequest$new(
+        url = private$domain,
+        opts = private$options,
+        headers = private$headers
+      )
+      req$get(path = paste(private$base_path, key, sep="/"))
+      res <- crul::AsyncVaried$new(req)
+      res$request()
+
+      return(unclass(res$responses())[[1]])
+    },
+    memoize_make_request = function() {
+      if(private$cache_enabled) {
+        private$make_request_memoized <-  memoise::memoise(
+          function(key) private$make_request(key), 
+          ~memoise::timeout(private$cache_time_seconds)
+        )
+      } else {
+        private$make_request_memoized <- private$make_request
+      }
     },
     get_zmetadata = function() {
       res <- private$make_request(".zmetadata")
@@ -405,16 +425,14 @@ HttpStore <- R6::R6Class("HttpStore",
       private$domain <- paste(segments[1:3], collapse="/")
       private$base_path <- paste(segments[4:length(segments)], collapse="/")
       
-      if(!requireNamespace("crul", quietly = TRUE)) stop("HttpStore requires the crul package")
-      
-      private$client <- crul::HttpClient$new(
-        url = private$domain,
-        opts = private$options,
-        headers = private$headers
-      )
-      
-      private$mem_get <-  memoise(function(client, path) client$get(path), 
-                                           ~timeout(private$cache_time_seconds))
+      if(!requireNamespace("crul", quietly = TRUE)) {
+        stop("HttpStore requires the crul package")
+      }
+
+      private$cache_time_seconds <- getOption("pizzarr.http_store_cache_time_seconds")
+      private$cache_enabled <- private$cache_time_seconds > 0
+
+      private$memoize_make_request()
       
       private$zmetadata <- private$get_zmetadata()
     },
@@ -423,7 +441,7 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param item The item key.
     #' @return The item data in a vector of type raw.
     get_item = function(item) {
-      res <- private$make_request(item)
+      res <- private$make_request_memoized(item)
       return(res$content)
     },
     #' @description
@@ -438,7 +456,7 @@ HttpStore <- R6::R6Class("HttpStore",
       } else if(!is.null(self$get_consolidated_metadata())) {
         return(FALSE)
       } else {
-        res <- private$make_request(item)
+        res <- private$make_request_memoized(item)
         
         return(res$status_code == 200)        
       }
@@ -475,6 +493,8 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param seconds number of seconds until cache is invalid -- 0 for no cache
     set_cache_time_seconds = function(seconds) {
       private$cache_time_seconds <- seconds
+      # We need to re-memoize.
+      private$memoize_make_request()
     }
   )
 )

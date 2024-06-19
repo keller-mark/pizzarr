@@ -38,4 +38,7 @@ Suggests:
     rmarkdown,
     crul,
     Rarr,
-    vcr (>= 0.6.0)
+    vcr (>= 0.6.0),
+    foreach,
+    doParallel,
+    bench
