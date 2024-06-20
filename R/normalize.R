@@ -180,7 +180,7 @@ guess_chunks <- function(shape, typesize) {
         break  # Element size larger than CHUNK_MAX
       }
 
-      chunks[idx %% ndims] <- ceiling(chunks[idx %% ndims] / 2.0)
+      chunks[idx %% ndims + 1] <- ceiling(chunks[idx %% ndims + 1] / 2.0)
       idx <- idx + 1
   }
 
