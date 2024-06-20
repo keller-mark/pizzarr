@@ -1,5 +1,18 @@
 library(pizzarr)
 
+test_that("no infinite loop", {
+    shape <- c(27557749)
+    dtype <- "<i4"
+    chunks <- NA
+
+    dtype <- normalize_dtype(dtype, object_codec = NA)
+    shape <- normalize_shape(shape)
+    
+    dtype_itemsize <- dtype$num_bytes
+    chunks <- normalize_chunks(chunks, shape, dtype_itemsize)
+    expect_equal(chunks, c(215295))
+})
+
 test_that("can get array that spans multiple chunks", {
     a <- array(data=1:100, dim=c(10, 10))
     #      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]

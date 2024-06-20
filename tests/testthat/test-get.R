@@ -16,7 +16,7 @@ test_that("get_basic_selection_zd", {
 })
 
 test_that("get_basic_selection_zd with anndataR IntScalar fixture", {
-    root <- pizzarr_sample("fixtures/v2/example.zarr")
+    root <- pizzarr_sample(file.path("fixtures", "v2", "example.zarr"))
     
     store <- DirectoryStore$new(root)
     z <- zarr_open_array(store, path = "uns/IntScalar")
@@ -30,7 +30,7 @@ test_that("get_basic_selection_zd with anndataR IntScalar fixture", {
 })
 
 test_that("get_basic_selection_zd with anndataR StringScalar fixture", {
-    root <- pizzarr_sample("fixtures/v2/example.zarr")
+    root <- pizzarr_sample(file.path("fixtures", "v2", "example.zarr"))
     
     store <- DirectoryStore$new(root)
     z <- zarr_open_array(store, path = "uns/StringScalar")
@@ -256,7 +256,7 @@ test_that("get_basic_selection_3d(one-based) - can get_item for three-dimensiona
 })
 
 test_that("Can read 2D string array", {
-    root <- pizzarr_sample("fixtures/v2/example.zarr")
+    root <- pizzarr_sample(file.path("fixtures", "v2", "example.zarr"))
     store <- DirectoryStore$new(root)
     z <- zarr_open_array(store, path = "uns/String2D")
     nested_arr <- z$get_item("...")
