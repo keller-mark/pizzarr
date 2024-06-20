@@ -221,7 +221,13 @@ TODO
 TODO
 
 
-TODO
+For parallel usage
+
+
+For parallel usage
+
+
+For non-parallel usage
 
 
 TODO

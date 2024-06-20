@@ -1,9 +1,6 @@
 # Adapted from https://github.com/IRkernel/IRkernel/blob/master/R/options.r
 
-#' @usage
 #' pizzarr_option_defaults
-#' 
-#' @rdname pizzarr-package
 #' @export
 pizzarr_option_defaults <- list(
     pizzarr.http_store_cache_time_seconds = 3600,
@@ -11,6 +8,7 @@ pizzarr_option_defaults <- list(
     pizzarr.parallel_write_enabled = FALSE
 )
 
+#' @keywords internal
 from_env <- list(
     PIZZARR_HTTP_STORE_CACHE_TIME_SECONDS = as.integer,
     PIZZARR_PARALLEL_READ_ENABLED = as.logical,

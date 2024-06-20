@@ -3,7 +3,7 @@
 #' The Zarr Array class.
 #' @title ZarrArray Class
 #' @docType class
-#' @importFrom R6 R6Class
+#' @importFrom foreach %dopar%
 #' @description
 #' Instantiate an array from an initialized store.
 #' @param selection Selections are lists containing either scalars, strings, or Slice objects. Two character

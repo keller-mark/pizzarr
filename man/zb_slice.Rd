@@ -2,7 +2,7 @@
 % Please edit documentation in R/slicing.R
 \name{zb_slice}
 \alias{zb_slice}
-\title{Convenience function for the internal Sliceclass constructor
+\title{Convenience function for the internal Slice class constructor
 with zero-based indexing and exclusive stop index.}
 \usage{
 zb_slice(start, stop = NA, step = NA)
@@ -15,6 +15,6 @@ zb_slice(start, stop = NA, step = NA)
 \item{step}{The step size.}
 }
 \description{
-Convenience function for the internal Sliceclass constructor
+Convenience function for the internal Slice class constructor
 with zero-based indexing and exclusive stop index.
 }

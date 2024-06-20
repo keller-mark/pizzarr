@@ -346,7 +346,6 @@ MemoryStore <- R6::R6Class("MemoryStore",
 #' HttpStore for Zarr
 #' @title HttpStore Class
 #' @docType class
-#' @importFrom memoise memoise timeout
 #' @description
 #' Store class that uses HTTP requests.
 #' Read-only. Depends on the `crul` package.
