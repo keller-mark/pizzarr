@@ -1,7 +1,5 @@
 library(pizzarr)
 
-pbapply::pboptions(type = "none")
-
 SlowGettingDirectoryStore <- R6::R6Class("SlowGettingDirectoryStore",
   inherit = DirectoryStore,
   public = list(
@@ -68,7 +66,6 @@ run_parallel_set <- function(num_workers) {
 }
 
 test_that("can run get_item() in parallel", {
-
   bench_df <- bench::mark(
     run_parallel_get(1),
     run_parallel_get(2),
@@ -81,11 +78,9 @@ test_that("can run get_item() in parallel", {
   expect_equal(unlist(bench_df$result), rep(134538481, 3))
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   expect_equal(bench_df$total_time[[2]] > bench_df$total_time[[3]], TRUE)
-  
 })
 
 test_that("can run set_item() in parallel", {
-
   bench_df <- bench::mark(
     run_parallel_set(1),
     run_parallel_set(2),
@@ -98,5 +93,27 @@ test_that("can run set_item() in parallel", {
   expect_equal(unlist(bench_df$result), rep(134538481*2.0, 3))
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   expect_equal(bench_df$total_time[[2]] > bench_df$total_time[[3]], TRUE)
-  
+})
+
+test_that("parse_parallel_option works as expected", {
+  expect_equal(parse_parallel_option("future"), "future")
+  expect_equal(parse_parallel_option("0"), FALSE)
+  expect_equal(parse_parallel_option(0), FALSE)
+  expect_equal(parse_parallel_option("FALSE"), FALSE)
+  expect_equal(parse_parallel_option(FALSE), FALSE)
+  expect_equal(parse_parallel_option("1"), TRUE)
+  expect_equal(parse_parallel_option(1), TRUE)
+  expect_equal(parse_parallel_option("TRUE"), TRUE)
+  expect_equal(parse_parallel_option(TRUE), TRUE)
+  expect_equal(parse_parallel_option("2"), 2)
+  expect_equal(parse_parallel_option(2), 2)
+})
+
+test_that("is_truthy_parallel_option works as expected", {
+  expect_equal(is_truthy_parallel_option("future"), TRUE)
+  expect_equal(is_truthy_parallel_option(FALSE), FALSE)
+  expect_equal(is_truthy_parallel_option(0), FALSE)
+  expect_equal(is_truthy_parallel_option(TRUE), TRUE)
+  expect_equal(is_truthy_parallel_option(1), TRUE)
+  expect_equal(is_truthy_parallel_option(2), TRUE)
 })

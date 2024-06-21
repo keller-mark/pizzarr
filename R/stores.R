@@ -370,6 +370,7 @@ HttpStore <- R6::R6Class("HttpStore",
       path <- paste(private$base_path, key, sep="/")
 
       parallel_option <- getOption("pizzarr.parallel_read_enabled")
+      parallel_option <- parse_parallel_option(parallel_option)
       is_parallel <- is_truthy_parallel_option(parallel_option)
 
       if(is_parallel) {

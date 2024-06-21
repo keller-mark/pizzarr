@@ -13,8 +13,8 @@ parse_parallel_option <- function(val) {
   if(val == "future") {
     return("future")
   }
-  logical_val <- as.logical(val)
-  integer_val <- as.integer(val)
+  logical_val <- suppressWarnings(as.logical(val))
+  integer_val <- suppressWarnings(as.integer(val))
 
   if(is.na(integer_val)) {
     return(logical_val)
