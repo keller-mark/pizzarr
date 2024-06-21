@@ -367,21 +367,25 @@ HttpStore <- R6::R6Class("HttpStore",
     cache_time_seconds = NULL,
     make_request = function(item) {
       key <- item_to_key(item)
+      path <- paste(private$base_path, key, sep="/")
 
-      # For some reason, the crul::HttpClient fails in parallel settings
-      # (when used inside foreach %dopar% loops). This alternative
-      # with HttpRequest and AsyncVaried seems to work.
-      # Reference: https://docs.ropensci.org/crul/articles/async.html
-      req <- crul::HttpRequest$new(
-        url = private$domain,
-        opts = private$options,
-        headers = private$headers
-      )
-      req$get(path = paste(private$base_path, key, sep="/"))
-      res <- crul::AsyncVaried$new(req)
-      res$request()
-
-      return(unclass(res$responses())[[1]])
+      if(getOption("pizzarr.parallel_read_enabled")) {
+        # For some reason, the crul::HttpClient fails in parallel settings
+        # (when used inside foreach %dopar% loops). This alternative
+        # with HttpRequest and AsyncVaried seems to work.
+        # Reference: https://docs.ropensci.org/crul/articles/async.html
+        req <- crul::HttpRequest$new(
+          url = private$domain,
+          opts = private$options,
+          headers = private$headers
+        )
+        req$get(path = path)
+        res <- crul::AsyncVaried$new(req)
+        res$request()
+        return(unclass(res$responses())[[1]])
+      } else {
+        return(private$client$get(path = path))
+      }
     },
     memoize_make_request = function() {
       if(private$cache_enabled) {
@@ -427,6 +431,12 @@ HttpStore <- R6::R6Class("HttpStore",
       if(!requireNamespace("crul", quietly = TRUE)) {
         stop("HttpStore requires the crul package")
       }
+
+      private$client <- crul::HttpClient$new(
+        url = private$domain,
+        opts = private$options,
+        headers = private$headers
+      )
 
       private$cache_time_seconds <- getOption("pizzarr.http_store_cache_time_seconds")
       private$cache_enabled <- private$cache_time_seconds > 0
