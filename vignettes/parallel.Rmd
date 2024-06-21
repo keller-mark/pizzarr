@@ -15,12 +15,16 @@ vignette: >
 )
 ```
 
-```{r}
-library(pizzarr)
-```
-
 By default, reads and writes are performed sequentially (i.e., not in parallel).
 Users can opt-in to parallel read/write functionality via `options`.
+
+```{r}
+library(pizzarr)
+
+if(!requireNamespace("pbapply", quietly = TRUE)) {
+    install.packages("pbapply")
+}
+```
 
 ## Simulate slow operations
 
