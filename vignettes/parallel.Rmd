@@ -13,7 +13,10 @@ vignette: >
   comment = "#>",
   out.width = "100%"
 )
-devtools::load_all()
+```
+
+```{r}
+library(pizzarr)
 ```
 
 By default, reads and writes are performed sequentially (i.e., not in parallel).
