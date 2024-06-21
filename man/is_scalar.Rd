@@ -2,7 +2,7 @@
 % Please edit documentation in R/atomic.R
 \name{is_scalar}
 \alias{is_scalar}
-\title{Check if a value is a scalar.}
+\title{Check if a value is a scalar (i.e., a one-element vector that was converted with as_scalar).}
 \usage{
 is_scalar(s)
 }
@@ -13,5 +13,5 @@ is_scalar(s)
 TRUE if the value is a scalar, FALSE otherwise.
 }
 \description{
-Check if a value is a scalar.
+Check if a value is a scalar (i.e., a one-element vector that was converted with as_scalar).
 }

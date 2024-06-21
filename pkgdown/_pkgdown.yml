@@ -77,6 +77,7 @@ reference:
   - is_scalar
   - is_key_error
   - pizzarr_sample
+  - pizzarr_option_defaults
   - Dtype
 
 
@@ -88,6 +89,7 @@ articles:
       - ome-ngff
       - remote-ome-ngff
       - remote-anndata
+      - parallel
   - title: Articles
     navbar: Troubleshooting
     contents:

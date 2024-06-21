@@ -3,7 +3,6 @@
 #' The Zarr Array class.
 #' @title ZarrArray Class
 #' @docType class
-#' @importFrom R6 R6Class
 #' @description
 #' Instantiate an array from an initialized store.
 #' @param selection Selections are lists containing either scalars, strings, or Slice objects. Two character
@@ -324,9 +323,27 @@ ZarrArray <- R6::R6Class("ZarrArray",
         return(out)
       }
 
-      # TODO: use queue to handle async iterator
-      for(proj in indexer$iter()) {
-        private$chunk_getitem(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
+      parallel_option <- getOption("pizzarr.parallel_read_enabled")
+      cl <- parse_parallel_option(parallel_option)
+      is_parallel <- is_truthy_parallel_option(cl)
+      
+      apply_func <- lapply
+      if(is_parallel) {
+        if(!requireNamespace("pbapply", quietly = TRUE)) {
+          stop("Parallel reading requires the 'pbapply' package.")
+        }
+        apply_func <- pbapply::pblapply
+      }
+
+      parts <- indexer$iter()
+      part1_results <- apply_func(parts, function(proj, cl = NA) {
+        private$chunk_getitem_part1(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
+      }, cl = cl)
+
+      for(i in seq_along(parts)) {
+        proj <- parts[[i]]
+        part1_result <- part1_results[[i]]
+        private$chunk_getitem_part2(part1_result, proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
       }
 
       # Return scalar instead of zero-dimensional array.
@@ -441,11 +458,26 @@ ZarrArray <- R6::R6Class("ZarrArray",
           stop("Unknown data type for setting :(")
         }
 
-        # TODO: use queue to handle async iterator
-        for (proj in indexer$iter()) {
+        parallel_option <- getOption("pizzarr.parallel_write_enabled")
+        cl <- parse_parallel_option(parallel_option)
+        is_parallel <- is_truthy_parallel_option(cl)
+        
+        apply_func <- lapply
+        if(is_parallel) {
+          if(!requireNamespace("pbapply", quietly=TRUE)) {
+            stop("Parallel writing requires the 'pbapply' package.")
+          }
+          apply_func <- pbapply::pblapply
+        }
+
+        parts <- indexer$iter()
+        apply_func(parts, function(proj, cl = NA) {
           chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
           private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
-        }
+          NULL
+        }, cl = cl)
+        
+        return()
       }
     },
     #' @description
@@ -480,7 +512,71 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # TODO
     },
     #' @description
-    #' TODO
+    #' For parallel usage
+    chunk_getitem_part1 = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
+      if(length(chunk_coords) != length(private$chunks)) {
+        stop("Inconsistent shapes: chunkCoordsLength: ${chunkCoords.length}, cDataShapeLength: ${this.chunkDataShape.length}")
+      }
+      c_key <- private$chunk_key(chunk_coords)
+
+      result <- tryCatch({
+        c_data <- self$get_chunk_store()$get_item(c_key)
+        decoded_chunk <- private$decode_chunk(c_data)
+        chunk_nested_arr <- NestedArray$new(decoded_chunk, shape=private$chunks, dtype=private$dtype, order = private$order)
+        return(list(
+          status = "success",
+          value = chunk_nested_arr
+        ))
+      }, error = function(cond) {
+        return(list(status = "error", value = cond))
+      })
+      return(result)
+    },
+    #' @description
+    #' For parallel usage
+    chunk_getitem_part2 = function(part1_result, chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
+      c_key <- private$chunk_key(chunk_coords)
+
+      if(part1_result$status == "success") {
+        chunk_nested_arr <- part1_result$value
+
+        if("NestedArray" %in% class(out)) {
+          if(is_contiguous_selection(out_selection) && is_total_slice(chunk_selection, private$chunks) && is.null(private$filters)) {
+            out$set(out_selection, chunk_nested_arr)
+            return(TRUE)
+          }
+
+          # Decode chunk
+          chunk <- chunk_nested_arr
+          tmp <- chunk$get(chunk_selection)
+
+          if(!is_na(drop_axes)) {
+            stop("Drop axes is not supported yet")
+          }
+          out$set(out_selection, tmp)
+        } else {
+          # RawArray
+          # Copies chunk by index directly into output. Doesn't matter if selection is contiguous
+          # since store/output are different shapes/strides.
+          #out$set(out_selection, private$chunk_buffer_to_raw_array(decoded_chunk), chunk_selection)
+          stop("TODO: support out for chunk_getitem")
+        }
+      } else {
+        # There was an error - this corresponds to the Catch statement in the non-parallel version.
+        cond <- part1_result$value
+        if(is_key_error(cond)) {
+          # fill with scalar if cKey doesn't exist in store
+          if(!is_na(private$fill_value)) {
+            out$set(out_selection, as_scalar(private$fill_value))
+          }
+        } else {
+          print(cond$message)
+          stop("Different type of error - rethrow")
+        }
+      }
+    },
+    #' @description
+    #' For non-parallel usage
     chunk_getitem = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
       # TODO
       # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L380

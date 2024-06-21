@@ -349,6 +349,14 @@ item_to_key <- function(item) {
   key
 }
 
+#' @keywords internal
+is_truthy_parallel_option <- function(val) {
+  if(val == "future") {
+    return(TRUE)
+  }
+  return(as.logical(as.integer(val)))
+}
+
 try_from_zmeta <- function(key, store) {
   store$get_consolidated_metadata()$metadata[[key]]
 }

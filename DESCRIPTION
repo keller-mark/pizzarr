@@ -38,4 +38,8 @@ Suggests:
     rmarkdown,
     crul,
     Rarr,
-    vcr (>= 0.6.0)
+    vcr (>= 0.6.0),
+    pbapply,
+    parallel,
+    future,
+    bench

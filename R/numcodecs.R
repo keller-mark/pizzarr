@@ -36,7 +36,6 @@ Codec <- R6::R6Class("Codec",
 #' ZSTD compressor for Zarr
 #' @title ZstdCodec Class
 #' @docType class
-#' @importFrom qs zstd_compress_raw zstd_decompress_raw
 #' @description
 #' Class representing a ZSTD compressor
 
@@ -62,7 +61,7 @@ ZstdCodec <- R6::R6Class("ZstdCodec",
     #' @return Compressed data.
     encode = function(buf, zarr_arr) {
       # Reference: https://github.com/traversc/qs/blob/84e30f4/R/RcppExports.R#L16
-      result <- zstd_compress_raw(buf, self$level)
+      result <- qs::zstd_compress_raw(buf, self$level)
       return(result)
     },
     #' @description
@@ -71,7 +70,7 @@ ZstdCodec <- R6::R6Class("ZstdCodec",
     #' @param zarr_arr The ZarrArray instance.
     #' @return Un-compressed data.
     decode = function(buf, zarr_arr) {
-      result <- zstd_decompress_raw(buf)
+      result <- qs::zstd_decompress_raw(buf)
       return(result)
     },
     #' @description
@@ -89,7 +88,6 @@ ZstdCodec <- R6::R6Class("ZstdCodec",
 #' LZ4 compressor for Zarr
 #' @title Lz4Codec Class
 #' @docType class
-#' @importFrom qs lz4_compress_raw lz4_decompress_raw
 #' @description
 #' Class representing a LZ4 compressor
 #'
@@ -115,7 +113,7 @@ Lz4Codec <- R6::R6Class("Lz4Codec",
      #' @return Compressed data.
      encode = function(buf, zarr_arr) {
        # Reference: https://github.com/traversc/qs/blob/84e30f4/R/RcppExports.R#L24
-       body <- lz4_compress_raw(buf, self$acceleration)
+       body <- qs::lz4_compress_raw(buf, self$acceleration)
 
        # The compressed output includes a 4-byte header storing the original size
        # of the decompressed data as a little-endian 32-bit integer.
@@ -135,7 +133,7 @@ Lz4Codec <- R6::R6Class("Lz4Codec",
      decode = function(buf, zarr_arr) {
       body <- buf[5:length(buf)]
 
-      result <- lz4_decompress_raw(body)
+      result <- qs::lz4_decompress_raw(body)
       return(result)
      },
      #' @description
