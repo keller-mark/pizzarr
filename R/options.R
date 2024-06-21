@@ -9,10 +9,27 @@ pizzarr_option_defaults <- list(
 )
 
 #' @keywords internal
+parse_parallel_option <- function(val) {
+  if(val == "future") {
+    return("future")
+  }
+  logical_val <- as.logical(val)
+  integer_val <- as.integer(val)
+
+  if(is.na(integer_val)) {
+    return(logical_val)
+  }
+  if(integer_val <= 1) {
+    return(as.logical(integer_val))
+  }
+  return(integer_val)
+}
+
+#' @keywords internal
 from_env <- list(
     PIZZARR_HTTP_STORE_CACHE_TIME_SECONDS = as.integer,
-    PIZZARR_PARALLEL_READ_ENABLED = as.logical,
-    PIZZARR_PARALLEL_WRITE_ENABLED = as.logical
+    PIZZARR_PARALLEL_READ_ENABLED = parse_parallel_option,
+    PIZZARR_PARALLEL_WRITE_ENABLED = parse_parallel_option
 )
 
 # converts e.g. jupyter.log_level to JUPYTER_LOG_LEVEL

@@ -39,6 +39,7 @@ Suggests:
     crul,
     Rarr,
     vcr (>= 0.6.0),
-    foreach,
-    doParallel,
+    pbapply,
+    parallel,
+    future,
     bench

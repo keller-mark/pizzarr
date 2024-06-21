@@ -369,9 +369,12 @@ HttpStore <- R6::R6Class("HttpStore",
       key <- item_to_key(item)
       path <- paste(private$base_path, key, sep="/")
 
-      if(getOption("pizzarr.parallel_read_enabled")) {
+      parallel_option <- getOption("pizzarr.parallel_read_enabled")
+      is_parallel <- is_truthy_parallel_option(parallel_option)
+
+      if(is_parallel) {
         # For some reason, the crul::HttpClient fails in parallel settings
-        # (when used inside foreach %dopar% loops). This alternative
+        # This alternative
         # with HttpRequest and AsyncVaried seems to work.
         # Reference: https://docs.ropensci.org/crul/articles/async.html
         req <- crul::HttpRequest$new(

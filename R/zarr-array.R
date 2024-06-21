@@ -3,7 +3,6 @@
 #' The Zarr Array class.
 #' @title ZarrArray Class
 #' @docType class
-#' @importFrom foreach %dopar%
 #' @description
 #' Instantiate an array from an initialized store.
 #' @param selection Selections are lists containing either scalars, strings, or Slice objects. Two character
@@ -324,23 +323,27 @@ ZarrArray <- R6::R6Class("ZarrArray",
         return(out)
       }
 
-      if(getOption("pizzarr.parallel_read_enabled")) {
-        if(!requireNamespace("foreach", quietly = TRUE)) {
-          stop("Parallel reading requires the 'foreach' package.")
+      parallel_option <- getOption("pizzarr.parallel_read_enabled")
+      cl <- parse_parallel_option(parallel_option)
+      is_parallel <- is_truthy_parallel_option(cl)
+      
+      apply_func <- lapply
+      if(is_parallel) {
+        if(!requireNamespace("pbapply", quietly = TRUE)) {
+          stop("Parallel reading requires the 'pbapply' package.")
         }
-        parts <- indexer$iter()
-        part1_results <- foreach::foreach(proj=parts) %dopar% {
-          private$chunk_getitem_part1(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
-        }
-        for(i in seq_along(parts)) {
-          proj <- parts[[i]]
-          part1_result <- part1_results[[i]]
-          private$chunk_getitem_part2(part1_result, proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
-        }
-      } else {
-        for(proj in indexer$iter()) {
-          private$chunk_getitem(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
-        }
+        apply_func <- pbapply::pblapply
+      }
+
+      parts <- indexer$iter()
+      part1_results <- apply_func(parts, function(proj, cl = NA) {
+        private$chunk_getitem_part1(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
+      }, cl = cl)
+
+      for(i in seq_along(parts)) {
+        proj <- parts[[i]]
+        part1_result <- part1_results[[i]]
+        private$chunk_getitem_part2(part1_result, proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
       }
 
       # Return scalar instead of zero-dimensional array.
@@ -455,21 +458,26 @@ ZarrArray <- R6::R6Class("ZarrArray",
           stop("Unknown data type for setting :(")
         }
 
-        if(getOption("pizzarr.parallel_write_enabled")) {
-          if(!requireNamespace("foreach", quietly=TRUE)) {
-            stop("Parallel writing requires the 'foreach' package.")
+        parallel_option <- getOption("pizzarr.parallel_write_enabled")
+        cl <- parse_parallel_option(parallel_option)
+        is_parallel <- is_truthy_parallel_option(cl)
+        
+        apply_func <- lapply
+        if(is_parallel) {
+          if(!requireNamespace("pbapply", quietly=TRUE)) {
+            stop("Parallel writing requires the 'pbapply' package.")
           }
-          foreach::foreach(proj=indexer$iter(), .combine = c, .inorder = FALSE, .init = NULL) %dopar% {
-            chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
-            private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
-            NULL # return null since we are not using the combined result
-          }
-        } else {
-          for (proj in indexer$iter()) {
-            chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
-            private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
-          }
+          apply_func <- pbapply::pblapply
         }
+
+        parts <- indexer$iter()
+        apply_func(parts, function(proj, cl = NA) {
+          chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
+          private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
+          NULL
+        }, cl = cl)
+        
+        return()
       }
     },
     #' @description

@@ -88,6 +88,7 @@ articles:
       - ome-ngff
       - remote-ome-ngff
       - remote-anndata
+      - parallel
   - title: Articles
     navbar: Troubleshooting
     contents:

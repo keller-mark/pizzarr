@@ -1,11 +1,13 @@
 library(pizzarr)
 
+pbapply::pboptions(type = "none")
+
 SlowGettingDirectoryStore <- R6::R6Class("SlowGettingDirectoryStore",
   inherit = DirectoryStore,
   public = list(
     get_item = function(key) {
       # Simulate a slow read such as an HTTP request.
-      Sys.sleep(1.0/50.0)
+      Sys.sleep(1.0/25.0)
       return(super$get_item(key))
     }
   )
@@ -16,7 +18,7 @@ SlowSettingDirectoryStore <- R6::R6Class("SlowSettingDirectoryStore",
   public = list(
     set_item = function(key, value) {
       # Simulate a slow write such as an HTTP request.
-      Sys.sleep(1.0/50.0)
+      Sys.sleep(1.0/25.0)
       return(super$set_item(key, value))
     }
   )
@@ -33,27 +35,16 @@ get_dog_arr <- function(slow_setting = FALSE) {
     store <- SlowGettingDirectoryStore$new(root)
   }
 
-  g <- zarr_open_group(store)
-
-  # Using the OME metadata, get the path to the first resolution of the image pyramid.
-  attrs <- g$get_attrs()$to_list()
-  resolution_paths <- attrs$multiscales[[1]]$datasets[[1]]$path
-  first_resolution <- resolution_paths[[1]]
-
-  # Load the 3-dimensional array of RGB pixels (as a ZarrArray instance).
-  zarr_arr <- g$get_item(first_resolution)
-
+  zarr_arr <- zarr_open(store = store, path = "/0")
   return(zarr_arr)
 }
 
 run_parallel_get <- function(num_workers) {
-  options(pizzarr.parallel_read_enabled = TRUE)
-  doParallel::registerDoParallel(num_workers)
-  
+  options(pizzarr.parallel_read_enabled = num_workers)
+    
   zarr_arr <- get_dog_arr()
   arr <- zarr_arr$get_item("...")$data
 
-  doParallel::stopImplicitCluster()
   options(pizzarr.parallel_read_enabled = FALSE)
 
   return(sum(arr))
@@ -61,9 +52,8 @@ run_parallel_get <- function(num_workers) {
 
 
 run_parallel_set <- function(num_workers) {
-  options(pizzarr.parallel_write_enabled = TRUE)
-  doParallel::registerDoParallel(num_workers)
-
+  options(pizzarr.parallel_write_enabled = num_workers)
+  
   zarr_arr <- get_dog_arr(slow_setting = TRUE)
   arr <- zarr_arr$get_item("...")$data
 
@@ -72,7 +62,6 @@ run_parallel_set <- function(num_workers) {
 
   doubled_arr <- zarr_arr$get_item("...")$data
   
-  doParallel::stopImplicitCluster()
   options(pizzarr.parallel_write_enabled = FALSE)
 
   return(sum(doubled_arr))
