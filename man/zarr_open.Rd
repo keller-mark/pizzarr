@@ -7,17 +7,17 @@
 zarr_open(store = NA, mode = NA, path = NA, ...)
 }
 \arguments{
-\item{store}{: MutableMapping or string, optional
-Store or path to directory in file system or name of zip file.}
+\item{store}{: Store
+A mapping that supports string keys and bytes-like values.}
 
-\item{mode}{: {'r', 'r+', 'a', 'w', 'w-'}, optional
+\item{mode}{: \code{'r', 'r+', 'a', 'w', 'w-'}, optional
 Persistence mode: 'r' means read only (must exist); 'r+' means
 read/write (must exist); 'a' means read/write (create if doesn't
 exist); 'w' means create (overwrite if exists); 'w-' means create
 (fail if exists).}
 
-\item{path}{: str or NA, optional
-The path within the store to open.}
+\item{path}{: string, bytes, optional
+Path under which array is stored.}
 
 \item{...}{Additional arguments to pass to zarr_open_array or zarr_open_group.}
 }

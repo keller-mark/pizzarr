@@ -14,14 +14,13 @@ zarr_create_group(
 )
 }
 \arguments{
-\item{store}{: MutableMapping or string, optional
-Store or path to directory in file system.}
+\item{store}{: Store
+A mapping that supports string keys and bytes-like values.}
 
 \item{overwrite}{: bool, optional
-If True, delete any pre-existing data in \code{store} at \code{path} before
-creating the group.}
+If True, erase all data in \code{store} prior to initialisation.}
 
-\item{chunk_store}{: MutableMapping, optional
+\item{chunk_store}{: Store, optional
 Separate storage for chunks. If not provided, \code{store} will be used
 for storage of both chunks and metadata.}
 
@@ -33,8 +32,8 @@ to all attribute read operations.}
 \item{synchronizer}{: object, optional
 Array synchronizer.}
 
-\item{path}{: string, optional
-Group path within store.}
+\item{path}{: string, bytes, optional
+Path under which array is stored.}
 }
 \value{
 ZarrGroup

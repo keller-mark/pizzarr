@@ -122,7 +122,7 @@ slice <- function(start, stop = NA, step = NA, zero_based = FALSE) {
 #' Convenience function for the internal Slice R6 class constructor 
 #' with zero-based indexing and exclusive stop index.
 #' @inheritParams slice
-#' @inheritSection slice return section name
+#' @inherit slice return
 #' @export
 zb_slice <- function(start, stop = NA, step = NA) {
   return(slice(start, stop, step, zero_based = TRUE))

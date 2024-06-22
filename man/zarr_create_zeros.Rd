@@ -7,7 +7,8 @@
 zarr_create_zeros(shape, ...)
 }
 \arguments{
-\item{shape}{: int or tuple of ints}
+\item{shape}{: int or tuple of ints
+Array shape.}
 
 \item{...}{The params of zarr_create()}
 }
