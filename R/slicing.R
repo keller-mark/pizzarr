@@ -94,7 +94,7 @@ Slice <- R6::R6Class("Slice",
   )
 )
 
-#' Convenience function for the internal Slice class constructor.
+#' Convenience function for the internal Slice R6 class constructor.
 #' @param start The start index.
 #' @param stop The stop index.
 #' @param step The step size.
@@ -119,11 +119,10 @@ slice <- function(start, stop = NA, step = NA, zero_based = FALSE) {
   ))
 }
 
-#' Convenience function for the internal Slice class constructor 
+#' Convenience function for the internal Slice R6 class constructor 
 #' with zero-based indexing and exclusive stop index.
-#' @param start The start index.
-#' @param stop The stop index.
-#' @param step The step size.
+#' @inheritParams slice
+#' @inheritSection slice return section name
 #' @export
 zb_slice <- function(start, stop = NA, step = NA) {
   return(slice(start, stop, step, zero_based = TRUE))
