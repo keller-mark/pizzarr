@@ -1295,7 +1295,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
 #' S3 method for as.array
 #'
-#' @param obj object 
+#' @param x object 
 #' @param ... not used
 #' @keywords internal
 #' @export

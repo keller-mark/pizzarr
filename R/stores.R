@@ -351,6 +351,7 @@ MemoryStore <- R6::R6Class("MemoryStore",
 #' Read-only. Depends on the `crul` package.
 #'
 #' @rdname HttpStore
+#' @importFrom memoise memoise timeout
 #' @export
 HttpStore <- R6::R6Class("HttpStore",
   inherit = Store,
@@ -393,9 +394,9 @@ HttpStore <- R6::R6Class("HttpStore",
     },
     memoize_make_request = function() {
       if(private$cache_enabled) {
-        private$make_request_memoized <-  memoise::memoise(
+        private$make_request_memoized <-  memoise(
           function(key) private$make_request(key), 
-          ~memoise::timeout(private$cache_time_seconds)
+          ~timeout(private$cache_time_seconds)
         )
       } else {
         private$make_request_memoized <- private$make_request
