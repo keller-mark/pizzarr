@@ -4,7 +4,7 @@
 #' @title OIndex Class
 #' @docType class
 #' @description
-#'  TODO
+#'  Orthogonal index class
 #' @rdname OIndex
 #' @keywords internal
 OIndex <- R6::R6Class("OIndex",
@@ -28,7 +28,7 @@ OIndex <- R6::R6Class("OIndex",
 #' @title VIndex Class
 #' @docType class
 #' @description
-#'  TODO
+#'  Vectorized index class
 #' @rdname VIndex
 #' @keywords internal
 VIndex <- R6::R6Class("VIndex",
