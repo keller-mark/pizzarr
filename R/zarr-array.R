@@ -80,7 +80,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' @keywords internal
     oindex = NULL,
     #' @description
-    #' (Re)load metadata from store.
+    #' (Re)load metadata from store without synchronization (file locking).
     load_metadata_nosync = function() {
 
       mkey <- paste0(private$key_prefix, ARRAY_META_KEY)
@@ -135,27 +135,27 @@ ZarrArray <- R6::R6Class("ZarrArray",
       private$dtype <- normalize_dtype(meta$dtype, object_codec = object_codec)
     },
     #' @description
-    #' TODO
+    #' Load or reload metadata from store.
     load_metadata = function() {
       private$load_metadata_nosync()
       # TODO: support for synchronization
     },
     #' @description
-    #' TODO
+    #' Referesh metadata if not cached without synchronization (file locking).
     refresh_metadata_nosync = function() {
       if(!private$cache_metadata && !private$is_view) {
         private$load_metadata_nosync()
       }
     },
     #' @description
-    #' TODO
+    #' Refresh metadata from store if not cached.
     refresh_metadata = function() {
       if(!private$cache_metadata) {
         private$load_metadata()
       }
     },
     #' @description
-    #' TODO
+    #' Write metadata to store without synchronization (file locking).
     flush_metadata_nosync = function() {
       if(private$is_view) {
         stop("Operation not permitted for views")
@@ -212,7 +212,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(cdata_shape)
     },
     #' @description
-    #' TODO
+    #' Resize an array without synchronization (file locking)
     resize_nosync = function(...) {
       # Note: When resizing an array, the data are not rearranged in any way.
       # If one or more dimensions are shrunk, any chunks falling outside the
@@ -850,17 +850,17 @@ ZarrArray <- R6::R6Class("ZarrArray",
       private$oindex <- VIndex$new(self)
     },
     #' @description
-    #' TODO
+    #' get store from array.
     get_store = function() {
       return(private$store)
     },    
     #' @description
-    #' TODO
+    #' get array path
     get_path = function() {
       return(private$path)
     },
     #' @description
-    #' TODO
+    #' get full array name
     get_name = function() {
       if(!is.na(private$path)) {
         name <- private$path
@@ -873,7 +873,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(NA)
     },
     #' @description
-    #' TODO
+    #' get the basename of an array
     get_basename = function() {
       name <- self$get_name()
       if(!is.na(name)) {
@@ -883,18 +883,18 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(NA)
     },
     #' @description
-    #' TODO
+    #' get the read only property of an array (TRUE/FALSE)
     get_read_only = function() {
       return(private$read_only)
     },
     #' @description
-    #' TODO
+    #' set the read only property of an array
     #' @param val value to set
     set_read_only = function(val) {
       private$read_only <- val
     },
     #' @description
-    #' TODO
+    #' get the chunk store for an array
     get_chunk_store = function() {
       if(is_na(private$chunk_store)) {
         return(private$store)
@@ -903,13 +903,13 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }
     },
     #' @description
-    #' TODO
+    #' get the shape of an array
     get_shape = function() {
       private$refresh_metadata()
       return(private$shape)
     },
     #' @description
-    #' TODO
+    #' set or reset the size of an array
     #' @param value numeric size to set
     set_shape = function(value) {
       self$resize(value)
@@ -922,70 +922,70 @@ ZarrArray <- R6::R6Class("ZarrArray",
       do.call(private$resize_nosync, args)
     },
     #' @description
-    #' TODO
+    #' get the chunk metadata of an array
     get_chunks = function() {
       return(private$chunks)
     },
     #' @description
-    #' TODO
+    #' get the Dtype of an array
     get_dtype = function() {
       return(private$dtype)
     },
     #' @description
-    #' TODO
+    #' get the compressor of an array
     get_compressor = function() {
       return(private$compressor)
     },
     #' @description
-    #' TODO
+    #' get the fill value of an array
     get_fill_value = function() {
       return(private$fill_value)
     },
     #' @description
-    #' TODO
+    #' set the fill value of an array
     #' @param val fill value to use
     set_fill_value = function(val) {
       private$fill_value <- val
       private$flush_metadata_nosync()
     },
     #' @description
-    #' TODO
+    #' get the storage order metadata of an array.
     get_order = function() {
       return(private$order)
     },
     #' @description
-    #' TODO
+    #' get the filters metadata of an array
     get_filters = function() {
       return(private$filters)
     },
     #' @description
-    #' TODO
+    #' get the synchronizer of an array TODO: not implemented
     get_synchronizer = function() {
       return(private$synchronizer)
     },
     #' @description
-    #' TODO
+    #' get attributes of array
     get_attrs = function() {
       return(private$attrs)
     },
     #' @description
-    #' TODO
+    #' get number of dimensions of array
     get_ndim = function() {
       return(length(private$shape))
     },
     #' @description
-    #' TODO
+    #' get size of an array TODO: not implemented
     get_size = function() {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L383
       # TODO
     },
     #' @description
-    #' TODO
+    #' TODO: not implemented
     get_itemsize = function() {
       # TODO
     },
     #' @description
-    #' TODO
+    #' get number of bytes of an array
     get_nbytes = function() {
       private$refresh_metadata()
       return(self$get_size() * self$get_itemsize())
@@ -1013,27 +1013,27 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # TODO
     },
     #' @description
-    #' TODO
+    #' get is_view metadata of array
     get_is_view = function() {
       return(private$is_view)
     },
     #' @description
-    #' TODO
+    #' get orthogonal index of array
     get_oindex = function() {
       return(private$oindex)
     },
     #' @description
-    #' TODO
+    #' get vectorized index of array
     get_vindex = function() {
       return(private$vindex)
     },
     #' @description
-    #' TODO
+    #' get write empty chunks setting of array
     get_write_empty_chunks = function() {
       return(private$write_empty_chunks)
     },
     #' @description
-    #' TODO
+    #' check if another object refers to the same array. does not check array data
     #' @param other other object to check
     equals = function(other) {
       return(all(c(
@@ -1070,7 +1070,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(self$get_basic_selection(selection))
     },
     #' @description
-    #' TODO
+    #' get a selection of an array based on a "basic"list of slices
 
     #' @param out TODO
     #' @param fields TODO

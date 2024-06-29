@@ -5,10 +5,15 @@
 \alias{Dtype}
 \title{Dtype Class}
 \description{
-TODO
+A data type object (an instance of Dtype class) describes how
+the bytes in the fixed-size block of memory corresponding to an array
+item should be interpreted.
 }
 \details{
 The Zarr Dtype class.
+}
+\references{
+https://numpy.org/doc/stable/reference/arrays.dtypes.html
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
