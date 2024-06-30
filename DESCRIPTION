@@ -43,3 +43,5 @@ Suggests:
     parallel,
     future,
     bench
+Config/testthat/parallel: true
+Config/testthat/edition: 3

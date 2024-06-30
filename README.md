@@ -97,6 +97,8 @@ devtools::load_all()
 
 ## Testing
 
+Set `TESTTHAT_CPUS=#` in .Renviron to run tests in parallel
+
 ```r
 devtools::check()
 devtools::test()

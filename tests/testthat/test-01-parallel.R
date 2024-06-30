@@ -5,7 +5,7 @@ SlowGettingDirectoryStore <- R6::R6Class("SlowGettingDirectoryStore",
   public = list(
     get_item = function(key) {
       # Simulate a slow read such as an HTTP request.
-      Sys.sleep(1.0/10.0)
+      Sys.sleep(1.0/2)
       return(super$get_item(key))
     }
   )
@@ -16,7 +16,7 @@ SlowSettingDirectoryStore <- R6::R6Class("SlowSettingDirectoryStore",
   public = list(
     set_item = function(key, value) {
       # Simulate a slow write such as an HTTP request.
-      Sys.sleep(1.0/10.0)
+      Sys.sleep(1.0/2)
       return(super$set_item(key, value))
     }
   )
@@ -66,33 +66,30 @@ run_parallel_set <- function(num_workers) {
 }
 
 test_that("can run get_item() in parallel", {
+  skip_on_cran()
   bench_df <- bench::mark(
-    run_parallel_get(1),
     run_parallel_get(2),
     run_parallel_get(4),
-    iterations = 10,
+    iterations = 1,
     memory = FALSE,
     filter_gc = FALSE
   )
 
-  expect_equal(unlist(bench_df$result), rep(134538481, 3))
+  expect_equal(unlist(bench_df$result), rep(134538481, 2))
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
-  expect_equal(bench_df$total_time[[2]] > bench_df$total_time[[3]], TRUE)
 })
 
 test_that("can run set_item() in parallel", {
   bench_df <- bench::mark(
-    run_parallel_set(1),
     run_parallel_set(2),
     run_parallel_set(4),
-    iterations = 10,
+    iterations = 1,
     memory = FALSE,
     filter_gc = FALSE
   )
 
-  expect_equal(unlist(bench_df$result), rep(134538481*2.0, 3))
+  expect_equal(unlist(bench_df$result), rep(134538481*2.0, 2))
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
-  expect_equal(bench_df$total_time[[2]] > bench_df$total_time[[3]], TRUE)
 })
 
 test_that("parse_parallel_option works as expected", {

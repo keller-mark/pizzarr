@@ -333,6 +333,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
           stop("Parallel reading requires the 'pbapply' package.")
         }
         apply_func <- pbapply::pblapply
+        if(is.integer(cl) & .Platform$OS.type == "windows") {
+          # See #105
+          cl <- parallel::makeCluster(cl)
+          on.exit(parallel::stopCluster(cl))
+        }
       }
 
       parts <- indexer$iter()
@@ -468,6 +473,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
             stop("Parallel writing requires the 'pbapply' package.")
           }
           apply_func <- pbapply::pblapply
+          if(is.integer(cl) & .Platform$OS.type == "windows") {
+            # See #105
+            cl <- parallel::makeCluster(cl)
+            on.exit(parallel::stopCluster(cl))
+          }
         }
 
         parts <- indexer$iter()
