@@ -66,10 +66,9 @@ run_parallel_set <- function(num_workers) {
 }
 
 test_that("can run get_item() in parallel", {
-  skip_on_cran()
   bench_df <- bench::mark(
+    run_parallel_get(1),
     run_parallel_get(2),
-    run_parallel_get(4),
     iterations = 1,
     memory = FALSE,
     filter_gc = FALSE
@@ -81,8 +80,8 @@ test_that("can run get_item() in parallel", {
 
 test_that("can run set_item() in parallel", {
   bench_df <- bench::mark(
+    run_parallel_set(1),
     run_parallel_set(2),
-    run_parallel_set(4),
     iterations = 1,
     memory = FALSE,
     filter_gc = FALSE

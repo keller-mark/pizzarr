@@ -16,8 +16,9 @@ Authors@R: c(
            email = "dblodgett@usgs.gov",
            comment = c(ORCID = "0000-0001-9489-1710"))
   )
-Description: An implementation of chunked, compressed,
-    N-dimensional arrays for R.
+Description: An implementation of chunked, compressed, 
+  N-dimensional arrays for R. Zarr spec V2 (2024) 
+  <doi:10.5281/zenodo.11320255>.
 License: MIT + file LICENSE
 BugReports: https://github.com/keller-mark/pizzarr/issues
 URL: https://github.com/keller-mark/pizzarr
