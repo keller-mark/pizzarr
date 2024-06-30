@@ -19,12 +19,12 @@ Metadata2 <- R6::R6Class("Metadata2",
         },
         decode_array_metadata = function(s) {
             meta <- self$decode_metadata(s)
-            validate_v2_meta(meta)
+            if(!is.null(meta)) validate_v2_meta(meta)
             return(meta)
         },
         decode_group_metadata = function(s) {
             meta <- self$decode_metadata(s)
-            validate_v2_meta(meta)
+            if(!is.null(meta)) validate_v2_meta(meta)
             return(meta)
         },
         encode_array_metadata = function(meta) {

@@ -389,7 +389,9 @@ HttpStore <- R6::R6Class("HttpStore",
         res$request()
         return(unclass(res$responses())[[1]])
       } else {
-        return(private$client$get(path = path))
+        ret <- NULL
+        try(ret <- private$client$get(path = path))
+        return(ret)
       }
     },
     memoize_make_request = function() {
@@ -405,7 +407,7 @@ HttpStore <- R6::R6Class("HttpStore",
     get_zmetadata = function() {
       res <- private$make_request(".zmetadata")
       
-      if(res$status_code == 200) {
+      if(!is.null(res$status_code) && res$status_code == 200) {
         out <- try_fromJSON(res$parse("UTF-8"))
       } else out <- NULL
       
@@ -463,7 +465,6 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param item The item key.
     #' @return A boolean value.
     contains_item = function(item) {
-      
       # use consolidated metadata if it exists
       if(!is.null(try_from_zmeta(item_to_key(item), self))) {
         return(TRUE)
@@ -472,7 +473,7 @@ HttpStore <- R6::R6Class("HttpStore",
       } else {
         res <- private$make_request_memoized(item)
         
-        return(res$status_code == 200)        
+        return(!is.null(res$status_code) && res$status_code == 200)        
       }
 
     },

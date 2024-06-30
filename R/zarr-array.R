@@ -89,7 +89,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
       
       if(is.null(meta)) {
         meta_bytes <- private$store$get_item(mkey)
-        meta <- private$store$metadata_class$decode_array_metadata(meta_bytes)
+        if(!is.null(meta_bytes))
+          meta <- private$store$metadata_class$decode_array_metadata(meta_bytes)
       }
       
       private$meta <- meta

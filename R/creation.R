@@ -17,17 +17,21 @@ contains_array <- function(store, path=NA) {
     path <- normalize_storage_path(path)
     prefix <- path_to_prefix(path)
     key <- paste0(prefix, ARRAY_META_KEY)
-    return(store$contains_item(key))
+    ret <- store$contains_item(key)
+    return(!is.null(ret) && ret)
 }
 
 #' @keywords internal
 contains_group <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L99
     # Return True if the store contains a group at the given logical path.
+
     path <- normalize_storage_path(path)
     prefix <- path_to_prefix(path)
     key <- paste0(prefix, GROUP_META_KEY)
-    return(store$contains_item(key))
+    ret <- store$contains_item(key)
+    
+    return(!is.null(ret) && ret)
 }
 
 #' @keywords internal
