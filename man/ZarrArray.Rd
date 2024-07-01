@@ -13,23 +13,32 @@ Instantiate an array from an initialized store.
 \details{
 The Zarr Array class.
 }
+\keyword{(Re)load}
 \keyword{(default),}
+\keyword{(file}
 \keyword{Array}
 \keyword{False}
 \keyword{False,}
+\keyword{For}
 \keyword{If}
+\keyword{Load}
 \keyword{Object,}
+\keyword{Referesh}
+\keyword{Refresh}
+\keyword{Resize}
 \keyword{Separate}
 \keyword{Storage}
 \keyword{String,}
 \keyword{TODO}
 \keyword{True}
 \keyword{True,}
+\keyword{Write}
 \keyword{`store`}
 \keyword{a}
 \keyword{access}
 \keyword{against}
 \keyword{all}
+\keyword{an}
 \keyword{and}
 \keyword{array}
 \keyword{array's}
@@ -39,6 +48,7 @@ The Zarr Array class.
 \keyword{both}
 \keyword{cache_attrs}
 \keyword{cache_metadata}
+\keyword{cached}
 \keyword{cached.}
 \keyword{chunk}
 \keyword{chunk's}
@@ -60,21 +70,28 @@ The Zarr Array class.
 \keyword{fill_value}
 \keyword{filters}
 \keyword{for}
+\keyword{from}
 \keyword{if}
 \keyword{internal}
 \keyword{is}
 \keyword{is_view}
 \keyword{key}
 \keyword{key_prefix}
+\keyword{locking)}
+\keyword{locking).}
 \keyword{meta}
 \keyword{metadata}
 \keyword{metadata.}
+\keyword{method_description}
 \keyword{modification.}
+\keyword{non-parallel}
 \keyword{not}
 \keyword{of}
 \keyword{oindex}
 \keyword{optional.}
+\keyword{or}
 \keyword{order}
+\keyword{parallel}
 \keyword{path}
 \keyword{path.}
 \keyword{prior}
@@ -82,14 +99,17 @@ The Zarr Array class.
 \keyword{provided,}
 \keyword{read_only}
 \keyword{regardless}
+\keyword{reload}
 \keyword{reloaded}
 \keyword{shape}
 \keyword{should}
 \keyword{storage}
 \keyword{store}
+\keyword{store.}
 \keyword{stored}
 \keyword{stored,}
 \keyword{storing.}
+\keyword{synchronization}
 \keyword{synchronizer}
 \keyword{synchronizer.}
 \keyword{that}
@@ -98,12 +118,14 @@ The Zarr Array class.
 \keyword{then}
 \keyword{to}
 \keyword{uniformly}
+\keyword{usage}
 \keyword{used}
 \keyword{user}
 \keyword{value}
 \keyword{value,}
 \keyword{vindex}
 \keyword{will}
+\keyword{without}
 \keyword{write_empty_chunks}
 \section{Methods}{
 \subsection{Public methods}{
@@ -170,94 +192,7 @@ The Zarr Array class.
 \if{html}{\out{<a id="method-ZarrArray-new"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-new}{}}}
 \subsection{Method \code{new()}}{
-(Re)load metadata from store without synchronization (file locking).
-
-
-Load or reload metadata from store.
-
-
-Referesh metadata if not cached without synchronization (file locking).
-
-
-Refresh metadata from store if not cached.
-
-
-Write metadata to store without synchronization (file locking).
-
-
-TODO
-
-
-TODO
-
-
-Resize an array without synchronization (file locking)
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-For parallel usage
-
-
-For parallel usage
-
-
-For non-parallel usage
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-Create a new Array instance.
+Create a new ZarrArray instance.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$new(
   store,

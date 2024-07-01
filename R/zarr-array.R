@@ -79,7 +79,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' oindex TODO
     #' @keywords internal
     oindex = NULL,
-    #' @description
+    #' method_description
     #' (Re)load metadata from store without synchronization (file locking).
     load_metadata_nosync = function() {
 
@@ -135,27 +135,27 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }
       private$dtype <- normalize_dtype(meta$dtype, object_codec = object_codec)
     },
-    #' @description
+    #' method_description
     #' Load or reload metadata from store.
     load_metadata = function() {
       private$load_metadata_nosync()
       # TODO: support for synchronization
     },
-    #' @description
+    #' method_description
     #' Referesh metadata if not cached without synchronization (file locking).
     refresh_metadata_nosync = function() {
       if(!private$cache_metadata && !private$is_view) {
         private$load_metadata_nosync()
       }
     },
-    #' @description
+    #' method_description
     #' Refresh metadata from store if not cached.
     refresh_metadata = function() {
       if(!private$cache_metadata) {
         private$load_metadata()
       }
     },
-    #' @description
+    #' method_description
     #' Write metadata to store without synchronization (file locking).
     flush_metadata_nosync = function() {
       if(private$is_view) {
@@ -188,13 +188,13 @@ ZarrArray <- R6::R6Class("ZarrArray",
       encoded_meta <- private$store$metadata_class$encode_array_metadata(zarray_meta)
       private$store$set_item(mkey, encoded_meta)
     },
-    #' @description
+    #' method_description
     #' TODO
     chunk_key = function(chunk_coords) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2063
       return(paste0(private$key_prefix, do.call(paste, c(as.list(chunk_coords), sep = private$dimension_separator))))
     },
-    #' @description
+    #' method_description
     #' TODO
     compute_cdata_shape = function() {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L428
@@ -212,7 +212,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       cdata_shape <- as.numeric(cdata_shape)
       return(cdata_shape)
     },
-    #' @description
+    #' method_description
     #' Resize an array without synchronization (file locking)
     resize_nosync = function(...) {
       # Note: When resizing an array, the data are not rearranged in any way.
@@ -252,7 +252,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         }
       }
     },
-    #' @description
+    #' method_description
     #' TODO
     get_basic_selection_zd = function(selection = NA, out = NA, fields = NA) {
       # Special case basic selection for zero-dimensional array
@@ -296,13 +296,13 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }
       return(out)
     },
-    #' @description
+    #' method_description
     #' TODO
     get_basic_selection_nd = function(selection = NA, out = NA, fields = NA) {
       indexer <- BasicIndexer$new(selection, self)
       return(private$get_selection(indexer, out = out, fields = fields))
     },
-    #' @description
+    #' method_description
     #' TODO
     get_selection = function(indexer, out = NA, fields = NA) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/index.ts#L304
@@ -359,7 +359,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       return(out)
 
     },
-    #' @description
+    #' method_description
     #' TODO
     set_basic_selection_zd = function(selection, value, fields = NA) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L1625
@@ -422,13 +422,13 @@ ZarrArray <- R6::R6Class("ZarrArray",
       c_data <- private$encode_chunk(chunk_raw)
       self$get_chunk_store()$set_item(c_key, c_data)
     },
-    #' @description
+    #' method_description
     #' TODO
     set_basic_selection_nd = function(selection, value, fields = NA) {
       indexer <- BasicIndexer$new(selection, self)
       return(private$set_selection(indexer, value = value, fields = fields))
     },
-    #' @description
+    #' method_description
     #' TODO
     set_selection = function(indexer, value, fields = NA) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1682
@@ -491,13 +491,13 @@ ZarrArray <- R6::R6Class("ZarrArray",
         return()
       }
     },
-    #' @description
+    #' method_description
     #' TODO
     process_chunk = function(out, cdata, chunk_selection, drop_axes, out_is_ndarray, fields, out_selection, partial_read_decode = FALSE) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L1755
       # TODO
     },
-    #' @description
+    #' method_description
     #' TODO
     get_chunk_value = function(proj, indexer, value, selection_shape) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L550
@@ -517,12 +517,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
       }
       return(chunk_value)
     },
-    #' @description
+    #' method_description
     #' TODO
     chunk_buffer_to_raw_array = function(decoded_chunk) {
       # TODO
     },
-    #' @description
+    #' method_description
     #' For parallel usage
     chunk_getitem_part1 = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
       if(length(chunk_coords) != length(private$chunks)) {
@@ -543,7 +543,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       })
       return(result)
     },
-    #' @description
+    #' method_description
     #' For parallel usage
     chunk_getitem_part2 = function(part1_result, chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
       c_key <- private$chunk_key(chunk_coords)
@@ -586,7 +586,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         }
       }
     },
-    #' @description
+    #' method_description
     #' For non-parallel usage
     chunk_getitem = function(chunk_coords, chunk_selection, out, out_selection, drop_axes = NA, fields = NA) {
       # TODO
@@ -634,12 +634,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
         }
       })
     },
-    #' @description
+    #' method_description
     #' TODO
     chunk_getitems = function(lchunk_coords, lchunk_selection, out, lout_selection, drop_axes = NA, fields = NA) {
       # TODO
     },
-    #' @description
+    #' method_description
     #' TODO
     chunk_setitem = function(chunk_coords, chunk_selection, value, fields = NA) {
       # Reference: https://github.com/gzuidhof/zarr.js/blob/15e3a3f00eb19f0133018fb65f002311ea53bb7c/src/core/index.ts#L625
@@ -717,17 +717,17 @@ ZarrArray <- R6::R6Class("ZarrArray",
       chunk_data <- private$encode_chunk(chunk_raw)
       self$get_chunk_store()$set_item(chunk_key, chunk_data)
     },
-    #' @description
+    #' method_description
     #' TODO
     chunk_setitem_nosync = function(chunk_coords, chunk_selection, value, fields = NA) {
       # TODO
     },
-    #' @description
+    #' method_description
     #' TODO
     chunk_setitems = function(lchunk_coords, lchunk_selection, values, fields = NA) {
       # TODO
     },
-    #' @description
+    #' method_description
     #' TODO
     process_for_setitem = function(ckey, chunk_selection, value, fields = NA) {
       # TODO
@@ -735,12 +735,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
     chunk_delitem = function(ckey) {
       # TODO
     },
-    #' @description
+    #' method_description
     #' TODO
     chunk_delitems = function(ckeys) {
       # TODO
     },
-    #' @description
+    #' method_description
     #' TODO
     decode_chunk = function(cdata, start = NA, nitems = NA, expected_shape = NA) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2066
@@ -782,7 +782,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # ensure correct chunk shape
       return(chunk)
     },
-    #' @description
+    #' method_description
     #' TODO
     encode_chunk = function(chunk_as_raw) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/core.py#L2105
@@ -813,7 +813,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
 
       return(cdata)
     },
-    #' @description
+    #' method_description
     #' TODO
     append_nosync = function(data, axis = 0) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L2141
@@ -822,7 +822,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
   ),
   public = list(
     #' @description
-    #' Create a new Array instance.
+    #' Create a new ZarrArray instance.
     #' @param store Array store already initialized.
     #' @param path character path
     #' @param read_only logical read only?
