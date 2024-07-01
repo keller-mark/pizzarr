@@ -49,7 +49,7 @@ SlowDirectoryStore <- R6::R6Class("SlowDirectoryStore",
 
 ## Read in parallel
 
-Provide an integer >= 2 to the option to use forking-based parallelism.
+Provide an integer >= 2 or a cluster object to the option to use forking-based parallelism.
 This value will be passed to the `cl` parameter of `pbapply::pblapply`.
 
 ```{r}

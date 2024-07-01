@@ -343,13 +343,18 @@ MemoryStore <- R6::R6Class("MemoryStore",
 
 # Reference: https://github.com/manzt/zarrita.js/blob/main/packages/storage/src/fetch.ts
 
-#' HttpStore for Zarr
 #' @title HttpStore Class
 #' @docType class
 #' @description
 #' Store class that uses HTTP requests.
 #' Read-only. Depends on the `crul` package.
-#'
+#' @details For parallel operation, set the "pizzarr.parallel_read_enabled" option
+#' to one of:
+#' * `"future"` if a future plan has been set up
+#' * `integer` if you would like a one-time use cluster created per call
+#' * `cluster` object created with `parallel::make_cluster()` if you want to reuse a cluster
+#' 
+#' For more, see `vignette("parallel").`
 #' @rdname HttpStore
 #' @importFrom memoise memoise timeout
 #' @export
