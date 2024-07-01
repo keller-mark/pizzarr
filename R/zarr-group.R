@@ -258,7 +258,7 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
       }
     },
     #' @description
-    #' greate a group
+    #' create a group
     #' @param name character group name
     #' @param overwrite logical overwrite?
     create_group = function(name, overwrite = FALSE) {

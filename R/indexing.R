@@ -69,7 +69,7 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
     dim_chunk_len = NULL,
     #' @description
     #' Create a new IntDimIndexer instance.
-    #' @param dim_sel integer dimention selection
+    #' @param dim_sel integer dimension selection
     #' @param dim_len integer dimension length
     #' @param dim_chunk_len integer dimension chunk length
     #' @return A `IntDimIndexer` instance.
@@ -134,7 +134,7 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
     step = NULL,
     #' @description
     #' Create a new SliceDimIndexer instance.
-    #' @param dim_sel integer dimention selection
+    #' @param dim_sel integer dimension selection
     #' @param dim_len integer dimension length
     #' @param dim_chunk_len integer dimension chunk length
     #' @return A `SliceDimIndexer` instance.

@@ -19,6 +19,7 @@ Authors@R: c(
 Description: An implementation of chunked, compressed, 
   N-dimensional arrays for R. Zarr spec V2 (2024) 
   <doi:10.5281/zenodo.11320255>.
+Language: en-US
 License: MIT + file LICENSE
 BugReports: https://github.com/keller-mark/pizzarr/issues
 URL: https://github.com/keller-mark/pizzarr
