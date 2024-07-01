@@ -7,8 +7,8 @@
 zarr_save_array(store, arr, ...)
 }
 \arguments{
-\item{store}{: MutableMapping or string
-Store or path to directory in file system or name of zip file.}
+\item{store}{: Store
+A mapping that supports string keys and bytes-like values.}
 
 \item{arr}{: ZarrArray
 The array with data to save.}

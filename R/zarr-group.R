@@ -160,7 +160,8 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
           }
         })
         
-        private$meta <- private$store$metadata_class$decode_group_metadata(meta_bytes)
+        if(!is.null(meta_bytes))
+          private$meta <- private$store$metadata_class$decode_group_metadata(meta_bytes)
         
       }
       
@@ -229,6 +230,10 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
     #' Obtain a group member.
     #' @param item character item to test for
     get_item = function(item) {
+      if(is.null(item)) {
+        #for case with no internet
+        stop("item can not be null")
+      }
       path <- private$item_path(item)
       if(contains_array(private$store, path)) {
         return(ZarrArray$new(
@@ -253,7 +258,7 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
       }
     },
     #' @description
-    #' greate a group
+    #' create a group
     #' @param name character group name
     #' @param overwrite logical overwrite?
     create_group = function(name, overwrite = FALSE) {
