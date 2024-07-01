@@ -8,7 +8,7 @@ Metadata2 <- R6::R6Class("Metadata2",
     ),
     public = list(
         decode_metadata = function(s, auto_unbox=FALSE) {
-            if(is.list(s)) {
+            if(is.list(s) || is.null(s)) {
                 return(s)
             } else {
                 return(try_fromJSON(rawToChar(s), simplifyVector = FALSE))

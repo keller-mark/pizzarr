@@ -391,6 +391,7 @@ HttpStore <- R6::R6Class("HttpStore",
       } else {
         ret <- NULL
         try(ret <- private$client$get(path = path))
+        if(is.null(ret)) warning("Can't procede, web request failed.")
         return(ret)
       }
     },

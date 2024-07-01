@@ -232,8 +232,7 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
     get_item = function(item) {
       if(is.null(item)) {
         #for case with no internet
-        warning("item can not be null") 
-        return(NULL)
+        stop("item can not be null")
       }
       path <- private$item_path(item)
       if(contains_array(private$store, path)) {
