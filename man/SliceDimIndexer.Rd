@@ -51,7 +51,7 @@ Create a new SliceDimIndexer instance.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dim_sel}}{integer dimention selection}
+\item{\code{dim_sel}}{integer dimension selection}
 
 \item{\code{dim_len}}{integer dimension length}
 

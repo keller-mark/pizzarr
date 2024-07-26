@@ -9,12 +9,12 @@ init_group(store, overwrite = FALSE, path = NA, chunk_store = NA)
 }
 \arguments{
 \item{store}{: Store
-A mapping that supports string keys and byte sequence values.}
+A mapping that supports string keys and bytes-like values.}
 
 \item{overwrite}{: bool, optional
 If True, erase all data in \code{store} prior to initialisation.}
 
-\item{path}{: string, optional
+\item{path}{: string, bytes, optional
 Path under which array is stored.}
 
 \item{chunk_store}{: Store, optional

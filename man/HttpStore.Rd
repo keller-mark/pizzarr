@@ -9,7 +9,15 @@ Store class that uses HTTP requests.
 Read-only. Depends on the \code{crul} package.
 }
 \details{
-HttpStore for Zarr
+For parallel operation, set the "pizzarr.parallel_read_enabled" option
+to one of:
+\itemize{
+\item \code{"future"} if a future plan has been set up
+\item \code{integer} if you would like a one-time use cluster created per call
+\item \code{cluster} object created with \code{parallel::make_cluster()} if you want to reuse a cluster
+}
+
+For more, see \verb{vignette("parallel").}
 }
 \section{Super class}{
 \code{\link[pizzarr:Store]{pizzarr::Store}} -> \code{HttpStore}

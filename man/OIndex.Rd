@@ -5,7 +5,7 @@
 \alias{OIndex}
 \title{OIndex Class}
 \description{
-TODO
+Orthogonal index class
 }
 \details{
 The Zarr OIndex class.
