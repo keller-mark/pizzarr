@@ -1245,8 +1245,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
             }
             return(slice(from, to, by))
           } else if(x[[1]] == "c") {
-            stop("Custom vector slicing is not yet supported")
-            # return(eval(y))
+            # stop("Custom vector slicing is not yet supported")
+            check_func <- sapply(x, function(y) {
+              !is.function(eval(y))
+            })
+            return(floor(unlist(x[check_func])))
           } else {
             stop("Unsupported filter '", as.character(x), "' supplied")
           }
