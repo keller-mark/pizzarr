@@ -1249,7 +1249,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
             check_func <- sapply(x, function(y) {
               !is.function(eval(y))
             })
-            return(floor(unlist(x[check_func])))
+            return(int(floor(unlist(x[check_func]))))
           } else {
             stop("Unsupported filter '", as.character(x), "' supplied")
           }

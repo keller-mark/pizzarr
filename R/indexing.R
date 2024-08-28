@@ -69,24 +69,25 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
     dim_chunk_len = NULL,
     #' @description
     #' Create a new IntDimIndexer instance.
-    #' @param dim_sel integer dimention selection
+    #' @param dim_sel integer dimension selection
     #' @param dim_len integer dimension length
     #' @param dim_chunk_len integer dimension chunk length
     #' @return A `IntDimIndexer` instance.
     initialize = function(dim_sel, dim_len, dim_chunk_len) {
       # Normalize
-      dim_sel <- normalize_integer_selection(dim_sel, dim_len)
+      # dim_sel <- normalize_integer_selection(dim_sel, dim_len)
 
       self$dim_sel <- dim_sel
       self$dim_len <- dim_len
       self$dim_chunk_len <- dim_chunk_len
-      self$num_items <- 1
+      self$num_items <- length(dim_sel)
     },
     #' @description 
     #' TODO
     #' @return a `ChunkDimProjection` instance
     iter = function() {
       # TODO: use generator/yield features from async package
+      dim_sel
       dim_chunk_index <- floor(self$dim_sel / self$dim_chunk_len)
       dim_offset <- dim_chunk_index * self$dim_chunk_len
       dim_chunk_sel <- self$dim_sel - dim_offset
@@ -259,7 +260,8 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
           dim_sel <- zb_slice(NA)
         }
 
-        if(is_integer(dim_sel)) {
+        #if(is_integer(dim_sel)) {
+        if(is_int(dim_sel)) {
           dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
         } else if(is_slice(dim_sel)) {
           dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)

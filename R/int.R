@@ -17,9 +17,14 @@ Int <- R6::R6Class("Int",
                          self$index <- index
                        },
                        #' @description
-                       #' indices method
-                       indices = function() {
-                         return(self$index)
+                       #' This method takes a single integer argument `length_param` and computes information about the
+                       #' slice that the slice object would describe if applied to a sequence of `length_param` items.
+                       #' It returns a tuple of three integers; respectively these are the start and stop indices
+                       # and the step or stride length of the slice. Missing or out-of-bounds indices are handled
+                       # in a manner consistent with regular slices.
+                       #' @param length_param integer length parameter for calculation of integer indices
+                       indices = function(length_param) {
+                         return(c(self$index, length_param))
                        }
                      )
 )
@@ -49,12 +54,12 @@ zb_int <- function(index) {
   return(int(index, zero_based = TRUE))
 }
 
-#' Check if a value is a Slice instance.
+#' Check if a value is a Int instance.
 #' @param s The value to check.
 #' @return TRUE if the value is a Slice instance, FALSE otherwise.
 #' @export
-is_slice <- function(s) {
-  if(class(s)[[1]] == "Slice") {
+is_int<- function(s) {
+  if(class(s)[[1]] == "Int") {
     return(TRUE)
   }
   return(FALSE)
