@@ -24,7 +24,12 @@ Int <- R6::R6Class("Int",
                        # in a manner consistent with regular slices.
                        #' @param length_param integer length parameter for calculation of integer indices
                        indices = function(length_param) {
-                         return(c(self$index, length_param))
+                         
+                         # check length_param
+                         index <- self$index[self$index <= length_param]
+                         
+                         # return
+                         return(c(index, length_param))
                        }
                      )
 )

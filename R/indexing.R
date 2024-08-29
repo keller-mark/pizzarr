@@ -1,3 +1,19 @@
+is_pure_fancy_indexing <- function(selection, ndim) {
+    
+  if(ndim == 1){
+    if(length(selection) > 1){
+      return(TRUE)
+    }
+  } 
+  
+  # check if there are any slice objects 
+  no_slicing <- (length(selection) == ndim) & !(any(sapply(selection, function(s) inherits(s, "Slice"))))
+  
+  # return
+  return(no_slicing)
+}
+
+
 # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L655
 
 #' The Zarr OIndex class.
@@ -18,6 +34,14 @@ OIndex <- R6::R6Class("OIndex",
     #' @return An `OIndex` instance.
     initialize = function(array) {
       self$array <- array
+    },
+    #' @description
+    #' get method for the Oindex instance
+    #' @param selection selection
+    #' @return An `OIndex` instance.
+    get_item = function(selection) {
+      # self$array <- array$get
+      self$array$get_orthogonal_selection(selection)
     }
   )
 )
@@ -56,51 +80,50 @@ VIndex <- R6::R6Class("VIndex",
 #' @rdname IntDimIndexer
 #' @keywords internal
 IntDimIndexer <- R6::R6Class("IntDimIndexer",
-  inherit = DimIndexer,
-  public = list(
-    #' @field dim_sel TODO
-    #' @keywords internal
-    dim_sel = NULL,
-    #' @field dim_len TODO
-    #' @keywords internal
-    dim_len = NULL,
-    #' @field dim_chunk_len TODO
-    #' @keywords internal
-    dim_chunk_len = NULL,
-    #' @description
-    #' Create a new IntDimIndexer instance.
-    #' @param dim_sel integer dimension selection
-    #' @param dim_len integer dimension length
-    #' @param dim_chunk_len integer dimension chunk length
-    #' @return A `IntDimIndexer` instance.
-    initialize = function(dim_sel, dim_len, dim_chunk_len) {
-      # Normalize
-      # dim_sel <- normalize_integer_selection(dim_sel, dim_len)
-
-      self$dim_sel <- dim_sel
-      self$dim_len <- dim_len
-      self$dim_chunk_len <- dim_chunk_len
-      self$num_items <- length(dim_sel)
-    },
-    #' @description 
-    #' TODO
-    #' @return a `ChunkDimProjection` instance
-    iter = function() {
-      # TODO: use generator/yield features from async package
-      dim_sel
-      dim_chunk_index <- floor(self$dim_sel / self$dim_chunk_len)
-      dim_offset <- dim_chunk_index * self$dim_chunk_len
-      dim_chunk_sel <- self$dim_sel - dim_offset
-      dim_out_sel <- NA
-      return(list(
-        ChunkDimProjection$new(
-          dim_chunk_index,
-          dim_chunk_sel,
-          dim_out_sel
-        )
-      ))
-    }
-  )
+                             inherit = DimIndexer,
+                             public = list(
+                               #' @field dim_sel TODO
+                               #' @keywords internal
+                               dim_sel = NULL,
+                               #' @field dim_len TODO
+                               #' @keywords internal
+                               dim_len = NULL,
+                               #' @field dim_chunk_len TODO
+                               #' @keywords internal
+                               dim_chunk_len = NULL,
+                               #' @description
+                               #' Create a new IntDimIndexer instance.
+                               #' @param dim_sel integer dimention selection
+                               #' @param dim_len integer dimension length
+                               #' @param dim_chunk_len integer dimension chunk length
+                               #' @return A `IntDimIndexer` instance.
+                               initialize = function(dim_sel, dim_len, dim_chunk_len) {
+                                 # Normalize
+                                 dim_sel <- normalize_integer_selection(dim_sel, dim_len)
+                                 
+                                 self$dim_sel <- dim_sel
+                                 self$dim_len <- dim_len
+                                 self$dim_chunk_len <- dim_chunk_len
+                                 self$num_items <- 1
+                               },
+                               #' @description 
+                               #' TODO
+                               #' @return a `ChunkDimProjection` instance
+                               iter = function() {
+                                 # TODO: use generator/yield features from async package
+                                 dim_chunk_index <- floor(self$dim_sel / self$dim_chunk_len)
+                                 dim_offset <- dim_chunk_index * self$dim_chunk_len
+                                 dim_chunk_sel <- self$dim_sel - dim_offset
+                                 dim_out_sel <- NA
+                                 return(list(
+                                   ChunkDimProjection$new(
+                                     dim_chunk_index,
+                                     dim_chunk_sel,
+                                     dim_out_sel
+                                   )
+                                 ))
+                               }
+                             )
 )
 
 # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L163
@@ -260,8 +283,8 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
           dim_sel <- zb_slice(NA)
         }
 
-        #if(is_integer(dim_sel)) {
-        if(is_int(dim_sel)) {
+        if(is_integer(dim_sel)) {
+        # if(is_int(dim_sel)) {
           dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
         } else if(is_slice(dim_sel)) {
           dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
@@ -323,4 +346,75 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
       return(result)
     }
   )
+)
+
+
+#' The Zarr OrthogonalIndexer class.
+#' @title OrthogonalIndexer Class
+#' @docType class
+#' @description
+#'  An indexer class to normalize a selection of an array and provide an iterator 
+#'  of indexes over the dimensions of an array.
+#' @param selection selection as with ZarrArray, scalar, string, or Slice. "..." and ":" supported for string 
+#' @param array ZarrArray object that will be indexed
+#' @rdname OrthogonalIndexer
+#' @keywords internal
+OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
+                            inherit = Indexer,
+                            public = list(
+                              #' @field dim_indexers TODO
+                              #' @keywords internal
+                              dim_indexers = NULL,
+                              #' @description
+                              #' Create a new VIndex instance.
+                              #' @return A `VIndex` instance.
+                              initialize = function(selection, array) {
+                                
+                                shape <- array$get_shape()
+                                chunks <- array$get_chunks()
+                                
+                                selection <- normalize_list_selection(selection, shape)
+                                
+                                # Setup per-dimension indexers
+                                dim_indexers <- list()
+                                for(i in seq_along(selection)) {
+                                  dim_sel <- selection[[i]]
+                                  dim_len <- shape[i]
+                                  dim_chunk_len <- chunks[i]
+                                  
+                                  if(is.null(dim_sel)) {
+                                    dim_sel <- zb_slice(NA)
+                                  }
+                                  
+                                  if(length(dim_sel) == 1) {
+                                    dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
+                                  } else if(is_slice(dim_sel)) {
+                                    dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
+                                  } else if(length(dim_sel) > 1) {
+                                    dim_indexer <- IntArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
+                                  } else if(is_slice(dim_sel)) {
+                                    dim_indexer <- BoolArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
+                                  } else {
+                                    stop('Unsupported selection item for basic indexing, expected integer, slice, vector of integer or boolean')
+                                  }
+                                  dim_indexers <- append(dim_indexers, dim_indexer)
+                                }
+                                self$shape <- list()
+                                for(d in dim_indexers) {
+                                  if(class(d)[[1]] == "SliceDimIndexer") {
+                                    self$shape <- append(self$shape, d$num_items)
+                                  }
+                                }
+                                self$drop_axes <- NA
+                                
+                                self$dim_indexers <- dim_indexers
+                                
+                              },
+                              #' @description 
+                              #'   An iterator over the dimensions of an array
+                              #' @return A list of ChunkProjection objects
+                              iter = function() {
+                                
+                              }
+                            )
 )
