@@ -55,7 +55,7 @@ Create a new IntArrayDimIndexer instance.
   dim_sel,
   dim_len,
   dim_chunk_len,
-  order = Order$public_fields$UNKOWN
+  sel_order = Order$public_fields$UNKNOWN
 )}\if{html}{\out{</div>}}
 }
 
@@ -68,7 +68,7 @@ Create a new IntArrayDimIndexer instance.
 
 \item{\code{dim_chunk_len}}{integer dimension chunk length}
 
-\item{\code{order}}{order}
+\item{\code{sel_order}}{order}
 }
 \if{html}{\out{</div>}}
 }

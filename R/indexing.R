@@ -400,7 +400,7 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                 }
                                 self$shape <- list()
                                 for(d in dim_indexers) {
-                                  if(class(d)[[1]] == "SliceDimIndexer") {
+                                  if(class(d)[[1]] != "IntDimIndexer") {
                                     self$shape <- append(self$shape, d$num_items)
                                   }
                                 }
@@ -414,6 +414,43 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                               #' @return A list of ChunkProjection objects
                               iter = function() {
                                 
+                                # TODO: use generator/yield features from async package
+                                result <- list()
+                                
+                                # dim_indexers is a list of DimIndexer objects.
+                                # dim_indexer_iterables is a list (one per dimension)
+                                # of lists of IntDimIndexer or SliceDimIndexer objects.
+                                dim_indexer_iterables <- lapply(self$dim_indexers, function(di) di$iter())
+                                dim_indexer_product <- get_list_product(dim_indexer_iterables)
+                                
+                                
+                                for(row_i in seq_len(length(dim_indexer_product))) {
+                                  dim_proj <- dim_indexer_product[[row_i]]
+                                  
+                                  chunk_coords <- list()
+                                  chunk_sel <- list()
+                                  out_sel <- list()
+                                  
+                                  if(!is.list(dim_proj)) {
+                                    dim_proj <- list(dim_proj)
+                                  }
+                                  
+                                  for(p in dim_proj) {
+                                    chunk_coords <- append(chunk_coords, p$dim_chunk_index)
+                                    chunk_sel <- append(chunk_sel, p$dim_chunk_sel)
+                                    if(!is_na(p$dim_out_sel)) {
+                                      out_sel <- append(out_sel, p$dim_out_sel)
+                                    }
+                                  }
+                                  
+                                  result <- append(result, ChunkProjection$new(
+                                    chunk_coords,
+                                    chunk_sel,
+                                    out_sel
+                                  ))
+                                }
+                                
+                                return(result)
                               }
                             )
 )
@@ -451,11 +488,11 @@ Order <- R6::R6Class("Order",
                          all_increasing <- n_diff_positive == length(diff_positive)
                          any_increasing <- n_diff_positive > 0
                          if(all_increasing){
-                           return(Order$INCREASING)
+                           return(Order$public_fields$INCREASING)
                          } else if(any_increasing) {
-                           return(Order$UNORDERED)
+                           return(Order$public_fields$UNORDERED)
                          } else{
-                           return(Order$DECREASING)
+                           return(Order$public_fields$DECREASING)
                          }
                        })
                      )
@@ -504,9 +541,9 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                  #' @param dim_sel integer dimention selection
                                  #' @param dim_len integer dimension length
                                  #' @param dim_chunk_len integer dimension chunk length
-                                 #' @param order order
+                                 #' @param sel_order order
                                  #' @return A `IntArrayDimIndexer` instance.
-                                 initialize = function(dim_sel, dim_len, dim_chunk_len, order = Order$public_fields$UNKOWN) {
+                                 initialize = function(dim_sel, dim_len, dim_chunk_len, sel_order = Order$public_fields$UNKNOWN) {
 
                                    # Normalize
                                    dim_sel <- sapply(dim_sel, normalize_integer_selection, dim_len = dim_len)
@@ -521,11 +558,9 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                    dim_sel_chunk <- ceiling(dim_sel / dim_chunk_len)
                                    
                                    # determine order of indices
-                                   # TODO: for some reason order starts as NULL eventhough supposed to be set as Order$public_fields$UNKNOWN
-                                   # if(order == Order$public_fields$UNKNOWN) TODO: 
-                                   if(0 == Order$public_fields$UNKNOWN)
-                                     order <- Order$public_methods$check(dim_sel)
-                                   self$order <- order
+                                   if(sel_order == Order$public_fields$UNKNOWN)
+                                     sel_order <- Order$public_methods$check(dim_sel)
+                                   self$order <- sel_order
                                    
                                    if(self$order == Order$public_fields$INCREASING){
                                      self$dim_sel <-  dim_sel
@@ -534,14 +569,15 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      self$dim_out_sel = rev(seq(1,self$num_items))
                                    } else {
                                      # sort indices to group by chunk
-                                     self$dim_out_sel = dim_sel[order(dim_sel_chunk)]
+                                     self$dim_out_sel = order(dim_sel_chunk)
+                                     self$dim_sel <- dim_sel[self$dim_out_sel]
                                    }
                                    
                                    # precompute number of selected items for each chunk
                                    self$chunk_nitems <- tabulate(dim_sel_chunk, nbins = self$num_chunks)
                                    
                                    # find chunks that we need to visit
-                                   self.dim_chunk_ixs = which(self$chunk_nitems != 0)
+                                   self$dim_chunk_ixs = which(self$chunk_nitems != 0)
                                    
                                    # compute offsets into the output array
                                    self$chunk_nitems_cumsum = cumsum(self$chunk_nitems)
@@ -554,17 +590,24 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                    
                                    # Iterate over chunks in range
                                    result <- list()
-                                   for(dim_chunk_index in self$dim_chunk_ixs) {
+                                   for(dim_chunk_ix in self$dim_chunk_ixs) {
                                      
                                      # find region in output
-                                     if (dim_chunk_ix == 0) {
+                                     # if (dim_chunk_ix == 0) {
+                                     if (dim_chunk_ix == 1) {
                                        start <- 0
                                      } else {
                                        start <- self$chunk_nitems_cumsum[dim_chunk_ix - 1]
                                      }
                                      stop <- self$chunk_nitems_cumsum[dim_chunk_ix]
                                      
-                                     if (self$order == Order$INCREASING) {
+                                     # START R-SPECIFIC
+                                     if(start == stop) {
+                                       stop <- stop + 1
+                                     }
+                                     # END R-SPECIFIC
+                                     
+                                     if (self$order == Order$public_fields$INCREASING) {
                                        dim_out_sel <- seq(start, stop - 1)
                                      } else {
                                        dim_out_sel <- self$dim_out_sel[(start + 1):stop]
@@ -572,8 +615,9 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      
                                      # find region in chunk
                                      dim_offset <- dim_chunk_ix * self$dim_chunk_len
-                                     dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset
-                                     
+                                     # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset 
+                                     dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset + 1
+
                                      result <- append(result, ChunkDimProjection$new(
                                        dim_chunk_ix,
                                        dim_chunk_sel,
