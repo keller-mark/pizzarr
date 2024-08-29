@@ -49,7 +49,7 @@ The Zarr IntArrayDimIndexer class.
 \if{html}{\out{<a id="method-IntArrayDimIndexer-new"></a>}}
 \if{latex}{\out{\hypertarget{method-IntArrayDimIndexer-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new SliceDimIndexer instance.
+Create a new IntArrayDimIndexer instance.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntArrayDimIndexer$new(
   dim_sel,
@@ -73,20 +73,20 @@ Create a new SliceDimIndexer instance.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A \code{SliceDimIndexer} instance.
+A \code{IntArrayDimIndexer} instance.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-IntArrayDimIndexer-iter"></a>}}
 \if{latex}{\out{\hypertarget{method-IntArrayDimIndexer-iter}{}}}
 \subsection{Method \code{iter()}}{
-TODO
+An iterator over the dimensions of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntArrayDimIndexer$iter()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-TODO
+A list of ChunkProjection objects
 }
 }
 \if{html}{\out{<hr>}}

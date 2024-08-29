@@ -500,12 +500,12 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                  #' @keywords internal
                                  chunk_nitems_cumsum = NULL, 
                                  #' @description
-                                 #' Create a new SliceDimIndexer instance.
+                                 #' Create a new IntArrayDimIndexer instance.
                                  #' @param dim_sel integer dimention selection
                                  #' @param dim_len integer dimension length
                                  #' @param dim_chunk_len integer dimension chunk length
                                  #' @param order order
-                                 #' @return A `SliceDimIndexer` instance.
+                                 #' @return A `IntArrayDimIndexer` instance.
                                  initialize = function(dim_sel, dim_len, dim_chunk_len, order = Order$public_fields$UNKOWN) {
 
                                    # Normalize
@@ -521,7 +521,8 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                    dim_sel_chunk <- ceiling(dim_sel / dim_chunk_len)
                                    
                                    # determine order of indices
-                                   # if(order == Order$public_fields$UNKNOWN)
+                                   # TODO: for some reason order starts as NULL eventhough supposed to be set as Order$public_fields$UNKNOWN
+                                   # if(order == Order$public_fields$UNKNOWN) TODO: 
                                    if(0 == Order$public_fields$UNKNOWN)
                                      order <- Order$public_methods$check(dim_sel)
                                    self$order <- order
@@ -547,64 +548,34 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                    
                                  },
                                  #' @description 
-                                 #' TODO
-                                 #' @return TODO
+                                 #'   An iterator over the dimensions of an array
+                                 #' @return A list of ChunkProjection objects
                                  iter = function() {
-                                   # TODO: use generator/yield features from async package
-                                   dim_chunk_index_from <- floor(self$dim_sel / self$dim_chunk_len)
-                                   dim_chunk_index_to <- ceiling(self$stop / self$dim_chunk_len)
-                                   
-                                   # START R-SPECIFIC
-                                   if(dim_chunk_index_from == dim_chunk_index_to) {
-                                     dim_chunk_index_to <- dim_chunk_index_to + 1
-                                   }
-                                   # END R-SPECIFIC
                                    
                                    # Iterate over chunks in range
                                    result <- list()
-                                   for(dim_chunk_index in seq(from = dim_chunk_index_from, to = (dim_chunk_index_to - 1), by = 1)) {
+                                   for(dim_chunk_index in self$dim_chunk_ixs) {
                                      
-                                     # Compute offsets for chunk within overall array
-                                     dim_offset <- dim_chunk_index * self$dim_chunk_len
-                                     dim_limit <- min(self$dim_len, (dim_chunk_index + 1) * self$dim_chunk_len)
-                                     
-                                     # Determine chunk length, accounting for trailing chunk
-                                     dim_chunk_len <- dim_limit - dim_offset
-                                     
-                                     dim_chunk_sel_start <- 0
-                                     dim_chunk_sel_stop <- 0
-                                     dim_out_offset <- 0
-                                     
-                                     if(self$start < dim_offset) {
-                                       # Selection starts before the current chunk
-                                       
-                                       dim_chunk_sel_start <- 0
-                                       remainder <- (dim_offset - self$start) %% self$step
-                                       if(remainder > 0) {
-                                         dim_chunk_sel_start <- dim_chunk_sel_start + (self$step - remainder)
-                                       }
-                                       # Compute number of previous items, provides offset into output array
-                                       dim_out_offset <- ceiling((dim_offset - self$start) / self$step)
+                                     # find region in output
+                                     if (dim_chunk_ix == 0) {
+                                       start <- 0
                                      } else {
-                                       # Selection starts within the current chunk
-                                       dim_chunk_sel_start <- self$start - dim_offset
-                                       dim_out_offset <- 0
+                                       start <- self$chunk_nitems_cumsum[dim_chunk_ix - 1]
+                                     }
+                                     stop <- self$chunk_nitems_cumsum[dim_chunk_ix]
+                                     
+                                     if (self$order == Order$INCREASING) {
+                                       dim_out_sel <- seq(start, stop - 1)
+                                     } else {
+                                       dim_out_sel <- self$dim_out_sel[(start + 1):stop]
                                      }
                                      
-                                     if(self$stop > dim_limit) {
-                                       # Selection ends after current chunk
-                                       dim_chunk_sel_stop <- self$dim_chunk_len
-                                     } else {
-                                       # Selection ends within current chunk
-                                       dim_chunk_sel_stop <- self$stop - dim_offset
-                                     }
-                                     
-                                     dim_chunk_sel <- zb_slice(dim_chunk_sel_start, dim_chunk_sel_stop, self$step)
-                                     dim_chunk_num_items <- ceiling((dim_chunk_sel_stop - dim_chunk_sel_start) / self$step)
-                                     dim_out_sel <- zb_slice(dim_out_offset, dim_out_offset + dim_chunk_num_items)
+                                     # find region in chunk
+                                     dim_offset <- dim_chunk_ix * self$dim_chunk_len
+                                     dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset
                                      
                                      result <- append(result, ChunkDimProjection$new(
-                                       dim_chunk_index,
+                                       dim_chunk_ix,
                                        dim_chunk_sel,
                                        dim_out_sel
                                      ))
