@@ -1101,7 +1101,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         private$load_metadata()
       }
       
-      indexer <- OrthogonalIndexer$new(selection)
+      indexer <- OrthogonalIndexer$new(selection, self)
       return(private$get_selection(indexer, out = out, fields = fields))
     },
     #' @description

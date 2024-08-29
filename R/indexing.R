@@ -348,6 +348,7 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
   )
 )
 
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/indexing.py#L585
 
 #' The Zarr OrthogonalIndexer class.
 #' @title OrthogonalIndexer Class
@@ -372,8 +373,6 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                 
                                 shape <- array$get_shape()
                                 chunks <- array$get_chunks()
-                                
-                                selection <- normalize_list_selection(selection, shape)
                                 
                                 # Setup per-dimension indexers
                                 dim_indexers <- list()
@@ -417,4 +416,155 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                 
                               }
                             )
+)
+
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/indexing.py#L424
+
+#' The Order class.
+#' @title Order Class
+#' @docType class
+#' @description
+#'  TODO
+#' @rdname Order
+#' @keywords internal
+Order <- R6::R6Class("Order",
+                     public = list(
+                       UNKNOWN = 0,
+                       INCREASING = 1,
+                       DECREASING = 2,
+                       UNORDERED = 3,
+                       check = function(a){
+                         diff_a <- diff(a)
+                         diff_positive <- diff_a >= 0
+                         n_diff_positive <- sum(diff_positive)
+                         n_diff_positive = np.count_nonzero(diff_positive)
+                         all_increasing <- n_diff_positive == len(diff_positive)
+                         any_increasing <- n_diff_positive > 0
+                         if(all_increasing){
+                           return(Order$INCREASING)
+                         } else if(any_increasing) {
+                           return(Order$UNORDERED)
+                         } else{
+                           return(Order$DECREASING)
+                         }
+                       })
+                     )
+
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/indexing.py#L457
+
+#' The Zarr IntArrayDimIndexer class.
+#' @title IntArrayDimIndexer Class
+#' @docType class
+#' @description
+#'  TODO
+#' @rdname IntArrayDimIndexer
+#' @keywords internal
+IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
+                               inherit = DimIndexer,
+                               public = list(
+                                 #' @field dim_len dimension length
+                                 #' @keywords internal
+                                 dim_len = NULL,
+                                 #' @field dim_chunk_len dimension chunk length
+                                 #' @keywords internal
+                                 dim_chunk_len = NULL,
+                                 #' @field num_chunks number of chunks
+                                 #' @keywords internal
+                                 num_chunks = NULL,
+                                 #' @field dim_sel selection on dimension
+                                 #' @keywords internal
+                                 dim_sel = NULL,
+                                 #' @field order order
+                                 #' @keywords internal
+                                 order = NULL,
+                                 #' @description
+                                 #' Create a new SliceDimIndexer instance.
+                                 #' @param dim_sel integer dimention selection
+                                 #' @param dim_len integer dimension length
+                                 #' @param dim_chunk_len integer dimension chunk length
+                                 #' @return A `SliceDimIndexer` instance.
+                                 initialize = function(dim_sel, dim_len, dim_chunk_len, order = Order$UNKOWN) {
+
+                                   # Normalize
+                                   dim_sel <- sapply(dim_sel, normalize_integer_selection, dim_len = dim_len)
+                                   self$dim_sel <- dim_sel
+                                   
+                                   # store attributes 
+                                   self$dim_len <- dim_len
+                                   self$dim_chunk_len <- dim_chunk_len
+                                   self$num_items <- length(dim_sel)
+                                   self$num_chunks <- ceiling(self$dim_len / self$dim_chunk_len)
+                                   
+                                   # determine order of indices
+                                   if(order == Order$UNKNOWN)
+                                     order <- Order$check(dim_sel)
+                                   self$order <- order
+                                   
+                                 },
+                                 #' @description 
+                                 #' TODO
+                                 #' @return TODO
+                                 iter = function() {
+                                   # TODO: use generator/yield features from async package
+                                   dim_chunk_index_from <- floor(self$dim_sel / self$dim_chunk_len)
+                                   dim_chunk_index_to <- ceiling(self$stop / self$dim_chunk_len)
+                                   
+                                   # START R-SPECIFIC
+                                   if(dim_chunk_index_from == dim_chunk_index_to) {
+                                     dim_chunk_index_to <- dim_chunk_index_to + 1
+                                   }
+                                   # END R-SPECIFIC
+                                   
+                                   # Iterate over chunks in range
+                                   result <- list()
+                                   for(dim_chunk_index in seq(from = dim_chunk_index_from, to = (dim_chunk_index_to - 1), by = 1)) {
+                                     
+                                     # Compute offsets for chunk within overall array
+                                     dim_offset <- dim_chunk_index * self$dim_chunk_len
+                                     dim_limit <- min(self$dim_len, (dim_chunk_index + 1) * self$dim_chunk_len)
+                                     
+                                     # Determine chunk length, accounting for trailing chunk
+                                     dim_chunk_len <- dim_limit - dim_offset
+                                     
+                                     dim_chunk_sel_start <- 0
+                                     dim_chunk_sel_stop <- 0
+                                     dim_out_offset <- 0
+                                     
+                                     if(self$start < dim_offset) {
+                                       # Selection starts before the current chunk
+                                       
+                                       dim_chunk_sel_start <- 0
+                                       remainder <- (dim_offset - self$start) %% self$step
+                                       if(remainder > 0) {
+                                         dim_chunk_sel_start <- dim_chunk_sel_start + (self$step - remainder)
+                                       }
+                                       # Compute number of previous items, provides offset into output array
+                                       dim_out_offset <- ceiling((dim_offset - self$start) / self$step)
+                                     } else {
+                                       # Selection starts within the current chunk
+                                       dim_chunk_sel_start <- self$start - dim_offset
+                                       dim_out_offset <- 0
+                                     }
+                                     
+                                     if(self$stop > dim_limit) {
+                                       # Selection ends after current chunk
+                                       dim_chunk_sel_stop <- self$dim_chunk_len
+                                     } else {
+                                       # Selection ends within current chunk
+                                       dim_chunk_sel_stop <- self$stop - dim_offset
+                                     }
+                                     
+                                     dim_chunk_sel <- zb_slice(dim_chunk_sel_start, dim_chunk_sel_stop, self$step)
+                                     dim_chunk_num_items <- ceiling((dim_chunk_sel_stop - dim_chunk_sel_start) / self$step)
+                                     dim_out_sel <- zb_slice(dim_out_offset, dim_out_offset + dim_chunk_num_items)
+                                     
+                                     result <- append(result, ChunkDimProjection$new(
+                                       dim_chunk_index,
+                                       dim_chunk_sel,
+                                       dim_out_sel
+                                     ))
+                                   }
+                                   return(result)
+                                 }
+                               )
 )
