@@ -1067,7 +1067,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
     get_item = function(selection) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
       # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/index.ts#L266
-      if(any(sapply(selection, function(s) inherits(s, "Slice")))){
+      if(!all(sapply(selection, function(s) inherits(s, "Slice")))){
         return(self$get_vindex()$get_item(selection))
       } else {
         return(self$get_basic_selection(selection)) 

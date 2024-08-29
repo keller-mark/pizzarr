@@ -429,16 +429,26 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
 #' @keywords internal
 Order <- R6::R6Class("Order",
                      public = list(
+                       #' @field UNKNOWN UNKNOWN
+                       #' @keywords internal
                        UNKNOWN = 0,
+                       #' @field INCREASING INCREASING
+                       #' @keywords internal
                        INCREASING = 1,
+                       #' @field DECREASING DECREASING
+                       #' @keywords internal
                        DECREASING = 2,
+                       #' @field UNORDERED UNORDERED
+                       #' @keywords internal
                        UNORDERED = 3,
+                       #' @description
+                       #' checking order of numbers
+                       #' @param a vector of numbers
                        check = function(a){
                          diff_a <- diff(a)
                          diff_positive <- diff_a >= 0
                          n_diff_positive <- sum(diff_positive)
-                         n_diff_positive = np.count_nonzero(diff_positive)
-                         all_increasing <- n_diff_positive == len(diff_positive)
+                         all_increasing <- n_diff_positive == length(diff_positive)
                          any_increasing <- n_diff_positive > 0
                          if(all_increasing){
                            return(Order$INCREASING)
@@ -474,16 +484,29 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                  #' @field dim_sel selection on dimension
                                  #' @keywords internal
                                  dim_sel = NULL,
+                                 #' @field dim_out_sel TODO
+                                 #' @keywords internal
+                                 dim_out_sel = NULL,
                                  #' @field order order
                                  #' @keywords internal
                                  order = NULL,
+                                 #' @field chunk_nitems number of items per chunk
+                                 #' @keywords internal
+                                 chunk_nitems = NULL, 
+                                 #' @field dim_chunk_ixs chunks that should be visited
+                                 #' @keywords internal
+                                 dim_chunk_ixs = NULL,
+                                 #' @field chunk_nitems_cumsum offsets into the output array
+                                 #' @keywords internal
+                                 chunk_nitems_cumsum = NULL, 
                                  #' @description
                                  #' Create a new SliceDimIndexer instance.
                                  #' @param dim_sel integer dimention selection
                                  #' @param dim_len integer dimension length
                                  #' @param dim_chunk_len integer dimension chunk length
+                                 #' @param order order
                                  #' @return A `SliceDimIndexer` instance.
-                                 initialize = function(dim_sel, dim_len, dim_chunk_len, order = Order$UNKOWN) {
+                                 initialize = function(dim_sel, dim_len, dim_chunk_len, order = Order$public_fields$UNKOWN) {
 
                                    # Normalize
                                    dim_sel <- sapply(dim_sel, normalize_integer_selection, dim_len = dim_len)
@@ -495,10 +518,32 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                    self$num_items <- length(dim_sel)
                                    self$num_chunks <- ceiling(self$dim_len / self$dim_chunk_len)
                                    
+                                   dim_sel_chunk <- ceiling(dim_sel / dim_chunk_len)
+                                   
                                    # determine order of indices
-                                   if(order == Order$UNKNOWN)
-                                     order <- Order$check(dim_sel)
+                                   # if(order == Order$public_fields$UNKNOWN)
+                                   if(0 == Order$public_fields$UNKNOWN)
+                                     order <- Order$public_methods$check(dim_sel)
                                    self$order <- order
+                                   
+                                   if(self$order == Order$public_fields$INCREASING){
+                                     self$dim_sel <-  dim_sel
+                                   } else if(self$order == Order$public_fields$DECREASING) {
+                                     self$dim_sel = rev(dim_sel)
+                                     self$dim_out_sel = rev(seq(1,self$num_items))
+                                   } else {
+                                     # sort indices to group by chunk
+                                     self$dim_out_sel = dim_sel[order(dim_sel_chunk)]
+                                   }
+                                   
+                                   # precompute number of selected items for each chunk
+                                   self$chunk_nitems <- tabulate(dim_sel_chunk, nbins = self$num_chunks)
+                                   
+                                   # find chunks that we need to visit
+                                   self.dim_chunk_ixs = which(self$chunk_nitems != 0)
+                                   
+                                   # compute offsets into the output array
+                                   self$chunk_nitems_cumsum = cumsum(self$chunk_nitems)
                                    
                                  },
                                  #' @description 
