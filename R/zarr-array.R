@@ -1250,12 +1250,14 @@ ZarrArray <- R6::R6Class("ZarrArray",
             from <- ifelse("from" %in% arg_names, x[[which("from" == arg_names)]], x[[2]])
             to <- ifelse("to" %in% arg_names, x[[which("to" == arg_names)]], x[[3]])
             if(length(x) > 3) {
-              stop("Slicing with step size is not supported yet")
-              by <- ifelse("by" %in% arg_names, x[[which("by" == arg_names)]], x[[4]])
+              # stop("Slicing with step size is not supported yet")
+              # by <- ifelse("by" %in% arg_names, x[[which("by" == arg_names)]], x[[4]])
+              return(seq(x[[2]], x[[3]], x[[4]]))
             } else {
-              by <- NA
+              # by <- NA
+              return(slice(from, to))
             }
-            return(slice(from, to, by))
+            # return(slice(from, to, by))
             
           # custom vector slicing
           } else if(x[[1]] == "c") {

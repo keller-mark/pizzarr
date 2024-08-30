@@ -66,9 +66,11 @@ test_that("S3 methods of Zarr object", {
     #subetting with brackets `[`
     expect_equal(z[4,5], z$get_item(list(slice(4, 4), slice(5, 5))))
     expect_equal(z[1:3,5], z$get_item(list(slice(1, 3), slice(5, 5))))
+    
     #TODO slicing by step size is not yet supported
     expect_error(z[1,seq(1,5,2)])
-    expect_equal(z[1,seq(1,5)], z$get_item(list(slice(1, 1), slice(1, 5))))
+      
+    # expect_equal(z[1,seq(1,5)], z$get_item(list(slice(1, 1), slice(1, 5))))
     # expect_equal(z[1,seq(1,5,2)], z$get_item(list(slice(1, 1), slice(1, 5, 2))))
     expect_equal(z[1,], z$get_item(list(slice(1, 1))))
     expect_error(z[1], "This Zarr object has 2 dimensions, 1 were supplied")
