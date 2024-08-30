@@ -572,11 +572,13 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      self$dim_sel <-  dim_sel
                                    } else if(self$order == Order$public_fields$DECREASING) {
                                      self$dim_sel = rev(dim_sel)
-                                     self$dim_out_sel = rev(seq(1,self$num_items))
+                                     # self$dim_out_sel = rev(seq(1,self$num_items))
+                                     self$dim_out_sel = rev(seq(0,self$num_items-1)) # Python based indexing
                                    } else {
                                      # sort indices to group by chunk
                                      self$dim_out_sel = order(dim_sel_chunk)
                                      self$dim_sel <- dim_sel[self$dim_out_sel]
+                                     self$dim_out_sel <- self$dim_out_sel - 1 # Python based indexing
                                    }
                                    
                                    # precompute number of selected items for each chunk
@@ -618,6 +620,7 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      } else {
                                        dim_out_sel <- self$dim_out_sel[(start + 1):stop]
                                      }
+                                     # dim_out_sel <- self$dim_out_sel[(start + 1):stop]
                                      
                                      # find region in chunk
                                      dim_offset <- dim_chunk_ix * self$dim_chunk_len

@@ -29,6 +29,7 @@ normalize_integer_selection <- function(dim_sel, dim_len) {
   # Normalize type to int
   dim_sel <- as_scalar(dim_sel)
 
+  # TODO: do we really need this for R type array indexing ?
   # handle wraparound
   if(dim_sel < 0) {
     dim_sel <- dim_len + dim_sel
