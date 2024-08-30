@@ -1241,6 +1241,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
           return(slice(x, x))
         } else if(typeof(x) == "language") {
           x <- as.list(x)
+          
           # Return a range (supplied via : or seq())
           if(x[[1]] == ":") {
             return(slice(x[[2]], x[[3]]))
@@ -1255,12 +1256,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
               by <- NA
             }
             return(slice(from, to, by))
+            
+          # custom vector slicing
           } else if(x[[1]] == "c") {
-            # stop("Custom vector slicing is not yet supported")
             check_func <- sapply(x, function(y) {
               !is.function(eval(y))
             })
-            # return(int(floor(unlist(x[check_func]))))
             return(floor(unlist(x[check_func])))
           } else {
             stop("Unsupported filter '", as.character(x), "' supplied")

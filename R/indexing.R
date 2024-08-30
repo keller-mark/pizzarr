@@ -98,6 +98,7 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
                                #' @param dim_chunk_len integer dimension chunk length
                                #' @return A `IntDimIndexer` instance.
                                initialize = function(dim_sel, dim_len, dim_chunk_len) {
+                                 
                                  # Normalize
                                  dim_sel <- normalize_integer_selection(dim_sel, dim_len)
                                  
@@ -373,6 +374,9 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                 
                                 shape <- array$get_shape()
                                 chunks <- array$get_chunks()
+                                
+                                # Normalize
+                                selection <- normalize_list_selection(selection, shape)
                                 
                                 # Setup per-dimension indexers
                                 dim_indexers <- list()
