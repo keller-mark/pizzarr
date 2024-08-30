@@ -1,40 +1,55 @@
 #' @keywords internal
 zero_based_to_one_based <- function(selection, shape) {
 
-  if(!all(vapply(selection, is_slice, logical(length = 1)))) 
-    stop("selection must be a list of slices")
+  # drop this since we could do it for arbitrary indices
+  # if(!all(vapply(selection, is_slice, logical(length = 1)))) 
+  #   stop("selection must be a list of slices")
   
   selection_list <- list()
   
   for(i in seq_len(length(selection))) {
+    
+    # get selection
     sel <- selection[[i]]
-    # We assume the selection uses zero-based indexing,
-    # and internally convert to R-based / 1-based indexing
-    # before accessing data on the internal self$data.
-    sel_start <- sel$start + 1 # Add one, since R indexing is zero-based.
-    sel_stop <- sel$stop # Do not subtract one, since R indexing is inclusive.
-    sel_step <- sel$step
-    if(is.na(sel_step)) sel_step <- 1
-    # TODO: convert these warnings to errors once we know internals do indexing correctly
-    if(sel_start < 1) {
-      sel_start <- 1
-      message("IndexError: NestedArray$get() received slice with start index out of bounds - too low")
-    }
-    if(sel_start > shape[i]) {
-      sel_start <- shape[i]
-      message("IndexError: NestedArray$get() received slice with start index out of bounds - too high")
-    }
-    if(sel_stop < 1) {
-      sel_stop <- 1
-      message("IndexError: NestedArray$get() received slice with stop index out of bounds - too low")
-    }
-    if(sel_stop > shape[i]) {
-      sel_stop <- shape[i]
-      message("IndexError: NestedArray$get() received slice with stop index out of bounds - too high")
-    }
-    selection_list <- append(selection_list, list(seq(from = sel_start, 
-                                                      to = sel_stop, 
-                                                      by = sel_step)))
+    
+    # for slice
+    if(inherits(sel, "Slice")){
+     
+      # We assume the selection uses zero-based indexing,
+      # and internally convert to R-based / 1-based indexing
+      # before accessing data on the internal self$data.
+      sel_start <- sel$start + 1 # Add one, since R indexing is zero-based.
+      sel_stop <- sel$stop # Do not subtract one, since R indexing is inclusive.
+      sel_step <- sel$step
+      if(is.na(sel_step)) sel_step <- 1
+      # TODO: convert these warnings to errors once we know internals do indexing correctly
+      if(sel_start < 1) {
+        sel_start <- 1
+        message("IndexError: NestedArray$get() received slice with start index out of bounds - too low")
+      }
+      if(sel_start > shape[i]) {
+        sel_start <- shape[i]
+        message("IndexError: NestedArray$get() received slice with start index out of bounds - too high")
+      }
+      if(sel_stop < 1) {
+        sel_stop <- 1
+        message("IndexError: NestedArray$get() received slice with stop index out of bounds - too low")
+      }
+      if(sel_stop > shape[i]) {
+        sel_stop <- shape[i]
+        message("IndexError: NestedArray$get() received slice with stop index out of bounds - too high")
+      }
+      selection_list <- append(selection_list, list(seq(from = sel_start, 
+                                                        to = sel_stop, 
+                                                        by = sel_step))) 
+    } else {
+      
+      sel <- sel + 1
+      selection_list <- append(selection_list, list(sel))
+    }      
+    # } else {
+    #   stop("Unknown selection type")
+    # }
   }
   return(selection_list)
 }

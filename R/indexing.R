@@ -437,9 +437,11 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                   
                                   for(p in dim_proj) {
                                     chunk_coords <- append(chunk_coords, p$dim_chunk_index)
-                                    chunk_sel <- append(chunk_sel, p$dim_chunk_sel)
+                                    # chunk_sel <- append(chunk_sel, p$dim_chunk_sel)
+                                    chunk_sel <- append(chunk_sel, list(p$dim_chunk_sel))
                                     if(!is_na(p$dim_out_sel)) {
-                                      out_sel <- append(out_sel, p$dim_out_sel)
+                                      # out_sel <- append(out_sel, p$dim_out_sel)
+                                      out_sel <- append(out_sel, list(p$dim_out_sel))
                                     }
                                   }
                                   
@@ -617,6 +619,10 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      dim_offset <- dim_chunk_ix * self$dim_chunk_len
                                      # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset 
                                      dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset + 1
+                                     
+                                     # START R-SPECIFIC
+                                     dim_chunk_ix <- dim_chunk_ix - 1
+                                     # END R-SPECIFIC
 
                                      result <- append(result, ChunkDimProjection$new(
                                        dim_chunk_ix,
