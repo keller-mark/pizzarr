@@ -622,14 +622,19 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      }
                                      # dim_out_sel <- self$dim_out_sel[(start + 1):stop]
                                      
-                                     # find region in chunk
-                                     dim_offset <- dim_chunk_ix * self$dim_chunk_len
-                                     # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset 
-                                     dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset + 1
-                                     
                                      # START R-SPECIFIC
                                      dim_chunk_ix <- dim_chunk_ix - 1
                                      # END R-SPECIFIC
+                                     
+                                     # find region in chunk
+                                     dim_offset <- dim_chunk_ix * self$dim_chunk_len
+                                     # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset 
+                                     # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset + 1
+                                     dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset - 1
+                                     
+                                     # # START R-SPECIFIC
+                                     # dim_chunk_ix <- dim_chunk_ix - 1
+                                     # # END R-SPECIFIC
 
                                      result <- append(result, ChunkDimProjection$new(
                                        dim_chunk_ix,
