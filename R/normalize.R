@@ -35,7 +35,8 @@ normalize_integer_selection <- function(dim_sel, dim_len) {
     dim_sel <- dim_len + dim_sel
   }
 
-  # Handle out of bounds
+  # TODO: do we need to normalize R indexing or Python indexing here ?
+  # handle out of bounds
   # if(dim_sel >= dim_len || dim_sel < 0) {
   if(dim_sel > dim_len || dim_sel < 1) {
     stop('BoundsCheckError(dim_len)')
