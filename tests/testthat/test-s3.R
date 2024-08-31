@@ -52,7 +52,7 @@ test_that("can use bracket notation to get values from ZarrArray", {
 })
 
 test_that("S3 methods of Zarr object", {
-  a <- array(data=1:20, dim=c(2, 10))
+    a <- array(data=1:20, dim=c(2, 10))
     #      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
     # [1,]    1    3    5    7    9   11   13   15   17    19
     # [2,]    2    4    6    8   10   12   14   16   18    20
@@ -67,11 +67,19 @@ test_that("S3 methods of Zarr object", {
     expect_equal(z[4,5], z$get_item(list(slice(4, 4), slice(5, 5))))
     expect_equal(z[1:3,5], z$get_item(list(slice(1, 3), slice(5, 5))))
     
-    #TODO slicing by step size is not yet supported
-    expect_error(z[1,seq(1,5,2)])
+    # slicing by step size
+    z[1,seq(1,5,2)]
+    z[1:3,seq(1,5,2)]
+    z[c(2,1),seq(1,5,2)]
+    
+    # arbitrary indices
+    z[1,c(5,3,8)]
+    z[1:3,c(6,2,3)]
+    z[c(2,1),c(10,1,6)]
       
-    # expect_equal(z[1,seq(1,5)], z$get_item(list(slice(1, 1), slice(1, 5))))
-    # expect_equal(z[1,seq(1,5,2)], z$get_item(list(slice(1, 1), slice(1, 5, 2))))
+    # compare regular slicing and step size
+    expect_equal(z[1,seq(1,5)], z$get_item(list(slice(1, 1), slice(1, 5))))
+    expect_equal(z[1,seq(1,5,2)], z$get_item(list(slice(1, 1), slice(1, 5, 2))))
     expect_equal(z[1,], z$get_item(list(slice(1, 1))))
     expect_error(z[1], "This Zarr object has 2 dimensions, 1 were supplied")
     
