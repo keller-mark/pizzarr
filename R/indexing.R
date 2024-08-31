@@ -1,7 +1,8 @@
-is_pure_fancy_indexing <- function(selection, ndim) {
+is_pure_fancy_indexing <- function(selection, ndim = length(selection)) {
     
+  # one dimensions case
   if(ndim == 1){
-    if(length(selection) > 1){
+    if(is_integer_vec(selection) | is_integer_list(selection)){
       return(TRUE)
     }
   } 
@@ -9,8 +10,16 @@ is_pure_fancy_indexing <- function(selection, ndim) {
   # check if there are any slice objects 
   no_slicing <- (length(selection) == ndim) & !(any(sapply(selection, function(s) inherits(s, "Slice"))))
   
+  # check for integer vectors
+  all_integer <- all(sapply(selection, function(sel){
+    (is_integer(sel) | is_integer_list(sel)) | is_integer_vec(sel)
+  }))
+  any_integer <- any(sapply(selection, function(sel){
+    is_integer_list(sel) | is_integer_vec(sel)
+  }))
+  
   # return
-  return(no_slicing)
+  return((no_slicing & all_integer) & any_integer)
 }
 
 

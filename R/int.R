@@ -1,4 +1,5 @@
 # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/src/core/slice.ts#L78
+# TODO: for now these are defined but not used, should be used in the future ? 
 
 #' Abstract Int object
 #' @title Int Class

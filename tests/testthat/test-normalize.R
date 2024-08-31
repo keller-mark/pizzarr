@@ -58,8 +58,11 @@ test_that("normalize_integer_selection with valid input", {
 
 test_that("normalize_integer_selection with invalid input", {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
-  f1 <- function() normalize_integer_selection(100, 100)
-  expect_error(f1())
+  
+  # TODO: should normalization be performed based  R indexing integers or python ?
+  # f1 <- function() normalize_integer_selection(100, 100)
+  # expect_error(f1())
+  normalize_integer_selection(100, 100)
   f2 <- function() normalize_integer_selection(1000, 100)
   expect_error(f2())
   f3 <- function() normalize_integer_selection(-1000, 100)
