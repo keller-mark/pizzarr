@@ -11,19 +11,15 @@ manage_filters <- function(filters) {
       
     } else if(typeof(x) == "double") {
       # Return single value for dimension
-      # TODO: do we need slicing for this case ?
-      # return(slice(x, x))
-      return(x)
+      return(slice(x, x))
     } else if(typeof(x) == "language") {
       x <- as.list(x)
       
       # Return a range (supplied via : or seq())
       if(x[[1]] == ":") {
-        # return(slice(x[[2]], x[[3]]))
-        # TODO: do we need slicing for this case ?
-        return(x[[2]]:x[[3]])
+        return(slice(x[[2]], x[[3]]))
       } else if(x[[1]] == "seq") {
-        # TODO: do we need slicing for this case ?
+        # TODO: do we need slicing for this case ? otherwise implement slice(start, stop, step)
         arg_names <- names(x)
         from <- ifelse("from" %in% arg_names, x[[which("from" == arg_names)]], x[[2]])
         to <- ifelse("to" %in% arg_names, x[[which("to" == arg_names)]], x[[3]])
@@ -31,12 +27,10 @@ manage_filters <- function(filters) {
           by <- ifelse("by" %in% arg_names, x[[which("by" == arg_names)]], x[[4]])
           return(seq(from, to, by))
         } else {
-          # by <- NA
+          by <- NA
           return(seq(from, to))
         }
-        return(seq())
-        # return(slice(from, to, by))
-        # custom vector slicing
+        return(seq(from, to, by))
       } else if(x[[1]] == "c") {
         check_func <- sapply(x, function(y) {
           !is.function(eval(y))
