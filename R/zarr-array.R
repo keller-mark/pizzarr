@@ -1068,16 +1068,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
       # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/index.ts#L266
       
-      ###
-      # TODO: what should be case if one of dimensions is a slice and others are not
-      #       since in this case get_basic_selection cannot handle non-slice dimensions
-      ###
-      
-      ###
-      # Native to R, one might prefer to get an orthogonal selection
-      ###
-      
-      # if(!all(sapply(selection, function(s) inherits(s, "Slice")))){
       if(is_pure_fancy_indexing(selection)){
         # TODO: implement vindex further for vertical indexing
         stop("vertical indexing is not supported yet")
