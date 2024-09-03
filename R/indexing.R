@@ -404,6 +404,8 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                     dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else if(length(dim_sel) > 1) {
                                     dim_indexer <- IntArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
+                                    
+                                  # TODO: implement BoolArrayDimIndexer and fix if condition here
                                   } else if(is_slice(dim_sel)) {
                                     dim_indexer <- BoolArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else {
