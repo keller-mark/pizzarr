@@ -1073,9 +1073,15 @@ ZarrArray <- R6::R6Class("ZarrArray",
       #       since in this case get_basic_selection cannot handle non-slice dimensions
       ###
       
+      ###
+      # Native to R, one might prefer to get an orthogonal selection
+      ###
+      
       # if(!all(sapply(selection, function(s) inherits(s, "Slice")))){
       if(is_pure_fancy_indexing(selection)){
-        return(self$get_vindex()$get_item(selection))
+        # TODO: implement vindex further for vertical indexing
+        stop("vertical indexing is not supported yet")
+        # return(self$get_vindex()$get_item(selection))
       } else {
         return(self$get_basic_selection(selection)) 
       }
@@ -1277,7 +1283,10 @@ ZarrArray <- R6::R6Class("ZarrArray",
       #   }
       # })
       filters <- manage_filters(filters)
-      return(self$get_item(filters))
+
+      # return orthogonal selection upon `[.ZarrArray`
+      # return(self$get_item(filters))
+      return(self$get_orthogonal_selection(filters))
     },
     #' @description
     #' Assign values for a selection using bracket notation (for S3 method).
