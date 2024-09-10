@@ -294,7 +294,6 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
         }
 
         if(is_integer(dim_sel)) {
-        # if(is_int(dim_sel)) {
           dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
         } else if(is_slice(dim_sel)) {
           dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
