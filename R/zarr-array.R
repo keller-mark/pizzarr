@@ -1230,10 +1230,10 @@ ZarrArray <- R6::R6Class("ZarrArray",
         stop("This Zarr object has ", length(private$shape), " dimensions, ", length(filters), " were supplied")
       }
 
+      # update filters for orthogonal_selection
       filters <- manage_filters(filters)
 
       # return orthogonal selection upon `[.ZarrArray`
-      # return(self$get_item(filters))
       return(self$get_orthogonal_selection(filters))
     },
     #' @description
