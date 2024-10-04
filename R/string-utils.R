@@ -18,13 +18,8 @@ char_vec_to_raw <- function(char_vec, basic_type, num_chars, byte_order) {
   }
   num_bytes <- num_chars * num_bytes_per_char
 
-  # print(length(char_vec))
-  # print(head(char_vec))
-  # print(char_vec[is.na(char_vec)])
-  # print(char_vec[length(char_vec)])
   list_of_raw <- iconv(char_vec, to = iconv_to, toRaw = TRUE)
-  # print(list_of_raw[[length(list_of_raw)]])
-  
+
   buf <- raw(length = length(list_of_raw) * num_bytes)
 
   for(i in seq_len(length(list_of_raw))) {
@@ -38,8 +33,6 @@ char_vec_to_raw <- function(char_vec, basic_type, num_chars, byte_order) {
     offset_i_stop <- offset_i_start + length(raw_vec_i) - 1
 
     # TODO: take into account byte_order?
-    # print(raw_vec_i)
-    # print(c(offset_i_start, offset_i_stop, length(raw_vec_i)))
     buf[offset_i_start:offset_i_stop] <- raw_vec_i
   }
 
