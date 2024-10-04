@@ -140,3 +140,19 @@ test_that("selection functionality", {
   expect_equal(sub_a$shape, c(a$get_shape()[1], 10))
   
 })
+
+test_that("Order class", {
+  
+  # fields
+  expect_equal(Order$public_fields$UNKNOWN, 0)
+  expect_equal(Order$public_fields$INCREASING,1)
+  expect_equal(Order$public_fields$DECREASING,2)
+  expect_equal(Order$public_fields$UNORDERED,3)
+  
+  # methods
+  expect_equal(Order$public_methods$check(1:5),1)
+  expect_equal(Order$public_methods$check(seq(2,10,2)),1)
+  expect_equal(Order$public_methods$check(10:1),2)
+  expect_equal(Order$public_methods$check(c(1,5,2,6)),3)
+  expect_error(Order$public_methods$check(c("a", 2)))
+})
