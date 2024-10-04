@@ -107,7 +107,6 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
                                #' @param dim_chunk_len integer dimension chunk length
                                #' @return A `IntDimIndexer` instance.
                                initialize = function(dim_sel, dim_len, dim_chunk_len) {
-                                 
                                  # Normalize
                                  dim_sel <- normalize_integer_selection(dim_sel, dim_len)
                                  
@@ -294,7 +293,6 @@ BasicIndexer <- R6::R6Class("BasicIndexer",
         }
 
         if(is_integer(dim_sel)) {
-        # if(is_int(dim_sel)) {
           dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
         } else if(is_slice(dim_sel)) {
           dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
