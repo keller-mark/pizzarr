@@ -141,6 +141,26 @@ test_that("selection functionality", {
   
 })
 
+test_that("checking pure fancy indexing", {
+  
+  # check integer input, list vector or scalar
+  expect_equal(is_pure_fancy_indexing(list(1:3, 1, 1:2)), TRUE)
+  expect_equal(is_pure_fancy_indexing(list(1:5, 1, 1:2)), TRUE)
+  expect_equal(is_pure_fancy_indexing(list(3, 1, 10)), TRUE)
+  expect_equal(is_pure_fancy_indexing(c(1,5,2)), TRUE)
+  expect_equal(is_pure_fancy_indexing(list(3, list(1,2,3), 10)), TRUE)
+  
+  # checking slices
+  expect_equal(is_pure_fancy_indexing(list(1:5, 1, slice(1,2))), FALSE)
+  expect_equal(is_pure_fancy_indexing(list(1:5, slice(1,3), slice(1,2))), FALSE)
+  
+  # checking non-integers
+  expect_equal(is_pure_fancy_indexing(list(1:5, 1.2, 1:2)), FALSE)
+  expect_equal(is_pure_fancy_indexing(c(1,5,2.4)), FALSE)
+  expect_equal(is_pure_fancy_indexing(list(3, list(1,2,3.3), 10)), FALSE)
+  
+})
+
 test_that("Order class", {
   
   # fields
