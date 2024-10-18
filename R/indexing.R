@@ -1,6 +1,6 @@
 # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L61
 
-# Check whether a selection contains only scalars or integer array-likes
+# Check whether a selection contains only integer array-likes
 # This is used to determine whether zarr.array$get_item() calls vectorized (inner) indexing
 is_pure_fancy_indexing <- function(selection, ndim = length(selection)) {
     
@@ -111,6 +111,7 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
                                #' @param dim_chunk_len integer dimension chunk length
                                #' @return A `IntDimIndexer` instance.
                                initialize = function(dim_sel, dim_len, dim_chunk_len) {
+                                 
                                  # Normalize
                                  dim_sel <- normalize_integer_selection(dim_sel, dim_len)
                                  
@@ -123,6 +124,7 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
                                #' TODO
                                #' @return a `ChunkDimProjection` instance
                                iter = function() {
+                                 
                                  # TODO: use generator/yield features from async package
                                  dim_chunk_index <- floor(self$dim_sel / self$dim_chunk_len)
                                  dim_offset <- dim_chunk_index * self$dim_chunk_len
@@ -400,16 +402,16 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                     dim_sel <- zb_slice(NA)
                                   }
                                   
+                                  # TODO: for now, normalize_list_selection will get SliceDimIndexer for single integer
                                   if(length(dim_sel) == 1) {
                                     dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else if(is_slice(dim_sel)) {
                                     dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else if(length(dim_sel) > 1) {
                                     dim_indexer <- IntArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
-                                    
                                   # TODO: implement BoolArrayDimIndexer and fix if condition here
-                                  } else if(is_slice(dim_sel)) {
-                                    dim_indexer <- BoolArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
+                                  # } else if(is_slice(dim_sel)) {
+                                    # dim_indexer <- BoolArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else {
                                     stop('Unsupported selection item for basic indexing, expected integer, slice, vector of integer or boolean')
                                   }
