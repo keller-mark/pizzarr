@@ -1,3 +1,7 @@
+# Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L61
+
+# Check whether a selection contains only scalars or integer array-likes
+# This is used to determine whether zarr.array$get_item() calls vectorized (inner) indexing
 is_pure_fancy_indexing <- function(selection, ndim = length(selection)) {
     
   # one dimensions case
