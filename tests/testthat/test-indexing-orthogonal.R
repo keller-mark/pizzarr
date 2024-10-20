@@ -30,12 +30,12 @@ test_that("basic indexer for array that spans multiple chunks", {
   expect_equal("SliceDimIndexer" %in% class(bi$dim_indexers[[1]]), TRUE)
   
   # combination of IntArrayDimIndexer and SliceDimIndexer
-  bi <- OrthogonalIndexer$new(list(1:10, zb_slice(0, 11)), z)
+  bi <- OrthogonalIndexer$new(list(0:9, zb_slice(0, 11)), z)
   expect_equal("IntArrayDimIndexer" %in% class(bi$dim_indexers[[1]]), TRUE)
   expect_equal("SliceDimIndexer" %in% class(bi$dim_indexers[[2]]), TRUE)
   
   # unordered integer vector is a IntArrayDimIndexer
-  bi <- OrthogonalIndexer$new(list(1:10, c(2,3,5,4,1)), z)
+  bi <- OrthogonalIndexer$new(list(0:9, c(2,3,5,4,1)), z)
   expect_equal("IntArrayDimIndexer" %in% class(bi$dim_indexers[[2]]), TRUE)
   
   # empty dimension is a slice
@@ -58,12 +58,12 @@ test_that("basic indexer for array that spans multiple chunks where shape is not
   expect_equal("SliceDimIndexer" %in% class(bi$dim_indexers[[1]]), TRUE)
   
   # combination of IntArrayDimIndexer and SliceDimIndexer
-  bi <- OrthogonalIndexer$new(list(1:10, zb_slice(0, 11)), z)
+  bi <- OrthogonalIndexer$new(list(0:9, zb_slice(0, 11)), z)
   expect_equal("IntArrayDimIndexer" %in% class(bi$dim_indexers[[1]]), TRUE)
   expect_equal("SliceDimIndexer" %in% class(bi$dim_indexers[[2]]), TRUE)
   
   # unordered integer vector is a IntArrayDimIndexer
-  bi <- OrthogonalIndexer$new(list(1:10, c(2,3,5,4,1)), z)
+  bi <- OrthogonalIndexer$new(list(0:9, c(2,3,5,4,1)), z)
   expect_equal("IntArrayDimIndexer" %in% class(bi$dim_indexers[[2]]), TRUE)
   
   # empty dimension is a slice
@@ -76,8 +76,9 @@ test_that("basic indexer for array that spans multiple chunks where shape is not
 test_that("int array dimension indexer", {
   
   # ordered int array index
-  iad <- IntArrayDimIndexer$new(1:10, 10, 3)
-  expect_equal(iad$dim_sel, 1:10)
+  # iad <- IntArrayDimIndexer$new(1:10, 10, 3)
+  iad <- IntArrayDimIndexer$new(0:9, 10, 3)
+  expect_equal(iad$dim_sel, 0:9)
   expect_equal(iad$dim_chunk_ixs, c(1,2,3,4))
   expect_equal(iad$dim_len, 10)
   expect_equal(iad$dim_chunk_len, 3)
@@ -87,12 +88,12 @@ test_that("int array dimension indexer", {
   
   # unordered int array index
   iad <- IntArrayDimIndexer$new(c(2,3,5,1,2), 6, 3)
-  expect_equal(iad$dim_sel, c(2,3,1,2,5))
+  expect_equal(iad$dim_sel, c(2,1,2,3,5))
   expect_equal(iad$dim_chunk_ixs, c(1,2))
   expect_equal(iad$dim_len, 6)
   expect_equal(iad$dim_chunk_len, 3)
   expect_equal(iad$num_chunks, 2)
-  expect_equal(iad$chunk_nitems, c(4,1))
+  expect_equal(iad$chunk_nitems, c(3,2))
   expect_equal(iad$order, 3)
   
   # error for wrong dimension length

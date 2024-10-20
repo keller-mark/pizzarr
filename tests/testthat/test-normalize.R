@@ -60,9 +60,11 @@ test_that("normalize_integer_selection with invalid input", {
   # Reference: https://github.com/gzuidhof/zarr.js/blob/292804/test/core/indexing.test.ts#L12
   
   # TODO: should normalization be performed based  R indexing integers or python ?
-  # f1 <- function() normalize_integer_selection(100, 100)
-  # expect_error(f1())
-  normalize_integer_selection(100, 100)
+  # Artur: I think it has to be in Python indexing since zero_based_to_one_based() is called later when R arrays are filled from chunk selection
+  normalize_integer_selection(99, 100)
+  f1 <- function() normalize_integer_selection(100, 100)
+  expect_error(f1())
+  # normalize_integer_selection(100, 100)
   f2 <- function() normalize_integer_selection(1000, 100)
   expect_error(f2())
   f3 <- function() normalize_integer_selection(-1000, 100)
