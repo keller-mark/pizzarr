@@ -5,7 +5,8 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
 
   for(i in seq_along(selection)) {
     dim_sel <- selection[[i]]
-    if(length(dim_sel) == 1 && is_integer(dim_sel)) {
+    # if(length(dim_sel) == 1 && is_integer(dim_sel)) {
+    if(is_integer(dim_sel)){
       if(convert_integer_selection_to_slices) {
         selection[[i]] <- zb_slice(dim_sel, dim_sel + 1, 1)
       } else {
@@ -37,8 +38,8 @@ normalize_integer_selection <- function(dim_sel, dim_len) {
 
   # TODO: do we need to normalize R indexing or Python indexing here ?
   # handle out of bounds
-  # if(dim_sel >= dim_len || dim_sel < 0) {
-  if(dim_sel > dim_len || dim_sel < 1) {
+  if(dim_sel >= dim_len || dim_sel < 0) {
+  # if(dim_sel > dim_len || dim_sel < 1) { # pre zb_int implementation
     stop('BoundsCheckError(dim_len)')
   }
 

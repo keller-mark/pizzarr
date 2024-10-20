@@ -30,18 +30,22 @@ manage_filters <- function(filters) {
         to <- ifelse("to" %in% arg_names, x[[which("to" == arg_names)]], x[[3]])
         if(length(x) > 3) {
           by <- ifelse("by" %in% arg_names, x[[which("by" == arg_names)]], x[[4]])
-          return(seq(from, to, by))
+          # return(seq(from, to, by))
+          return(int(seq(from, to, by)))
         } else {
           by <- NA
-          return(seq(from, to))
+          # return(seq(from, to))
+          return(int(seq(from, to)))
         }
-        return(seq(from, to, by))
+        # return(seq(from, to, by))
+        return(int(seq(from, to, by)))
       } else if(x[[1]] == "c") {
         # return elements of the combine function as indices
         check_func <- sapply(x, function(y) {
           !is.function(eval(y))
         })
-        return(floor(unlist(x[check_func])))
+        # return(floor(unlist(x[check_func])))
+        return(int(floor(unlist(x[check_func]))))
       } else {
         stop("Unsupported filter '", as.character(x), "' supplied")
       }

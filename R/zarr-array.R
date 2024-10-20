@@ -1069,8 +1069,8 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/index.ts#L266
       
       if(is_pure_fancy_indexing(selection)){
-        # TODO: implement vindex further for vertical indexing
-        stop("vertical indexing is not supported yet")
+        # TODO: implement vindex further for vectorized indexing
+        stop("vectorized indexing is not supported yet")
         # return(self$get_vindex()$get_item(selection))
       } else {
         return(self$get_basic_selection(selection)) 

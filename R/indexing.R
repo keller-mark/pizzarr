@@ -19,7 +19,8 @@ is_pure_fancy_indexing <- function(selection, ndim = length(selection)) {
     (is_integer(sel) | is_integer_list(sel)) | is_integer_vec(sel)
   }))
   any_integer <- any(sapply(selection, function(sel){
-    is_integer_list(sel) | is_integer_vec(sel)
+    # is_integer_list(sel) | is_integer_vec(sel)
+    is_integer_list(sel) | is_integer_vec(sel) | is_integer(sel)
   }))
   
   # return
@@ -409,8 +410,8 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                     dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else if(length(dim_sel) > 1) {
                                     dim_indexer <- IntArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
-                                  # TODO: implement BoolArrayDimIndexer and fix if condition here
-                                  # } else if(is_slice(dim_sel)) {
+                                  # TODO: implement BoolArrayDimIndexer and fix if condition here (is_bool_vec)
+                                  # } else if(is_bool_vec(dim_sel)) {
                                     # dim_indexer <- BoolArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else {
                                     stop('Unsupported selection item for basic indexing, expected integer, slice, vector of integer or boolean')
@@ -576,7 +577,8 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                    self$num_items <- length(dim_sel)
                                    self$num_chunks <- ceiling(self$dim_len / self$dim_chunk_len)
                                    
-                                   dim_sel_chunk <- ceiling(dim_sel / dim_chunk_len)
+                                   # dim_sel_chunk <- ceiling(dim_sel / dim_chunk_len) # pre zb_int() implementation
+                                   dim_sel_chunk <- floor(dim_sel / dim_chunk_len)
                                    
                                    # determine order of indices
                                    if(sel_order == Order$public_fields$UNKNOWN)
@@ -587,17 +589,18 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      self$dim_sel <-  dim_sel
                                    } else if(self$order == Order$public_fields$DECREASING) {
                                      self$dim_sel = rev(dim_sel)
-                                     # self$dim_out_sel = rev(seq(1,self$num_items))
-                                     self$dim_out_sel = rev(seq(0,self$num_items-1)) # Python based indexing
+                                     self$dim_out_sel = rev(seq(1,self$num_items))
+                                     # self$dim_out_sel = rev(seq(0,self$num_items-1)) # Python based indexing
                                    } else {
                                      # sort indices to group by chunk
                                      self$dim_out_sel = order(dim_sel_chunk)
                                      self$dim_sel <- dim_sel[self$dim_out_sel]
-                                     self$dim_out_sel <- self$dim_out_sel - 1 # Python based indexing
+                                     # self$dim_out_sel <- self$dim_out_sel - 1 # Python based indexing
                                    }
                                    
                                    # precompute number of selected items for each chunk
-                                   self$chunk_nitems <- tabulate(dim_sel_chunk, nbins = self$num_chunks)
+                                   # self$chunk_nitems <- tabulate(dim_sel_chunk, nbins = self$num_chunks) # pre zb_int() implementation
+                                   self$chunk_nitems <- tabulate(dim_sel_chunk + 1, nbins = self$num_chunks)
                                    
                                    # find chunks that we need to visit
                                    self$dim_chunk_ixs = which(self$chunk_nitems != 0)
@@ -617,7 +620,7 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                      
                                      # find region in output
                                      # if (dim_chunk_ix == 0) {
-                                     if (dim_chunk_ix == 1) {
+                                     if (dim_chunk_ix == 1) { 
                                        start <- 0
                                      } else {
                                        start <- self$chunk_nitems_cumsum[dim_chunk_ix - 1]
@@ -634,19 +637,20 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                        dim_out_sel <- seq(start, stop - 1)
                                      } else {
                                        dim_out_sel <- self$dim_out_sel[(start + 1):stop]
+                                       # START R-SPECIFIC
+                                       dim_out_sel <- dim_out_sel - 1
+                                       # END R-SPECIFIC
                                      }
-                                     # dim_out_sel <- self$dim_out_sel[(start + 1):stop]
-                                     
+
                                      # START R-SPECIFIC
                                      dim_chunk_ix <- dim_chunk_ix - 1
                                      # END R-SPECIFIC
                                      
                                      # find region in chunk
                                      dim_offset <- dim_chunk_ix * self$dim_chunk_len
-                                     # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset 
-                                     # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset + 1
-                                     dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset - 1
-                                     
+                                     # dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset - 1 # pre zb_int implementation()
+                                     dim_chunk_sel <- self$dim_sel[(start + 1):stop] - dim_offset
+
                                      # # START R-SPECIFIC
                                      # dim_chunk_ix <- dim_chunk_ix - 1
                                      # # END R-SPECIFIC
