@@ -1067,7 +1067,14 @@ ZarrArray <- R6::R6Class("ZarrArray",
     get_item = function(selection) {
       # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/core.py#L580
       # Reference: https://github.com/gzuidhof/zarr.js/blob/master/src/core/index.ts#L266
-      return(self$get_basic_selection(selection))
+      
+      if(is_pure_fancy_indexing(selection)){
+        # TODO: implement vindex further for vectorized indexing
+        stop("vectorized indexing is not supported yet")
+        # return(self$get_vindex()$get_item(selection))
+      } else {
+        return(self$get_basic_selection(selection)) 
+      }
     },
     #' @description
     #' TODO
@@ -1091,7 +1098,14 @@ ZarrArray <- R6::R6Class("ZarrArray",
     #' @param out TODO
     #' @param fields TODO
     get_orthogonal_selection = function(selection = NA, out = NA, fields = NA) {
-      # TODO
+      
+      # Refresh metadata
+      if(!private$cache_metadata) {
+        private$load_metadata()
+      }
+      
+      indexer <- OrthogonalIndexer$new(selection, self)
+      return(private$get_selection(indexer, out = out, fields = fields))
     },
     #' @description
     #' TODO
@@ -1215,46 +1229,12 @@ ZarrArray <- R6::R6Class("ZarrArray",
       if(length(filters) != length(private$shape)) {
         stop("This Zarr object has ", length(private$shape), " dimensions, ", length(filters), " were supplied")
       }
-      filters <- lapply(filters, function(x) {
-        # Proceed based on type of filter
-        if(typeof(x) == "symbol") {
-          # When empty dimension, return everything
-          if(x == "") {
-            return(NULL)
-          } else {
-            stop("Unsupported filter '", as.character(x), "' supplied") 
-          }
-          
-        } else if(typeof(x) == "double") {
-          # Return single value for dimension
-          return(slice(x, x))
-        } else if(typeof(x) == "language") {
-          x <- as.list(x)
-          # Return a range (supplied via : or seq())
-          if(x[[1]] == ":") {
-            return(slice(x[[2]], x[[3]]))
-          } else if(x[[1]] == "seq") {
-            arg_names <- names(x)
-            from <- ifelse("from" %in% arg_names, x[[which("from" == arg_names)]], x[[2]])
-            to <- ifelse("to" %in% arg_names, x[[which("to" == arg_names)]], x[[3]])
-            if(length(x) > 3) {
-              stop("Slicing with step size is not supported yet")
-              by <- ifelse("by" %in% arg_names, x[[which("by" == arg_names)]], x[[4]])
-            } else {
-              by <- NA
-            }
-            return(slice(from, to, by))
-          } else if(x[[1]] == "c") {
-            stop("Custom vector slicing is not yet supported")
-            # return(eval(y))
-          } else {
-            stop("Unsupported filter '", as.character(x), "' supplied")
-          }
-        } else {
-          stop("Unsupported filter '", as.character(x), "' supplied")
-        }
-      })
-      return(self$get_item(filters))
+
+      # update filters for orthogonal_selection
+      filters <- manage_filters(filters)
+
+      # return orthogonal selection upon `[.ZarrArray`
+      return(self$get_orthogonal_selection(filters))
     },
     #' @description
     #' Assign values for a selection using bracket notation (for S3 method).
