@@ -65,13 +65,22 @@ test_that("S3 methods of Zarr object", {
 
     #subetting with brackets `[`
     expect_equal(z[4,5], z$get_item(list(slice(4, 4), slice(5, 5))))
+    # TODO: decide if this is ultimately how we want 1:3 (stop beyond end of dimension) to behave
+    expect_equal(z[1:3,5], z$get_item(list(slice(1, 3), slice(5, 5))))
     
     # with seq
-    # for now seq(from, to, by) does not use slice(start,step,steo)
-    z[1:2,seq(1,5,2)]
+    # for now seq(from, to, by) does not use slice(start,stop,step)
+    expect_equal(
+        z[1:2,seq(1,5,2)]$data,
+        array(data=c(1, 2, 5, 6, 9, 10), dim=c(2, 3))
+    )
+    
 
     # arbitrary indices
-    z[c(2,1),c(10,1,6)]
+    expect_equal(
+        z[c(2,1),c(10,1,6)]$data,
+        array(data=c(20, 19, 2, 1, 12, 11), dim=c(2, 3))
+    )
       
     # compare regular slicing and step size
     expect_error(z[1], "This Zarr object has 2 dimensions, 1 were supplied")
