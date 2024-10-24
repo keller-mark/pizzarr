@@ -94,52 +94,50 @@ VIndex <- R6::R6Class("VIndex",
 #' @rdname IntDimIndexer
 #' @keywords internal
 IntDimIndexer <- R6::R6Class("IntDimIndexer",
-                             inherit = DimIndexer,
-                             public = list(
-                               #' @field dim_sel TODO
-                               #' @keywords internal
-                               dim_sel = NULL,
-                               #' @field dim_len TODO
-                               #' @keywords internal
-                               dim_len = NULL,
-                               #' @field dim_chunk_len TODO
-                               #' @keywords internal
-                               dim_chunk_len = NULL,
-                               #' @description
-                               #' Create a new IntDimIndexer instance.
-                               #' @param dim_sel integer dimention selection
-                               #' @param dim_len integer dimension length
-                               #' @param dim_chunk_len integer dimension chunk length
-                               #' @return A `IntDimIndexer` instance.
-                               initialize = function(dim_sel, dim_len, dim_chunk_len) {
-                                 
-                                 # Normalize
-                                 dim_sel <- normalize_integer_selection(dim_sel, dim_len)
-                                 
-                                 self$dim_sel <- dim_sel
-                                 self$dim_len <- dim_len
-                                 self$dim_chunk_len <- dim_chunk_len
-                                 self$num_items <- 1
-                               },
-                               #' @description 
-                               #' TODO
-                               #' @return a `ChunkDimProjection` instance
-                               iter = function() {
-                                 
-                                 # TODO: use generator/yield features from async package
-                                 dim_chunk_index <- floor(self$dim_sel / self$dim_chunk_len)
-                                 dim_offset <- dim_chunk_index * self$dim_chunk_len
-                                 dim_chunk_sel <- self$dim_sel - dim_offset
-                                 dim_out_sel <- NA
-                                 return(list(
-                                   ChunkDimProjection$new(
-                                     dim_chunk_index,
-                                     dim_chunk_sel,
-                                     dim_out_sel
-                                   )
-                                 ))
-                               }
-                             )
+  inherit = DimIndexer,
+  public = list(
+    #' @field dim_sel TODO
+    #' @keywords internal
+    dim_sel = NULL,
+    #' @field dim_len TODO
+    #' @keywords internal
+    dim_len = NULL,
+    #' @field dim_chunk_len TODO
+    #' @keywords internal
+    dim_chunk_len = NULL,
+    #' @description
+    #' Create a new IntDimIndexer instance.
+    #' @param dim_sel integer dimention selection
+    #' @param dim_len integer dimension length
+    #' @param dim_chunk_len integer dimension chunk length
+    #' @return A `IntDimIndexer` instance.
+    initialize = function(dim_sel, dim_len, dim_chunk_len) {
+      # Normalize
+      dim_sel <- normalize_integer_selection(dim_sel, dim_len)
+
+      self$dim_sel <- dim_sel
+      self$dim_len <- dim_len
+      self$dim_chunk_len <- dim_chunk_len
+      self$num_items <- 1
+    },
+    #' @description 
+    #' TODO
+    #' @return a `ChunkDimProjection` instance
+    iter = function() {
+      # TODO: use generator/yield features from async package
+      dim_chunk_index <- floor(self$dim_sel / self$dim_chunk_len)
+      dim_offset <- dim_chunk_index * self$dim_chunk_len
+      dim_chunk_sel <- self$dim_sel - dim_offset
+      dim_out_sel <- NA
+      return(list(
+        ChunkDimProjection$new(
+          dim_chunk_index,
+          dim_chunk_sel,
+          dim_out_sel
+        )
+      ))
+    }
+  )
 )
 
 # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0/zarr/indexing.py#L163
