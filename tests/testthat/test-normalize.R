@@ -64,7 +64,6 @@ test_that("normalize_integer_selection with invalid input", {
   normalize_integer_selection(99, 100)
   f1 <- function() normalize_integer_selection(100, 100)
   expect_error(f1())
-  # normalize_integer_selection(100, 100)
   f2 <- function() normalize_integer_selection(1000, 100)
   expect_error(f2())
   f3 <- function() normalize_integer_selection(-1000, 100)

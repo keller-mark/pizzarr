@@ -84,9 +84,9 @@ test_that("set array values", {
   expect_equal(sub$as.array(),
                new_vals)
 
-  # TODO: Should this be the case?!?
-  # expect_error(a[1:10, 1:20]$set("...", new_vals),
-  #              "selection must be a list of slices")
+  # TODO: remove this expect-error once implemented.
+  expect_error(a[1:10, 1:20]$set("...", new_vals),
+                "Unsupported selection type")
 
   a[1:10, 1:20]$set(list(slice(1,10), slice(1,20)), new_vals)
 

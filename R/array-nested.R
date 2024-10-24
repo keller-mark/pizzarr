@@ -42,14 +42,12 @@ zero_based_to_one_based <- function(selection, shape) {
       selection_list <- append(selection_list, list(seq(from = sel_start, 
                                                         to = sel_stop, 
                                                         by = sel_step))) 
-    } else {
-      
+    } else if(is.numeric(sel)) {
       sel <- sel + 1
       selection_list <- append(selection_list, list(sel))
-    }      
-    # } else {
-    #   stop("Unknown selection type")
-    # }
+    } else {
+      stop("Unsupported selection type")
+    }
   }
   return(selection_list)
 }

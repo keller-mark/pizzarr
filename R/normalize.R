@@ -5,15 +5,13 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
 
   for(i in seq_along(selection)) {
     dim_sel <- selection[[i]]
-    # if(length(dim_sel) == 1 && is_integer(dim_sel)) {
     if(is_integer(dim_sel)){
       if(convert_integer_selection_to_slices) {
         selection[[i]] <- zb_slice(dim_sel, dim_sel + 1, 1)
       } else {
         selection[[i]] <- normalize_integer_selection(dim_sel, shape[i])
       }
-    } else if(is_integer_vec(dim_sel)) { # TODO: should this be is_integer_vec?
-      # stop('TypeError(Integer array selections are not supported (yet))')
+    } else if(is_integer_vec(dim_sel)) {
       selection[[i]] <- sapply(dim_sel, normalize_integer_selection, dim_len = shape[i])
     } else if(!is.null(dim_sel) && !is.environment(dim_sel) && 
               (is.na(dim_sel) || dim_sel == ":")) {
