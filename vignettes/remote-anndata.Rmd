@@ -23,7 +23,7 @@ BiocManager::install("Rarr")
 library(pizzarr)
 
 # The path to the root of the AnnData-Zarr store.
-root <- "https://s3.amazonaws.com/vitessce-data/0.0.33/main/human-lymph-node-10x-visium/human_lymph_node_10x_visium.h5ad.zarr"
+root <- "https://data-1.vitessce.io/0.0.33/main/human-lymph-node-10x-visium/human_lymph_node_10x_visium.h5ad.zarr"
 
 # Open the AnnData-Zarr store as an HttpStore.
 store <- HttpStore$new(root)

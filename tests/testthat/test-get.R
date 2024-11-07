@@ -1,6 +1,5 @@
 library(pizzarr)
 
-
 test_that("get_basic_selection_zd", {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/tests/test_indexing.py#L70
     a <- as_scalar(42)

@@ -22,6 +22,7 @@ The Zarr OIndex class.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-OIndex-new}{\code{OIndex$new()}}
+\item \href{#method-OIndex-get_item}{\code{OIndex$get_item()}}
 \item \href{#method-OIndex-clone}{\code{OIndex$clone()}}
 }
 }
@@ -38,6 +39,26 @@ Create a new OIndex instance.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{array}}{array}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+An \code{OIndex} instance.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-OIndex-get_item"></a>}}
+\if{latex}{\out{\hypertarget{method-OIndex-get_item}{}}}
+\subsection{Method \code{get_item()}}{
+get method for the Oindex instance
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{OIndex$get_item(selection)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selection}}{selection}
 }
 \if{html}{\out{</div>}}
 }

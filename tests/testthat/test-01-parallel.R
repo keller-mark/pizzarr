@@ -39,7 +39,7 @@ get_dog_arr <- function(slow_setting = FALSE) {
 
 run_parallel_get <- function(num_workers) {
   options(pizzarr.parallel_read_enabled = num_workers)
-    
+
   zarr_arr <- get_dog_arr()
   arr <- zarr_arr$get_item("...")$data
 
@@ -51,7 +51,7 @@ run_parallel_get <- function(num_workers) {
 
 run_parallel_set <- function(num_workers) {
   options(pizzarr.parallel_write_enabled = num_workers)
-  
+
   zarr_arr <- get_dog_arr(slow_setting = TRUE)
   arr <- zarr_arr$get_item("...")$data
 
@@ -59,7 +59,7 @@ run_parallel_set <- function(num_workers) {
   zarr_arr$set_item("...", arr * 2.0)
 
   doubled_arr <- zarr_arr$get_item("...")$data
-  
+
   options(pizzarr.parallel_write_enabled = FALSE)
 
   return(sum(doubled_arr))

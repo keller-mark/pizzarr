@@ -68,34 +68,34 @@ test_that("zero_based_to_one_based", {
 })
 
 test_that("set array values", {
-  
+
   d <- zarr_volcano()
-  
+
   a <- d$get_item("volcano")
 
   vals <- a[1:10, 1:20]$as.array()
-  
+
   new_vals <- vals * 10
-  
+
   sub <- a[1:10, 1:20]
-  
+
   sub$set(list(slice(1,10), slice(1,20)), new_vals)
-  
+
   expect_equal(sub$as.array(),
                new_vals)
-  
-  # Should this be the case?!?
-  expect_error(a[1:10, 1:20]$set("...", new_vals), 
-               "selection must be a list of slices")
+
+  # TODO: remove this expect-error once implemented.
+  expect_error(a[1:10, 1:20]$set("...", new_vals),
+                "Unsupported selection type")
 
   a[1:10, 1:20]$set(list(slice(1,10), slice(1,20)), new_vals)
-    
+
   # it does not update the original array -- should it?
   expect_equal(a[1:10, 1:20]$as.array(),
                vals)
-  
+
   a$set_item(list(slice(1,10), slice(1,20)), new_vals)
-  
+
   expect_equal(a[1:10, 1:20]$as.array(),
                new_vals)
 })
