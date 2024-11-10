@@ -86,3 +86,25 @@ ensure_list <- function(selection) {
   }
   return(as.list(selection))
 }
+
+#' Check that a value is boolean with length 1
+#' @keywords internal
+is_bool <- function(s){
+  if(is.logical(s) && length(s) == 1)
+    return(TRUE)
+  return(FALSE)
+}
+#' Check that a value is a vector of one or more boolean
+#' @keywords internal
+is_bool_vec <- function(s) {
+  if(is.vector(s) && !is.list(s) && is.logical(s) && length(s) > 1)
+    return(TRUE)
+  return(FALSE)
+}
+#' Check that a value is a list of one or more boolean
+#' @keywords internal
+is_bool_list <- function(s) {
+  if(is.list(s) && is_bool_vec(unlist(s)))
+    return(TRUE)
+  return(FALSE)
+}

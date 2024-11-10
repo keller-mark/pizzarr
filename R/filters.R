@@ -2,7 +2,7 @@
 # 
 # a:b => slice(a,b)
 # seq(from, to, by) => slice(start, stop, step) ? for now indices of seq(from, to, by) are passed to get_orthogonal_selection (check below, TODO)
-# c(a,b,c) => c(a,b,c), combine elements are passed as indices
+# c(a,b,c) => c(a,b,c), combine elements are passed as indices or boolean
 # empty dimension => return everything
 # 
 manage_filters <- function(filters) {
@@ -13,7 +13,8 @@ manage_filters <- function(filters) {
       if(x == "") {
         return(NULL)
       } else {
-        stop("Unsupported filter '", as.character(x), "' supplied") 
+        # TODO: is eval() always the solution here ?, e.g. ind <- c(TRUE, FALSE, TRUE, TRUE) then eval(ind) if typeof(ind) == "symbol"
+        return(eval(x))
       }
     } else if(typeof(x) == "double") {
       # Return single value for dimension
@@ -41,7 +42,16 @@ manage_filters <- function(filters) {
         check_func <- sapply(x, function(y) {
           !is.function(eval(y))
         })
-        return(int(floor(unlist(x[check_func]))))
+        x <- x[check_func]
+        
+        # correct for integer or boolean vectors
+        x <- sapply(x, function(y) {
+          if(is.numeric(y))
+            return(int(floor(y))) 
+          if(is_bool(y))
+            return(y)
+        })
+        return(x)
       } else {
         stop("Unsupported filter '", as.character(x), "' supplied")
       }
