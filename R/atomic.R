@@ -23,7 +23,7 @@ is_scalar <- function(s) {
 #' Check if a value is an integer R vector or scalar.
 #' @keywords internal
 is_integer <- function(s) {
-  if(is.atomic(s) && is.numeric(s) && all(s %% 1 == 0)) {
+  if(is.atomic(s) && is.numeric(s) && all(s %% 1 == 0) && length(s) == 1) {
     return(TRUE)
   }
   return(FALSE)
@@ -42,8 +42,10 @@ is_integer_scalar <- function(s) {
 #' explicitly tagged as a scalar.
 #' @keywords internal
 is_integer_vec <- function(s) {
-  if(!is_scalar(s) && is_integer(s)) {
-    return(TRUE)
+  if(!is_scalar(s) && is.vector(s) && !is.list(s) && all(sapply(s,is_integer))) {
+    if(length(s) > 1){
+      return(TRUE)
+    }
   }
   return(FALSE)
 }

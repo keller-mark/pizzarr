@@ -73,6 +73,8 @@ reference:
   - slice
   - zb_slice
   - is_slice
+  - int
+  - zb_int
   - as_scalar
   - is_scalar
   - is_key_error

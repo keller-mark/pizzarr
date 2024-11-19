@@ -5,14 +5,14 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
 
   for(i in seq_along(selection)) {
     dim_sel <- selection[[i]]
-    if(is_integer(dim_sel)) {
+    if(is_integer(dim_sel)){
       if(convert_integer_selection_to_slices) {
         selection[[i]] <- zb_slice(dim_sel, dim_sel + 1, 1)
       } else {
         selection[[i]] <- normalize_integer_selection(dim_sel, shape[i])
       }
-    } else if(is_integer_list(dim_sel)) { # TODO: should this be is_integer_vec?
-      stop('TypeError(Integer array selections are not supported (yet))')
+    } else if(is_integer_vec(dim_sel)) {
+      selection[[i]] <- sapply(dim_sel, normalize_integer_selection, dim_len = shape[i])
     } else if(!is.null(dim_sel) && !is.environment(dim_sel) && 
               (is.na(dim_sel) || dim_sel == ":")) {
       selection[[i]] <- zb_slice(NA, NA, 1)
@@ -28,13 +28,16 @@ normalize_integer_selection <- function(dim_sel, dim_len) {
   # Normalize type to int
   dim_sel <- as_scalar(dim_sel)
 
+  # TODO: do we really need this for R type array indexing ?
   # handle wraparound
   if(dim_sel < 0) {
     dim_sel <- dim_len + dim_sel
   }
 
-  # Handle out of bounds
+  # TODO: do we need to normalize R indexing or Python indexing here ?
+  # handle out of bounds
   if(dim_sel >= dim_len || dim_sel < 0) {
+  # if(dim_sel > dim_len || dim_sel < 1) { # pre zb_int implementation
     stop('BoundsCheckError(dim_len)')
   }
 
