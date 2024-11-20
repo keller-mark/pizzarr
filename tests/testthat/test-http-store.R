@@ -70,6 +70,13 @@ vcr::use_cassette("http_listdir", {
     expect_equal(names(g$get_store()$get_consolidated_metadata()$metadata),
                  names(z$get_consolidated_metadata()$metadata))
     
+    options(pizzarr.parallel_write_enabled = "future")
+    old_plan <- future::plan(future::multisession, workers = 2)
+    
+    expect_equal(dim(g$get_item("pr")$as.array()), c(12, 33, 81))
+    
+    options(pizzarr.parallel_write_enabled = FALSE)
+    future::plan(old_plan)
   })
   
 })

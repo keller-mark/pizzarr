@@ -332,7 +332,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
         if(!requireNamespace("pbapply", quietly = TRUE)) {
           stop("Parallel reading requires the 'pbapply' package.")
         }
-        apply_func <- pbapply::pblapply
+        apply_func <- function(X, FUN, ..., cl = NULL) {
+          pbapply::pblapply(X, FUN, ..., 
+                            future.packages = "Rarr",
+                            future.seed=TRUE, cl = cl)
+        }
       }
 
       parts <- indexer$iter()
@@ -467,7 +471,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
           if(!requireNamespace("pbapply", quietly=TRUE)) {
             stop("Parallel writing requires the 'pbapply' package.")
           }
-          apply_func <- pbapply::pblapply
+          apply_func <- function(X, FUN, ..., cl = NULL) {
+            pbapply::pblapply(X, FUN, ..., 
+                              future.packages = "Rarr",
+                              future.seed=TRUE, cl = cl)
+          }
         }
 
         parts <- indexer$iter()
