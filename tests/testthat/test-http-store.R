@@ -81,6 +81,23 @@ vcr::use_cassette("http_listdir", {
   
 })
 
+test_that("http broken", {
+  
+  url<- "https://nogonnawork.zarr"
+  
+  expect_warning(z <- pizzarr::HttpStore$new(url), "Can't procede, web request failed.")
+  expect_equal(class(z), c("HttpStore", "Store", "R6"))
+
+  expect_message(vars <- z$listdir(), "not found for this http store")
+  
+  expect_null(vars)
+
+  w <- capture_warnings(g <- pizzarr::zarr_open_group(z))
+ 
+  expect_equal(w, c("Can't procede, web request failed.", 
+                    "Can't procede, web request failed."))
+})
+
 vcr::use_cassette("http_github_pattern", {
   
   test_that("http_listdir", {

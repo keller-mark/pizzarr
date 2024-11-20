@@ -13,23 +13,32 @@ Instantiate an array from an initialized store.
 \details{
 The Zarr Array class.
 }
+\keyword{(Re)load}
 \keyword{(default),}
+\keyword{(file}
 \keyword{Array}
 \keyword{False}
 \keyword{False,}
+\keyword{For}
 \keyword{If}
+\keyword{Load}
 \keyword{Object,}
+\keyword{Referesh}
+\keyword{Refresh}
+\keyword{Resize}
 \keyword{Separate}
 \keyword{Storage}
 \keyword{String,}
 \keyword{TODO}
 \keyword{True}
 \keyword{True,}
+\keyword{Write}
 \keyword{`store`}
 \keyword{a}
 \keyword{access}
 \keyword{against}
 \keyword{all}
+\keyword{an}
 \keyword{and}
 \keyword{array}
 \keyword{array's}
@@ -39,6 +48,7 @@ The Zarr Array class.
 \keyword{both}
 \keyword{cache_attrs}
 \keyword{cache_metadata}
+\keyword{cached}
 \keyword{cached.}
 \keyword{chunk}
 \keyword{chunk's}
@@ -60,21 +70,28 @@ The Zarr Array class.
 \keyword{fill_value}
 \keyword{filters}
 \keyword{for}
+\keyword{from}
 \keyword{if}
 \keyword{internal}
 \keyword{is}
 \keyword{is_view}
 \keyword{key}
 \keyword{key_prefix}
+\keyword{locking)}
+\keyword{locking).}
 \keyword{meta}
 \keyword{metadata}
 \keyword{metadata.}
+\keyword{method_description}
 \keyword{modification.}
+\keyword{non-parallel}
 \keyword{not}
 \keyword{of}
 \keyword{oindex}
 \keyword{optional.}
+\keyword{or}
 \keyword{order}
+\keyword{parallel}
 \keyword{path}
 \keyword{path.}
 \keyword{prior}
@@ -82,14 +99,17 @@ The Zarr Array class.
 \keyword{provided,}
 \keyword{read_only}
 \keyword{regardless}
+\keyword{reload}
 \keyword{reloaded}
 \keyword{shape}
 \keyword{should}
 \keyword{storage}
 \keyword{store}
+\keyword{store.}
 \keyword{stored}
 \keyword{stored,}
 \keyword{storing.}
+\keyword{synchronization}
 \keyword{synchronizer}
 \keyword{synchronizer.}
 \keyword{that}
@@ -98,12 +118,14 @@ The Zarr Array class.
 \keyword{then}
 \keyword{to}
 \keyword{uniformly}
+\keyword{usage}
 \keyword{used}
 \keyword{user}
 \keyword{value}
 \keyword{value,}
 \keyword{vindex}
 \keyword{will}
+\keyword{without}
 \keyword{write_empty_chunks}
 \section{Methods}{
 \subsection{Public methods}{
@@ -170,94 +192,7 @@ The Zarr Array class.
 \if{html}{\out{<a id="method-ZarrArray-new"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-new}{}}}
 \subsection{Method \code{new()}}{
-(Re)load metadata from store.
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-For parallel usage
-
-
-For parallel usage
-
-
-For non-parallel usage
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-TODO
-
-
-Create a new Array instance.
+Create a new ZarrArray instance.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$new(
   store,
@@ -300,7 +235,7 @@ An \code{Array} instance.
 \if{html}{\out{<a id="method-ZarrArray-get_store"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_store}{}}}
 \subsection{Method \code{get_store()}}{
-TODO
+get store from array.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_store()}\if{html}{\out{</div>}}
 }
@@ -310,7 +245,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_path"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_path}{}}}
 \subsection{Method \code{get_path()}}{
-TODO
+get array path
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_path()}\if{html}{\out{</div>}}
 }
@@ -320,7 +255,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_name"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_name}{}}}
 \subsection{Method \code{get_name()}}{
-TODO
+get full array name
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_name()}\if{html}{\out{</div>}}
 }
@@ -330,7 +265,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_basename"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_basename}{}}}
 \subsection{Method \code{get_basename()}}{
-TODO
+get the basename of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_basename()}\if{html}{\out{</div>}}
 }
@@ -340,7 +275,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_read_only"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_read_only}{}}}
 \subsection{Method \code{get_read_only()}}{
-TODO
+get the read only property of an array (TRUE/FALSE)
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_read_only()}\if{html}{\out{</div>}}
 }
@@ -350,7 +285,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-set_read_only"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-set_read_only}{}}}
 \subsection{Method \code{set_read_only()}}{
-TODO
+set the read only property of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$set_read_only(val)}\if{html}{\out{</div>}}
 }
@@ -367,7 +302,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_chunk_store"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_chunk_store}{}}}
 \subsection{Method \code{get_chunk_store()}}{
-TODO
+get the chunk store for an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_chunk_store()}\if{html}{\out{</div>}}
 }
@@ -377,7 +312,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_shape"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_shape}{}}}
 \subsection{Method \code{get_shape()}}{
-TODO
+get the shape of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_shape()}\if{html}{\out{</div>}}
 }
@@ -387,7 +322,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-set_shape"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-set_shape}{}}}
 \subsection{Method \code{set_shape()}}{
-TODO
+set or reset the size of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$set_shape(value)}\if{html}{\out{</div>}}
 }
@@ -421,7 +356,7 @@ Change the shape of the array by growing or shrinking one or more dimensions.
 \if{html}{\out{<a id="method-ZarrArray-get_chunks"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_chunks}{}}}
 \subsection{Method \code{get_chunks()}}{
-TODO
+get the chunk metadata of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_chunks()}\if{html}{\out{</div>}}
 }
@@ -431,7 +366,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_dtype"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_dtype}{}}}
 \subsection{Method \code{get_dtype()}}{
-TODO
+get the Dtype of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_dtype()}\if{html}{\out{</div>}}
 }
@@ -441,7 +376,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_compressor"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_compressor}{}}}
 \subsection{Method \code{get_compressor()}}{
-TODO
+get the compressor of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_compressor()}\if{html}{\out{</div>}}
 }
@@ -451,7 +386,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_fill_value"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_fill_value}{}}}
 \subsection{Method \code{get_fill_value()}}{
-TODO
+get the fill value of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_fill_value()}\if{html}{\out{</div>}}
 }
@@ -461,7 +396,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-set_fill_value"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-set_fill_value}{}}}
 \subsection{Method \code{set_fill_value()}}{
-TODO
+set the fill value of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$set_fill_value(val)}\if{html}{\out{</div>}}
 }
@@ -478,7 +413,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_order"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_order}{}}}
 \subsection{Method \code{get_order()}}{
-TODO
+get the storage order metadata of an array.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_order()}\if{html}{\out{</div>}}
 }
@@ -488,7 +423,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_filters"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_filters}{}}}
 \subsection{Method \code{get_filters()}}{
-TODO
+get the filters metadata of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_filters()}\if{html}{\out{</div>}}
 }
@@ -498,7 +433,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_synchronizer"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_synchronizer}{}}}
 \subsection{Method \code{get_synchronizer()}}{
-TODO
+get the synchronizer of an array TODO: not implemented
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_synchronizer()}\if{html}{\out{</div>}}
 }
@@ -508,7 +443,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_attrs"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_attrs}{}}}
 \subsection{Method \code{get_attrs()}}{
-TODO
+get attributes of array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_attrs()}\if{html}{\out{</div>}}
 }
@@ -518,7 +453,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_ndim"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_ndim}{}}}
 \subsection{Method \code{get_ndim()}}{
-TODO
+get number of dimensions of array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_ndim()}\if{html}{\out{</div>}}
 }
@@ -528,7 +463,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_size"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_size}{}}}
 \subsection{Method \code{get_size()}}{
-TODO
+get size of an array TODO: not implemented
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_size()}\if{html}{\out{</div>}}
 }
@@ -538,7 +473,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_itemsize"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_itemsize}{}}}
 \subsection{Method \code{get_itemsize()}}{
-TODO
+TODO: not implemented
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_itemsize()}\if{html}{\out{</div>}}
 }
@@ -548,7 +483,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_nbytes"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_nbytes}{}}}
 \subsection{Method \code{get_nbytes()}}{
-TODO
+get number of bytes of an array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_nbytes()}\if{html}{\out{</div>}}
 }
@@ -598,7 +533,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_is_view"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_is_view}{}}}
 \subsection{Method \code{get_is_view()}}{
-TODO
+get is_view metadata of array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_is_view()}\if{html}{\out{</div>}}
 }
@@ -608,7 +543,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_oindex"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_oindex}{}}}
 \subsection{Method \code{get_oindex()}}{
-TODO
+get orthogonal index of array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_oindex()}\if{html}{\out{</div>}}
 }
@@ -618,7 +553,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_vindex"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_vindex}{}}}
 \subsection{Method \code{get_vindex()}}{
-TODO
+get vectorized index of array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_vindex()}\if{html}{\out{</div>}}
 }
@@ -628,7 +563,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-get_write_empty_chunks"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_write_empty_chunks}{}}}
 \subsection{Method \code{get_write_empty_chunks()}}{
-TODO
+get write empty chunks setting of array
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_write_empty_chunks()}\if{html}{\out{</div>}}
 }
@@ -638,7 +573,7 @@ TODO
 \if{html}{\out{<a id="method-ZarrArray-equals"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-equals}{}}}
 \subsection{Method \code{equals()}}{
-TODO
+check if another object refers to the same array. does not check array data
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$equals(other)}\if{html}{\out{</div>}}
 }
@@ -703,7 +638,7 @@ array dimension.}
 \if{html}{\out{<a id="method-ZarrArray-get_basic_selection"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrArray-get_basic_selection}{}}}
 \subsection{Method \code{get_basic_selection()}}{
-TODO
+get a selection of an array based on a "basic"list of slices
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrArray$get_basic_selection(selection = NA, out = NA, fields = NA)}\if{html}{\out{</div>}}
 }

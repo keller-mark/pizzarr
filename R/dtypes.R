@@ -131,14 +131,14 @@ get_dtype_asrtype <- function(dtype) {
   return(DTYPE_RTYPE_MAPPING[[dtype_parts$basic_type]])
 }
 
-
-# Reference: https://numpy.org/doc/stable/reference/arrays.dtypes.html
-
 #' The Zarr Dtype class.
 #' @title Dtype Class
 #' @docType class
 #' @description
-#'  TODO
+#'  A data type object (an instance of Dtype class) describes how 
+#'  the bytes in the fixed-size block of memory corresponding to an array 
+#'  item should be interpreted.
+#' @references https://numpy.org/doc/stable/reference/arrays.dtypes.html
 #' @rdname Dtype
 #' @export
 Dtype <- R6::R6Class("Dtype",

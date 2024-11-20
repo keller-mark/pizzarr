@@ -10,9 +10,15 @@ pizzarr_option_defaults <- list(
 
 #' @keywords internal
 parse_parallel_option <- function(val) {
+  
+  if(inherits(val, "cluster")) {
+    return(val)
+  }
+  
   if(val == "future") {
     return("future")
   }
+  
   logical_val <- suppressWarnings(as.logical(val))
   integer_val <- suppressWarnings(as.integer(val))
 

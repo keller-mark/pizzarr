@@ -196,7 +196,7 @@ Obtain a group member.
 \if{html}{\out{<a id="method-ZarrGroup-create_group"></a>}}
 \if{latex}{\out{\hypertarget{method-ZarrGroup-create_group}{}}}
 \subsection{Method \code{create_group()}}{
-greate a group
+create a group
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ZarrGroup$create_group(name, overwrite = FALSE)}\if{html}{\out{</div>}}
 }

@@ -27,14 +27,14 @@ zarr_open_array(
 )
 }
 \arguments{
-\item{store}{: MutableMapping or string
-Store or path to directory in file system or name of zip file.}
+\item{store}{: Store
+A mapping that supports string keys and bytes-like values.}
 
 \item{storage_options}{: dict
 If using an fsspec URL to create the store, these will be passed to
 the backend implementation. Ignored otherwise.}
 
-\item{mode}{: {'r', 'r+', 'a', 'w', 'w-'}, optional
+\item{mode}{: \code{'r', 'r+', 'a', 'w', 'w-'}, optional
 Persistence mode: 'r' means read only (must exist); 'r+' means
 read/write (must exist); 'a' means read/write (create if doesn't
 exist); 'w' means create (overwrite if exists); 'w-' means create
@@ -43,11 +43,9 @@ exist); 'w' means create (overwrite if exists); 'w-' means create
 \item{shape}{: int or tuple of ints
 Array shape.}
 
-\item{chunks}{: int or tuple of ints, optional
+\item{chunks}{: bool, int or tuple of ints, optional
 Chunk shape. If True, will be guessed from \code{shape} and \code{dtype}. If
-False, will be set to \code{shape}, i.e., single chunk for the whole array.
-If an int, the chunk size in each dimension will be given by the value
-of \code{chunks}. Default is True.}
+False, will be set to \code{shape}, i.e., single chunk for the whole array.}
 
 \item{dtype}{: string or dtype, optional
 NumPy dtype.}
@@ -58,24 +56,24 @@ Primary compressor.}
 \item{fill_value}{: object
 Default value to use for uninitialized portions of the array.}
 
-\item{order}{: {'C', 'F'}, optional
+\item{order}{: \code{'C', 'F'}, optional
 Memory layout to be used within each chunk.}
 
 \item{synchronizer}{: object, optional
 Array synchronizer.}
 
 \item{overwrite}{: bool, optional
-If True, delete all pre-existing data in \code{store} at \code{path} before
-creating the array.}
+If True, erase all data in \code{store} prior to initialisation.}
 
-\item{path}{: string, optional
+\item{path}{: string, bytes, optional
 Path under which array is stored.}
 
-\item{chunk_store}{: MutableMapping, optional
+\item{chunk_store}{: Store, optional
 Separate storage for chunks. If not provided, \code{store} will be used
 for storage of both chunks and metadata.}
 
-\item{filters}{: sequence of Codecs, optional}
+\item{filters}{: sequence, optional
+Sequence of filters to use to encode chunk data prior to compression.}
 
 \item{cache_metadata}{: bool, optional
 If True, array configuration metadata will be cached for the
@@ -91,7 +89,7 @@ to all attribute read operations.}
 \item{object_codec}{: Codec, optional
 A codec to encode object arrays, only needed if dtype=object.}
 
-\item{dimension_separator}{: {'.', '/'}, optional
+\item{dimension_separator}{: \code{'.', '/'}, optional
 Separator placed between the dimensions of a chunk.}
 
 \item{write_empty_chunks}{: bool, optional

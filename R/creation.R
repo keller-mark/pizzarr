@@ -17,17 +17,21 @@ contains_array <- function(store, path=NA) {
     path <- normalize_storage_path(path)
     prefix <- path_to_prefix(path)
     key <- paste0(prefix, ARRAY_META_KEY)
-    return(store$contains_item(key))
+    ret <- store$contains_item(key)
+    return(!is.null(ret) && ret)
 }
 
 #' @keywords internal
 contains_group <- function(store, path=NA) {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/storage.py#L99
     # Return True if the store contains a group at the given logical path.
+
     path <- normalize_storage_path(path)
     prefix <- path_to_prefix(path)
     key <- paste0(prefix, GROUP_META_KEY)
-    return(store$contains_item(key))
+    ret <- store$contains_item(key)
+    
+    return(!is.null(ret) && ret)
 }
 
 #' @keywords internal
@@ -243,7 +247,7 @@ require_parent_group <- function(
 #'     Primary compressor.
 #' @param fill_value : object
 #'     Default value to use for uninitialized portions of the array.
-#' @param order : {'C', 'F'}, optional
+#' @param order : \code{'C', 'F'}, optional
 #'     Memory layout to be used within each chunk.
 #' @param overwrite : bool, optional
 #'     If True, erase all data in `store` prior to initialisation.
@@ -256,7 +260,7 @@ require_parent_group <- function(
 #'     Sequence of filters to use to encode chunk data prior to compression.
 #' @param object_codec : Codec, optional
 #'     A codec to encode object arrays, only needed if dtype=object.
-#' @param dimension_separator : {'.', '/'}, optional
+#' @param dimension_separator : \code{'.', '/'}, optional
 #'     Separator placed between the dimensions of a chunk.
 #' @keywords internal
 init_array <- function(
@@ -307,15 +311,7 @@ init_array <- function(
 
 #' Initialize a group store. Note that this is a low-level function and there should be no
 #' need to call this directly from user code.
-#' @param store : Store
-#'     A mapping that supports string keys and byte sequence values.
-#' @param overwrite : bool, optional
-#'     If True, erase all data in `store` prior to initialisation.
-#' @param path : string, optional
-#'     Path under which array is stored.
-#' @param chunk_store : Store, optional
-#'     Separate storage for chunks. If not provided, `store` will be used
-#'     for storage of both chunks and metadata.
+#' @inheritParams init_array
 #' @keywords internal
 init_group <- function(
     store,
@@ -339,35 +335,14 @@ init_group <- function(
 
 
 #' Create an empty array
-#' @param shape : int or tuple of ints
-#'     Array shape.
+#' @inheritParams init_array
 #' @param chunks : int or tuple of ints, optional
 #'     Chunk shape. If True, will be guessed from `shape` and `dtype`. If
 #'     False, will be set to `shape`, i.e., single chunk for the whole array.
 #'     If an int, the chunk size in each dimension will be given by the value
 #'     of `chunks`. Default is True.
-#' @param dtype : string or dtype, optional
-#'     NumPy dtype.
-#' @param compressor : Codec, optional
-#'     Primary compressor.
-#' @param fill_value : object
-#'     Default value to use for uninitialized portions of the array.
-#' @param order : {'C', 'F'}, optional
-#'     Memory layout to be used within each chunk.
-#' @param store : MutableMapping or string
-#'     Store or path to directory in file system or name of zip file.
 #' @param synchronizer : object, optional
 #'     Array synchronizer.
-#' @param overwrite : bool, optional
-#'     If True, delete all pre-existing data in `store` at `path` before
-#'     creating the array.
-#' @param path : string, optional
-#'     Path under which array is stored.
-#' @param chunk_store : MutableMapping, optional
-#'     Separate storage for chunks. If not provided, `store` will be used
-#'     for storage of both chunks and metadata.
-#' @param filters : sequence of Codecs, optional
-#     Sequence of filters to use to encode chunk data prior to compression.
 #' @param cache_metadata : bool, optional
 #'     If True, array configuration metadata will be cached for the
 #'     lifetime of the object. If False, array metadata will be reloaded
@@ -379,10 +354,6 @@ init_group <- function(
 #'     to all attribute read operations.
 #' @param read_only : bool, optional
 #'     True if array should be protected against modification.
-#' @param object_codec : Codec, optional
-#'     A codec to encode object arrays, only needed if dtype=object.
-#' @param dimension_separator : {'.', '/'}, optional
-#'     Separator placed between the dimensions of a chunk.
 #' @param write_empty_chunks : bool, optional
 #'     If True (default), all chunks will be stored regardless of their
 #'     contents. If False, each chunk is compared to the array's fill value
@@ -449,7 +420,7 @@ zarr_create <- function(
 }
 
 #' Create an array filled with NAs.
-#' @param shape : int or tuple of ints
+#' @inheritParams zarr_create
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
 #' @export
@@ -470,7 +441,7 @@ zarr_create_array <- function(data, ...) {
 }
 
 #' Create an array filled with zeros.
-#' @param shape : int or tuple of ints
+#' @inheritParams zarr_create
 #' @param ... The params of zarr_create()
 #' @returns ZarrArray
 #' @export
@@ -479,22 +450,8 @@ zarr_create_zeros <- function(shape, ...) {
 }
 
 #' Create a group.
-#' @param store : MutableMapping or string, optional
-#'     Store or path to directory in file system.
-#' @param overwrite : bool, optional
-#'     If True, delete any pre-existing data in `store` at `path` before
-#'     creating the group.
-#' @param chunk_store : MutableMapping, optional
-#'     Separate storage for chunks. If not provided, `store` will be used
-#'     for storage of both chunks and metadata.
-#' @param cache_attrs : bool, optional
-#'     If True (default), user attributes will be cached for attribute read
-#'     operations. If False, user attributes are reloaded from the store prior
-#'     to all attribute read operations.
-#' @param synchronizer : object, optional
-#'     Array synchronizer.
-#' @param path : string, optional
-#'     Group path within store.
+#' @inheritParams init_array
+#' @inheritParams zarr_create
 #' @returns ZarrGroup
 #' @export
 zarr_create_group <- function(
@@ -529,23 +486,8 @@ zarr_create_group <- function(
 }
 
 #' Open a group using file-mode-like semantics.
-#' @param store : MutableMapping or string, optional
-#'     Store or path to directory in file system or name of zip file.
-#' @param mode : {'r', 'r+', 'a', 'w', 'w-'}, optional
-#'     Persistence mode: 'r' means read only (must exist); 'r+' means
-#'     read/write (must exist); 'a' means read/write (create if doesn't
-#'     exist); 'w' means create (overwrite if exists); 'w-' means create
-#'     (fail if exists).
-#' @param cache_attrs : bool, optional
-#'     If True (default), user attributes will be cached for attribute read
-#'     operations. If False, user attributes are reloaded from the store prior
-#'     to all attribute read operations.
-#' @param synchronizer : object, optional
-#'     Array synchronizer.
-#' @param path : string, optional
-#'     Group path within store.
-#' @param chunk_store : MutableMapping or string, optional
-#'     Store or path to directory in file system or name of zip file.
+#' @inheritParams zarr_open
+#' @inheritParams zarr_create
 #' @param storage_options : dict
 #'     If using an fsspec URL to create the store, these will be passed to
 #'     the backend implementation. Ignored otherwise.
@@ -617,66 +559,10 @@ zarr_open_group <- function(
 }
 
 #' Open an array using file-mode-like semantics.
-#' @param store : MutableMapping or string, optional
-#'     Store or path to directory in file system or name of zip file.
-#' @param storage_options : dict
-#'     If using an fsspec URL to create the store, these will be passed to
-#'     the backend implementation. Ignored otherwise.
-#' @param mode : {'r', 'r+', 'a', 'w', 'w-'}, optional
-#'     Persistence mode: 'r' means read only (must exist); 'r+' means
-#'     read/write (must exist); 'a' means read/write (create if doesn't
-#'     exist); 'w' means create (overwrite if exists); 'w-' means create
-#'     (fail if exists).
-#' @param shape : int or tuple of ints
-#'     Array shape.
-#' @param chunks : int or tuple of ints, optional
-#'     Chunk shape. If True, will be guessed from `shape` and `dtype`. If
-#'     False, will be set to `shape`, i.e., single chunk for the whole array.
-#'     If an int, the chunk size in each dimension will be given by the value
-#'     of `chunks`. Default is True.
-#' @param dtype : string or dtype, optional
-#'     NumPy dtype.
-#' @param compressor : Codec, optional
-#'     Primary compressor.
-#' @param fill_value : object
-#'     Default value to use for uninitialized portions of the array.
-#' @param order : {'C', 'F'}, optional
-#'     Memory layout to be used within each chunk.
-#' @param store : MutableMapping or string
-#'     Store or path to directory in file system or name of zip file.
-#' @param synchronizer : object, optional
-#'     Array synchronizer.
-#' @param overwrite : bool, optional
-#'     If True, delete all pre-existing data in `store` at `path` before
-#'     creating the array.
-#' @param path : string, optional
-#'     Path under which array is stored.
-#' @param chunk_store : MutableMapping, optional
-#'     Separate storage for chunks. If not provided, `store` will be used
-#'     for storage of both chunks and metadata.
-#' @param filters : sequence of Codecs, optional
-#     Sequence of filters to use to encode chunk data prior to compression.
-#' @param cache_metadata : bool, optional
-#'     If True, array configuration metadata will be cached for the
-#'     lifetime of the object. If False, array metadata will be reloaded
-#'     prior to all data access and modification operations (may incur
-#'     overhead depending on storage and data access pattern).
-#' @param cache_attrs : bool, optional
-#'     If True (default), user attributes will be cached for attribute read
-#'     operations. If False, user attributes are reloaded from the store prior
-#'     to all attribute read operations.
-#' @param object_codec : Codec, optional
-#'     A codec to encode object arrays, only needed if dtype=object.
-#' @param dimension_separator : {'.', '/'}, optional
-#'     Separator placed between the dimensions of a chunk.
-#' @param write_empty_chunks : bool, optional
-#'     If True (default), all chunks will be stored regardless of their
-#'     contents. If False, each chunk is compared to the array's fill value
-#'     prior to storing. If a chunk is uniformly equal to the fill value, then
-#'     that chunk is not be stored, and the store entry for that chunk's key
-#'     is deleted. This setting enables sparser storage, as only chunks with
-#'     non-fill-value data are stored, at the expense of overhead associated
-#'     with checking the data of each chunk.
+#' @inheritParams init_array
+#' @inheritParams zarr_create
+#' @inheritParams zarr_open
+#' @inheritParams zarr_open_group
 #' @returns ZarrArray
 #' @export
 zarr_open_array <- function(
@@ -784,8 +670,7 @@ zarr_open_array <- function(
 }
 
 #' Convenience function to save a ZarrArray to the local file system.
-#' @param store : MutableMapping or string
-#'     Store or path to directory in file system or name of zip file.
+#' @inheritParams init_array
 #' @param arr : ZarrArray
 #'     The array with data to save.
 #' @param ... Additional arguments to pass to zarr_create_array().
@@ -797,15 +682,12 @@ zarr_save_array <- function(store, arr, ...) {
 }
 
 #' Convenience function to open a group or array using file-mode-like semantics.
-#' @param store : MutableMapping or string, optional
-#'     Store or path to directory in file system or name of zip file.
-#' @param mode : {'r', 'r+', 'a', 'w', 'w-'}, optional
+#' @inheritParams init_array
+#' @param mode : \code{'r', 'r+', 'a', 'w', 'w-'}, optional
 #'     Persistence mode: 'r' means read only (must exist); 'r+' means
 #'     read/write (must exist); 'a' means read/write (create if doesn't
 #'     exist); 'w' means create (overwrite if exists); 'w-' means create
 #'     (fail if exists).
-#' @param path : str or NA, optional
-#'     The path within the store to open.
 #' @param ... Additional arguments to pass to zarr_open_array or zarr_open_group.
 #' @returns ZarrArray or ZarrGroup
 #' @export
