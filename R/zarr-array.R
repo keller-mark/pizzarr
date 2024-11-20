@@ -309,7 +309,6 @@ ZarrArray <- R6::R6Class("ZarrArray",
       # We iterate over all chunks which overlap the selection and thus contain data
       # that needs to be extracted. Each chunk is processed in turn, extracting the
       # necessary data and storing into the correct location in the output array.
-
       out_dtype <- private$dtype
       out_shape <- indexer$shape
       out_size <- compute_size(indexer$shape)
@@ -327,23 +326,29 @@ ZarrArray <- R6::R6Class("ZarrArray",
       parallel_option <- getOption("pizzarr.parallel_read_enabled")
       cl <- parse_parallel_option(parallel_option)
       is_parallel <- is_truthy_parallel_option(cl)
-      
       apply_func <- lapply
       if(is_parallel) {
         if(!requireNamespace("pbapply", quietly = TRUE)) {
           stop("Parallel reading requires the 'pbapply' package.")
         }
 
-        apply_func <- function(X, FUN, ..., cl = NULL) {
-          pbapply::pblapply(X, FUN, ..., 
-                            future.packages = "Rarr",
-                            future.seed=TRUE, cl = cl)
-        }
         if(is.integer(cl) & .Platform$OS.type == "windows") {
           # See #105
           cl <- parallel::makeCluster(cl)
           on.exit(parallel::stopCluster(cl))
         }
+        
+        apply_func <- function(X, FUN, ..., cl = NULL) {
+          
+          if(isTRUE(cl == "future")) {
+            pbapply::pblapply(X, FUN, ..., 
+                              future.packages = "Rarr",
+                              future.seed=TRUE, cl = cl)
+          } else {
+            pbapply::pblapply(X, FUN, ..., cl = cl)
+          }
+        }
+
       }
 
       parts <- indexer$iter()
@@ -478,22 +483,28 @@ ZarrArray <- R6::R6Class("ZarrArray",
           if(!requireNamespace("pbapply", quietly=TRUE)) {
             stop("Parallel writing requires the 'pbapply' package.")
           }
-          
+  
+          if(is.integer(cl) & .Platform$OS.type == "windows") {
+            # See #105
+            cl <- parallel::makeCluster(cl)
+            on.exit(parallel::stopCluster(cl))
+            
+          }
+                  
           apply_func <- function(X, FUN, ..., cl = NULL) {
-            pbapply::pblapply(X, FUN, ..., 
-                              future.packages = "Rarr",
-                              future.seed=TRUE, cl = cl)
             
-            
-            if(is.integer(cl) & .Platform$OS.type == "windows") {
-              # See #105
-              cl <- parallel::makeCluster(cl)
-              on.exit(parallel::stopCluster(cl))
-              
+            if(isTRUE(cl == "future")) {
+              pbapply::pblapply(X, FUN, ..., 
+                                future.packages = "Rarr",
+                                future.seed=TRUE, cl = cl)
+            } else {
+              pbapply::pblapply(X, FUN, ..., cl = cl)
             }
           }
+  
         }
-
+        
+        
         parts <- indexer$iter()
         apply_func(parts, function(proj, cl = NA) {
           chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)

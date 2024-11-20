@@ -22,8 +22,7 @@ test_that("orthogonal selection", {
   # int and zb_int
   expect_equal(
     z$get_orthogonal_selection(list(zb_int(c(0,1)), zb_int(c(1,2,3))))$data,
-    z$get_orthogonal_selection(list(int(c(1, 2)), int(c(2,3,4))))$data,
-  )
+    z$get_orthogonal_selection(list(int(c(1, 2)), int(c(2,3,4))))$data)
 
   # TODO: do not expect error once negative indexing has been implemented.
   expect_error(z$get_orthogonal_selection(list(c(-1,1),c(12,1,6)))$data) 
