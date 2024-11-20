@@ -478,18 +478,19 @@ ZarrArray <- R6::R6Class("ZarrArray",
           if(!requireNamespace("pbapply", quietly=TRUE)) {
             stop("Parallel writing requires the 'pbapply' package.")
           }
-<<<<<<< HEAD
+          
           apply_func <- function(X, FUN, ..., cl = NULL) {
             pbapply::pblapply(X, FUN, ..., 
                               future.packages = "Rarr",
                               future.seed=TRUE, cl = cl)
-=======
-          apply_func <- pbapply::pblapply
-          if(is.integer(cl) & .Platform$OS.type == "windows") {
-            # See #105
-            cl <- parallel::makeCluster(cl)
-            on.exit(parallel::stopCluster(cl))
->>>>>>> dev
+            
+            
+            if(is.integer(cl) & .Platform$OS.type == "windows") {
+              # See #105
+              cl <- parallel::makeCluster(cl)
+              on.exit(parallel::stopCluster(cl))
+              
+            }
           }
         }
 
