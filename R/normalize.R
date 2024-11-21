@@ -13,6 +13,8 @@ normalize_list_selection <- function(selection, shape, convert_integer_selection
       }
     } else if(is_integer_vec(dim_sel)) {
       selection[[i]] <- sapply(dim_sel, normalize_integer_selection, dim_len = shape[i])
+    } else if(is_bool_vec(dim_sel)) {
+      selection[[i]] <- selection[[i]]
     } else if(!is.null(dim_sel) && !is.environment(dim_sel) && 
               (is.na(dim_sel) || dim_sel == ":")) {
       selection[[i]] <- zb_slice(NA, NA, 1)

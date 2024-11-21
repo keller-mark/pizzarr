@@ -103,3 +103,34 @@ test_that("int array dimension indexer", {
   expect_error(IntArrayDimIndexer$new(1:10, 10))
   
 })
+
+test_that("bool array dimension indexer", {
+  
+  # boolean checks
+  expect_equal(is_bool(TRUE), TRUE)
+  expect_equal(is_bool(1), FALSE)
+  expect_equal(is_bool(1.2), FALSE)
+  expect_equal(is_bool(c(TRUE, FALSE, TRUE)), FALSE)
+  expect_equal(is_bool_vec(c(TRUE, FALSE, TRUE)), TRUE)
+  expect_equal(is_bool_vec(c(TRUE, FALSE, 1)), FALSE)
+  expect_equal(is_bool_vec(c(TRUE, 1.2, 1)), FALSE)
+  expect_equal(is_bool_list(list(TRUE, FALSE, FALSE)), TRUE)
+  expect_equal(is_bool_list(list(TRUE, 1.2, 1)), FALSE)
+  expect_equal(is_bool_list(c(TRUE, FALSE, FALSE)), FALSE)
+  
+  # ordered int array index
+  iad <- BoolArrayDimIndexer$new(c(TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE), 8, 5)
+  expect_equal(iad$dim_sel, c(TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(iad$dim_chunk_ixs, c(1,2))
+  expect_equal(iad$dim_len, 8)
+  expect_equal(iad$dim_chunk_len, 5)
+  expect_equal(iad$num_chunks, 2)
+  expect_equal(iad$chunk_nitems, c(3,2))
+  
+  # error for wrong dimension length
+  expect_error(BoolArrayDimIndexer$new(c(TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE), 3, 5))
+  
+  # missing chunk size
+  expect_error(BoolArrayDimIndexer$new(c(TRUE, TRUE, FALSE, TRUE, FALSE), 5))
+  
+})
