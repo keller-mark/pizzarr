@@ -10,62 +10,48 @@ permissions:
 
 jobs:
   pre_deploy:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.config.os }}
     env:
-      cache-version: 5
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      _R_CHECK_TESTS_NLINES_: 0
+      NOT_CRAN: true
+      HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: true
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,   r: 'release'}
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up libraries for Ubuntu
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libsodium-dev libharfbuzz-dev libfribidi-dev libcurl4-openssl-dev texlive-latex-base texlive-fonts-extra pandoc libmagick++-dev libhdf5-dev
-      - name: Set up R 4.0
-        uses: r-lib/actions/setup-r@v2
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
         with:
-          r-version: 4.0
-      - name: Set CRAN mirror
-        run: |
-          cat("\noptions(repos=structure(c(CRAN=\"https://cran.rstudio.com\")))\n", file = "~/.Rprofile", append = TRUE)
-        shell: Rscript {0}
-      - name: Get R and OS version
-        id: get-version
-        run: |
-          cat("::set-output name=os-version::", sessionInfo()$running, "\n", sep = "")
-          cat("::set-output name=r-version::", R.Version()$version.string, "\n", sep = "")
-          cat("::endgroup::\n")
-        shell: Rscript {0}
-      - name: Cache dependencies
-        id: cache-deps
-        uses: actions/cache@v2
+            r-version: ${{ matrix.config.r }}
+            use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.R_LIBS_USER }}/*
-          key: ${{ hashFiles('DESCRIPTION') }}-${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{ env.cache-version }}-deps
-      - name: Install dependencies
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: |
-          install.packages(c("devtools", "remotes", "rcmdcheck", "BiocManager", "covr"))
-          BiocManager::install("Rarr")
-          remotes::install_deps(dependencies = TRUE)
+          extra-packages: any::rcmdcheck, any::covr
+          needs: check, coverage
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+
+      - name: Test coverage
+        run: covr::codecov()
         shell: Rscript {0}
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      - name: rcmdcheck
-        run: |
-          rcmdcheck::rcmdcheck(
-            error_on = "error", # TODO: switch back to "warning"
-            check_dir = "check"
-          )
-        shell: Rscript {0}
-        env:
-          _R_CHECK_FORCE_SUGGESTS_: false
-      - name: Run coverage report
-        run: |
-          covr::package_coverage()
-        shell: Rscript {0}
-      - name: Downgrade pkgdown
-        run: |
-          remotes::install_version("pkgdown", "2.0.3")
-        shell: Rscript {0}
+        
+      # Needed?
+      # - name: Downgrade pkgdown
+      #   run: |
+      #     remotes::install_version("pkgdown", "2.0.3")
+      #   shell: Rscript {0}
+        
       - name: Build docs
         run: |
           Rscript -e 'devtools::document(); pkgdown::build_site(new_process = FALSE)'
