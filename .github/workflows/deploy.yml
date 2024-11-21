@@ -52,7 +52,7 @@ jobs:
       - name: rcmdcheck
         run: |
           rcmdcheck::rcmdcheck(
-            error_on = "error", # TODO: switch back to "warning"
+            error_on = "error",
             check_dir = "check"
           )
         shell: Rscript {0}
@@ -62,7 +62,7 @@ jobs:
         run: |
           rcmdcheck::rcmdcheck(
             args = "--as-cran",
-            error_on = "error", # TODO: switch back to "warning"
+            error_on = "warning",
             check_dir = "cran_check"
           )
       - name: Run coverage report
