@@ -29,6 +29,7 @@ jobs:
         run: |
           brew install libsodium harfbuzz fribidi curl texlive pandoc imagemagick hdf5 basictex
       - name: Set up libraries for Windows
+        if: runner.os == 'Windows'
         run: |
           choco install rtools
           choco install pandoc
