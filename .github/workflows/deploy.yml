@@ -65,6 +65,7 @@ jobs:
             error_on = "warning",
             check_dir = "cran_check"
           )
+        shell: Rscript {0}
       - name: Run coverage report
         run: |
           covr::package_coverage()
