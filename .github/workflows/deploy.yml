@@ -58,6 +58,13 @@ jobs:
         shell: Rscript {0}
         env:
           _R_CHECK_FORCE_SUGGESTS_: false
+      - name: rcmdcheck as CRAN
+        run: |
+          rcmdcheck::rcmdcheck(
+            args = "--as-cran",
+            error_on = "error", # TODO: switch back to "warning"
+            check_dir = "cran_check"
+          )
       - name: Run coverage report
         run: |
           covr::package_coverage()

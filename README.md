@@ -67,7 +67,7 @@ print(selection$data)
 | `Unicode`             |            ✔ / ✔             |  Converted to `character` in R.               |
 | `void *`              |            ❌ / ❌             |                                                                                                                                                                                 |
 | Structured data types |            ❌ / ❌             |   |
-| Object data type - [VLenUTF8](https://numcodecs.readthedocs.io/en/stable/vlen.html#vlenutf8) |            ✔ / ✔             | Converted to `character` in R. |
+| Object data type - [VLenUTF8](https://numcodecs.readthedocs.io/en/stable/other/vlen.html) |            ✔ / ✔             | Converted to `character` in R. |
 
 
 Note: no effort is made to assess loss of precision due to conversion.
@@ -120,14 +120,14 @@ pkgdown::build_site()
   - Note: `pizzarr` has an optional dependency on Rarr for Blosc (de)compression.
 - R package development
   - [R packages](https://r-pkgs.org/)
-  - [roxygen2 syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html)
+  - [roxygen2 syntax](https://CRAN.R-project.org/package=roxygen2/vignettes/rd-formatting.html)
   - [R6](https://r6.r-lib.org/index.html)
   - [R6 roxygen2 syntax](https://www.tidyverse.org/blog/2019/11/roxygen2-7-0-0/#r6-documentation)
   - [pkgdown](https://pkgdown.r-lib.org/)
 - Zarr implementation
   - [zarr_implementations](https://github.com/zarr-developers/zarr_implementations)
   - [zarr-python](https://github.com/zarr-developers/zarr-python)
-  - [LZ4 and ZSTD compression in R](https://github.com/traversc/qs)
+  - [LZ4 and ZSTD compression in R](https://github.com/qsbase/qs)
   - [zarr.js](https://github.com/gzuidhof/zarr.js)
   - [zarrita.js](https://github.com/manzt/zarrita.js)
   - [v2 spec](https://zarr.readthedocs.io/en/stable/spec/v2.html)
