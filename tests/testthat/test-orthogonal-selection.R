@@ -36,4 +36,13 @@ test_that("orthogonal selection", {
     z$get_orthogonal_selection(list(c(1,0), slice(1,3)))$data,
     array(data=c(2, 1, 4, 3, 6, 5), dim=c(2, 3))
   )
+  
+  # boolean indexing
+  ind <- rep(FALSE, 10)
+  ind[c(3,5,8)] <- TRUE
+  expect_equal(
+    z$get_orthogonal_selection(list(c(1,0), ind))$data,
+    array(data=c(6, 5, 10, 9, 16, 15), dim=c(2, 3))
+  )
+  expect_error(z$get_orthogonal_selection(list(c(0,1),c(TRUE,FALSE,TRUE)))$data)
 })

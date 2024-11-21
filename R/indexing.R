@@ -401,16 +401,14 @@ OrthogonalIndexer <- R6::R6Class("OrthogonalIndexer",
                                     dim_sel <- zb_slice(NA)
                                   }
                                   
-                                  # TODO: for now, normalize_list_selection will get SliceDimIndexer for single integer
-                                  if(length(dim_sel) == 1) {
+                                  if(is_integer(dim_sel)) {
                                     dim_indexer <- IntDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else if(is_slice(dim_sel)) {
                                     dim_indexer <- SliceDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
-                                  } else if(length(dim_sel) > 1) {
+                                  } else if(is_bool_vec(dim_sel)) {
+                                    dim_indexer <- BoolArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
+                                  } else if(is_integer_vec(dim_sel)) {
                                     dim_indexer <- IntArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
-                                  # TODO: implement BoolArrayDimIndexer and fix if condition here (is_bool_vec)
-                                  # } else if(is_bool_vec(dim_sel)) {
-                                    # dim_indexer <- BoolArrayDimIndexer$new(dim_sel, dim_len, dim_chunk_len)
                                   } else {
                                     stop('Unsupported selection item for basic indexing, expected integer, slice, vector of integer or boolean')
                                   }
@@ -662,4 +660,138 @@ IntArrayDimIndexer <- R6::R6Class("IntArrayDimIndexer",
                                    return(result)
                                  }
                                )
+)
+
+# Reference: https://github.com/zarr-developers/zarr-python/blob/4a3bbf1cbb89e90ea9ca4d6d75dae23ed4b957c9/src/zarr/core/indexing.py#L581
+#' The Zarr BoolArrayDimIndexer class.
+#' @title BoolArrayDimIndexer Class
+#' @docType class
+#' @description
+#'  TODO
+#' @rdname BoolArrayDimIndexer
+#' @keywords internal
+BoolArrayDimIndexer <- R6::R6Class("BoolArrayDimIndexer",
+                                   inherit = DimIndexer,
+                                   public = list(
+                                     #' @field dim_sel selection on dimension
+                                     #' @keywords internal
+                                     dim_sel = NULL,
+                                     #' @field dim_len dimension length
+                                     #' @keywords internal
+                                     dim_len = NULL,
+                                     #' @field dim_chunk_len dimension chunk length
+                                     #' @keywords internal
+                                     dim_chunk_len = NULL,
+                                     #' @field num_chunks number of chunks
+                                     #' @keywords internal
+                                     num_chunks = NULL,
+                                     #' @field chunk_nitems number of items per chunk
+                                     #' @keywords internal
+                                     chunk_nitems = NULL, 
+                                     #' @field chunk_nitems_cumsum offsets into the output array
+                                     #' @keywords internal
+                                     chunk_nitems_cumsum = NULL, 
+                                     #' @field dim_chunk_ixs chunks that should be visited
+                                     #' @keywords internal
+                                     dim_chunk_ixs = NULL,
+                                     #' @field dim_out_sel TODO
+                                     #' @keywords internal
+                                     dim_out_sel = NULL,
+                                     #' @description
+                                     #' Create a new BoolArrayDimIndexer instance.
+                                     #' @param dim_sel integer dimension selection
+                                     #' @param dim_len integer dimension length
+                                     #' @param dim_chunk_len integer dimension chunk length
+                                     #' @return A `BoolArrayDimIndexer` instance.
+                                     initialize = function(dim_sel, dim_len, dim_chunk_len) {
+                                       
+                                       # check selection length
+                                       if(length(dim_sel) != dim_len)
+                                         stop(paste0("IndexError: Boolean vector has the wrong length for dimension; expected ", dim_len, ", got ", length(dim_sel)))
+                                       
+                                       # precompute number of selected items for each chunk
+                                       num_chunks <- ceiling(dim_len / dim_chunk_len)
+                                       chunk_nitems <- rep(0, num_chunks)
+                                       for(dim_chunk_ix in 1:num_chunks){
+                                         dim_offset <- ((dim_chunk_ix - 1) * dim_chunk_len) + 1
+                                         # START R-SPECIFIC
+                                         dim_offset_limits <- dim_offset+dim_chunk_len-1
+                                         dim_offset_limits <- ifelse(dim_offset_limits > length(dim_sel), length(dim_sel), dim_offset_limits)
+                                         # STOP R-SPECIFIC
+                                         
+                                         chunk_nitems[dim_chunk_ix] <- sum(dim_sel[dim_offset:dim_offset_limits] != 0)
+                                       }
+                                       
+                                       # compute offsets into the output array
+                                       chunk_nitems_cumsum <- cumsum(chunk_nitems)
+                                       num_items <- rev(chunk_nitems_cumsum)[1]
+                                       
+                                       # find chunks that we need to visit
+                                       dim_chunk_ixs <- which(chunk_nitems != 0)
+                                       
+                                       # store attributes
+                                       self$dim_sel <- dim_sel
+                                       self$dim_len <- dim_len
+                                       self$dim_chunk_len <- dim_chunk_len
+                                       self$num_chunks <- num_chunks
+                                       self$chunk_nitems <- chunk_nitems
+                                       self$chunk_nitems_cumsum <- chunk_nitems_cumsum
+                                       self$num_items <- num_items
+                                       self$dim_chunk_ixs <- dim_chunk_ixs
+                                     },
+                                     #' @description 
+                                     #'   An iterator over the dimensions of an array
+                                     #' @return A list of ChunkProjection objects
+                                     iter = function() {
+                                       
+                                       # Iterate over chunks in range
+                                       result <- list()
+                                       for(dim_chunk_ix in self$dim_chunk_ixs) {
+                                         
+                                         # find region in chunk
+                                         dim_offset <- ((dim_chunk_ix - 1) * self$dim_chunk_len) + 1
+                                         dim_chunk_sel <- self$dim_sel[dim_offset:(dim_offset+self$dim_chunk_len-1)]
+                                         
+                                         # pad out if final chunk
+                                         if(length(dim_chunk_sel) < length(self$dim_chunk_len)){
+                                           tmp <- rep(FALSE, self$dim_chunk_len)
+                                           tmp[1:length(dim_chunk_sel)] <- dim_chunk_sel
+                                           dim_chunk_sel <- tmp
+                                         }
+                                         
+                                         # find region in output
+                                         if (dim_chunk_ix == 1) { 
+                                           start <- 0
+                                         } else {
+                                           start <- self$chunk_nitems_cumsum[dim_chunk_ix - 1]
+                                         }
+                                         stop <- self$chunk_nitems_cumsum[dim_chunk_ix]
+                                         
+                                         # START R-SPECIFIC
+                                         if(start == stop) {
+                                           stop <- stop + 1
+                                         }
+                                         # END R-SPECIFIC
+                                         
+                                         # get out selection
+                                         dim_out_sel <- seq(start, stop - 1)
+                                         
+                                         # make boolean as integer, specific to pizzarr
+                                         dim_chunk_sel <- which(dim_chunk_sel) - 1
+                                         
+                                         # START R-SPECIFIC
+                                         dim_chunk_ix <- dim_chunk_ix - 1
+                                         # END R-SPECIFIC
+                                         
+                                         result <- append(result, ChunkDimProjection$new(
+                                           dim_chunk_ix,
+                                           dim_chunk_sel,
+                                           dim_out_sel
+                                         ))
+                                         
+                                       }
+                                       
+                                       return(result)
+                                     }
+                                   )
 )
