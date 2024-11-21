@@ -9,7 +9,7 @@ on:
 name: R-CMD-check
 
 jobs:
-  pre_deploy:
+  check:
     runs-on: ${{ matrix.config.os }}
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
