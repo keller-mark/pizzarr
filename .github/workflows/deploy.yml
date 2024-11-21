@@ -35,7 +35,7 @@ jobs:
             use-public-rspm: true
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::covr, any::devtools
+          extra-packages: any::rcmdcheck, any::covr, any::devtools, any::pkgdown
           needs: check, coverage
 
       - uses: r-lib/actions/check-r-package@v2
@@ -46,20 +46,14 @@ jobs:
         run: covr::codecov()
         shell: Rscript {0}
         
-      # Needed?
-      # - name: Downgrade pkgdown
-      #   run: |
-      #     remotes::install_version("pkgdown", "2.0.3")
-      #   shell: Rscript {0}
-  #       
-  #     - name: Build docs
-  #       run: |
-  #         Rscript -e 'devtools::document(); pkgdown::build_site(new_process = FALSE)'
-  #         touch docs/.nojekyll
-  #     - uses: actions/upload-pages-artifact@v1
-  #       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-  #       with:
-  #         path: ./docs
+      - name: Build docs
+        run: |
+          Rscript -e 'devtools::document(); pkgdown::build_site(new_process = FALSE)'
+          touch docs/.nojekyll
+      - uses: actions/upload-pages-artifact@v1
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        with:
+          path: ./docs
   # 
   # deploy:
   #   runs-on: ubuntu-latest
