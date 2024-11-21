@@ -33,7 +33,7 @@ jobs:
         run: |
           choco install rtools
           choco install pandoc
-          choco install miktex
+          choco install tinytex
           choco install imagemagick
       - name: Set up R 4.0
         uses: r-lib/actions/setup-r@v2
