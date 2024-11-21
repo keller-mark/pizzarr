@@ -1,12 +1,12 @@
-name: R
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-on: [push, pull_request]
-
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+name: R-CMD-check
 
 jobs:
   pre_deploy:
