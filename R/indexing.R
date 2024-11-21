@@ -34,7 +34,7 @@ is_pure_fancy_indexing <- function(selection, ndim = length(selection)) {
 #' @title OIndex Class
 #' @docType class
 #' @description
-#'  TODO
+#'  Orthogonal index class
 #' @rdname OIndex
 #' @keywords internal
 OIndex <- R6::R6Class("OIndex",
@@ -66,7 +66,7 @@ OIndex <- R6::R6Class("OIndex",
 #' @title VIndex Class
 #' @docType class
 #' @description
-#'  TODO
+#'  Vectorized index class
 #' @rdname VIndex
 #' @keywords internal
 VIndex <- R6::R6Class("VIndex",
@@ -107,7 +107,7 @@ IntDimIndexer <- R6::R6Class("IntDimIndexer",
     dim_chunk_len = NULL,
     #' @description
     #' Create a new IntDimIndexer instance.
-    #' @param dim_sel integer dimention selection
+    #' @param dim_sel integer dimension selection
     #' @param dim_len integer dimension length
     #' @param dim_chunk_len integer dimension chunk length
     #' @return A `IntDimIndexer` instance.
@@ -172,7 +172,7 @@ SliceDimIndexer <- R6::R6Class("SliceDimIndexer",
     step = NULL,
     #' @description
     #' Create a new SliceDimIndexer instance.
-    #' @param dim_sel integer dimention selection
+    #' @param dim_sel integer dimension selection
     #' @param dim_len integer dimension length
     #' @param dim_chunk_len integer dimension chunk length
     #' @return A `SliceDimIndexer` instance.

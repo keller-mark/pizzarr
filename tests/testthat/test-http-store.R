@@ -70,8 +70,32 @@ vcr::use_cassette("http_listdir", {
     expect_equal(names(g$get_store()$get_consolidated_metadata()$metadata),
                  names(z$get_consolidated_metadata()$metadata))
     
+    options(pizzarr.parallel_write_enabled = "future")
+    old_plan <- future::plan(future::multisession, workers = 2)
+    
+    expect_equal(dim(g$get_item("pr")$as.array()), c(12, 33, 81))
+    
+    options(pizzarr.parallel_write_enabled = FALSE)
+    future::plan(old_plan)
   })
   
+})
+
+test_that("http broken", {
+  
+  url<- "https://nogonnawork.zarr"
+  
+  expect_warning(z <- pizzarr::HttpStore$new(url), "Can't procede, web request failed.")
+  expect_equal(class(z), c("HttpStore", "Store", "R6"))
+
+  expect_message(vars <- z$listdir(), "not found for this http store")
+  
+  expect_null(vars)
+
+  w <- capture_warnings(g <- pizzarr::zarr_open_group(z))
+ 
+  expect_equal(w, c("Can't procede, web request failed.", 
+                    "Can't procede, web request failed."))
 })
 
 vcr::use_cassette("http_github_pattern", {

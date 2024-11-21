@@ -15,10 +15,10 @@ zarr_open_group(
 )
 }
 \arguments{
-\item{store}{: MutableMapping or string, optional
-Store or path to directory in file system or name of zip file.}
+\item{store}{: Store
+A mapping that supports string keys and bytes-like values.}
 
-\item{mode}{: {'r', 'r+', 'a', 'w', 'w-'}, optional
+\item{mode}{: \code{'r', 'r+', 'a', 'w', 'w-'}, optional
 Persistence mode: 'r' means read only (must exist); 'r+' means
 read/write (must exist); 'a' means read/write (create if doesn't
 exist); 'w' means create (overwrite if exists); 'w-' means create
@@ -32,11 +32,12 @@ to all attribute read operations.}
 \item{synchronizer}{: object, optional
 Array synchronizer.}
 
-\item{path}{: string, optional
-Group path within store.}
+\item{path}{: string, bytes, optional
+Path under which array is stored.}
 
-\item{chunk_store}{: MutableMapping or string, optional
-Store or path to directory in file system or name of zip file.}
+\item{chunk_store}{: Store, optional
+Separate storage for chunks. If not provided, \code{store} will be used
+for storage of both chunks and metadata.}
 
 \item{storage_options}{: dict
 If using an fsspec URL to create the store, these will be passed to

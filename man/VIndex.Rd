@@ -5,7 +5,7 @@
 \alias{VIndex}
 \title{VIndex Class}
 \description{
-TODO
+Vectorized index class
 }
 \details{
 The Zarr VIndex class.

@@ -41,7 +41,7 @@ Primary compressor.}
 \item{fill_value}{: object
 Default value to use for uninitialized portions of the array.}
 
-\item{order}{: {'C', 'F'}, optional
+\item{order}{: \code{'C', 'F'}, optional
 Memory layout to be used within each chunk.}
 
 \item{overwrite}{: bool, optional
@@ -60,7 +60,7 @@ Sequence of filters to use to encode chunk data prior to compression.}
 \item{object_codec}{: Codec, optional
 A codec to encode object arrays, only needed if dtype=object.}
 
-\item{dimension_separator}{: {'.', '/'}, optional
+\item{dimension_separator}{: \code{'.', '/'}, optional
 Separator placed between the dimensions of a chunk.}
 }
 \description{
