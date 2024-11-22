@@ -43,7 +43,7 @@ jobs:
             use-public-rspm: true
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::covr, any::devtools, any::pkgdown
+          extra-packages: any::rcmdcheck, any::covr, any::devtools, any::pkgdown, any::BH
           needs: check, coverage
 
       - uses: r-lib/actions/check-r-package@v2
