@@ -43,14 +43,12 @@ jobs:
             use-public-rspm: true
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::covr, any::devtools, any::pkgdown, any::BH
+          extra-packages: any::rcmdcheck, any::covr, any::devtools, any::pkgdown
           needs: check, coverage
 
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          args: 'c("--as-cran")'
-          build_args: 'c()'
 
       - name: Test coverage
         run: covr::codecov()
