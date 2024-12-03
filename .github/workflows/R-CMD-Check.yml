@@ -1,0 +1,60 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+        required: false
+        default: false
+
+
+name: R-CMD-check
+
+jobs:
+  check:
+    runs-on: ${{ matrix.config.os }}
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      _R_CHECK_TESTS_NLINES_: 0
+      NOT_CRAN: true
+      HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: true
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,   r: 'release'}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+            r-version: ${{ matrix.config.r }}
+            use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck, any::covr, any::devtools, any::pkgdown
+          needs: check, coverage
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+
+      - name: Test coverage
+        run: covr::codecov()
+        shell: Rscript {0}
+        
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
