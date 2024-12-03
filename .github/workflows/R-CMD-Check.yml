@@ -21,7 +21,6 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       _R_CHECK_TESTS_NLINES_: 0
       NOT_CRAN: true
       HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: true
@@ -45,6 +44,8 @@ jobs:
         with:
           extra-packages: any::rcmdcheck, any::covr, any::devtools, any::pkgdown
           needs: check, coverage
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: r-lib/actions/check-r-package@v2
         with:

@@ -26,7 +26,6 @@ jobs:
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CUSTOM_DR_UA: 'GitHub_CI'
     steps:
       - uses: actions/checkout@v3
@@ -41,6 +40,8 @@ jobs:
         with:
           extra-packages: any::pkgdown, any::devtools, local::.
           needs: website
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build site
         run: |
@@ -48,6 +49,8 @@ jobs:
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, dest_dir = "public") |
           file.copy(from = "./public/articles/logo.png",to = "./public/reference/logo.png")
         shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
