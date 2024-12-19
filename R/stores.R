@@ -439,8 +439,10 @@ HttpStore <- R6::R6Class("HttpStore",
 
       segments <- stringr::str_split(private$url, "/")[[1]]
       private$domain <- paste(segments[1:3], collapse="/")
+
       # Support both cases in which the store is located at the root
       # of the domain, or located under some base_path.
+
       private$base_path <- ifelse(length(segments) == 3, "", 
                                   paste(segments[4:length(segments)], collapse="/"))
       
