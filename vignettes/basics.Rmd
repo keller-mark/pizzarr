@@ -13,6 +13,8 @@ vignette: >
   comment = "#>",
   out.width = "100%"
 )
+sample_dir <- tools::R_user_dir("pizzarr")
+clean <- !dir.exists(sample_dir)
 ```
 
 ## Load the package
@@ -122,4 +124,7 @@ a <- z$get_item("4")
 class(a)
 
 a$get_attrs()$to_list()
+```
+```{r, include=FALSE}
+if(clean) unlink(sample_dir, recursive = TRUE)
 ```
