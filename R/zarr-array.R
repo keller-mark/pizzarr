@@ -323,38 +323,13 @@ ZarrArray <- R6::R6Class("ZarrArray",
         return(out)
       }
 
-      parallel_option <- getOption("pizzarr.parallel_read_enabled")
-      cl <- parse_parallel_option(parallel_option)
-      is_parallel <- is_truthy_parallel_option(cl)
-      apply_func <- lapply
-      if(is_parallel) {
-        if(!requireNamespace("pbapply", quietly = TRUE)) {
-          stop("Parallel reading requires the 'pbapply' package.")
-        }
-
-        if(is.integer(cl) & .Platform$OS.type == "windows") {
-          # See #105
-          cl <- parallel::makeCluster(cl)
-          on.exit(parallel::stopCluster(cl))
-        }
-        
-        apply_func <- function(X, FUN, ..., cl = NULL) {
-          
-          if(isTRUE(cl == "future")) {
-            pbapply::pblapply(X, FUN, ..., 
-                              future.packages = "Rarr",
-                              future.seed=TRUE, cl = cl)
-          } else {
-            pbapply::pblapply(X, FUN, ..., cl = cl)
-          }
-        }
-
-      }
+      ps <- get_parallel_settings(parallel_option = getOption("pizzarr.parallel_read_enabled", FALSE))
+      if(ps$close) on.exit(try(parallel::stopCluster(ps$cl), silent = TRUE))
 
       parts <- indexer$iter()
-      part1_results <- apply_func(parts, function(proj, cl = NA) {
+      part1_results <- ps$FUN(parts, function(proj, cl = NA) {
         private$chunk_getitem_part1(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
-      }, cl = cl)
+      }, cl = ps$cl)
 
       for(i in seq_along(parts)) {
         proj <- parts[[i]]
@@ -474,43 +449,15 @@ ZarrArray <- R6::R6Class("ZarrArray",
           stop("Unknown data type for setting :(")
         }
 
-        parallel_option <- getOption("pizzarr.parallel_write_enabled")
-        cl <- parse_parallel_option(parallel_option)
-        is_parallel <- is_truthy_parallel_option(cl)
-        
-        apply_func <- lapply
-        if(is_parallel) {
-          if(!requireNamespace("pbapply", quietly=TRUE)) {
-            stop("Parallel writing requires the 'pbapply' package.")
-          }
-  
-          if(is.integer(cl) & .Platform$OS.type == "windows") {
-            # See #105
-            cl <- parallel::makeCluster(cl)
-            on.exit(parallel::stopCluster(cl))
-            
-          }
-                  
-          apply_func <- function(X, FUN, ..., cl = NULL) {
-            
-            if(isTRUE(cl == "future")) {
-              pbapply::pblapply(X, FUN, ..., 
-                                future.packages = "Rarr",
-                                future.seed=TRUE, cl = cl)
-            } else {
-              pbapply::pblapply(X, FUN, ..., cl = cl)
-            }
-          }
-  
-        }
-        
+        ps <- get_parallel_settings(parallel_option = getOption("pizzarr.parallel_write_enabled", FALSE))
+        if(ps$close) on.exit(try(parallel::stopCluster(ps$cl), silent = TRUE))
         
         parts <- indexer$iter()
-        apply_func(parts, function(proj, cl = NA) {
+        ps$FUN(parts, function(proj, cl = NA) {
           chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
           private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
           NULL
-        }, cl = cl)
+        }, cl = ps$cl)
         
         return()
       }
@@ -1316,4 +1263,83 @@ ZarrArray <- R6::R6Class("ZarrArray",
 #' @export
 as.array.ZarrArray = function(x, ...) {
   x$as.array()
+}
+
+get_parallel_settings <- function(on_windows = (.Platform$OS.type == "windows"),
+                                  parallel_option = getOption("pizzarr.parallel_read_enabled", FALSE),
+                                  progress = getOption("pizzarr.progress_bar", FALSE)) {
+
+  cl <- parse_parallel_option(parallel_option)
+  is_parallel <- is_truthy_parallel_option(cl)
+  
+  # fall back on lapply
+  apply_func <- function(X, FUN, ..., cl = NULL) {
+    lapply(X, FUN, ...)
+  }
+  
+  # triggers closing a temporary cluster
+  close <- FALSE
+  
+  if(is_parallel) {
+    
+    # check for pbapply
+    if(progress & !requireNamespace("pbapply", quietly = TRUE)) {
+      # NOTEST
+      progress <- FALSE
+      warning("Parallel progress bar operations requires the 'pbapply' package.")
+    }
+    
+    if(isTRUE(cl == "future")) {
+      
+      if(!requireNamespace("future.apply", quietly = TRUE)) {
+        # NOTEST
+        warning("cluster options is 'future' but future.apply not available.")
+        
+      } else { # we can use future
+        if(progress) {
+          apply_func <- function(X, FUN, ..., cl = NULL) {
+            pbapply::pblapply(X, FUN, ..., 
+                              future.packages = "Rarr",
+                              future.seed = TRUE, cl = cl)
+          }
+        } else {
+          apply_func <- function(X, FUN, ..., cl = NULL) {
+            future.apply::future_lapply(X, FUN, ..., 
+                                        future.packages = "Rarr",
+                                        future.seed=TRUE)
+          }
+        } }
+    } else {
+      
+      if(!requireNamespace("parallel", quietly = TRUE)) {
+        # NOTEST
+        warning("Parallel operations require the 'parallel' or 'future' package.")
+      } else {
+        if(is.integer(cl) & on_windows) {
+          # See #105
+          cl <- parallel::makeCluster(cl)
+          close <- TRUE
+        }
+        
+        if(progress) {
+          apply_func <- function(X, FUN, ..., cl = NULL) {
+            pbapply::pblapply(X, FUN, ..., cl = cl)
+          }
+        } else if(!is.logical(cl)) {
+          if(on_windows) {
+            apply_func <- function(X, FUN, ..., cl = NULL) {
+              parallel::parLapply(cl, X, FUN, ...)
+            }
+          } else {
+            apply_func <- function(X, FUN, ..., cl = NULL) {
+              parallel::mclapply(X, FUN, ..., mc.cores = cl)
+            }
+          }
+        }
+        if(is.logical(cl)) cl <- NULL
+      }
+    }
+  }
+  
+  list(FUN = apply_func, cl = cl, close = close)
 }
