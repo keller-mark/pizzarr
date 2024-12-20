@@ -17,6 +17,8 @@ to one of:
 \item \code{cluster} object created with \code{parallel::make_cluster()} if you want to reuse a cluster
 }
 
+Set the option "pizzarr.progress_bar" to TRUE to get a progress bar for long running reads.
+
 For more, see \verb{vignette("parallel").}
 }
 \section{Super class}{

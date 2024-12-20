@@ -1,5 +1,8 @@
 library(pizzarr)
 
+sample_dir <- tools::R_user_dir("pizzarr")
+clean <- !dir.exists(sample_dir)
+
 test_that("get_basic_selection_zd", {
     # Reference: https://github.com/zarr-developers/zarr-python/blob/5dd4a0e6cdc04c6413e14f57f61d389972ea937c/zarr/tests/test_indexing.py#L70
     a <- as_scalar(42)
@@ -270,3 +273,5 @@ test_that("Can read 2D string array", {
     expected_arr <- t(array(data = c(row1, row2, row3, row4, row5), dim = c(10, 5)))
     expect_equal(expected_arr, data)
 })
+
+if(clean) unlink(sample_dir, recursive = TRUE)

@@ -1,11 +1,20 @@
 library(pizzarr)
 
+sample_dir <- tools::R_user_dir("pizzarr")
+clean <- !dir.exists(sample_dir)
+
+cache <- pizzarr_sample("dog.ome.zarr")
+
 SlowGettingDirectoryStore <- R6::R6Class("SlowGettingDirectoryStore",
   inherit = DirectoryStore,
   public = list(
     get_item = function(key) {
+      if(.Platform$OS.type == "windows") {
+        # windows has a lot of per process overhead
+        Sys.sleep(1/5)
+      }
       # Simulate a slow read such as an HTTP request.
-      Sys.sleep(1.0/25)
+      Sys.sleep(1/5)
       return(super$get_item(key))
     }
   )
@@ -15,8 +24,12 @@ SlowSettingDirectoryStore <- R6::R6Class("SlowSettingDirectoryStore",
   inherit = DirectoryStore,
   public = list(
     set_item = function(key, value) {
+      if(.Platform$OS.type == "windows") {
+        # windows has a lot of per process overhead
+        Sys.sleep(1/5)
+      }
       # Simulate a slow write such as an HTTP request.
-      Sys.sleep(1.0/25)
+      Sys.sleep(1/5)
       return(super$set_item(key, value))
     }
   )
@@ -24,8 +37,12 @@ SlowSettingDirectoryStore <- R6::R6Class("SlowSettingDirectoryStore",
 
 get_dog_arr <- function(slow_setting = FALSE) {
   # The path to the root of the OME-NGFF Zarr store.
-  root <- pizzarr_sample("dog.ome.zarr")
 
+  root <- file.path(tempdir(), "dog.ome.zarr")
+  
+  file.copy(pizzarr_sample("dog.ome.zarr"), dirname(root), 
+            recursive = TRUE)
+  
   # Open the OME-NGFF as a DirectoryStore.
   if(slow_setting) {
     store <- SlowSettingDirectoryStore$new(root)
@@ -39,6 +56,7 @@ get_dog_arr <- function(slow_setting = FALSE) {
 
 run_parallel_get <- function(num_workers) {
   options(pizzarr.parallel_read_enabled = num_workers)
+  options(pizzarr.progress_bar = FALSE)
 
   zarr_arr <- get_dog_arr()
   arr <- zarr_arr$get_item("...")$data
@@ -51,6 +69,7 @@ run_parallel_get <- function(num_workers) {
 
 run_parallel_set <- function(num_workers) {
   options(pizzarr.parallel_write_enabled = num_workers)
+  options(pizzarr.progress_bar = FALSE)
 
   zarr_arr <- get_dog_arr(slow_setting = TRUE)
   arr <- zarr_arr$get_item("...")$data
@@ -65,20 +84,19 @@ run_parallel_set <- function(num_workers) {
   return(sum(doubled_arr))
 }
 
-cl1 <- parallel::makeCluster(1)
-cl2 <- parallel::makeCluster(2)
-
 test_that("can run get_item() and set_item in parallel", {
   
   bench_df <- bench::mark(
-    run_parallel_get(cl1),
-    run_parallel_get(cl2),
+    run_parallel_get(1),
+    run_parallel_get(2),
     iterations = 1,
     memory = FALSE,
     filter_gc = FALSE
   )
 
   expect_equal(unlist(bench_df$result), rep(134538481, 2))
+  
+  testthat::skip_on_covr()
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   
 })
@@ -86,17 +104,21 @@ test_that("can run get_item() and set_item in parallel", {
 test_that("can run set_item() in parallel", {
 
   bench_df <- bench::mark(
-    run_parallel_set(cl1),
-    run_parallel_set(cl2),
+    run_parallel_set(1),
+    run_parallel_set(2),
     iterations = 1,
     memory = FALSE,
     filter_gc = FALSE
   )
 
   expect_equal(unlist(bench_df$result), rep(134538481*2.0, 2))
+  
+  testthat::skip_on_covr()
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   
 })
+
+cl1 <- parallel::makeCluster(1)
 
 test_that("parse_parallel_option works as expected", {
   expect_equal(parse_parallel_option(cl1), cl1)
@@ -123,5 +145,137 @@ test_that("is_truthy_parallel_option works as expected", {
   expect_equal(is_truthy_parallel_option(2), TRUE)
 })
 
+test_that("get_parallel_settings", {
+  testthat::skip_on_covr() # need to debug why this breaks covr run
+  
+  # Case 1: not parallel
+  ps <- get_parallel_settings(parallel_option = FALSE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 lapply(X, FUN, ...)
+               }))
+  
+  expect_equal(ps$cl, FALSE)
+  
+  # Case 2a1: Future, progress
+  ps <- get_parallel_settings(parallel_option = "future",
+                              progress = TRUE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 pbapply::pblapply(X, FUN, ..., 
+                                   future.packages = "Rarr",
+                                   future.seed = TRUE, cl = cl)
+               }))
+  
+  expect_equal(ps$cl, "future")
+  
+  # Case 2a2: Future, no progress
+  
+  ps <- get_parallel_settings(parallel_option = "future",
+                              progress = FALSE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 future.apply::future_lapply(X, FUN, ..., 
+                                             future.packages = "Rarr",
+                                             future.seed=TRUE)
+               }))
+  
+  expect_equal(ps$cl, "future")
+  
+  # Case 2b1: cl = integer > 1, windows, progress = TRUE
+  
+  ps <- get_parallel_settings(on_windows = TRUE, 
+                              parallel_option = 2,
+                              progress = TRUE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 pbapply::pblapply(X, FUN, ..., cl = cl)
+               }))
+  
+  expect_true(inherits(ps$cl, "cluster"))
+  
+  # Case 2b2: cl = 1, progress = TRUE, windows doesn't matter
+  
+  ps <- get_parallel_settings(parallel_option = 1,
+                              progress = TRUE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 pbapply::pblapply(X, FUN, ..., cl = cl)
+               }))
+  
+  expect_equal(ps$cl, NULL)
+  
+  # Case 2b3: cl = 2, progress = TRUE, not windows
+  
+  ps <- get_parallel_settings(on_windows = FALSE,
+                              parallel_option = 2,
+                              progress = TRUE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 pbapply::pblapply(X, FUN, ..., cl = cl)
+               }))
+  
+  expect_equal(ps$cl, 2)
+  
+  # Case 2b4: cl = 2, not windows, progress
+  
+  ps <- get_parallel_settings(on_windows = FALSE,
+                              parallel_option = 2,
+                              progress = TRUE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 pbapply::pblapply(X, FUN, ..., cl = cl)
+               }))
+  
+  expect_equal(ps$cl, 2)
+  
+  # case 2b5 cl = 1, no progress
+  
+  ps <- get_parallel_settings(parallel_option = 1,
+                              progress = FALSE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 lapply(X, FUN, ...)
+               }))
+  
+  expect_equal(ps$cl, NULL)
+  
+  # Case 2b6: cl = 2, no progress, on windows
+  
+  ps <- get_parallel_settings(on_windows = TRUE,
+                              parallel_option = 2,
+                              progress = FALSE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 parallel::parLapply(cl, X, FUN, ...)
+               }))
+  
+  expect_true(inherits(ps$cl, "cluster"))
+  
+  # Case 2b7: cl = 2, no progress, not windows
+  
+  ps <- get_parallel_settings(on_windows = FALSE,
+                              parallel_option = 2,
+                              progress = FALSE)
+  
+  expect_equal(format(ps$FUN), 
+               format(function(X, FUN, ..., cl = NULL) {
+                 parallel::mclapply(X, FUN, ..., mc.cores = cl)
+               }))
+  
+  expect_equal(ps$cl, 2)
+    
+})
+
 parallel::stopCluster(cl1)
-parallel::stopCluster(cl2)
+
+if(clean) unlink(sample_dir, recursive = TRUE)

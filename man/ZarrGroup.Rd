@@ -10,16 +10,7 @@ Instantiate a group from an initialized store.
 \details{
 The Zarr Group class.
 }
-\keyword{TODO}
-\keyword{attrs}
-\keyword{cache_attrs}
-\keyword{chunk_store}
 \keyword{internal}
-\keyword{key_prefix}
-\keyword{meta}
-\keyword{path}
-\keyword{read_only}
-\keyword{synchronizer}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

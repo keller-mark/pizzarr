@@ -1,5 +1,8 @@
 library(pizzarr)
 
+sample_dir <- tools::R_user_dir("pizzarr")
+clean <- !dir.exists(sample_dir)
+
 test_that("demo data", {
   
   demo_data <- pizzarr_sample()
@@ -216,3 +219,5 @@ test_that("NaN in json", {
   
   expect_warning(try_fromJSON("borked", "test warning"), "test warning")
 })
+
+if(clean) unlink(sample_dir, recursive = TRUE)
