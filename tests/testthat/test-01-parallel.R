@@ -14,7 +14,7 @@ SlowGettingDirectoryStore <- R6::R6Class("SlowGettingDirectoryStore",
         Sys.sleep(1/5)
       }
       # Simulate a slow read such as an HTTP request.
-      Sys.sleep(1.0/25)
+      Sys.sleep(1/5)
       return(super$get_item(key))
     }
   )
@@ -29,7 +29,7 @@ SlowSettingDirectoryStore <- R6::R6Class("SlowSettingDirectoryStore",
         Sys.sleep(1/5)
       }
       # Simulate a slow write such as an HTTP request.
-      Sys.sleep(1.0/25)
+      Sys.sleep(1/5)
       return(super$set_item(key, value))
     }
   )
