@@ -96,6 +96,7 @@ test_that("can run get_item() and set_item in parallel", {
 
   expect_equal(unlist(bench_df$result), rep(134538481, 2))
   
+  testthat::skip_on_covr()
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   
 })
@@ -112,6 +113,7 @@ test_that("can run set_item() in parallel", {
 
   expect_equal(unlist(bench_df$result), rep(134538481*2.0, 2))
   
+  testthat::skip_on_covr()
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   
 })
