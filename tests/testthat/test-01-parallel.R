@@ -1,5 +1,10 @@
 library(pizzarr)
 
+sample_dir <- tools::R_user_dir("pizzarr")
+clean <- !dir.exists(sample_dir)
+
+cache <- pizzarr_sample("dog.ome.zarr")
+
 SlowGettingDirectoryStore <- R6::R6Class("SlowGettingDirectoryStore",
   inherit = DirectoryStore,
   public = list(
@@ -24,8 +29,12 @@ SlowSettingDirectoryStore <- R6::R6Class("SlowSettingDirectoryStore",
 
 get_dog_arr <- function(slow_setting = FALSE) {
   # The path to the root of the OME-NGFF Zarr store.
-  root <- pizzarr_sample("dog.ome.zarr")
 
+  root <- file.path(tempdir(), "dog.ome.zarr")
+  
+  file.copy(pizzarr_sample("dog.ome.zarr"), dirname(root), 
+            recursive = TRUE)
+  
   # Open the OME-NGFF as a DirectoryStore.
   if(slow_setting) {
     store <- SlowSettingDirectoryStore$new(root)
@@ -79,6 +88,9 @@ test_that("can run get_item() and set_item in parallel", {
   )
 
   expect_equal(unlist(bench_df$result), rep(134538481, 2))
+  
+  testthat::skip_on_os("windows") 
+  # injecting parallel workers this way on windows doesn't work
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   
 })
@@ -94,6 +106,9 @@ test_that("can run set_item() in parallel", {
   )
 
   expect_equal(unlist(bench_df$result), rep(134538481*2.0, 2))
+  
+  testthat::skip_on_os("windows") 
+  # injecting parallel workers this way on windows doesn't work
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   
 })
@@ -125,3 +140,5 @@ test_that("is_truthy_parallel_option works as expected", {
 
 parallel::stopCluster(cl1)
 parallel::stopCluster(cl2)
+
+if(clean) unlink(sample_dir, recursive = TRUE)

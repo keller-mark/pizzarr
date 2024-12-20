@@ -1,5 +1,8 @@
 library(pizzarr)
 
+sample_dir <- tools::R_user_dir("pizzarr")
+clean <- !dir.exists(sample_dir)
+
 test_that("Can open Zarr group using convenience function", {
 
     root <- pizzarr_sample(file.path("fixtures", "v2", "data.zarr"))
@@ -514,3 +517,5 @@ test_that("Can create 0-element 2D array", {
     expect_equal(length(sel$data), 0)
     expect_equal(dim(sel$data), c(0, 0))
 })
+
+if(clean) unlink(sample_dir, recursive = TRUE)

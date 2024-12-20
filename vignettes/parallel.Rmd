@@ -14,6 +14,8 @@ vignette: >
   out.width = "100%"
 )
 library(pizzarr)
+sample_dir <- tools::R_user_dir("pizzarr")
+clean <- !dir.exists(sample_dir)
 ```
 
 By default, reads and writes are performed sequentially (i.e., not in parallel).
@@ -138,4 +140,8 @@ To re-enable, run:
 
 ```{r}
 pbapply::pboptions(type = "timer")
+```
+
+```{r, include=FALSE}
+if(clean) unlink(sample_dir, recursive = TRUE)
 ```
