@@ -10,13 +10,22 @@
 #' @return path to ready to use zarr store
 #' @export
 #' @examples
-#' zarr_samples <- pizzarr_sample()
+#' 
+#' sample_dir <- tools::R_user_dir("pizzarr")
+#' 
+#' clean <- !dir.exists(sample_dir)
+#' 
+#' zarr_samples <- pizzarr_sample(outdir = sample_dir)
 #' 
 #' #printing without system path for example
-#' gsub(tempdir(), "...", zarr_samples, fixed = TRUE)
+#' gsub(sample_dir, "...", zarr_samples, fixed = TRUE)
+#' 
+#' # clean up if you don't want to keep them for next time
+#' if(clean) unlink(sample_dir, recursive = TRUE)
 #' 
 pizzarr_sample <- function(dataset = NULL, 
-                           outdir = file.path(tempdir(TRUE), "pizzarr_sample")) {
+                           outdir = file.path(tools::R_user_dir("pizzarr"), 
+                                              "pizzarr_sample")) {
   # will unzip here
   tdir <- outdir
   dir.create(tdir, showWarnings = FALSE, recursive = TRUE)
@@ -45,7 +54,9 @@ pizzarr_sample <- function(dataset = NULL,
   # in case zarr_zips is all, loop over them and unzip
   for(z in seq_along(zarr_zips)) {
     
-    if(file.size(zarr_zips[z]) == 0) {
+    need <- !file.exists(file.path(tdir, avail[z]))
+    
+    if(file.size(zarr_zips[z]) == 0 & need) {
       
       new_z <- file.path(tdir, basename(zarr_zips[z]))
 
@@ -56,8 +67,8 @@ pizzarr_sample <- function(dataset = NULL,
       zarr_zips[z] <- new_z
     }
      
-    utils::unzip(zarr_zips[z], 
-                 exdir = file.path(tdir, dirname(avail[z])))
+    if(need)
+      utils::unzip(zarr_zips[z], exdir = file.path(tdir, dirname(avail[z])))
   }
   
   return(file.path(tdir, avail))
