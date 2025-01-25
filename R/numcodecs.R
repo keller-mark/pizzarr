@@ -32,6 +32,13 @@ Codec <- R6::R6Class("Codec",
    )
 )
 
+#' @keywords internal
+warn_if_unk_args <- function(unk_args, compressor_name) {
+  if(length(unk_args) > 0) {
+    unk_args_str <- paste(names(unk_args), collapse = ", ")
+    warning(paste(compressor_name, "received unrecognized compressor config parameters:", unk_args_str))
+  }
+}
 
 #' ZSTD compressor for Zarr
 #' @title ZstdCodec Class
@@ -52,8 +59,9 @@ ZstdCodec <- R6::R6Class("ZstdCodec",
     #' Create a new ZSTD compressor.
     #' @param level The compression level, between 1 and 22.
     #' @return A new `ZstdCodec` object.
-    initialize = function(level = 1) {
+    initialize = function(level = 1, ...) {
       self$level <- level
+      warn_if_unk_args(list(...), "ZstdCodec")
     },
     #' @description
     #' Compress data.
@@ -105,8 +113,9 @@ Lz4Codec <- R6::R6Class("Lz4Codec",
      #' Create a new LZ4 compressor.
      #' @param acceleration The compression level.
      #' @return A new `Lz4Codec` object.
-     initialize = function(acceleration = 1) {
+     initialize = function(acceleration = 1, ...) {
        self$acceleration <- acceleration
+       warn_if_unk_args(list(...), "Lz4Codec")
      },
      #' @description
      #' Compress data.
@@ -167,9 +176,10 @@ ZlibCodec <- R6::R6Class("ZlibCodec",
      #' Create a new Zlib compressor.
      #' @param level The compression level, between 1 and 22.
      #' @return A new `ZlibCodec` object.
-     initialize = function(level = 6) {
+     initialize = function(level = 6, ...) {
       self$level <- level
       # No config options for zlib.
+      warn_if_unk_args(list(...), "ZlibCodec")
      },
     #' @description
     #' Compress data.
@@ -227,9 +237,10 @@ GzipCodec <- R6::R6Class("GzipCodec",
      #' Create a new Gzip compressor.
      #' @param level The compression level, between 1 and 22.
      #' @return A new `GzipCodec` object.
-     initialize = function(level = 6) {
+     initialize = function(level = 6, ...) {
       # No config options for gzip.
       self$level <- level
+      warn_if_unk_args(list(...), "GzipCodec")
      },
      #' @description
      #' Compress data.
@@ -284,9 +295,10 @@ Bz2Codec <- R6::R6Class("Bz2Codec",
      #' Create a new Bz2 compressor.
      #' @param level The compression level, between 1 and 22.
      #' @return A new `Bz2Codec` object.
-     initialize = function(level = 6) {
+     initialize = function(level = 6, ...) {
       # No config options for bz2.
       self$level <- level
+      warn_if_unk_args(list(...), "Bz2Codec")
      },
      #' @description
      #' Compress data.
@@ -344,13 +356,14 @@ LzmaCodec <- R6::R6Class("LzmaCodec",
      #' @param level The compression level, between 1 and 22.
      #' @param format only 1 is supported
      #' @return A new `LzmaCodec` object.
-     initialize = function(level = 9, format = 1) {
+     initialize = function(level = 9, format = 1, ...) {
       # No config options for lzma.
       self$level <- level
       self$format <- format
       if(format != 1) {
         stop("Only format 1 is supported for lzma compression")
       }
+      warn_if_unk_args(list(...), "LzmaCodec")
      },
      #' @description
      #' Compress data.
@@ -415,7 +428,7 @@ BloscCodec <- R6::R6Class("BloscCodec",
     #' @param shuffle The shuffle filter to use.
     #' @param blocksize The block size.
     #' @return A new `BloscCodec` object.
-    initialize = function(cname = "lz4", clevel = 5, shuffle = TRUE, blocksize = NA) {
+    initialize = function(cname = "lz4", clevel = 5, shuffle = TRUE, blocksize = NA, ...) {
       self$cname <- cname
       self$clevel <- clevel
       self$shuffle <- shuffle
@@ -424,6 +437,7 @@ BloscCodec <- R6::R6Class("BloscCodec",
       if (!require("Rarr", quietly = TRUE)) {
         stop("Rarr package must be installed to use the Blosc codec. Install with BiocManager::install('Rarr')")
       }
+      warn_if_unk_args(list(...), "BloscCodec")
     },
     #' @description
     #' Compress data.
