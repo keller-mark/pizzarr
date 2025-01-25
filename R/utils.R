@@ -44,6 +44,18 @@ pizzarr_sample <- function(dataset = NULL,
   
   # in case zarr_zips is all, loop over them and unzip
   for(z in seq_along(zarr_zips)) {
+    
+    if(file.size(zarr_zips[z]) == 0) {
+      
+      new_z <- file.path(tdir, basename(zarr_zips[z]))
+
+      utils::download.file(paste0("https://github.com/keller-mark/pizzarr/raw/refs/heads/main/docs/data/", 
+                                           basename(zarr_zips[z])), mode = "wb",
+                                    new_z)
+      
+      zarr_zips[z] <- new_z
+    }
+     
     utils::unzip(zarr_zips[z], 
                  exdir = file.path(tdir, dirname(avail[z])))
   }
