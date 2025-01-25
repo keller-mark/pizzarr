@@ -354,6 +354,8 @@ MemoryStore <- R6::R6Class("MemoryStore",
 #' * `integer` if you would like a one-time use cluster created per call
 #' * `cluster` object created with `parallel::make_cluster()` if you want to reuse a cluster
 #' 
+#' Set the option "pizzarr.progress_bar" to TRUE to get a progress bar for long running reads.
+#' 
 #' For more, see `vignette("parallel").`
 #' @rdname HttpStore
 #' @importFrom memoise memoise timeout

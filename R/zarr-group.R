@@ -13,28 +13,28 @@ ZarrGroup <- R6::R6Class("ZarrGroup",
     # store TODO
     #' @keywords internal
     store = NULL,
-    #' path TODO
+    # path TODO
     #' @keywords internal
     path = NULL,
-    #' read_only TODO
+    # read_only TODO
     #' @keywords internal
     read_only = NULL,
-    #' chunk_store TODO
+    # chunk_store TODO
     #' @keywords internal
     chunk_store = NULL,
-    #' cache_attrs TODO
+    # cache_attrs TODO
     #' @keywords internal
     cache_attrs = NULL,
-    #' synchronizer TODO
+    # synchronizer TODO
     #' @keywords internal
     synchronizer = NULL,
-    #' key_prefix TODO
+    # key_prefix TODO
     #' @keywords internal
     key_prefix = NULL,
-    #' meta TODO
+    # meta TODO
     #' @keywords internal
     meta = NULL,
-    #' attrs TODO
+    # attrs TODO
     #' @keywords internal
     attrs = NULL,
     item_path = function(item) {
