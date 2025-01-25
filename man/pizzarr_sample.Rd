@@ -6,7 +6,7 @@
 \usage{
 pizzarr_sample(
   dataset = NULL,
-  outdir = file.path(tempdir(TRUE), "pizzarr_sample")
+  outdir = file.path(tools::R_user_dir("pizzarr"), "pizzarr_sample")
 )
 }
 \arguments{
@@ -26,9 +26,17 @@ For directory stores, unzips the store to a temporary directory
 and returns the resulting path.
 }
 \examples{
-zarr_samples <- pizzarr_sample()
+
+sample_dir <- tools::R_user_dir("pizzarr")
+
+clean <- !dir.exists(sample_dir)
+
+zarr_samples <- pizzarr_sample(outdir = sample_dir)
 
 #printing without system path for example
-gsub(tempdir(), "...", zarr_samples, fixed = TRUE)
+gsub(sample_dir, "...", zarr_samples, fixed = TRUE)
+
+# clean up if you don't want to keep them for next time
+if(clean) unlink(sample_dir, recursive = TRUE)
 
 }
