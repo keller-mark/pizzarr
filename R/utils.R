@@ -374,12 +374,12 @@ item_to_key <- function(item) {
 
 #' @keywords internal
 is_truthy_parallel_option <- function(val) {
-  if(inherits(val, "cluster")) {
-    return(TRUE)
-  }
-  if(val == "future") {
-    return(TRUE)
-  }
+  if(is.na(val)) return(FALSE)
+  
+  if(inherits(val, "cluster")) return(TRUE)
+  
+  if(val == "future") return(TRUE)
+  
   return(as.logical(as.integer(val)))
 }
 

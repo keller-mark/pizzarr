@@ -348,7 +348,7 @@ MemoryStore <- R6::R6Class("MemoryStore",
 #' @description
 #' Store class that uses HTTP requests.
 #' Read-only. Depends on the `crul` package.
-#' @details For parallel operation, set the "pizzarr.parallel_read_enabled" option
+#' @details For parallel operation, set the "pizzarr.parallel_backend" option
 #' to one of:
 #' * `"future"` if a future plan has been set up
 #' * `integer` if you would like a one-time use cluster created per call
@@ -381,7 +381,7 @@ HttpStore <- R6::R6Class("HttpStore",
       
       if(!is.null(ret)) return(ret)
       
-      parallel_option <- getOption("pizzarr.parallel_read_enabled")
+      parallel_option <- getOption("pizzarr.parallel_backend", NA)
       parallel_option <- parse_parallel_option(parallel_option)
       is_parallel <- is_truthy_parallel_option(parallel_option)
 

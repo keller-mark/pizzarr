@@ -322,11 +322,11 @@ ZarrArray <- R6::R6Class("ZarrArray",
         return(out)
       }
 
-      ps <- get_parallel_settings(parallel_option = getOption("pizzarr.parallel_read_enabled", FALSE))
+      ps <- get_parallel_settings(parallel_option = getOption("pizzarr.parallel_backend", NA))
       if(ps$close) on.exit(try(parallel::stopCluster(ps$cl), silent = TRUE))
 
       parts <- indexer$iter()
-      part1_results <- ps$apply_func(parts, function(proj, cl = NA) {
+      part1_results <- ps$apply_func(parts, function(proj) {
         private$chunk_getitem_part1(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
       }, cl = ps$cl)
 
@@ -448,11 +448,17 @@ ZarrArray <- R6::R6Class("ZarrArray",
           stop("Unknown data type for setting :(")
         }
 
-        ps <- get_parallel_settings(parallel_option = getOption("pizzarr.parallel_write_enabled", FALSE))
-        if(ps$close) on.exit(try(parallel::stopCluster(ps$cl), silent = TRUE))
+        par_opt <- NA
         
+        if(getOption("pizzarr.parallel_write_enabled", FALSE)) {
+          par_opt <- getOption("pizzarr.parallel_backend", NA)
+        }
+        
+        ps <- get_parallel_settings(parallel_option = par_opt)
+        if(ps$close) on.exit(try(parallel::stopCluster(ps$cl), silent = TRUE))
+
         parts <- indexer$iter()
-        ps$apply_func(parts, function(proj, cl = NA) {
+        ps$apply_func(parts, function(proj) {
           chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
           private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
           NULL
@@ -1263,8 +1269,19 @@ as.array.ZarrArray = function(x, ...) {
   x$as.array()
 }
 
+#' get parallel settings
+#' @keywords internal
+#' @description
+#' given information about user preferences and environment conditions, returns a function
+#' and cluster object.
+#' @param on_windows logical indicating if windows restrictions should apply
+#' @param parallel_option integer, or "future" to control how parallelization occurs.
+#' @param progress logical to control whether `pbapply` is used such that progress is printed.
+#' @return list containing the function to use in parallel operations, a cluster object to be used 
+#' in parallel operations, and whether or not the cluster object needs to be closed.
+#' 
 get_parallel_settings <- function(on_windows = (.Platform$OS.type == "windows"),
-                                  parallel_option = getOption("pizzarr.parallel_read_enabled", FALSE),
+                                  parallel_option = getOption("pizzarr.parallel_backend", NA),
                                   progress = getOption("pizzarr.progress_bar", FALSE)) {
 
   cl <- parse_parallel_option(parallel_option)
@@ -1284,7 +1301,7 @@ get_parallel_settings <- function(on_windows = (.Platform$OS.type == "windows"),
     if(progress & !requireNamespace("pbapply", quietly = TRUE)) {
       # NOTEST
       progress <- FALSE
-      warning("Parallel progress bar operations requires the 'pbapply' package.")
+      warning("progress bar operations requires the 'pbapply' package.")
     }
     
     if(isTRUE(cl == "future")) {

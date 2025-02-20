@@ -9,7 +9,7 @@ Store class that uses HTTP requests.
 Read-only. Depends on the \code{crul} package.
 }
 \details{
-For parallel operation, set the "pizzarr.parallel_read_enabled" option
+For parallel operation, set the "pizzarr.parallel_backend" option
 to one of:
 \itemize{
 \item \code{"future"} if a future plan has been set up

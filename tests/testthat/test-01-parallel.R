@@ -55,20 +55,21 @@ get_dog_arr <- function(slow_setting = FALSE) {
 }
 
 run_parallel_get <- function(num_workers) {
-  options(pizzarr.parallel_read_enabled = num_workers)
+  options(pizzarr.parallel_backend = num_workers)
   options(pizzarr.progress_bar = FALSE)
 
   zarr_arr <- get_dog_arr()
   arr <- zarr_arr$get_item("...")$data
 
-  options(pizzarr.parallel_read_enabled = FALSE)
+  options(pizzarr.parallel_backend = NA)
 
   return(sum(arr))
 }
 
 
 run_parallel_set <- function(num_workers) {
-  options(pizzarr.parallel_write_enabled = num_workers)
+  options(pizzarr.parallel_write_enabled = TRUE)
+  options(pizzarr.parallel_backend = num_workers)
   options(pizzarr.progress_bar = FALSE)
 
   zarr_arr <- get_dog_arr(slow_setting = TRUE)
@@ -80,6 +81,7 @@ run_parallel_set <- function(num_workers) {
   doubled_arr <- zarr_arr$get_item("...")$data
 
   options(pizzarr.parallel_write_enabled = FALSE)
+  options(pizzarr.parallel_backend = NA)
 
   return(sum(doubled_arr))
 }
@@ -149,20 +151,20 @@ test_that("get_parallel_settings", {
   testthat::skip_on_covr() # need to debug why this breaks covr run
   
   # Case 1: not parallel
-  ps <- get_parallel_settings(parallel_option = FALSE)
+  ps <- get_parallel_settings(parallel_option = NA)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  lapply(X, FUN, ...)
                }))
   
-  expect_equal(ps$cl, FALSE)
+  expect_equal(ps$cl, NA)
   
   # Case 2a1: Future, progress
   ps <- get_parallel_settings(parallel_option = "future",
                               progress = TRUE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  pbapply::pblapply(X, FUN, ..., 
                                    future.packages = "Rarr",
@@ -176,7 +178,7 @@ test_that("get_parallel_settings", {
   ps <- get_parallel_settings(parallel_option = "future",
                               progress = FALSE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  future.apply::future_lapply(X, FUN, ..., 
                                              future.packages = "Rarr",
@@ -191,7 +193,7 @@ test_that("get_parallel_settings", {
                               parallel_option = 2,
                               progress = TRUE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  pbapply::pblapply(X, FUN, ..., cl = cl)
                }))
@@ -203,7 +205,7 @@ test_that("get_parallel_settings", {
   ps <- get_parallel_settings(parallel_option = 1,
                               progress = TRUE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  pbapply::pblapply(X, FUN, ..., cl = cl)
                }))
@@ -216,7 +218,7 @@ test_that("get_parallel_settings", {
                               parallel_option = 2,
                               progress = TRUE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  pbapply::pblapply(X, FUN, ..., cl = cl)
                }))
@@ -229,7 +231,7 @@ test_that("get_parallel_settings", {
                               parallel_option = 2,
                               progress = TRUE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  pbapply::pblapply(X, FUN, ..., cl = cl)
                }))
@@ -241,7 +243,7 @@ test_that("get_parallel_settings", {
   ps <- get_parallel_settings(parallel_option = 1,
                               progress = FALSE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  lapply(X, FUN, ...)
                }))
@@ -254,7 +256,7 @@ test_that("get_parallel_settings", {
                               parallel_option = 2,
                               progress = FALSE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  parallel::parLapply(cl, X, FUN, ...)
                }))
@@ -267,7 +269,7 @@ test_that("get_parallel_settings", {
                               parallel_option = 2,
                               progress = FALSE)
   
-  expect_equal(format(ps$FUN), 
+  expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  parallel::mclapply(X, FUN, ..., mc.cores = cl)
                }))
