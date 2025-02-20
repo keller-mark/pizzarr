@@ -121,7 +121,7 @@ test_that("can run set_item() in parallel", {
   testthat::skip_on_covr()
   testthat::skip_on_os("windows") 
   # injecting parallel workers this way on windows doesn't work
-  
+
   expect_equal(bench_df$total_time[[1]] > bench_df$total_time[[2]], TRUE)
   
 })
