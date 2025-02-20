@@ -326,7 +326,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
       if(ps$close) on.exit(try(parallel::stopCluster(ps$cl), silent = TRUE))
 
       parts <- indexer$iter()
-      part1_results <- ps$FUN(parts, function(proj, cl = NA) {
+      part1_results <- ps$apply_func(parts, function(proj, cl = NA) {
         private$chunk_getitem_part1(proj$chunk_coords, proj$chunk_sel, out, proj$out_sel, drop_axes = indexer$drop_axes)
       }, cl = ps$cl)
 
@@ -452,7 +452,7 @@ ZarrArray <- R6::R6Class("ZarrArray",
         if(ps$close) on.exit(try(parallel::stopCluster(ps$cl), silent = TRUE))
         
         parts <- indexer$iter()
-        ps$FUN(parts, function(proj, cl = NA) {
+        ps$apply_func(parts, function(proj, cl = NA) {
           chunk_value <- private$get_chunk_value(proj, indexer, value, selection_shape)
           private$chunk_setitem(proj$chunk_coords, proj$chunk_sel, chunk_value)
           NULL
@@ -1339,5 +1339,5 @@ get_parallel_settings <- function(on_windows = (.Platform$OS.type == "windows"),
     }
   }
   
-  list(FUN = apply_func, cl = cl, close = close)
+  list(apply_func = apply_func, cl = cl, close = close)
 }
