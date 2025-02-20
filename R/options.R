@@ -1,21 +1,29 @@
 # Adapted from https://github.com/IRkernel/IRkernel/blob/master/R/options.r
 
 #' pizzarr_option_defaults
+#' @description 
+#' * pizzarr.http_store_cache_time_seconds how long to cache web requests
+#' * pizzarr.parallel_backend "future", a cluster object, or an integer (if not on windows)
+#' * pizzarr.parallel_write_enabled logical, whether to use parallel backend for writing
+#' * pizzarr.progress_bar logical whether to use `pbapply` to emit a progress bar
 #' @export
 pizzarr_option_defaults <- list(
     pizzarr.http_store_cache_time_seconds = 3600,
-    pizzarr.parallel_read_enabled = FALSE,
-    pizzarr.parallel_write_enabled = FALSE
+    pizzarr.parallel_backend = NA,
+    pizzarr.parallel_write_enabled = FALSE,
+    pizzarr.progress_bar = FALSE
 )
 
 #' @keywords internal
 parse_parallel_option <- function(val) {
   
+  if(is.na(val)) return(val)
+  
   if(inherits(val, "cluster")) {
     return(val)
   }
   
-  if(val == "future") {
+  if(!is.na(val) && val == "future") {
     return("future")
   }
   
@@ -34,8 +42,9 @@ parse_parallel_option <- function(val) {
 #' @keywords internal
 from_env <- list(
     PIZZARR_HTTP_STORE_CACHE_TIME_SECONDS = as.integer,
-    PIZZARR_PARALLEL_READ_ENABLED = parse_parallel_option,
-    PIZZARR_PARALLEL_WRITE_ENABLED = parse_parallel_option
+    PIZZARR_PARALLEL_BACKEND = parse_parallel_option,
+    PIZZARR_PARALLEL_WRITE_ENABLED = as.logical,
+    PIZZARR_PROGRESS_BAR = as.logical
 )
 
 # converts e.g. jupyter.log_level to JUPYTER_LOG_LEVEL
