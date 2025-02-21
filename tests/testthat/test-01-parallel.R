@@ -173,6 +173,7 @@ test_that("get_parallel_settings", {
   expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  pbapply::pblapply(X, FUN, ..., 
+                                   future.globals = FALSE,
                                    future.packages = "Rarr",
                                    future.seed = TRUE, cl = cl)
                }))
@@ -187,6 +188,7 @@ test_that("get_parallel_settings", {
   expect_equal(format(ps$apply_func), 
                format(function(X, FUN, ..., cl = NULL) {
                  future.apply::future_lapply(X, FUN, ..., 
+                                             future.globals = FALSE,
                                              future.packages = "Rarr",
                                              future.seed=TRUE)
                }))
