@@ -38,7 +38,7 @@ Lzma compressor for Zarr
 \subsection{Method \code{new()}}{
 Create a new lzma compressor.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LzmaCodec$new(level = 9, format = 1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{LzmaCodec$new(level = 9, format = 1, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -47,6 +47,8 @@ Create a new lzma compressor.
 \item{\code{level}}{The compression level, between 1 and 22.}
 
 \item{\code{format}}{only 1 is supported}
+
+\item{\code{...}}{not used}
 }
 \if{html}{\out{</div>}}
 }

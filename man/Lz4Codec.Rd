@@ -37,13 +37,15 @@ LZ4 compressor for Zarr
 \subsection{Method \code{new()}}{
 Create a new LZ4 compressor.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Lz4Codec$new(acceleration = 1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Lz4Codec$new(acceleration = 1, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{acceleration}}{The compression level.}
+
+\item{\code{...}}{not used}
 }
 \if{html}{\out{</div>}}
 }
