@@ -58,6 +58,7 @@ ZstdCodec <- R6::R6Class("ZstdCodec",
     #' @description
     #' Create a new ZSTD compressor.
     #' @param level The compression level, between 1 and 22.
+    #' @param ... not used
     #' @return A new `ZstdCodec` object.
     initialize = function(level = 1, ...) {
       self$level <- level
@@ -112,6 +113,7 @@ Lz4Codec <- R6::R6Class("Lz4Codec",
      #' @description
      #' Create a new LZ4 compressor.
      #' @param acceleration The compression level.
+     #' @param ... not used
      #' @return A new `Lz4Codec` object.
      initialize = function(acceleration = 1, ...) {
        self$acceleration <- acceleration
@@ -175,6 +177,7 @@ ZlibCodec <- R6::R6Class("ZlibCodec",
      #' @description
      #' Create a new Zlib compressor.
      #' @param level The compression level, between 1 and 22.
+     #' @param ... not used
      #' @return A new `ZlibCodec` object.
      initialize = function(level = 6, ...) {
       self$level <- level
@@ -237,6 +240,7 @@ GzipCodec <- R6::R6Class("GzipCodec",
      #' Create a new Gzip compressor.
      #' @param level The compression level, between 1 and 22.
      #' @return A new `GzipCodec` object.
+     #' @param ... not used
      initialize = function(level = 6, ...) {
       # No config options for gzip.
       self$level <- level
@@ -294,6 +298,7 @@ Bz2Codec <- R6::R6Class("Bz2Codec",
      #' @description
      #' Create a new Bz2 compressor.
      #' @param level The compression level, between 1 and 22.
+     #' @param ... not used
      #' @return A new `Bz2Codec` object.
      initialize = function(level = 6, ...) {
       # No config options for bz2.
@@ -355,6 +360,7 @@ LzmaCodec <- R6::R6Class("LzmaCodec",
      #' Create a new lzma compressor.
      #' @param level The compression level, between 1 and 22.
      #' @param format only 1 is supported
+     #' @param ... not used
      #' @return A new `LzmaCodec` object.
      initialize = function(level = 9, format = 1, ...) {
       # No config options for lzma.
@@ -427,6 +433,7 @@ BloscCodec <- R6::R6Class("BloscCodec",
     #' @param clevel The compression level.
     #' @param shuffle The shuffle filter to use.
     #' @param blocksize The block size.
+    #' @param ... not used
     #' @return A new `BloscCodec` object.
     initialize = function(cname = "lz4", clevel = 5, shuffle = TRUE, blocksize = NA, ...) {
       self$cname <- cname

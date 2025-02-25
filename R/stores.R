@@ -385,7 +385,7 @@ HttpStore <- R6::R6Class("HttpStore",
       parallel_option <- parse_parallel_option(parallel_option)
       is_parallel <- is_truthy_parallel_option(parallel_option)
 
-      if(is_parallel) {
+      parallel_get <- function(path) {
         # For some reason, the crul::HttpClient fails in parallel settings
         # This alternative
         # with HttpRequest and AsyncVaried seems to work.
@@ -399,10 +399,42 @@ HttpStore <- R6::R6Class("HttpStore",
         res <- crul::AsyncVaried$new(req)
         res$request()
         return(unclass(res$responses())[[1]])
+      }
+      
+      # Despite getOption above, when running in parallel, options may not be passed to workers as expected.
+      # For this reason, if the `private$client$get` fails, which is known to not work in parallel,
+      # then we first guess that the failure is due to running in a worker (despite is_parallel being false).
+      # Reference: https://github.com/keller-mark/pizzarr/issues/128
+      
+      if(is_parallel) {
+        
+        return(parallel_get(path))
+        
       } else {
-        ret <- NULL
-        try(ret <- private$client$get(path = path))
-        if(is.null(ret)) warning("Can't procede, web request failed.")
+        
+        ret <- tryCatch(private$client$get(path = path),
+                        error = function(e) {
+                          
+                          # if the error involves a bad handle
+                          if(inherits(e, "simpleError") &&
+                             !is.null(e$message) &&
+                             grepl("handle", e$message)) {
+                            
+                            warning("http request issue, are we running in parallel? \n",
+                                    "set parallel options in environment variables or .Rprofile \n",
+                                    "trying fallback method")
+                            
+                            tryCatch(parallel_get(path), 
+                                     error = function(e2) {
+                                       warning("Can't procede, web request failed. Error was:", e2)
+                                       NULL
+                                     })
+                          } else {
+                            warning("Can't procede, web request failed. Error was:", e)
+                            NULL
+                          }
+                        })
+        
         return(ret)
       }
     },

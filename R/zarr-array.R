@@ -1314,12 +1314,14 @@ get_parallel_settings <- function(on_windows = (.Platform$OS.type == "windows"),
         if(progress) {
           apply_func <- function(X, FUN, ..., cl = NULL) {
             pbapply::pblapply(X, FUN, ..., 
+                              future.globals = FALSE,
                               future.packages = "Rarr",
                               future.seed = TRUE, cl = cl)
           }
         } else {
           apply_func <- function(X, FUN, ..., cl = NULL) {
             future.apply::future_lapply(X, FUN, ..., 
+                                        future.globals = FALSE,
                                         future.packages = "Rarr",
                                         future.seed=TRUE)
           }

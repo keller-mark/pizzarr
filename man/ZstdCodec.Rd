@@ -37,13 +37,15 @@ ZSTD compressor for Zarr
 \subsection{Method \code{new()}}{
 Create a new ZSTD compressor.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ZstdCodec$new(level = 1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ZstdCodec$new(level = 1, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{level}}{The compression level, between 1 and 22.}
+
+\item{\code{...}}{not used}
 }
 \if{html}{\out{</div>}}
 }

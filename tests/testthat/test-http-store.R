@@ -85,6 +85,8 @@ test_that("http broken", {
   
   url<- "https://nogonnawork.zarr"
   
+  options(pizzarr.parallel_backend = NA)
+  
   expect_warning(z <- pizzarr::HttpStore$new(url), "Can't procede, web request failed.")
   expect_equal(class(z), c("HttpStore", "Store", "R6"))
 
@@ -94,8 +96,7 @@ test_that("http broken", {
 
   w <- capture_warnings(g <- pizzarr::zarr_open_group(z))
  
-  expect_equal(w, c("Can't procede, web request failed.", 
-                    "Can't procede, web request failed."))
+  expect_true(all(grepl("Can't procede", w)))
 })
 
 vcr::use_cassette("http_github_pattern", {
