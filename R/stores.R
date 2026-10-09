@@ -464,7 +464,8 @@ item_to_key <- function(item) {
 #' backend is not compiled in, and uses parallel chunk decode when it is.
 #' It needs no credentials and no environment configuration.
 #'
-#' When the store publishes consolidated metadata (a `.zmetadata` key),
+#' When the store publishes consolidated metadata (V2 `.zmetadata` or
+#' V3 inline metadata in the root `zarr.json`),
 #' `listdir()` reports its members; without it, HTTP stores cannot be listed
 #' and you must address arrays by name.
 #'
@@ -633,7 +634,8 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @description
     #' Fetches .zmetadata from the store evaluates its names
     #' @param path character path to list within, or `NA` for the store root.
-    #' @return Character vector of unique keys that do not start with a `.`.
+    #' @return Character vector of unique member names, or `NULL` if
+    #'   consolidated metadata is unavailable.
     listdir = function(path=NA) {
 
       if(!is.null(private$zmetadata)) {
