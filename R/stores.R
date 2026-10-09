@@ -464,7 +464,8 @@ item_to_key <- function(item) {
 #' backend is not compiled in, and uses parallel chunk decode when it is.
 #' It needs no credentials and no environment configuration.
 #'
-#' When the store publishes consolidated metadata (a `.zmetadata` key),
+#' When the store publishes consolidated metadata (V2 `.zmetadata` or
+#' V3 inline metadata in the root `zarr.json`),
 #' `listdir()` reports its members; without it, HTTP stores cannot be listed
 #' and you must address arrays by name.
 #'
@@ -499,10 +500,6 @@ HttpStore <- R6::R6Class("HttpStore",
       key <- item_to_key(item)
       path <- paste(private$base_path, key, sep="/")
 
-      ret <- try_from_zmeta(key, self)
-
-      if(!is.null(ret)) return(ret)
-
       tryCatch(private$client$get(path = path),
                error = function(e) {
                  warning("Can't proceed, web request failed for '", key,
@@ -525,9 +522,32 @@ HttpStore <- R6::R6Class("HttpStore",
       
       if(!is.null(res$status_code) && res$status_code == 200) {
         out <- try_fromJSON(res$parse("UTF-8"))
+      } else if(!is.null(res)) {
+        out <- private$get_zmetadata_v3()
       } else out <- NULL
       
       return(out)
+    },
+    # V3 puts consolidated metadata in the root zarr.json.
+    # Reshape it to match .zmetadata.
+    get_zmetadata_v3 = function() {
+      # memoized so opening the root group doesn't fetch zarr.json twice
+      res <- private$make_request_memoized(ZARR_JSON)
+
+      if(is.null(res$status_code) || res$status_code != 200) return(NULL)
+
+      root <- try_fromJSON(res$parse("UTF-8"))
+      consolidated <- root$consolidated_metadata
+      metadata <- consolidated$metadata
+
+      if(!identical(consolidated$kind, "inline") || !is.list(metadata)) return(NULL)
+
+      if(length(metadata) > 0) {
+        names(metadata) <- paste0(names(metadata), "/", ZARR_JSON)
+      }
+      metadata[[ZARR_JSON]] <- root
+
+      return(list(metadata = metadata))
     }
   ),
   public = list(
@@ -582,6 +602,12 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @param item The item key.
     #' @return The item data in a vector of type raw.
     get_item = function(item) {
+      meta <- try_from_zmeta(item_to_key(item), self)
+      if(!is.null(meta)) {
+        # consolidated nodes are already parsed, callers expect bytes
+        return(charToRaw(jsonlite::toJSON(meta, auto_unbox = TRUE,
+                                        null = "null", digits = 17)))
+      }
       res <- private$make_request_memoized(item)
       return(res$content)
     },
@@ -593,7 +619,10 @@ HttpStore <- R6::R6Class("HttpStore",
       # use consolidated metadata if it exists
       if(!is.null(try_from_zmeta(item_to_key(item), self))) {
         return(TRUE)
-      } else if(!is.null(self$get_consolidated_metadata())) {
+      } else if(!is.null(self$get_consolidated_metadata()) &&
+                basename(item_to_key(item)) %in%
+                c(ARRAY_META_KEY, GROUP_META_KEY, ATTRS_KEY, ZARR_JSON)) {
+        # consolidated metadata lists metadata files, not chunks
         return(FALSE)
       } else {
         res <- private$make_request_memoized(item)
@@ -605,7 +634,8 @@ HttpStore <- R6::R6Class("HttpStore",
     #' @description
     #' Fetches .zmetadata from the store evaluates its names
     #' @param path character path to list within, or `NA` for the store root.
-    #' @return Character vector of unique keys that do not start with a `.`.
+    #' @return Character vector of unique member names, or `NULL` if
+    #'   consolidated metadata is unavailable.
     listdir = function(path=NA) {
 
       if(!is.null(private$zmetadata)) {
@@ -619,15 +649,16 @@ HttpStore <- R6::R6Class("HttpStore",
               substring(nchar(prefix) + 1)
           }
 
+          # metadata files at this level are not members
           out <- keys |>
+            stringr::str_subset("/") |>
             stringr::str_split("/") |>
             vapply(\(x) head(x, 1), "") |>
-            unique() |>
-            stringr::str_subset("^\\.", negate = TRUE)
+            unique()
         }, error = \(e) warning("\n\nError parsing .zmetadata:\n\n", e))
       } else {
         out <- NULL
-        message(".zmetadata not found for this http store. Can't listdir")
+        message("Consolidated metadata not found for this http store. Can't listdir")
       }
 
       return(out)

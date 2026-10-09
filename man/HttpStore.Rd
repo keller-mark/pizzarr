@@ -24,7 +24,8 @@ tiers: it falls back to the R-native \code{crul} code path when the zarrs
 backend is not compiled in, and uses parallel chunk decode when it is.
 It needs no credentials and no environment configuration.
 
-When the store publishes consolidated metadata (a \code{.zmetadata} key),
+When the store publishes consolidated metadata (V2 \code{.zmetadata} or
+V3 inline metadata in the root \code{zarr.json}),
 \code{listdir()} reports its members; without it, HTTP stores cannot be listed
 and you must address arrays by name.
 }
@@ -168,7 +169,8 @@ Headers passed to crul.}
     \if{html}{\out{</div>}}
   }
   \subsection{Returns}{
-    Character vector of unique keys that do not start with a \code{.}.
+    Character vector of unique member names, or \code{NULL} if
+consolidated metadata is unavailable.
   }
 }
 

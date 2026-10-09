@@ -1,3 +1,9 @@
+# pizzarr (development version)
+
+* `HttpStore` reads V3 inline consolidated metadata from the root `zarr.json`,
+  allowing groups to be listed and child metadata to be read without additional
+  HTTP requests.
+
 # pizzarr 0.2.2
 
 (developed with the assistance of Claude Opus 5.5)
