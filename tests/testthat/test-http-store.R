@@ -26,7 +26,7 @@ vcr::use_cassette("http_base", {
     expect_equal(zarr_arr$get_shape(),
                  c(2L, 236L, 275L, 271L))
 
-    expect_message(listdir_output <- z$listdir(), ".zmetadata not found for this http store. Can't listdir")
+    expect_message(listdir_output <- z$listdir(), "Consolidated metadata not found for this http store. Can't listdir")
 
     expect_null(listdir_output)
 
@@ -86,6 +86,39 @@ vcr::use_cassette("http_listdir", {
                  names(z$get_consolidated_metadata()$metadata))
 
     expect_equal(dim(g$get_item("pr")$as.array()), c(12, 33, 81))
+  })
+
+})
+
+vcr::use_cassette("http_listdir_v3", {
+
+  test_that("http listdir from v3 consolidated metadata", {
+
+    # xarray tutorial store, see tutorial.xarray.dev/intermediate/hierarchical_zarr_store.html
+    url <- "https://pub-45a1d62ac8d94c4c89f4dc63681a98ed.r2.dev/precipitation.zarr"
+
+    z <- pizzarr::HttpStore$new(url)
+
+    expect_equal(z$listdir(), c("observed", "reanalysis", "time"))
+
+    expect_equal(z$listdir("observed"), c("lat", "lon", "precipitation"))
+
+    expect_equal(z$listdir("time"), character(0))
+
+    g <- pizzarr::zarr_open_group(z)
+
+    expect_output(print(g), "No\\. members : 3")
+
+    arr <- g$get_item("observed")$get_item("precipitation")
+
+    expect_equal(arr$get_chunks(), c(5L, 160L, 75L))
+
+    expect_equal(arr$get_attrs()$get_item("units"), "mm/hr")
+
+    # get_item() serves consolidated nodes as bytes that parse back unchanged
+    key <- "observed/precipitation/zarr.json"
+    expect_identical(try_fromJSON(rawToChar(z$get_item(key))),
+                     z$get_consolidated_metadata()$metadata[[key]])
   })
 
 })
