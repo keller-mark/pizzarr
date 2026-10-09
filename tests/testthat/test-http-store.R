@@ -119,6 +119,10 @@ vcr::use_cassette("http_listdir_v3", {
     key <- "observed/precipitation/zarr.json"
     expect_identical(try_fromJSON(rawToChar(z$get_item(key))),
                      z$get_consolidated_metadata()$metadata[[key]])
+
+    # chunk keys are not in consolidated metadata, so they are checked over http
+    expect_true(z$contains_item("time/c/0"))
+    expect_false(z$contains_item("time/c/1"))
   })
 
 })

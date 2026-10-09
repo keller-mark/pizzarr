@@ -618,7 +618,10 @@ HttpStore <- R6::R6Class("HttpStore",
       # use consolidated metadata if it exists
       if(!is.null(try_from_zmeta(item_to_key(item), self))) {
         return(TRUE)
-      } else if(!is.null(self$get_consolidated_metadata())) {
+      } else if(!is.null(self$get_consolidated_metadata()) &&
+                basename(item_to_key(item)) %in%
+                c(ARRAY_META_KEY, GROUP_META_KEY, ATTRS_KEY, ZARR_JSON)) {
+        # consolidated metadata lists metadata files, not chunks
         return(FALSE)
       } else {
         res <- private$make_request_memoized(item)
